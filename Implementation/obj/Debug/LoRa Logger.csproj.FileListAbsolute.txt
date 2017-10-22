@@ -1,0 +1,30 @@
+C:\Users\Florin Popescu\source\repos\LoRa Logger\LoRa Logger\bin\Debug\LoRa Logger.exe.config
+C:\Users\Florin Popescu\source\repos\LoRa Logger\LoRa Logger\bin\Debug\LoRa Logger.exe
+C:\Users\Florin Popescu\source\repos\LoRa Logger\LoRa Logger\bin\Debug\LoRa Logger.pdb
+C:\Users\Florin Popescu\source\repos\LoRa Logger\LoRa Logger\obj\Debug\LoRa Logger.csprojResolveAssemblyReference.cache
+C:\Users\Florin Popescu\source\repos\LoRa Logger\LoRa Logger\obj\Debug\LoRa_Logger.Form1.resources
+C:\Users\Florin Popescu\source\repos\LoRa Logger\LoRa Logger\obj\Debug\LoRa_Logger.Properties.Resources.resources
+C:\Users\Florin Popescu\source\repos\LoRa Logger\LoRa Logger\obj\Debug\LoRa Logger.csproj.GenerateResource.Cache
+C:\Users\Florin Popescu\source\repos\LoRa Logger\LoRa Logger\obj\Debug\LoRa Logger.csproj.CoreCompileInputs.cache
+C:\Users\Florin Popescu\source\repos\LoRa Logger\LoRa Logger\obj\Debug\LoRa Logger.exe
+C:\Users\Florin Popescu\source\repos\LoRa Logger\LoRa Logger\obj\Debug\LoRa Logger.pdb
+D:\Documents\Visual Studio 2017\Projects\LoRa Logger\LoRa Logger\bin\Debug\LoRa Logger.exe.config
+D:\Documents\Visual Studio 2017\Projects\LoRa Logger\LoRa Logger\bin\Debug\LoRa Logger.exe
+D:\Documents\Visual Studio 2017\Projects\LoRa Logger\LoRa Logger\bin\Debug\LoRa Logger.pdb
+D:\Documents\Visual Studio 2017\Projects\LoRa Logger\LoRa Logger\obj\Debug\LoRa_Logger.Form1.resources
+D:\Documents\Visual Studio 2017\Projects\LoRa Logger\LoRa Logger\obj\Debug\LoRa_Logger.Properties.Resources.resources
+D:\Documents\Visual Studio 2017\Projects\LoRa Logger\LoRa Logger\obj\Debug\LoRa Logger.csproj.GenerateResource.Cache
+D:\Documents\Visual Studio 2017\Projects\LoRa Logger\LoRa Logger\obj\Debug\LoRa Logger.csproj.CoreCompileInputs.cache
+D:\Documents\Visual Studio 2017\Projects\LoRa Logger\LoRa Logger\obj\Debug\LoRa Logger.exe
+D:\Documents\Visual Studio 2017\Projects\LoRa Logger\LoRa Logger\obj\Debug\LoRa Logger.pdb
+C:\Users\flori\Downloads\LoRa Logger\LoRa Logger\LoRa Logger\bin\Debug\LoRa Logger.exe.config
+C:\Users\flori\Downloads\LoRa Logger\LoRa Logger\LoRa Logger\bin\Debug\LoRa Logger.exe
+C:\Users\flori\Downloads\LoRa Logger\LoRa Logger\LoRa Logger\bin\Debug\LoRa Logger.pdb
+C:\Users\flori\Downloads\LoRa Logger\LoRa Logger\LoRa Logger\obj\Debug\LoRa Logger.csprojResolveAssemblyReference.cache
+C:\Users\flori\Downloads\LoRa Logger\LoRa Logger\LoRa Logger\obj\Debug\LoRa_Logger.Form1.resources
+C:\Users\flori\Downloads\LoRa Logger\LoRa Logger\LoRa Logger\obj\Debug\LoRa_Logger.Properties.Resources.resources
+C:\Users\flori\Downloads\LoRa Logger\LoRa Logger\LoRa Logger\obj\Debug\LoRa Logger.csproj.GenerateResource.Cache
+C:\Users\flori\Downloads\LoRa Logger\LoRa Logger\LoRa Logger\obj\Debug\LoRa Logger.csproj.CoreCompileInputs.cache
+C:\Users\flori\Downloads\LoRa Logger\LoRa Logger\LoRa Logger\obj\Debug\LoRa Logger.exe
+C:\Users\flori\Downloads\LoRa Logger\LoRa Logger\LoRa Logger\obj\Debug\LoRa Logger.pdb
+D:\Documents\Visual Studio 2017\Projects\LoRa Logger\LoRa Logger\obj\Debug\LoRa Logger.csprojResolveAssemblyReference.cache

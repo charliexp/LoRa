@@ -1,0 +1,228 @@
+﻿using LoRa_Controller.Device;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace LoRa_Controller
+{
+    public partial class Form1 : Form
+    {
+        DeviceHandler deviceHandler;
+        Logger logger;
+		const int logMaxEntries = 12;
+		private FolderBrowserDialog folderBrowserDialog;
+
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+		{
+			folderBrowserDialog = new FolderBrowserDialog();
+			folderBrowserDialog.Description = "Select the folder to store the logs.";
+			folderBrowserDialog.ShowNewFolderButton = true;
+			folderBrowserDialog.RootFolder = Environment.SpecialFolder.MyComputer;
+			Application.ApplicationExit += new EventHandler(OnApplicationExit);
+		}
+
+		private void ChangeLogFolderButton_Click(object sender, EventArgs e)
+		{
+			DialogResult result = folderBrowserDialog.ShowDialog();
+			if (result == DialogResult.OK)
+			{
+				logger.Path = folderBrowserDialog.SelectedPath;
+				logFolderTextBox.Text = folderBrowserDialog.SelectedPath;
+			}
+		}
+
+		private void ComPortComboBox_DropDown(object sender, EventArgs e)
+		{
+			ComboBox comboBox = ((ComboBox)sender);
+			string[] comPortsList = DeviceHandler.getAvailablePorts();
+
+			comboBox.Items.Clear();
+			foreach (string port in comPortsList)
+				if (!comboBox.Items.Contains(port))
+					comboBox.Items.Add(port);
+		}
+		private async void ComPortComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+			string comPort = (string)((ComboBox)sender).SelectedItem;
+			List<string> receivedData;
+
+			if (comPort != null)
+			{
+				if (deviceHandler != null)
+				{
+					logger.finish();
+				}
+
+				logger = new Logger("log_", "dd.MM.yyyy", "txt");
+				ChangeLogFolderButton_Click(new object(), new EventArgs());
+
+				deviceHandler = new DeviceHandler(comPort);
+				deviceHandler.ConnectedToBoard = new EventHandler<ConnectionEventArgs>(COMPortConnected);
+				deviceHandler.UnableToConnectToBoard = new EventHandler<ConnectionEventArgs>(COMPortConnected);
+				deviceHandler.DisconnectedFromBoard = new EventHandler<ConnectionEventArgs>(COMPortDisconnected);
+				deviceHandler.ConnectToBoard();
+			
+				while (deviceHandler.IsConnectedToBoard)
+				{
+					receivedData = await deviceHandler.ReceiveDataAsync();
+					UpdateLog(receivedData);
+					UpdateRSSI(deviceHandler.RSSI);
+					UpdateSNR(deviceHandler.SNR);
+					UpdateCurrentErrors(deviceHandler.Errors);
+					UpdateTotalErrors(deviceHandler.TotalErrors);
+					UpdateRadioConnectionStatus(deviceHandler.IsRadioConnected);
+					if (deviceHandler.IsRadioConnected)
+						await logger.write(deviceHandler.RSSI + ", " + deviceHandler.SNR);
+					else
+						await logger.write("error");
+				}
+			}
+		}
+		
+        public void OnApplicationExit(object sender, EventArgs e)
+        {
+            if (logger != null)
+                logger.finish();
+        }
+        
+		public void EnableLogControls()
+		{
+			logGroupBox.Enabled = true;
+			logListBox.Enabled = true;
+		}
+
+		public void DisableLogControls()
+		{
+			logGroupBox.Enabled = false;
+			logFolderTextBox.Clear();
+			logListBox.Items.Clear();
+		}
+
+		public void EnableRadioControls()
+		{
+			radioConnectionGroupBox.Enabled = true;
+			radioSettingsGroupBox.Enabled = true;
+		}
+
+		public void DisableRadioControls()
+		{
+			radioConnectionGroupBox.Enabled = false;
+			radioSettingsGroupBox.Enabled = false;
+			radioStatusTextBox.Clear();
+			rssiTextBox.Clear();
+			snrTextBox.Clear();
+			currentErrorsTextBox.Clear();
+		}
+
+		public void ClearTotalErrors()
+		{
+			totalErrorsTextBox.Clear();
+		}
+
+		public void COMPortConnected(object sender, ConnectionEventArgs e)
+        {
+			if (e.Connected)
+			{
+				serialStatusTextBox.Text = "Connected to board";
+				EnableLogControls();
+				EnableRadioControls();
+			}
+			else
+			{
+				serialStatusTextBox.Text = "Couldn't connect to board";
+				DisableLogControls();
+				DisableRadioControls();
+				ClearTotalErrors();
+			}
+		}
+
+		public void COMPortDisconnected(object sender, ConnectionEventArgs e)
+		{
+			if (e.DisconnectedOnPurpose)
+			{
+				serialStatusTextBox.Text = "Board not connected";
+				DisableLogControls();
+				DisableRadioControls();
+				ClearTotalErrors();
+			}
+			else
+			{
+				serialStatusTextBox.Text = "Board disconnected";
+				DisableLogControls();
+				DisableRadioControls();
+			}
+		}
+		
+		public void UpdateLog(List<string> data)
+		{
+			if (logGroupBox.Enabled)
+			{
+				while (logListBox.Items.Count + data.Count > logMaxEntries)
+					logListBox.Items.RemoveAt(0);
+				logListBox.Items.AddRange(data.ToArray());
+				logListBox.TopIndex = logListBox.Items.Count - 1;
+			}
+		}
+
+		public void UpdateRSSI(int value)
+		{
+			if (radioConnectionGroupBox.Enabled && rssiTextBox.Enabled)
+			{
+				if (deviceHandler.IsRadioConnected)
+					rssiTextBox.Text = value.ToString();
+				else
+					rssiTextBox.Clear();
+			}
+		}
+
+		public void UpdateSNR(int value)
+		{
+			if (radioConnectionGroupBox.Enabled && snrTextBox.Enabled)
+			{
+				if (deviceHandler.IsRadioConnected)
+					snrTextBox.Text = value.ToString();
+				else
+					snrTextBox.Clear();
+			}
+		}
+
+		public void UpdateCurrentErrors(uint value)
+		{
+			if (radioConnectionGroupBox.Enabled && currentErrorsTextBox.Enabled)
+			{
+				if (deviceHandler.IsRadioConnected)
+					currentErrorsTextBox.Text = value.ToString();
+				else
+					currentErrorsTextBox.Clear();
+			}
+		}
+
+		public void UpdateTotalErrors(uint value)
+		{
+			if (radioConnectionGroupBox.Enabled && totalErrorsTextBox.Enabled)
+			{
+				if (deviceHandler.IsRadioConnected)
+					totalErrorsTextBox.Text = value.ToString();
+				else
+					totalErrorsTextBox.Clear();
+			}
+		}
+
+		public void UpdateRadioConnectionStatus(bool connected)
+		{
+			if (radioConnectionGroupBox.Enabled && radioStatusTextBox.Enabled)
+			{
+				if (connected)
+					radioStatusTextBox.Text = "Connected";
+				else
+					radioStatusTextBox.Text = "Not connected";
+			}
+		}
+	}
+}
