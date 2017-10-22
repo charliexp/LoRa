@@ -1,0 +1,20 @@
+D:\Documents\GitHub\LoRa\Implementation\obj\Debug\LoRa Controller.csprojResolveAssemblyReference.cache
+D:\Documents\GitHub\LoRa\Implementation\obj\Debug\LoRa_Controller.Form1.resources
+D:\Documents\GitHub\LoRa\Implementation\obj\Debug\LoRa_Controller.Properties.Resources.resources
+D:\Documents\GitHub\LoRa\Implementation\obj\Debug\LoRa Controller.csproj.GenerateResource.Cache
+D:\Documents\GitHub\LoRa\Implementation\obj\Debug\LoRa Controller.csproj.CoreCompileInputs.cache
+D:\Documents\GitHub\LoRa\Implementation\bin\Debug\LoRa Controller.exe.config
+D:\Documents\GitHub\LoRa\Implementation\bin\Debug\LoRa Controller.exe
+D:\Documents\GitHub\LoRa\Implementation\bin\Debug\LoRa Controller.pdb
+D:\Documents\GitHub\LoRa\Implementation\obj\Debug\LoRa Controller.exe
+D:\Documents\GitHub\LoRa\Implementation\obj\Debug\LoRa Controller.pdb
+D:\Documents\GitHub\LoRa\Implementation\LoRa Controller\bin\Debug\LoRa Controller.exe.config
+D:\Documents\GitHub\LoRa\Implementation\LoRa Controller\bin\Debug\LoRa Controller.exe
+D:\Documents\GitHub\LoRa\Implementation\LoRa Controller\bin\Debug\LoRa Controller.pdb
+D:\Documents\GitHub\LoRa\Implementation\LoRa Controller\obj\Debug\LoRa Controller.csprojResolveAssemblyReference.cache
+D:\Documents\GitHub\LoRa\Implementation\LoRa Controller\obj\Debug\LoRa_Controller.Form1.resources
+D:\Documents\GitHub\LoRa\Implementation\LoRa Controller\obj\Debug\LoRa_Controller.Properties.Resources.resources
+D:\Documents\GitHub\LoRa\Implementation\LoRa Controller\obj\Debug\LoRa Controller.csproj.GenerateResource.Cache
+D:\Documents\GitHub\LoRa\Implementation\LoRa Controller\obj\Debug\LoRa Controller.csproj.CoreCompileInputs.cache
+D:\Documents\GitHub\LoRa\Implementation\LoRa Controller\obj\Debug\LoRa Controller.exe
+D:\Documents\GitHub\LoRa\Implementation\LoRa Controller\obj\Debug\LoRa Controller.pdb
