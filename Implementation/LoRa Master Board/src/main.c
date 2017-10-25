@@ -88,8 +88,8 @@ Maintainer: Miguel Luis and Gregory Cristian
                                                               //  1: 250 kHz,
                                                               //  2: 500 kHz,
                                                               //  3: Reserved]
-#define LORA_SPREADING_FACTOR                       7         // [SF7..SF12]
-#define LORA_CODINGRATE                             1         // [1: 4/5,
+#define LORA_SPREADING_FACTOR                       12         // [SF7..SF12]
+#define LORA_CODINGRATE                             4         // [1: 4/5,
                                                               //  2: 4/6,
                                                               //  3: 4/7,
                                                               //  4: 4/8]
@@ -121,8 +121,8 @@ typedef enum
     TX_TIMEOUT,
 }States_t;
 
-#define RX_TIMEOUT_VALUE                            1000
-#define BUFFER_SIZE                                 64 // Define the payload size here
+#define RX_TIMEOUT_VALUE                            2000
+#define BUFFER_SIZE                                 4 // Define the payload size here
 #define LED_PERIOD_MS               200
 
 #define LEDS_OFF   do{ \
@@ -181,6 +181,9 @@ void OnRxError( void );
  * \brief Function executed on when led timer elapses
  */
 static void OnledEvent( void );
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart);
+
 /**
  * Main application entry point.
  */
@@ -266,10 +269,10 @@ int main( void )
 					Buffer[2] = 'N';
 					Buffer[3] = 'G';
 					// We fill the buffer with numbers for the payload 
-					for( i = 4; i < BufferSize; i++ )
+					/*for( i = 4; i < BufferSize; i++ )
 					{
 						Buffer[i] = i - 4;
-					}
+					}*/
 					PRINTF("...PING\n\r");
 
 					DelayMs( 1 ); 
@@ -293,10 +296,10 @@ int main( void )
 			Buffer[1] = 'I';
 			Buffer[2] = 'N';
 			Buffer[3] = 'G';
-			for( i = 4; i < BufferSize; i++ )
+			/*for( i = 4; i < BufferSize; i++ )
 			{
 				Buffer[i] = i - 4;
-			}
+			}*/
 			DelayMs( 1 ); 
 			Radio.Send( Buffer, BufferSize );
       State = LOWPOWER;
@@ -323,6 +326,10 @@ int main( void )
     ENABLE_IRQ( );
        
   }
+}
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
 }
 
 void OnTxDone( void )

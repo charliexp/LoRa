@@ -63,6 +63,23 @@ namespace LoRa_Controller.Device
 			OnDisconnect(connectionEventArgs);
 		}
 
+		public async Task<bool> SendCharAsync(byte[] byteToSend)
+		{
+			try
+			{
+				await BaseStream.WriteAsync(byteToSend, 0, 1);
+				return true;
+			}
+			catch (System.IO.IOException)
+			{
+				ConnectionEventArgs connectionEventArgs = new ConnectionEventArgs();
+				connectionEventArgs.Connected = false;
+				connectionEventArgs.DisconnectedOnPurpose = false;
+				OnDisconnect(connectionEventArgs);
+				return false;
+			}
+		}
+
 		public async Task<bool> ReadCharAsync(byte[] receiveBuffer)
 		{
 			try

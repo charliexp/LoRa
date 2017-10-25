@@ -126,6 +126,15 @@ namespace LoRa_Controller
             return SerialPort.GetPortNames();
         }
 
+		public async Task SendDataAsync(string data)
+		{
+			foreach (char character in data.ToCharArray())
+			{
+				byte[] byteToSend = new byte[] { Convert.ToByte(character) };
+				await (_serialDevice.SendCharAsync(byteToSend));
+			}
+		}
+
         public async Task<List<string>> ReceiveDataAsync()
         {
             List<string> receivedData = new List<string>();

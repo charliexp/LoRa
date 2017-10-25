@@ -563,6 +563,7 @@
 			this.bandwidthComboBox.Size = new System.Drawing.Size(88, 21);
 			this.bandwidthComboBox.Sorted = true;
 			this.bandwidthComboBox.TabIndex = 12;
+			this.bandwidthComboBox.SelectedIndexChanged += new System.EventHandler(this.BandwidthComboBox_SelectedIndexChanged);
 			// 
 			// Form1
 			// 

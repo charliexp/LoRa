@@ -10,6 +10,7 @@ namespace LoRa_Controller
     {
         DeviceHandler deviceHandler;
         Logger logger;
+		bool masterReported;
 		const int logMaxEntries = 12;
 		private FolderBrowserDialog folderBrowserDialog;
 
@@ -67,6 +68,7 @@ namespace LoRa_Controller
 				deviceHandler.UnableToConnectToBoard = new EventHandler<ConnectionEventArgs>(COMPortConnected);
 				deviceHandler.DisconnectedFromBoard = new EventHandler<ConnectionEventArgs>(COMPortDisconnected);
 				deviceHandler.ConnectToBoard();
+				masterReported = false;
 			
 				while (deviceHandler.IsConnectedToBoard)
 				{
@@ -77,6 +79,16 @@ namespace LoRa_Controller
 					UpdateCurrentErrors(deviceHandler.Errors);
 					UpdateTotalErrors(deviceHandler.TotalErrors);
 					UpdateRadioConnectionStatus(deviceHandler.IsRadioConnected);
+
+					if (!masterReported)
+					{
+						masterReported = true;
+						if (deviceHandler.IsMaster)
+							await logger.write("Connected as master");
+						else
+							await logger.write("Connected as slave");
+					}
+
 					if (deviceHandler.IsRadioConnected)
 						await logger.write(deviceHandler.RSSI + ", " + deviceHandler.SNR);
 					else
@@ -223,6 +235,11 @@ namespace LoRa_Controller
 				else
 					radioStatusTextBox.Text = "Not connected";
 			}
+		}
+
+		private void BandwidthComboBox_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			deviceHandler.SendDataAsync("a");
 		}
 	}
 }
