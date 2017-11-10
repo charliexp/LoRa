@@ -1,6 +1,8 @@
 ﻿using LoRa_Controller.Device;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -10,13 +12,48 @@ namespace LoRa_Controller
     {
         DeviceHandler deviceHandler;
         Logger logger;
-		bool masterReported;
+        const string settingsFilePath = "settings.ini";
+        StreamWriter settingsFileStreamWriter;
+        bool masterReported;
 		const int logMaxEntries = 12;
 		private FolderBrowserDialog folderBrowserDialog;
 
         public Form1()
         {
             InitializeComponent();
+        }
+        
+        private void LoadSettings()
+        {
+            string[] settingLines;
+            string settingName;
+            string settingValue;
+            
+            settingLines = File.ReadAllLines(settingsFilePath);
+            
+            if (settingLines.Length > 0)
+            {
+                settingName = settingLines[0].Remove(settingLines[0].IndexOf('=') - 1);
+                settingValue = settingLines[0].Substring(settingLines[0].LastIndexOf('=') + 2);
+
+                if (settingName.Equals("LogFolder"))
+                {
+                    if (logger.isOpen())
+                        logger.finish();
+                    logger.Folder = settingValue;
+                    logFolderTextBox.Text = settingValue;
+                }
+            }
+        }
+
+        private void SaveSettings()
+        {
+            string settingName = "LogFolder";
+            string settingValue = logger.Folder;
+            settingsFileStreamWriter = new StreamWriter(File.Open(settingsFilePath, FileMode.Create));
+
+            settingsFileStreamWriter.WriteLine(settingName + " = " + settingValue);
+            settingsFileStreamWriter.Close();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -26,14 +63,17 @@ namespace LoRa_Controller
 			folderBrowserDialog.ShowNewFolderButton = true;
 			folderBrowserDialog.RootFolder = Environment.SpecialFolder.MyComputer;
 			Application.ApplicationExit += new EventHandler(OnApplicationExit);
-		}
+            logger = new Logger("log_", "dd.MM.yyyy", "txt");
+            LoadSettings();
+            logger.start();
+        }
 
 		private void ChangeLogFolderButton_Click(object sender, EventArgs e)
 		{
 			DialogResult result = folderBrowserDialog.ShowDialog();
 			if (result == DialogResult.OK)
 			{
-				logger.Path = folderBrowserDialog.SelectedPath;
+				logger.Folder = folderBrowserDialog.SelectedPath;
 				logFolderTextBox.Text = folderBrowserDialog.SelectedPath;
 			}
 		}
@@ -60,10 +100,7 @@ namespace LoRa_Controller
 					logger.finish();
 				}
 
-				logger = new Logger("log_", "dd.MM.yyyy", "txt");
-				ChangeLogFolderButton_Click(new object(), new EventArgs());
-
-				deviceHandler = new DeviceHandler(comPort);
+                deviceHandler = new DeviceHandler(comPort);
 				deviceHandler.ConnectedToBoard = new EventHandler<ConnectionEventArgs>(COMPortConnected);
 				deviceHandler.UnableToConnectToBoard = new EventHandler<ConnectionEventArgs>(COMPortConnected);
 				deviceHandler.DisconnectedFromBoard = new EventHandler<ConnectionEventArgs>(COMPortDisconnected);
@@ -99,6 +136,7 @@ namespace LoRa_Controller
 		
         public void OnApplicationExit(object sender, EventArgs e)
         {
+            SaveSettings();
             if (logger != null)
                 logger.finish();
         }

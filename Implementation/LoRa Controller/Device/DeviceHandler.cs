@@ -11,7 +11,6 @@ namespace LoRa_Controller
     {
         #region Private variables
         private SerialHandler _serialDevice;
-		private bool _isConnectedToBoard;
 		
         private Timer _connectionChecker;
         private uint _oldErrors;
@@ -62,7 +61,7 @@ namespace LoRa_Controller
 
 		public bool IsConnectedToBoard
 		{
-			get { return _isConnectedToBoard; }
+			get { return _serialDevice.isConnected; }
 		}
 
 		public EventHandler<ConnectionEventArgs> ConnectedToBoard
@@ -102,8 +101,8 @@ namespace LoRa_Controller
 		#region Private methods
 		private void UpdateBoardConnectionStatus(object sender, ConnectionEventArgs e)
 		{
-			_isConnectedToBoard = e.Connected;
-			if (!_isConnectedToBoard)
+			_serialDevice.isConnected = e.Connected;
+			if (!_serialDevice.isConnected)
 				_isRadioConnected = false;
 		}
 

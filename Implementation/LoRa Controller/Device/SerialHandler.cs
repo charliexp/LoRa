@@ -6,8 +6,12 @@ namespace LoRa_Controller.Device
 {
 	class SerialHandler : SerialPort
 	{
-		#region Constructors
-		public SerialHandler(string portName)
+        #region Private members
+        public bool isConnected;
+        #endregion
+
+        #region Constructors
+        public SerialHandler(string portName)
 		{
 			BaudRate = 115200;
 			Parity = Parity.None;
