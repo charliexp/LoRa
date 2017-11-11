@@ -122,7 +122,7 @@ typedef enum
 }States_t;
 
 #define RX_TIMEOUT_VALUE                            2000
-#define BUFFER_SIZE                                 4 // Define the payload size here
+#define BUFFER_SIZE                                 3 // Define the payload size here
 #define LED_PERIOD_MS               200
 
 #define LEDS_OFF   do{ \
@@ -131,9 +131,6 @@ typedef enum
                    LED_Off( LED_GREEN1 ) ; \
                    LED_Off( LED_GREEN2 ) ; \
                    } while(0) ;
-
-const uint8_t PingMsg[] = "PING";
-const uint8_t PongMsg[] = "PONG";
 
 uint16_t BufferSize = BUFFER_SIZE;
 uint8_t Buffer[BUFFER_SIZE];
@@ -189,7 +186,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart);
  */
 int main( void )
 {
-  uint8_t i;
+  uint16_t i = 0;
 
   HAL_Init( );
   
@@ -243,69 +240,25 @@ int main( void )
 #else
     #error "Please define a frequency band in the compiler options."
 #endif
-                                  
-  Radio.Rx( RX_TIMEOUT_VALUE );
+	Buffer[0] = 'P';
+	Buffer[1] = i >> 8;
+	Buffer[2] = i;
+	Radio.Send( Buffer, BufferSize );
                                   
   while( 1 )
   {
     switch( State )
     {
     case RX:
-			if( BufferSize > 0 )
-			{
-				if( strncmp( ( const char* )Buffer, ( const char* )PongMsg, 4 ) == 0 )
-				{
-					TimerStop(&timerLed );
-					LED_Off( LED_BLUE);
-					LED_Off( LED_GREEN ) ; 
-					LED_Off( LED_RED1 ) ;;
-					// Indicates on a LED that the received frame is a PONG
-					LED_Toggle( LED_RED2 ) ;
-
-
-					// Send the next PING frame      
-					Buffer[0] = 'P';
-					Buffer[1] = 'I';
-					Buffer[2] = 'N';
-					Buffer[3] = 'G';
-					// We fill the buffer with numbers for the payload 
-					/*for( i = 4; i < BufferSize; i++ )
-					{
-						Buffer[i] = i - 4;
-					}*/
-					PRINTF("...PING\n\r");
-
-					DelayMs( 1 ); 
-					Radio.Send( Buffer, BufferSize );
-					}
-					else // valid reception but neither a PING or a PONG message
-					{
-						Radio.Rx( RX_TIMEOUT_VALUE );
-					}
-				}
-      State = LOWPOWER;
-      break;
-    case TX:
-      Radio.Rx( RX_TIMEOUT_VALUE );
-      State = LOWPOWER;
-      break;
     case RX_TIMEOUT:
     case RX_ERROR:
-			// Send the next PING frame
-			Buffer[0] = 'P';
-			Buffer[1] = 'I';
-			Buffer[2] = 'N';
-			Buffer[3] = 'G';
-			/*for( i = 4; i < BufferSize; i++ )
-			{
-				Buffer[i] = i - 4;
-			}*/
-			DelayMs( 1 ); 
-			Radio.Send( Buffer, BufferSize );
-      State = LOWPOWER;
       break;
+    case TX:
     case TX_TIMEOUT:
-      Radio.Rx( RX_TIMEOUT_VALUE );
+			i++;
+			Buffer[1] = i >> 8;
+			Buffer[2] = i;
+			Radio.Send( Buffer, BufferSize );
       State = LOWPOWER;
       break;
     case LOWPOWER:

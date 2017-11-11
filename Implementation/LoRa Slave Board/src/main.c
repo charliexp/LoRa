@@ -122,7 +122,7 @@ typedef enum
 }States_t;
 
 #define RX_TIMEOUT_VALUE                            2000
-#define BUFFER_SIZE                                 4 // Define the payload size here
+#define BUFFER_SIZE                                 3 // Define the payload size here
 #define LED_PERIOD_MS               200
 
 #define LEDS_OFF   do{ \
@@ -131,9 +131,6 @@ typedef enum
                    LED_Off( LED_GREEN1 ) ; \
                    LED_Off( LED_GREEN2 ) ; \
                    } while(0) ;
-
-const uint8_t PingMsg[] = "PING";
-const uint8_t PongMsg[] = "PONG";
 
 uint16_t BufferSize = BUFFER_SIZE;
 uint8_t Buffer[BUFFER_SIZE];
@@ -186,8 +183,6 @@ static void OnledEvent( void );
  */
 int main( void )
 {
-  uint8_t i;
-
   HAL_Init( );
   
   SystemClock_Config( );
@@ -248,53 +243,13 @@ int main( void )
     switch( State )
     {
     case RX:
-				if( BufferSize > 0 )
-				{
-					if( strncmp( ( const char* )Buffer, ( const char* )PingMsg, 4 ) == 0 )
-					{
-						// Indicates on a LED that the received frame is a PING
-						TimerStop(&timerLed );
-						LED_Off( LED_RED1);
-						LED_Off( LED_RED2 ) ; 
-						LED_Off( LED_GREEN ) ;
-						LED_Toggle( LED_BLUE );
-
-						// Send the reply to the PONG string
-						Buffer[0] = 'P';
-						Buffer[1] = 'O';
-						Buffer[2] = 'N';
-						Buffer[3] = 'G';
-						// We fill the buffer with numbers for the payload 
-						/*for( i = 4; i < BufferSize; i++ )
-						{
-							Buffer[i] = i - 4;
-						}*/
-						DelayMs( 1 );
-
-						Radio.Send( Buffer, BufferSize );
-						PRINTF("...PONG\n\r");
-					}
-					else // valid reception but not a PING as expected
-					{
-						Radio.Rx( RX_TIMEOUT_VALUE );
-					}
-			 }
-      State = LOWPOWER;
-      break;
-    case TX:
-      // Indicates on a LED that we have sent a PING [Master]
-      // Indicates on a LED that we have sent a PONG [Slave]
-      //GpioWrite( &Led2, GpioRead( &Led2 ) ^ 1 );
-      Radio.Rx( RX_TIMEOUT_VALUE );
-      State = LOWPOWER;
-      break;
     case RX_TIMEOUT:
     case RX_ERROR:
 			Radio.Rx( RX_TIMEOUT_VALUE );
       State = LOWPOWER;
       break;
+    case TX:
     case TX_TIMEOUT:
-      Radio.Rx( RX_TIMEOUT_VALUE );
       State = LOWPOWER;
       break;
     case LOWPOWER:
@@ -334,6 +289,7 @@ void OnRxDone( uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr )
     State = RX;
   
     PRINTF("OnRxDone\n\r");
+		PRINTF("Packet #%u\n\r", payload[1] << 8 | payload[2]);
     PRINTF("RssiValue=%d dBm, SnrValue=%d\n\r", rssi, snr);
 }
 
