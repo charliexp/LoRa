@@ -11,6 +11,7 @@ namespace LoRa_Controller
     public partial class Form1 : Form
     {
         MasterHandler masterHandler;
+        BeaconHandler beaconHandler;
         Logger logger;
         const string settingsFilePath = "settings.ini";
         StreamWriter settingsFileStreamWriter;
@@ -115,6 +116,8 @@ namespace LoRa_Controller
 				masterHandler.UnableToConnectToBoard = new EventHandler<ConnectionEventArgs>(COMPortConnected);
 				masterHandler.DisconnectedFromBoard = new EventHandler<ConnectionEventArgs>(COMPortDisconnected);
 				masterHandler.ConnectToBoard();
+                beaconHandler = new BeaconHandler(2);
+                beaconHandler._serialDevice = masterHandler._serialDevice;
 				masterReported = false;
 			
 				while (masterHandler.IsConnectedToBoard)
@@ -293,8 +296,11 @@ namespace LoRa_Controller
 
 		private async void BandwidthComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			await masterHandler.SendCommandAsync(MasterHandler.Commands.Bandwidth, (byte) ((ComboBox)sender).SelectedIndex);
-		}
+            if (sender.Equals(masterBandwidthComboBox))
+			    await masterHandler.SendCommandAsync(MasterHandler.Commands.Bandwidth, (byte) ((ComboBox)sender).SelectedIndex);
+            else
+                await beaconHandler.SendCommandAsync(MasterHandler.Commands.Bandwidth, (byte)((ComboBox)sender).SelectedIndex);
+        }
 
         private async void codingRateComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {

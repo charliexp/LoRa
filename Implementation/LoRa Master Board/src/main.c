@@ -80,6 +80,7 @@ Maintainer: Miguel Luis and Gregory Cristian
 #define RADIO_BUFFER_SIZE     64
 #define UART_BUFFER_SIZE			6
 #define DEVICE_ADDRESS				1
+#define BEACON_ADDRESS				2
 
 uint8_t LoRa_Bandwidth = 0;         // [0: 125 kHz,
 																		//  1: 250 kHz,
@@ -95,9 +96,10 @@ uint8_t LoRa_RxSymTimeout = 5;      // Symbols
 uint16_t LoRa_RxMsTimeout = 2000;   // Milliseconds
 uint32_t LoRa_TxTimeout = 3000000;  // Milliseconds
 uint8_t LoRa_PreambleSize = 8;      // Same for Tx and Rx
-uint8_t LoRa_PayloadMaxSize = 3;
+uint8_t LoRa_PayloadMaxSize = 6;
 bool LoRa_VariablePayload = true;
 bool LoRa_PerformCRC = true;
+bool LoRa_Transmitting = false;
 
 typedef enum
 {
@@ -127,8 +129,16 @@ typedef enum
 	COMMAND_PREAMBLE_SIZE = 'h',
 	COMMAND_PAYLOAD_MAX_SIZE = 'i',
 	COMMAND_VARIABLE_PAYLOAD = 'j',
-	COMMAND_PERFORM_CRC = 'k'
+	COMMAND_PERFORM_CRC = 'k',
+	
+	COMMAND_IS_PRESENT = 'z'
 }Commands_t;
+
+typedef enum
+{
+	RESPONSE_ACK = 1,
+	RESPONSE_NACK = 0xff
+}Responses_t;
 
 extern UART_HandleTypeDef UartHandle;
 
@@ -187,7 +197,7 @@ static void OnledEvent( void );
  */
 int main( void )
 {
-  uint16_t i = 0;
+  uint16_t transmitIndex = 0;
 
   HAL_Init( );
   
@@ -224,10 +234,10 @@ int main( void )
 																 LoRa_RxSymTimeout, !LoRa_VariablePayload,
 																 LoRa_PayloadMaxSize, LoRa_PerformCRC, 0, 0, false, true );
 
-	RadioBuffer[0] = 'P';
-	RadioBuffer[1] = i >> 8;
-	RadioBuffer[2] = i;
+	RadioBuffer[0] = BEACON_ADDRESS;
+	RadioBuffer[1] = COMMAND_IS_PRESENT;
 	Radio.Send( RadioBuffer, LoRa_PayloadMaxSize );
+	
 	HAL_UART_Receive_IT(&UartHandle, UartBuffer, UART_BUFFER_SIZE);
                                   
   while( 1 )
@@ -304,6 +314,11 @@ int main( void )
 							break;
 					}
 				}
+				else
+				{
+					memcpy(RadioBuffer, UartBuffer, LoRa_PayloadMaxSize);
+					Radio.Send( RadioBuffer, LoRa_PayloadMaxSize );
+				}
 				UartState = UART_IDLE;
 				break;
 			case UART_IDLE:
@@ -328,19 +343,33 @@ int main( void )
     switch( RadioState )
     {
 			case RADIO_RX:
+				if (RadioBuffer[1] == RESPONSE_ACK)
+					PRINTF("Beacon ACK\n\r");
+				else if (RadioBuffer[1] == RESPONSE_NACK)
+					PRINTF("Beacon NACK\n\r");
+				transmitIndex++;
+				
+				RadioBuffer[0] = BEACON_ADDRESS;
+				RadioBuffer[1] = COMMAND_IS_PRESENT;
+				Radio.Send( RadioBuffer, LoRa_PayloadMaxSize );
+				
+				RadioState = RADIO_LOWPOWER;
+				break;
 			case RADIO_RX_TIMEOUT:
 			case RADIO_RX_ERROR:
-				break;
-			case RADIO_TX:
-			case RADIO_TX_TIMEOUT:
-				i++;
-				RadioBuffer[1] = i >> 8;
-				RadioBuffer[2] = i;
+				PRINTF("Beacon not responding\n\r");
 				Radio.Send( RadioBuffer, LoRa_PayloadMaxSize );
 				RadioState = RADIO_LOWPOWER;
 				break;
+			case RADIO_TX:
+				Radio.Rx( LoRa_RxMsTimeout );
+				RadioState = RADIO_LOWPOWER;
+				break;
+			case RADIO_TX_TIMEOUT:
+				Radio.Send( RadioBuffer, LoRa_PayloadMaxSize );
+				RadioState = RADIO_LOWPOWER;
 			case RADIO_LOWPOWER:
-				default:
+			default:
 							// Set low power
 				break;
     }
@@ -355,44 +384,38 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 
 void OnTxDone( void )
 {
-    Radio.Sleep( );
-    RadioState = RADIO_TX;
-    PRINTF("OnTxDone\n\r");
+	Radio.Sleep( );
+	RadioState = RADIO_TX;
 }
 
 void OnRxDone( uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr )
 {
-    Radio.Sleep( );
-    BufferSize = size;
-    memcpy( RadioBuffer, payload, BufferSize );
-    RssiValue = rssi;
-    SnrValue = snr;
-    RadioState = RADIO_RX;
+	Radio.Sleep( );
+	RadioState = RADIO_RX;
+	BufferSize = size;
+	memcpy( RadioBuffer, payload, BufferSize );
+	RssiValue = rssi;
+	SnrValue = snr;
   
-    PRINTF("OnRxDone\n\r");
-    PRINTF("RssiValue=%d dBm, SnrValue=%d\n\r", rssi, snr);
+	PRINTF("RssiValue=%d dBm, SnrValue=%d\n\r", rssi, snr);
 }
 
 void OnTxTimeout( void )
 {
-    Radio.Sleep( );
-    RadioState = RADIO_TX_TIMEOUT;
-  
-    PRINTF("OnTxTimeout\n\r");
+  Radio.Sleep( );
+	RadioState = RADIO_TX_TIMEOUT;
 }
 
 void OnRxTimeout( void )
 {
-    Radio.Sleep( );
-    RadioState = RADIO_RX_TIMEOUT;
-    PRINTF("OnRxTimeout\n\r");
+  Radio.Sleep( );
+	RadioState = RADIO_RX_TIMEOUT;
 }
 
 void OnRxError( void )
 {
-    Radio.Sleep( );
-    RadioState = RADIO_RX_ERROR;
-    PRINTF("OnRxError\n\r");
+	Radio.Sleep( );
+	RadioState = RADIO_RX_ERROR;
 }
 
 static void OnledEvent( void )

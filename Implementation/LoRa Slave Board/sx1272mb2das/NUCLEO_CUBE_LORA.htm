@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\sx1272mb2das\NUCLEO_CUBE_LORA.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\sx1272mb2das\NUCLEO_CUBE_LORA.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060528: Last Updated: Sun Nov 12 16:40:35 2017
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060528: Last Updated: Sun Nov 12 18:48:29 2017
 <BR><P>
 <H3>Maximum Stack Usage =        248 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -1133,39 +1133,31 @@ Global Symbols
 <P><STRONG><a name="[1]"></a>NMI_Handler</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, stm32l0xx_it.o(i.NMI_Handler))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32l073xx.o(RESET)
 </UL>
-<P><STRONG><a name="[2d]"></a>OnRxDone</STRONG> (Thumb, 72 bytes, Stack size 24 bytes, main.o(i.OnRxDone))
-<BR><BR>[Stack]<UL><LI>Max Depth = 216<LI>Call Chain = OnRxDone &rArr; vcom_Send &rArr; vsprintf
+<P><STRONG><a name="[2d]"></a>OnRxDone</STRONG> (Thumb, 52 bytes, Stack size 40 bytes, main.o(i.OnRxDone))
+<BR><BR>[Stack]<UL><LI>Max Depth = 232<LI>Call Chain = OnRxDone &rArr; vcom_Send &rArr; vsprintf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vcom_Send
 <LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> main.o(i.main)
 </UL>
-<P><STRONG><a name="[30]"></a>OnRxError</STRONG> (Thumb, 22 bytes, Stack size 8 bytes, main.o(i.OnRxError))
-<BR><BR>[Stack]<UL><LI>Max Depth = 200<LI>Call Chain = OnRxError &rArr; vcom_Send &rArr; vsprintf
-</UL>
-<BR>[Calls]<UL><LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vcom_Send
+<P><STRONG><a name="[30]"></a>OnRxError</STRONG> (Thumb, 16 bytes, Stack size 8 bytes, main.o(i.OnRxError))
+<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = OnRxError
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> main.o(i.main)
 </UL>
-<P><STRONG><a name="[2f]"></a>OnRxTimeout</STRONG> (Thumb, 22 bytes, Stack size 8 bytes, main.o(i.OnRxTimeout))
-<BR><BR>[Stack]<UL><LI>Max Depth = 200<LI>Call Chain = OnRxTimeout &rArr; vcom_Send &rArr; vsprintf
-</UL>
-<BR>[Calls]<UL><LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vcom_Send
+<P><STRONG><a name="[2f]"></a>OnRxTimeout</STRONG> (Thumb, 16 bytes, Stack size 8 bytes, main.o(i.OnRxTimeout))
+<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = OnRxTimeout
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> main.o(i.main)
 </UL>
-<P><STRONG><a name="[2c]"></a>OnTxDone</STRONG> (Thumb, 22 bytes, Stack size 8 bytes, main.o(i.OnTxDone))
-<BR><BR>[Stack]<UL><LI>Max Depth = 200<LI>Call Chain = OnTxDone &rArr; vcom_Send &rArr; vsprintf
-</UL>
-<BR>[Calls]<UL><LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vcom_Send
+<P><STRONG><a name="[2c]"></a>OnTxDone</STRONG> (Thumb, 16 bytes, Stack size 8 bytes, main.o(i.OnTxDone))
+<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = OnTxDone
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> main.o(i.main)
 </UL>
-<P><STRONG><a name="[2e]"></a>OnTxTimeout</STRONG> (Thumb, 22 bytes, Stack size 8 bytes, main.o(i.OnTxTimeout))
-<BR><BR>[Stack]<UL><LI>Max Depth = 200<LI>Call Chain = OnTxTimeout &rArr; vcom_Send &rArr; vsprintf
-</UL>
-<BR>[Calls]<UL><LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vcom_Send
+<P><STRONG><a name="[2e]"></a>OnTxTimeout</STRONG> (Thumb, 16 bytes, Stack size 8 bytes, main.o(i.OnTxTimeout))
+<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = OnTxTimeout
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> main.o(i.main)
 </UL>
@@ -1872,7 +1864,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[3c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SX1272GetTimeOnAir
 </UL>
 
-<P><STRONG><a name="[25]"></a>main</STRONG> (Thumb, 590 bytes, Stack size 40 bytes, main.o(i.main))
+<P><STRONG><a name="[25]"></a>main</STRONG> (Thumb, 646 bytes, Stack size 40 bytes, main.o(i.main))
 <BR><BR>[Stack]<UL><LI>Max Depth = 248<LI>Call Chain = main &rArr; HW_Init &rArr; HW_RTC_Init &rArr; HW_RTC_SetConfig &rArr; HAL_RTC_Init &rArr; HAL_RTC_MspInit &rArr; HAL_RCC_OscConfig &rArr; RCC_SetFlashLatencyFromMSIRange
 </UL>
 <BR>[Calls]<UL><LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vcom_Send
@@ -1935,10 +1927,6 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SX1272OnDio1Irq
 <LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SX1272OnDio0Irq
 <LI><a href="#[25]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
-<LI><a href="#[2e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OnTxTimeout
-<LI><a href="#[2c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OnTxDone
-<LI><a href="#[2f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OnRxTimeout
-<LI><a href="#[30]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OnRxError
 <LI><a href="#[2d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OnRxDone
 </UL>
 <P>

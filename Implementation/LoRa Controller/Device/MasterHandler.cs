@@ -9,9 +9,9 @@ namespace LoRa_Controller
 {
     class MasterHandler
     {
+        public SerialHandler _serialDevice;
+
         #region Private variables
-        private SerialHandler _serialDevice;
-		
         private Timer _connectionChecker;
         private uint _oldErrors;
         private uint _errors;
@@ -170,7 +170,9 @@ namespace LoRa_Controller
             List<string> receivedData = new List<string>();
             string receivedLine = "";
 
-            while (_serialDevice.IsOpen && !receivedLine.Contains("Done") && !receivedLine.Contains("Timeout"))
+            while (_serialDevice.IsOpen && !receivedLine.Contains("Done") &&
+                                           !receivedLine.Contains("Timeout") &&
+                                           !receivedLine.Contains(":"))
             {
                 receivedLine = "";
                 while (_serialDevice.IsOpen && !receivedLine.Contains("\r"))

@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Device\ConnectionEventArgs.cs" />
+    <Compile Include="Device\BeaconHandler.cs" />
     <Compile Include="Device\SerialHandler.cs">
       <SubType>Component</SubType>
     </Compile>
