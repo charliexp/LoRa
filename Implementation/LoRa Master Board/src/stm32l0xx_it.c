@@ -202,9 +202,11 @@ void SysTick_Handler(void)
 {
 }*/
 
+extern UART_HandleTypeDef UartHandle;
+
 void USART2_IRQHandler( void )
 {
-   vcom_Print( );
+	HAL_UART_IRQHandler ( &UartHandle );
 }
 
 void RTC_IRQHandler( void )

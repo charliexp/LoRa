@@ -63,7 +63,7 @@ __IO uint16_t iw=0;
 /* buffer read index*/
 static uint16_t ir=0;
 /* Uart Handle */
-static UART_HandleTypeDef UartHandle;
+UART_HandleTypeDef UartHandle;
 
 /* Private function prototypes -----------------------------------------------*/
 /* Functions Definition ------------------------------------------------------*/
@@ -134,28 +134,27 @@ void vcom_Send( char *format, ... )
   }
   RESTORE_PRIMASK();
   
-  HAL_NVIC_SetPendingIRQ(USARTX_IRQn);
+	if (UartHandle.gState != HAL_UART_STATE_BUSY_TX)
+	{
+		HAL_UART_Transmit_IT(&UartHandle, (uint8_t *) buff + ir, len);
+		ir = (ir + len) % BUFSIZE;
+	}
     
   va_end(args);
 }
 
-/* modifes only ir*/
-void vcom_Print( void)
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 {
-  char* CurChar;
-  while( ( (iw+BUFSIZE-ir)%BUFSIZE) >0 )
-  {
-    BACKUP_PRIMASK();
-    DISABLE_IRQ();
-    
-    CurChar = &buff[ir];
-    ir= (ir+1) %BUFSIZE;
-    
-    RESTORE_PRIMASK();
-    
-    HAL_UART_Transmit(&UartHandle,(uint8_t *) CurChar, 1, 300);    
-  }
-  HAL_NVIC_ClearPendingIRQ(USARTX_IRQn);
+	if (iw > ir)
+	{
+		HAL_UART_Transmit_IT(&UartHandle, (uint8_t *) buff + ir, iw - ir);
+		ir = iw;
+	}
+	else if (iw < ir)
+	{
+		HAL_UART_Transmit_IT(&UartHandle, (uint8_t *) buff + ir, BUFSIZE - ir);
+		ir = 0;
+	}
 }
 
 void vcom_Send_Lp( char *format, ... )

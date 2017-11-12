@@ -66,7 +66,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Log\Logger.cs" />
-    <Compile Include="Device\DeviceHandler.cs" />
+    <Compile Include="Device\MasterHandler.cs" />
     <Compile Include="Interface\Form1.cs">
       <SubType>Form</SubType>
     </Compile>

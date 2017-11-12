@@ -67,62 +67,6 @@ Maintainer: Miguel Luis and Gregory Cristian
 #include "low_power.h"
 #include "vcom.h"
 
-
-#if defined( USE_BAND_868 )
-
-#define RF_FREQUENCY                                866500000 // Hz
-
-#elif defined( USE_BAND_915 )
-
-#define RF_FREQUENCY                                915000000 // Hz
-
-#else
-    #error "Please define a frequency band in the compiler options."
-#endif
-
-#define TX_OUTPUT_POWER                             14        // dBm
-
-#if defined( USE_MODEM_LORA )
-
-#define LORA_BANDWIDTH                              0         // [0: 125 kHz,
-                                                              //  1: 250 kHz,
-                                                              //  2: 500 kHz,
-                                                              //  3: Reserved]
-#define LORA_SPREADING_FACTOR                       12         // [SF7..SF12]
-#define LORA_CODINGRATE                             4         // [1: 4/5,
-                                                              //  2: 4/6,
-                                                              //  3: 4/7,
-                                                              //  4: 4/8]
-#define LORA_PREAMBLE_LENGTH                        8         // Same for Tx and Rx
-#define LORA_SYMBOL_TIMEOUT                         5         // Symbols
-#define LORA_FIX_LENGTH_PAYLOAD_ON                  false
-#define LORA_IQ_INVERSION_ON                        false
-
-#elif defined( USE_MODEM_FSK )
-
-#define FSK_FDEV                                    25e3      // Hz
-#define FSK_DATARATE                                50e3      // bps
-#define FSK_BANDWIDTH                               50e3      // Hz
-#define FSK_AFC_BANDWIDTH                           83.333e3  // Hz
-#define FSK_PREAMBLE_LENGTH                         5         // Same for Tx and Rx
-#define FSK_FIX_LENGTH_PAYLOAD_ON                   false
-
-#else
-    #error "Please define a modem in the compiler options."
-#endif
-
-typedef enum
-{
-    LOWPOWER,
-    RX,
-    RX_TIMEOUT,
-    RX_ERROR,
-    TX,
-    TX_TIMEOUT,
-}States_t;
-
-#define RX_TIMEOUT_VALUE                            2000
-#define BUFFER_SIZE                                 3 // Define the payload size here
 #define LED_PERIOD_MS               200
 
 #define LEDS_OFF   do{ \
@@ -132,10 +76,69 @@ typedef enum
                    LED_Off( LED_GREEN2 ) ; \
                    } while(0) ;
 
-uint16_t BufferSize = BUFFER_SIZE;
-uint8_t Buffer[BUFFER_SIZE];
+#define RF_FREQUENCY          866500000 // Hz
+#define RADIO_BUFFER_SIZE     64
+#define UART_BUFFER_SIZE			6
+#define DEVICE_ADDRESS				1
 
-States_t State = LOWPOWER;
+uint8_t LoRa_Bandwidth = 0;         // [0: 125 kHz,
+																		//  1: 250 kHz,
+																		//  2: 500 kHz,
+																		//  3: Reserved]
+uint8_t LoRa_OutputPower = 14;      // dBm
+uint8_t LoRa_SpreadingFactor = 12;  // [SF7..SF12]
+uint8_t LoRa_CodingRate = 4;        // [1: 4/5,
+                                    //  2: 4/6,
+                                    //  3: 4/7,
+                                    //  4: 4/8]
+uint8_t LoRa_RxSymTimeout = 5;      // Symbols
+uint16_t LoRa_RxMsTimeout = 2000;   // Milliseconds
+uint32_t LoRa_TxTimeout = 3000000;  // Milliseconds
+uint8_t LoRa_PreambleSize = 8;      // Same for Tx and Rx
+uint8_t LoRa_PayloadMaxSize = 3;
+bool LoRa_VariablePayload = true;
+bool LoRa_PerformCRC = true;
+
+typedef enum
+{
+	RADIO_LOWPOWER,
+	RADIO_RX,
+	RADIO_RX_TIMEOUT,
+	RADIO_RX_ERROR,
+	RADIO_TX,
+	RADIO_TX_TIMEOUT
+}RadioStates_t;
+
+typedef enum
+{
+    UART_IDLE,
+		UART_RX
+}UartStates_t;
+
+typedef enum
+{
+	COMMAND_BANDWIDTH = 'a',
+	COMMAND_OUTPUT_POWER = 'b',
+	COMMAND_SPREAD_FACTOR = 'c',
+	COMMAND_CODING_RATE = 'd',
+	COMMAND_RX_SYM_TIMEOUT = 'e',
+	COMMAND_RX_MS_TIMEOUT = 'f',
+	COMMAND_TX_TIMEOUT = 'g',
+	COMMAND_PREAMBLE_SIZE = 'h',
+	COMMAND_PAYLOAD_MAX_SIZE = 'i',
+	COMMAND_VARIABLE_PAYLOAD = 'j',
+	COMMAND_PERFORM_CRC = 'k'
+}Commands_t;
+
+extern UART_HandleTypeDef UartHandle;
+
+uint16_t BufferSize = RADIO_BUFFER_SIZE;
+uint8_t RadioBuffer[RADIO_BUFFER_SIZE];
+uint8_t UartBuffer[UART_BUFFER_SIZE];
+uint8_t RadioSetupRequired = 0;
+
+UartStates_t UartState = UART_IDLE;
+RadioStates_t RadioState = RADIO_LOWPOWER;
 
 int8_t RssiValue = 0;
 int8_t SnrValue = 0;
@@ -179,8 +182,6 @@ void OnRxError( void );
  */
 static void OnledEvent( void );
 
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart);
-
 /**
  * Main application entry point.
  */
@@ -213,82 +214,149 @@ int main( void )
 
   Radio.SetChannel( RF_FREQUENCY );
 
-#if defined( USE_MODEM_LORA )
-
-  Radio.SetTxConfig( MODEM_LORA, TX_OUTPUT_POWER, 0, LORA_BANDWIDTH,
-                                 LORA_SPREADING_FACTOR, LORA_CODINGRATE,
-                                   LORA_PREAMBLE_LENGTH, LORA_FIX_LENGTH_PAYLOAD_ON,
-                                   true, 0, 0, LORA_IQ_INVERSION_ON, 3000000 );
+  Radio.SetTxConfig( MODEM_LORA, LoRa_OutputPower, 0, LoRa_Bandwidth,
+                                 LoRa_SpreadingFactor, LoRa_CodingRate,
+																 LoRa_PreambleSize, !LoRa_VariablePayload,
+																 LoRa_PerformCRC, 0, 0, false, LoRa_TxTimeout );
     
-  Radio.SetRxConfig( MODEM_LORA, LORA_BANDWIDTH, LORA_SPREADING_FACTOR,
-                                   LORA_CODINGRATE, 0, LORA_PREAMBLE_LENGTH,
-                                   LORA_SYMBOL_TIMEOUT, LORA_FIX_LENGTH_PAYLOAD_ON,
-                                   0, true, 0, 0, LORA_IQ_INVERSION_ON, true );
+  Radio.SetRxConfig( MODEM_LORA, LoRa_Bandwidth, LoRa_SpreadingFactor,
+																 LoRa_CodingRate, 0, LoRa_PreambleSize,
+																 LoRa_RxSymTimeout, !LoRa_VariablePayload,
+																 LoRa_PayloadMaxSize, LoRa_PerformCRC, 0, 0, false, true );
 
-#elif defined( USE_MODEM_FSK )
-
-  Radio.SetTxConfig( MODEM_FSK, TX_OUTPUT_POWER, FSK_FDEV, 0,
-                                  FSK_DATARATE, 0,
-                                  FSK_PREAMBLE_LENGTH, FSK_FIX_LENGTH_PAYLOAD_ON,
-                                  true, 0, 0, 0, 3000000 );
-    
-  Radio.SetRxConfig( MODEM_FSK, FSK_BANDWIDTH, FSK_DATARATE,
-                                  0, FSK_AFC_BANDWIDTH, FSK_PREAMBLE_LENGTH,
-                                  0, FSK_FIX_LENGTH_PAYLOAD_ON, 0, true,
-                                  0, 0,false, true );
-
-#else
-    #error "Please define a frequency band in the compiler options."
-#endif
-	Buffer[0] = 'P';
-	Buffer[1] = i >> 8;
-	Buffer[2] = i;
-	Radio.Send( Buffer, BufferSize );
+	RadioBuffer[0] = 'P';
+	RadioBuffer[1] = i >> 8;
+	RadioBuffer[2] = i;
+	Radio.Send( RadioBuffer, LoRa_PayloadMaxSize );
+	HAL_UART_Receive_IT(&UartHandle, UartBuffer, UART_BUFFER_SIZE);
                                   
   while( 1 )
   {
-    switch( State )
+		switch (UartState)
+		{
+			case UART_RX:
+				if (UartBuffer[0] == DEVICE_ADDRESS)
+				{
+					switch (UartBuffer[1])
+					{
+						case COMMAND_BANDWIDTH:
+							PRINTF("Bandwidth: %u\n\r", UartBuffer[2]);
+							LoRa_Bandwidth = UartBuffer[2];
+							RadioSetupRequired = 1;
+							break;
+						case COMMAND_CODING_RATE:
+							PRINTF("Coding Rate: %u\n\r", UartBuffer[2]);
+							LoRa_CodingRate = UartBuffer[2];
+							RadioSetupRequired = 1;
+							break;
+						case COMMAND_OUTPUT_POWER:
+							PRINTF("Output Power: %u\n\r", UartBuffer[2]);
+							LoRa_OutputPower = UartBuffer[2];
+							RadioSetupRequired = 1;
+							break;
+						case COMMAND_SPREAD_FACTOR:
+							PRINTF("Spreading Factor: %u\n\r", UartBuffer[2]);
+							LoRa_SpreadingFactor = UartBuffer[2];
+							RadioSetupRequired = 1;
+							break;
+						case COMMAND_RX_SYM_TIMEOUT:
+							PRINTF("Rx Timeout (sym): %u\n\r", UartBuffer[2]);
+							LoRa_RxSymTimeout = UartBuffer[2];
+							RadioSetupRequired = 1;
+							break;
+						case COMMAND_RX_MS_TIMEOUT:
+							PRINTF("Rx Timeout (ms): %u\n\r", (uint16_t) UartBuffer[4] << 8 |
+																													 UartBuffer[5]);
+							LoRa_RxMsTimeout = UartBuffer[1];
+							break;
+						case COMMAND_TX_TIMEOUT:
+							PRINTF("Tx Timeout (ms): %u\n\r", (uint32_t) UartBuffer[2] << 24 |
+																								(uint32_t) UartBuffer[3] << 16 |
+																								(uint32_t) UartBuffer[4] << 8 |
+																													 UartBuffer[5]);
+							LoRa_TxTimeout = (uint32_t) UartBuffer[2] << 24 |
+															 (uint32_t) UartBuffer[3] << 16 |
+															 (uint32_t) UartBuffer[4] << 8 |
+																					UartBuffer[5];
+							RadioSetupRequired = 1;
+							break;
+						case COMMAND_PREAMBLE_SIZE:
+							PRINTF("Preamble Size: %u\n\r", UartBuffer[2]);
+							LoRa_PreambleSize = UartBuffer[2];
+							RadioSetupRequired = 1;
+							break;
+						case COMMAND_PAYLOAD_MAX_SIZE:
+							PRINTF("Payload Max Size: %u\n\r", UartBuffer[2]);
+							LoRa_PayloadMaxSize = UartBuffer[2];
+							RadioSetupRequired = 1;
+							break;
+						case COMMAND_VARIABLE_PAYLOAD:
+							PRINTF("Variable Payload: %u\n\r", UartBuffer[2]);
+							LoRa_VariablePayload = UartBuffer[2];
+							RadioSetupRequired = 1;
+							break;
+						case COMMAND_PERFORM_CRC:
+							PRINTF("Perform CRC: %u\n\r", UartBuffer[2]);
+							LoRa_PerformCRC = UartBuffer[2];
+							RadioSetupRequired = 1;
+							break;
+						default:
+							break;
+					}
+				}
+				UartState = UART_IDLE;
+				break;
+			case UART_IDLE:
+			default:
+				break;
+		}
+		
+		if (RadioSetupRequired && RadioState != RADIO_LOWPOWER)
+		{
+			Radio.SetTxConfig( MODEM_LORA, LoRa_OutputPower, 0, LoRa_Bandwidth,
+												 LoRa_SpreadingFactor, LoRa_CodingRate,
+												 LoRa_PreambleSize, !LoRa_VariablePayload,
+												 LoRa_PerformCRC, 0, 0, false, LoRa_TxTimeout );
+				
+			Radio.SetRxConfig( MODEM_LORA, LoRa_Bandwidth, LoRa_SpreadingFactor,
+												 LoRa_CodingRate, 0, LoRa_PreambleSize,
+												 LoRa_RxSymTimeout, !LoRa_VariablePayload,
+												 LoRa_PayloadMaxSize, LoRa_PerformCRC, 0, 0, false, true );
+			RadioSetupRequired = 0;
+		}
+		
+    switch( RadioState )
     {
-    case RX:
-    case RX_TIMEOUT:
-    case RX_ERROR:
-      break;
-    case TX:
-    case TX_TIMEOUT:
-			i++;
-			Buffer[1] = i >> 8;
-			Buffer[2] = i;
-			Radio.Send( Buffer, BufferSize );
-      State = LOWPOWER;
-      break;
-    case LOWPOWER:
-      default:
-            // Set low power
-      break;
+			case RADIO_RX:
+			case RADIO_RX_TIMEOUT:
+			case RADIO_RX_ERROR:
+				break;
+			case RADIO_TX:
+			case RADIO_TX_TIMEOUT:
+				i++;
+				RadioBuffer[1] = i >> 8;
+				RadioBuffer[2] = i;
+				Radio.Send( RadioBuffer, LoRa_PayloadMaxSize );
+				RadioState = RADIO_LOWPOWER;
+				break;
+			case RADIO_LOWPOWER:
+				default:
+							// Set low power
+				break;
     }
-    
-    DISABLE_IRQ( );
-    /* if an interupt has occured after __disable_irq, it is kept pending 
-     * and cortex will not enter low power anyway  */
-    if (State == LOWPOWER)
-    {
-#ifndef LOW_POWER_DISABLE
-      LowPower_Handler( );
-#endif
-    }
-    ENABLE_IRQ( );
-       
   }
 }
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
+	UartState = UART_RX;
+	HAL_UART_Receive_IT(&UartHandle, UartBuffer, UART_BUFFER_SIZE);
 }
 
 void OnTxDone( void )
 {
     Radio.Sleep( );
-    State = TX;
+    RadioState = RADIO_TX;
     PRINTF("OnTxDone\n\r");
 }
 
@@ -296,10 +364,10 @@ void OnRxDone( uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr )
 {
     Radio.Sleep( );
     BufferSize = size;
-    memcpy( Buffer, payload, BufferSize );
+    memcpy( RadioBuffer, payload, BufferSize );
     RssiValue = rssi;
     SnrValue = snr;
-    State = RX;
+    RadioState = RADIO_RX;
   
     PRINTF("OnRxDone\n\r");
     PRINTF("RssiValue=%d dBm, SnrValue=%d\n\r", rssi, snr);
@@ -308,7 +376,7 @@ void OnRxDone( uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr )
 void OnTxTimeout( void )
 {
     Radio.Sleep( );
-    State = TX_TIMEOUT;
+    RadioState = RADIO_TX_TIMEOUT;
   
     PRINTF("OnTxTimeout\n\r");
 }
@@ -316,14 +384,14 @@ void OnTxTimeout( void )
 void OnRxTimeout( void )
 {
     Radio.Sleep( );
-    State = RX_TIMEOUT;
+    RadioState = RADIO_RX_TIMEOUT;
     PRINTF("OnRxTimeout\n\r");
 }
 
 void OnRxError( void )
 {
     Radio.Sleep( );
-    State = RX_ERROR;
+    RadioState = RADIO_RX_ERROR;
     PRINTF("OnRxError\n\r");
 }
 

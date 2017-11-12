@@ -10,7 +10,7 @@ namespace LoRa_Controller
 {
     public partial class Form1 : Form
     {
-        DeviceHandler deviceHandler;
+        MasterHandler masterHandler;
         Logger logger;
         const string settingsFilePath = "settings.ini";
         StreamWriter settingsFileStreamWriter;
@@ -58,7 +58,17 @@ namespace LoRa_Controller
 
         private void Form1_Load(object sender, EventArgs e)
 		{
-			folderBrowserDialog = new FolderBrowserDialog();
+            masterBandwidthComboBox.SelectedIndex = 0;
+            masterCodingRateComboBox.SelectedIndex = 3;
+            masterBandwidthComboBox.SelectedIndexChanged += new System.EventHandler(BandwidthComboBox_SelectedIndexChanged);
+            masterCodingRateComboBox.SelectedIndexChanged += new System.EventHandler(codingRateComboBox_SelectedIndexChanged);
+
+            beaconBandwidthComboBox.SelectedIndex = 0;
+            beaconCodingRateComboBox.SelectedIndex = 3;
+            beaconBandwidthComboBox.SelectedIndexChanged += new System.EventHandler(BandwidthComboBox_SelectedIndexChanged);
+            beaconCodingRateComboBox.SelectedIndexChanged += new System.EventHandler(codingRateComboBox_SelectedIndexChanged);
+
+            folderBrowserDialog = new FolderBrowserDialog();
 			folderBrowserDialog.Description = "Select the folder to store the logs.";
 			folderBrowserDialog.ShowNewFolderButton = true;
 			folderBrowserDialog.RootFolder = Environment.SpecialFolder.MyComputer;
@@ -81,7 +91,7 @@ namespace LoRa_Controller
 		private void ComPortComboBox_DropDown(object sender, EventArgs e)
 		{
 			ComboBox comboBox = ((ComboBox)sender);
-			string[] comPortsList = DeviceHandler.getAvailablePorts();
+			string[] comPortsList = MasterHandler.getAvailablePorts();
 
 			comboBox.Items.Clear();
 			foreach (string port in comPortsList)
@@ -95,42 +105,42 @@ namespace LoRa_Controller
 
 			if (comPort != null)
 			{
-				if (deviceHandler != null)
+				if (masterHandler != null)
 				{
 					logger.finish();
 				}
 
-                deviceHandler = new DeviceHandler(comPort);
-				deviceHandler.ConnectedToBoard = new EventHandler<ConnectionEventArgs>(COMPortConnected);
-				deviceHandler.UnableToConnectToBoard = new EventHandler<ConnectionEventArgs>(COMPortConnected);
-				deviceHandler.DisconnectedFromBoard = new EventHandler<ConnectionEventArgs>(COMPortDisconnected);
-				deviceHandler.ConnectToBoard();
+                masterHandler = new MasterHandler(comPort);
+				masterHandler.ConnectedToBoard = new EventHandler<ConnectionEventArgs>(COMPortConnected);
+				masterHandler.UnableToConnectToBoard = new EventHandler<ConnectionEventArgs>(COMPortConnected);
+				masterHandler.DisconnectedFromBoard = new EventHandler<ConnectionEventArgs>(COMPortDisconnected);
+				masterHandler.ConnectToBoard();
 				masterReported = false;
 			
-				while (deviceHandler.IsConnectedToBoard)
+				while (masterHandler.IsConnectedToBoard)
 				{
-					receivedData = await deviceHandler.ReceiveDataAsync();
+					receivedData = await masterHandler.ReceiveDataAsync();
 					UpdateLog(receivedData);
-					UpdateRSSI(deviceHandler.RSSI);
-					UpdateSNR(deviceHandler.SNR);
-					UpdateCurrentErrors(deviceHandler.Errors);
-					UpdateTotalErrors(deviceHandler.TotalErrors);
-					UpdateRadioConnectionStatus(deviceHandler.IsRadioConnected);
+					UpdateRSSI(masterHandler.RSSI);
+					UpdateSNR(masterHandler.SNR);
+					UpdateCurrentErrors(masterHandler.Errors);
+					UpdateTotalErrors(masterHandler.TotalErrors);
+					UpdateRadioConnectionStatus(masterHandler.IsRadioConnected);
 
 					if (!masterReported)
 					{
 						masterReported = true;
-						if (deviceHandler.IsMaster)
+						if (masterHandler.IsMaster)
 							await logger.write("Connected as master");
 						else
 							await logger.write("Connected as slave");
 					}
 
-					if (deviceHandler.IsRadioConnected)
-						await logger.write(deviceHandler.RSSI + ", " + deviceHandler.SNR);
-					else
-						await logger.write("error");
-				}
+					if (masterHandler.IsRadioConnected)
+                        await logger.write(masterHandler.RSSI + ", " + masterHandler.SNR);
+                    else
+                        await logger.write("error");
+                }
 			}
 		}
 		
@@ -157,13 +167,13 @@ namespace LoRa_Controller
 		public void EnableRadioControls()
 		{
 			radioConnectionGroupBox.Enabled = true;
-			radioSettingsGroupBox.Enabled = true;
+			masterSettingsGroupBox.Enabled = true;
 		}
 
 		public void DisableRadioControls()
 		{
 			radioConnectionGroupBox.Enabled = false;
-			radioSettingsGroupBox.Enabled = false;
+			masterSettingsGroupBox.Enabled = false;
 			radioStatusTextBox.Clear();
 			rssiTextBox.Clear();
 			snrTextBox.Clear();
@@ -224,7 +234,7 @@ namespace LoRa_Controller
 		{
 			if (radioConnectionGroupBox.Enabled && rssiTextBox.Enabled)
 			{
-				if (deviceHandler.IsRadioConnected)
+				if (masterHandler.IsRadioConnected)
 					rssiTextBox.Text = value.ToString();
 				else
 					rssiTextBox.Clear();
@@ -235,7 +245,7 @@ namespace LoRa_Controller
 		{
 			if (radioConnectionGroupBox.Enabled && snrTextBox.Enabled)
 			{
-				if (deviceHandler.IsRadioConnected)
+				if (masterHandler.IsRadioConnected)
 					snrTextBox.Text = value.ToString();
 				else
 					snrTextBox.Clear();
@@ -246,7 +256,7 @@ namespace LoRa_Controller
 		{
 			if (radioConnectionGroupBox.Enabled && currentErrorsTextBox.Enabled)
 			{
-				if (deviceHandler.IsRadioConnected)
+				if (masterHandler.IsRadioConnected)
 					currentErrorsTextBox.Text = value.ToString();
 				else
 					currentErrorsTextBox.Clear();
@@ -257,7 +267,7 @@ namespace LoRa_Controller
 		{
 			if (radioConnectionGroupBox.Enabled && totalErrorsTextBox.Enabled)
 			{
-				if (deviceHandler.IsRadioConnected)
+				if (masterHandler.IsRadioConnected)
 					totalErrorsTextBox.Text = value.ToString();
 				else
 					totalErrorsTextBox.Clear();
@@ -269,15 +279,71 @@ namespace LoRa_Controller
 			if (radioConnectionGroupBox.Enabled && radioStatusTextBox.Enabled)
 			{
 				if (connected)
-					radioStatusTextBox.Text = "Connected";
-				else
-					radioStatusTextBox.Text = "Not connected";
-			}
+                {
+                    beaconSettingsGroupBox.Enabled = true;
+                    radioStatusTextBox.Text = "Connected";
+                }
+                else
+                {
+                    beaconSettingsGroupBox.Enabled = false;
+                    radioStatusTextBox.Text = "Not connected";
+                }
+            }
 		}
 
-		private void BandwidthComboBox_SelectedIndexChanged(object sender, EventArgs e)
+		private async void BandwidthComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			deviceHandler.SendDataAsync("a");
+			await masterHandler.SendCommandAsync(MasterHandler.Commands.Bandwidth, (byte) ((ComboBox)sender).SelectedIndex);
 		}
-	}
+
+        private async void codingRateComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            await masterHandler.SendCommandAsync(MasterHandler.Commands.CodingRate, (byte)(((ComboBox)sender).SelectedIndex + 1));
+        }
+
+        private async void outputPowerNumericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            await masterHandler.SendCommandAsync(MasterHandler.Commands.OutputPower, (byte)(((NumericUpDown)sender).Value));
+        }
+
+        private async void spreadingFactorNumericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            await masterHandler.SendCommandAsync(MasterHandler.Commands.SpreadingFactor, (byte)(((NumericUpDown)sender).Value));
+        }
+
+        private async void rxSymTimeoutNumericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            await masterHandler.SendCommandAsync(MasterHandler.Commands.RxSymTimeout, (byte)(((NumericUpDown)sender).Value));
+        }
+
+
+        private async void rxMsTimeoutNumericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            await masterHandler.SendCommandAsync(MasterHandler.Commands.RxMsTimeout, (int)(((NumericUpDown)sender).Value));
+        }
+        private async void txTimeoutNumericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            await masterHandler.SendCommandAsync(MasterHandler.Commands.TxTimeout, (int)(((NumericUpDown)sender).Value));
+        }
+
+        private async void preambleNumericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            await masterHandler.SendCommandAsync(MasterHandler.Commands.PreambleSize, (byte)(((NumericUpDown)sender).Value));
+        }
+
+        private async void payloadNumericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            await masterHandler.SendCommandAsync(MasterHandler.Commands.PayloadMaxSize, (byte)(((NumericUpDown)sender).Value));
+        }
+
+        private async void variablePayloadCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            await masterHandler.SendCommandAsync(MasterHandler.Commands.VariablePayload, (byte)(((CheckBox)sender).Checked ? 1 : 0));
+        }
+
+        private async void crcCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            await masterHandler.SendCommandAsync(MasterHandler.Commands.PerformCRC, (byte)(((CheckBox)sender).Checked? 1 : 0));
+        }
+    }
 }

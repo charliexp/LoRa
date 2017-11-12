@@ -7,7 +7,7 @@ using System.Timers;
 
 namespace LoRa_Controller
 {
-    class DeviceHandler
+    class MasterHandler
     {
         #region Private variables
         private SerialHandler _serialDevice;
@@ -21,6 +21,25 @@ namespace LoRa_Controller
         private int _rssi;
         private int _snr;
         private bool _receiveTimeout;
+        private byte _address;
+        #endregion
+
+        #region Public enums
+        public enum Commands
+        {
+            Bandwidth = 'a',
+            OutputPower = 'b',
+            SpreadingFactor = 'c',
+            CodingRate = 'd',
+            RxSymTimeout = 'e',
+            RxMsTimeout = 'f',
+            TxTimeout = 'g',
+            PreambleSize = 'h',
+            PayloadMaxSize = 'i',
+            VariablePayload = 'j',
+            PerformCRC = 'k'
+        }
+
         #endregion
 
         #region Public properties
@@ -81,9 +100,10 @@ namespace LoRa_Controller
 		#endregion
 
 		#region Constructors
-		public DeviceHandler(string comPortName)
+		public MasterHandler(string comPortName)
         {
-			_serialDevice = new SerialHandler(comPortName);
+            _address = 1;
+            _serialDevice = new SerialHandler(comPortName);
 			_serialDevice.ConnectSucceeded += UpdateBoardConnectionStatus;
 			_serialDevice.ConnectFailed += UpdateBoardConnectionStatus;
 			_serialDevice.Disconnected += UpdateBoardConnectionStatus;
@@ -125,21 +145,32 @@ namespace LoRa_Controller
             return SerialPort.GetPortNames();
         }
 
-		public async Task SendDataAsync(string data)
-		{
-			foreach (char character in data.ToCharArray())
-			{
-				byte[] byteToSend = new byte[] { Convert.ToByte(character) };
-				await (_serialDevice.SendCharAsync(byteToSend));
-			}
-		}
+		public async Task SendCommandAsync(Commands command, byte value)
+        {
+            await (_serialDevice.SendCharAsync(new byte[] { _address }));
+            await (_serialDevice.SendCharAsync(new byte[] { Convert.ToByte(command) } ));
+            await (_serialDevice.SendCharAsync(new byte[] { value }));
+            await (_serialDevice.SendCharAsync(new byte[] { 0 }));
+            await (_serialDevice.SendCharAsync(new byte[] { 0 }));
+            await (_serialDevice.SendCharAsync(new byte[] { 0 }));
+        }
+
+        public async Task SendCommandAsync(Commands command, int value)
+        {
+            await (_serialDevice.SendCharAsync(new byte[] { _address }));
+            await (_serialDevice.SendCharAsync(new byte[] { Convert.ToByte(command) }));
+            await (_serialDevice.SendCharAsync(new byte[] { (byte)(value >> 24) }));
+            await (_serialDevice.SendCharAsync(new byte[] { (byte)(value >> 16) }));
+            await (_serialDevice.SendCharAsync(new byte[] { (byte)(value >> 8) }));
+            await (_serialDevice.SendCharAsync(new byte[] { (byte)value }));
+        }
 
         public async Task<List<string>> ReceiveDataAsync()
         {
             List<string> receivedData = new List<string>();
             string receivedLine = "";
 
-            while (_serialDevice.IsOpen && !receivedLine.Contains("txDone"))
+            while (_serialDevice.IsOpen && !receivedLine.Contains("Done") && !receivedLine.Contains("Timeout"))
             {
                 receivedLine = "";
                 while (_serialDevice.IsOpen && !receivedLine.Contains("\r"))
