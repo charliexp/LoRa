@@ -50,8 +50,7 @@ namespace LoRa_Controller
 				_hasBeaconConnected = true;
 
 				_beaconHandler = new BeaconHandler();
-				_beaconHandler.Address = 2;
-				//_beaconHandler.Address = receivedData.Substring(;
+				_beaconHandler.Address = Byte.Parse(receivedData.Remove(receivedData.LastIndexOf(' ')).Substring(receivedData.IndexOf(' ') + 1));
 			}
 			else if (receivedData.Contains("not responding"))
 			{
@@ -59,7 +58,11 @@ namespace LoRa_Controller
 				_totalErrors++;
 
 				if (_errors >= NotConnectedErrorThreshold)
+				{
 					_hasBeaconConnected = false;
+					_rssi = 0;
+					_snr = 0;
+				}
 			}
 			if (!_hasBeaconConnected)
 			{

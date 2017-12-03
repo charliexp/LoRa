@@ -149,12 +149,13 @@ namespace LoRa_Controller
 					if (deviceHandler is MasterHandler)
 					{
 						UpdateRadioConnectionStatus(((MasterHandler) deviceHandler).HasBeaconConnected);
-						if (((MasterHandler)deviceHandler).HasBeaconConnected)
-							await logger.write(deviceHandler.RSSI + ", " + deviceHandler.SNR);
-						else
-							await logger.write("error");
 					}
-                }
+
+					if (deviceHandler.RSSI != 0 && deviceHandler.SNR != 0)
+						await logger.write(deviceHandler.RSSI + ", " + deviceHandler.SNR);
+					else
+						await logger.write("error");
+				}
 			}
 			else
 			{

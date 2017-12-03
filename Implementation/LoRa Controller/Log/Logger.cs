@@ -57,7 +57,7 @@ namespace LoRa_Controller
         
         public async Task write(string data)
         {
-            //await streamWriter.WriteLineAsync(DateTime.Now.ToString("HH:mm:ss.fff") + ": " + data);
+            await streamWriter.WriteLineAsync(DateTime.Now.ToString("HH:mm:ss.fff") + ": " + data);
         }
 
         public bool isOpen()
@@ -66,18 +66,18 @@ namespace LoRa_Controller
         }
 
         public void start()
-        {/*
+        {
             streamWriter = File.AppendText(_folder + "\\" + fileName);
 			streamWriter.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + " Log started");
-            _isOpen = true;*/
+            _isOpen = true;
 		}
 
         public void finish()
-        {/*
+        {
 			streamWriter.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + " Log finished");
             if (streamWriter != null)
                 streamWriter.Close();
-            _isOpen = false;*/
+            _isOpen = false;
         }
     }
 }
