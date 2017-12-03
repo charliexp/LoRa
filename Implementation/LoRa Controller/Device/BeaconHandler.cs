@@ -10,12 +10,18 @@ namespace LoRa_Controller
 		public BeaconHandler()
 		{
 		}
+
 		public BeaconHandler(string comPortName) : base(comPortName)
 		{
 		}
+
+		public BeaconHandler(DeviceHandler deviceHandler)
+		{
+			Address = deviceHandler.Address;
+		}
 		#endregion
 
-		#region Private methods
+		#region Protected methods
 		protected override void ParseData(string receivedData)
 		{
 			base.ParseData(receivedData);

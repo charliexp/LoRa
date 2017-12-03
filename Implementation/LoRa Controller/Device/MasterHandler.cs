@@ -7,7 +7,11 @@ namespace LoRa_Controller
 {
     class MasterHandler : DeviceHandler
 	{
-        #region Private variables
+		#region Private constants
+		private const uint NotConnectedErrorThreshold = 10;
+		#endregion
+
+		#region Private variables
 		private bool _hasBeaconConnected;
 		private DeviceHandler _beaconHandler;
         #endregion
@@ -29,33 +33,33 @@ namespace LoRa_Controller
 		{
 			_hasBeaconConnected = false;
 		}
+
+		public MasterHandler(DeviceHandler deviceHandler)
+		{
+			Address = deviceHandler.Address;
+		}
 		#endregion
 
-		#region Private methods
-		private void CheckRadioErrors(Object source, ElapsedEventArgs e)
-		{
-			if (_errors - _oldErrors >= 2)
-				_hasBeaconConnected = false;
-			_oldErrors = _errors;
-		}
-
+		#region Protected methods
 		protected override void ParseData(string receivedData)
 		{
 			base.ParseData(receivedData);
-			if (receivedData.Contains("Beacon ACK"))
+			if (receivedData.Contains("ACK"))
 			{
 				_errors = 0;
 				_hasBeaconConnected = true;
 
 				_beaconHandler = new BeaconHandler();
 				_beaconHandler.Address = 2;
+				//_beaconHandler.Address = receivedData.Substring(;
 			}
 			else if (receivedData.Contains("not responding"))
 			{
-				if (_errors != 4)
-					_hasBeaconConnected = false;
 				_errors++;
 				_totalErrors++;
+
+				if (_errors >= NotConnectedErrorThreshold)
+					_hasBeaconConnected = false;
 			}
 			if (!_hasBeaconConnected)
 			{

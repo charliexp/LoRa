@@ -26,13 +26,13 @@ namespace LoRa_Controller.Device
 		#endregion
 
 		#region Public variables
-		public SerialHandler _serialDevice;
+		public static SerialHandler _serialDevice;
 		#endregion
 
 		#region Protected variables
 		protected byte _address;
 		protected bool _isMaster;
-		protected bool _isMasterReported;
+		protected bool _isMasterStatusProcessed;
 		protected int _rssi;
 		protected int _snr;
 		protected uint _oldErrors;
@@ -46,9 +46,9 @@ namespace LoRa_Controller.Device
 			get { return _isMaster; }
 		}
 
-		public bool IsMasterReported
+		public bool IsMasterStatusProcessed
 		{
-			get { return _isMasterReported; }
+			get { return _isMasterStatusProcessed; }
 		}
 
 		public int RSSI
@@ -101,27 +101,19 @@ namespace LoRa_Controller.Device
 		#region Constructors
 		public DeviceHandler()
 		{
-			_address = 0;
-			_serialDevice = null;
-			_isMasterReported = false;
+			_address = 1;
+			_isMasterStatusProcessed = true;
 
 			_errors = 0;
 			_oldErrors = 0;
 			_totalErrors = 0;
 		}
-		public DeviceHandler(string comPortName)
+		public DeviceHandler(string comPortName) : this()
 		{
-			_address = 1;
 			_serialDevice = new SerialHandler(comPortName);
 			_serialDevice.ConnectSucceeded += UpdateConnectionStatus;
 			_serialDevice.ConnectFailed += UpdateConnectionStatus;
 			_serialDevice.Disconnected += UpdateConnectionStatus;
-			
-			_isMasterReported = false;
-
-			_errors = 0;
-			_oldErrors = 0;
-			_totalErrors = 0;
 		}
 		#endregion
 
@@ -138,6 +130,7 @@ namespace LoRa_Controller.Device
 
 		public async Task SendCommandAsync(Commands command)
 		{
+			await (_serialDevice.SendCharAsync(new byte[] { 0 }));
 			await (_serialDevice.SendCharAsync(new byte[] { _address }));
 			await (_serialDevice.SendCharAsync(new byte[] { Convert.ToByte(command) }));
 			await (_serialDevice.SendCharAsync(new byte[] { 0 }));
@@ -148,6 +141,7 @@ namespace LoRa_Controller.Device
 
 		public async Task SendCommandAsync(Commands command, byte value)
 		{
+			await (_serialDevice.SendCharAsync(new byte[] { 0 }));
 			await (_serialDevice.SendCharAsync(new byte[] { _address }));
 			await (_serialDevice.SendCharAsync(new byte[] { Convert.ToByte(command) }));
 			await (_serialDevice.SendCharAsync(new byte[] { value }));
@@ -158,6 +152,7 @@ namespace LoRa_Controller.Device
 
 		public async Task SendCommandAsync(Commands command, int value)
 		{
+			await (_serialDevice.SendCharAsync(new byte[] { 0 }));
 			await (_serialDevice.SendCharAsync(new byte[] { _address }));
 			await (_serialDevice.SendCharAsync(new byte[] { Convert.ToByte(command) }));
 			await (_serialDevice.SendCharAsync(new byte[] { (byte)(value >> 24) }));
@@ -206,14 +201,14 @@ namespace LoRa_Controller.Device
 		{
 			if (receivedData.Contains("I am a master"))
 			{
-				_isMasterReported = true;
+				_isMasterStatusProcessed = false;
 				_isMaster = true;
 			}
 			else if (receivedData.Contains("I am a slave"))
 			{
-				_isMasterReported = true;
+				_isMasterStatusProcessed = false;
 				_isMaster = false;
-				String tempString = receivedData.Substring(receivedData.IndexOf(' ') + 1);
+				String tempString = receivedData.Substring(receivedData.LastIndexOf(' ') + 1);
 				_address = Byte.Parse(tempString);
 			}
 			else if (receivedData.Contains("Rssi") && receivedData.Contains(","))

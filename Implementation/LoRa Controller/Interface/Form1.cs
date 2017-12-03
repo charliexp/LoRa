@@ -130,19 +130,19 @@ namespace LoRa_Controller
 					UpdateCurrentErrors(deviceHandler.Errors);
 					UpdateTotalErrors(deviceHandler.TotalErrors);
 
-					if (deviceHandler.IsMasterReported)
+					if (!deviceHandler.IsMasterStatusProcessed)
 					{
 						if (deviceHandler.IsMaster)
 						{
-							deviceHandler = new MasterHandler(comPort);
+							deviceHandler = new MasterHandler(deviceHandler);
 							radioStatusTextBox.Text = "Master";
 							await logger.write("Connected to master");
 						}
 						else
 						{
-							deviceHandler = new BeaconHandler(comPort);
-							radioStatusTextBox.Text = "Slave";
-							await logger.write("Connected to slave");
+							deviceHandler = new BeaconHandler(deviceHandler);
+							radioStatusTextBox.Text = "Beacon " + deviceHandler.Address;
+							await logger.write("Connected to beacon " + deviceHandler.Address);
 						}
 					}
 					
@@ -207,14 +207,14 @@ namespace LoRa_Controller
         {
 			if (e.Connected)
 			{
-				serialStatusTextBox.Text = "Connected to board";
+				physicalStatusTextBox.Text = "Connected to board";
 				EnableLogControls();
 				EnableRadioControls();
 				await deviceHandler.SendCommandAsync(Commands.IsMaster);
 			}
 			else
 			{
-				serialStatusTextBox.Text = "Couldn't connect to board";
+				physicalStatusTextBox.Text = "Couldn't connect to board";
 				DisableLogControls();
 				DisableRadioControls();
 				ClearTotalErrors();
@@ -225,14 +225,14 @@ namespace LoRa_Controller
 		{
 			if (e.DisconnectedOnPurpose)
 			{
-				serialStatusTextBox.Text = "Board not connected";
+				physicalStatusTextBox.Text = "Board not connected";
 				DisableLogControls();
 				DisableRadioControls();
 				ClearTotalErrors();
 			}
 			else
 			{
-				serialStatusTextBox.Text = "Board disconnected";
+				physicalStatusTextBox.Text = "Board disconnected";
 				DisableLogControls();
 				DisableRadioControls();
 			}
