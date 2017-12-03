@@ -390,7 +390,7 @@
             0,
             0,
             0});
-            this.masterRxMsTimeoutNumericUpDown.ValueChanged += new System.EventHandler(this.rxMsTimeoutNumericUpDown_ValueChanged);
+            this.masterRxMsTimeoutNumericUpDown.ValueChanged += new System.EventHandler(this.RxMsTimeoutNumericUpDown_ValueChanged);
             // 
             // masterRxMsTimeoutLabel
             // 
@@ -424,7 +424,7 @@
             0,
             0,
             0});
-            this.masterTxTimeoutNumericUpDown.ValueChanged += new System.EventHandler(this.txTimeoutNumericUpDown_ValueChanged);
+            this.masterTxTimeoutNumericUpDown.ValueChanged += new System.EventHandler(this.TxTimeoutNumericUpDown_ValueChanged);
             // 
             // masterTxTimeoutLabel
             // 
@@ -458,7 +458,7 @@
             0,
             0,
             0});
-            this.masterRxSymTimeoutNumericUpDown.ValueChanged += new System.EventHandler(this.rxSymTimeoutNumericUpDown_ValueChanged);
+            this.masterRxSymTimeoutNumericUpDown.ValueChanged += new System.EventHandler(this.RxSymTimeoutNumericUpDown_ValueChanged);
             // 
             // masterRxSymTimeoutLabel
             // 
@@ -482,7 +482,7 @@
             this.masterCrcCheckBox.TabIndex = 24;
             this.masterCrcCheckBox.Text = "Perform CRC";
             this.masterCrcCheckBox.UseVisualStyleBackColor = true;
-            this.masterCrcCheckBox.CheckedChanged += new System.EventHandler(this.crcCheckBox_CheckedChanged);
+            this.masterCrcCheckBox.CheckedChanged += new System.EventHandler(this.CrcCheckBox_CheckedChanged);
             // 
             // masterVariablePayloadCheckBox
             // 
@@ -496,7 +496,7 @@
             this.masterVariablePayloadCheckBox.TabIndex = 23;
             this.masterVariablePayloadCheckBox.Text = "Variable Payload Size";
             this.masterVariablePayloadCheckBox.UseVisualStyleBackColor = true;
-            this.masterVariablePayloadCheckBox.CheckedChanged += new System.EventHandler(this.variablePayloadCheckBox_CheckedChanged);
+            this.masterVariablePayloadCheckBox.CheckedChanged += new System.EventHandler(this.VariablePayloadCheckBox_CheckedChanged);
             // 
             // masterPayloadNumericUpDown
             // 
@@ -520,7 +520,7 @@
             0,
             0,
             0});
-            this.masterPayloadNumericUpDown.ValueChanged += new System.EventHandler(this.payloadNumericUpDown_ValueChanged);
+            this.masterPayloadNumericUpDown.ValueChanged += new System.EventHandler(this.PayloadNumericUpDown_ValueChanged);
             // 
             // masterPayloadLabel
             // 
@@ -554,7 +554,7 @@
             0,
             0,
             0});
-            this.masterPreambleNumericUpDown.ValueChanged += new System.EventHandler(this.preambleNumericUpDown_ValueChanged);
+            this.masterPreambleNumericUpDown.ValueChanged += new System.EventHandler(this.PreambleNumericUpDown_ValueChanged);
             // 
             // masterPreambleLabel
             // 
@@ -614,7 +614,7 @@
             0,
             0,
             0});
-            this.masterSpreadingFactorNumericUpDown.ValueChanged += new System.EventHandler(this.spreadingFactorNumericUpDown_ValueChanged);
+            this.masterSpreadingFactorNumericUpDown.ValueChanged += new System.EventHandler(this.SpreadingFactorNumericUpDown_ValueChanged);
             // 
             // masterSpreadingFactorLabel
             // 
@@ -648,7 +648,7 @@
             0,
             0,
             0});
-            this.masterOutputPowerNumericUpDown.ValueChanged += new System.EventHandler(this.outputPowerNumericUpDown_ValueChanged);
+            this.masterOutputPowerNumericUpDown.ValueChanged += new System.EventHandler(this.OutputPowerNumericUpDown_ValueChanged);
             // 
             // masterOutputPowerLabel
             // 
@@ -739,7 +739,7 @@
             0,
             0,
             0});
-            this.beaconRxMsTimeoutNumericUpDown.ValueChanged += new System.EventHandler(this.rxMsTimeoutNumericUpDown_ValueChanged);
+            this.beaconRxMsTimeoutNumericUpDown.ValueChanged += new System.EventHandler(this.RxMsTimeoutNumericUpDown_ValueChanged);
             // 
             // beaconRxMsTimeoutLabel
             // 
@@ -773,7 +773,7 @@
             0,
             0,
             0});
-            this.beaconTxTimeoutNumericUpDown.ValueChanged += new System.EventHandler(this.txTimeoutNumericUpDown_ValueChanged);
+            this.beaconTxTimeoutNumericUpDown.ValueChanged += new System.EventHandler(this.TxTimeoutNumericUpDown_ValueChanged);
             // 
             // beaconTxTimeoutLabel
             // 
@@ -807,7 +807,7 @@
             0,
             0,
             0});
-            this.beaconRxSymTimeoutNumericUpDown.ValueChanged += new System.EventHandler(this.rxSymTimeoutNumericUpDown_ValueChanged);
+            this.beaconRxSymTimeoutNumericUpDown.ValueChanged += new System.EventHandler(this.RxSymTimeoutNumericUpDown_ValueChanged);
             // 
             // beaconRxSymTimeoutLabel
             // 
@@ -831,7 +831,7 @@
             this.beaconCrcCheckBox.TabIndex = 24;
             this.beaconCrcCheckBox.Text = "Perform CRC";
             this.beaconCrcCheckBox.UseVisualStyleBackColor = true;
-            this.beaconCrcCheckBox.CheckedChanged += new System.EventHandler(this.crcCheckBox_CheckedChanged);
+            this.beaconCrcCheckBox.CheckedChanged += new System.EventHandler(this.CrcCheckBox_CheckedChanged);
             // 
             // beaconVariablePayloadCheckBox
             // 
@@ -845,7 +845,7 @@
             this.beaconVariablePayloadCheckBox.TabIndex = 23;
             this.beaconVariablePayloadCheckBox.Text = "Variable Payload Size";
             this.beaconVariablePayloadCheckBox.UseVisualStyleBackColor = true;
-            this.beaconVariablePayloadCheckBox.CheckedChanged += new System.EventHandler(this.variablePayloadCheckBox_CheckedChanged);
+            this.beaconVariablePayloadCheckBox.CheckedChanged += new System.EventHandler(this.VariablePayloadCheckBox_CheckedChanged);
             // 
             // beaconPayloadNumericUpDown
             // 
@@ -869,7 +869,7 @@
             0,
             0,
             0});
-            this.beaconPayloadNumericUpDown.ValueChanged += new System.EventHandler(this.payloadNumericUpDown_ValueChanged);
+            this.beaconPayloadNumericUpDown.ValueChanged += new System.EventHandler(this.PayloadNumericUpDown_ValueChanged);
             // 
             // beaconPayloadLabel
             // 
@@ -903,7 +903,7 @@
             0,
             0,
             0});
-            this.beaconPreambleNumericUpDown.ValueChanged += new System.EventHandler(this.preambleNumericUpDown_ValueChanged);
+            this.beaconPreambleNumericUpDown.ValueChanged += new System.EventHandler(this.PreambleNumericUpDown_ValueChanged);
             // 
             // beaconPreambleLabel
             // 
@@ -963,7 +963,7 @@
             0,
             0,
             0});
-            this.beaconSpreadingFactorNumericUpDown.ValueChanged += new System.EventHandler(this.spreadingFactorNumericUpDown_ValueChanged);
+            this.beaconSpreadingFactorNumericUpDown.ValueChanged += new System.EventHandler(this.SpreadingFactorNumericUpDown_ValueChanged);
             // 
             // beaconSpreadingFactorLabel
             // 
@@ -997,7 +997,7 @@
             0,
             0,
             0});
-            this.beaconOutputPowerNumericUpDown.ValueChanged += new System.EventHandler(this.outputPowerNumericUpDown_ValueChanged);
+            this.beaconOutputPowerNumericUpDown.ValueChanged += new System.EventHandler(this.OutputPowerNumericUpDown_ValueChanged);
             // 
             // beaconOutputPowerLabel
             // 

@@ -130,7 +130,7 @@ typedef enum
 	COMMAND_PAYLOAD_MAX_SIZE = 'i',
 	COMMAND_VARIABLE_PAYLOAD = 'j',
 	COMMAND_PERFORM_CRC = 'k',
-	
+	COMMAND_IS_MASTER = 'y',
 	COMMAND_IS_PRESENT = 'z'
 }Commands_t;
 
@@ -254,14 +254,14 @@ int main( void )
 							LoRa_Bandwidth = UartBuffer[2];
 							RadioSetupRequired = 1;
 							break;
-						case COMMAND_CODING_RATE:
-							PRINTF("Coding Rate: %u\n\r", UartBuffer[2]);
-							LoRa_CodingRate = UartBuffer[2];
-							RadioSetupRequired = 1;
-							break;
 						case COMMAND_OUTPUT_POWER:
 							PRINTF("Output Power: %u\n\r", UartBuffer[2]);
 							LoRa_OutputPower = UartBuffer[2];
+							RadioSetupRequired = 1;
+							break;
+						case COMMAND_CODING_RATE:
+							PRINTF("Coding Rate: %u\n\r", UartBuffer[2]);
+							LoRa_CodingRate = UartBuffer[2];
 							RadioSetupRequired = 1;
 							break;
 						case COMMAND_SPREAD_FACTOR:
@@ -310,7 +310,11 @@ int main( void )
 							LoRa_PerformCRC = UartBuffer[2];
 							RadioSetupRequired = 1;
 							break;
+						case COMMAND_IS_MASTER:
+							PRINTF("I am a master\n\r");
+							break;
 						default:
+							PRINTF("Received unknown command: %c\n\r", UartBuffer[2]);
 							break;
 					}
 				}

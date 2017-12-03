@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="Device\ConnectionEventArgs.cs" />
     <Compile Include="Device\BeaconHandler.cs" />
+    <Compile Include="Device\DeviceHandler.cs" />
     <Compile Include="Device\SerialHandler.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -74,6 +75,8 @@
     <Compile Include="Interface\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Networking\Server.cs" />
+    <Compile Include="Networking\StateObject.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Interface\Form1.resx">
