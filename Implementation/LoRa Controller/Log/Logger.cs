@@ -14,6 +14,9 @@ namespace LoRa_Controller
         private StreamWriter streamWriter;
         private string dateFormat;
         private bool _isOpen = false;
+		private uint _linesWritten;
+
+		private const uint LinesRequiredToSaveFile = 10;
 
 		public string Folder
 		{
@@ -58,6 +61,12 @@ namespace LoRa_Controller
         public async Task write(string data)
         {
             await streamWriter.WriteLineAsync(DateTime.Now.ToString("HH:mm:ss.fff") + ": " + data);
+			_linesWritten++;
+			if (_linesWritten == LinesRequiredToSaveFile)
+			{
+				_linesWritten = 0;
+				await streamWriter.FlushAsync();
+			}
         }
 
         public bool isOpen()
@@ -70,6 +79,7 @@ namespace LoRa_Controller
             streamWriter = File.AppendText(_folder + "\\" + fileName);
 			streamWriter.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + " Log started");
             _isOpen = true;
+			_linesWritten = 0;
 		}
 
         public void finish()

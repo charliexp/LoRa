@@ -3,13 +3,18 @@ using System.Text;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using System.Collections.Generic;
 
 namespace LoRa_Controller.Networking
 {
 	public class Server
 	{
+		public List<string> sendBuffer;
+		private IPEndPoint localEndPoint;
+
 		public Server()
 		{
+			sendBuffer = new List<string>();
 		}
 
 		public void StartListening()
@@ -22,7 +27,7 @@ namespace LoRa_Controller.Networking
 			// running the listener is "host.contoso.com".  
 			IPHostEntry ipHostInfo = Dns.GetHostEntry("localhost");
 			IPAddress ipAddress = ipHostInfo.AddressList[0];
-			IPEndPoint localEndPoint = new IPEndPoint(ipAddress, 11000);
+			localEndPoint = new IPEndPoint(ipAddress, 11000);
 
 			// Create a TCP/IP socket.  
 			Socket listener = new Socket(ipAddress.AddressFamily,
@@ -59,8 +64,34 @@ namespace LoRa_Controller.Networking
 			// Create the state object.  
 			StateObject state = new StateObject();
 			state.workSocket = handler;
-			handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
-				new AsyncCallback(ReadCallback), state);
+			while (handler.Connected)
+			{
+				if (sendBuffer.Count != 0)
+				{
+					Send(handler, sendBuffer[0] + "\n\r");
+					sendBuffer.RemoveAt(0);
+				}
+			}
+
+			// Bind the socket to the local endpoint and listen for incoming connections.  
+			try
+			{
+				listener.Bind(localEndPoint);
+				listener.Listen(10);
+
+				// Start an asynchronous socket to listen for connections.  
+				Console.WriteLine("Waiting for a connection...");
+				listener.BeginAccept(
+					new AsyncCallback(AcceptCallback),
+					listener);
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(e.ToString());
+			}
+
+			//handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
+			//	new AsyncCallback(ReadCallback), state);
 		}
 
 		public void ReadCallback(IAsyncResult ar)
@@ -122,10 +153,10 @@ namespace LoRa_Controller.Networking
 				// Complete sending the data to the remote device.  
 				int bytesSent = handler.EndSend(ar);
 				Console.WriteLine("Sent {0} bytes to client.", bytesSent);
-
+				/*
 				handler.Shutdown(SocketShutdown.Both);
 				handler.Close();
-
+				*/
 			}
 			catch (Exception e)
 			{

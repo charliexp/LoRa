@@ -18,6 +18,7 @@ namespace LoRa_Controller
 		private FolderBrowserDialog folderBrowserDialog;
 		private const string remoteConnection = "Remote";
 		Server serverHandler;
+		Client clientHandler;
 
         public Form1()
         {
@@ -124,6 +125,8 @@ namespace LoRa_Controller
 				while (deviceHandler.IsConnected)
 				{
 					receivedData = await deviceHandler.ReceiveDataAsync();
+					foreach (string s in receivedData)
+						serverHandler.sendBuffer.Add(s);
 					UpdateLog(receivedData);
 					UpdateRSSI(deviceHandler.RSSI);
 					UpdateSNR(deviceHandler.SNR);
@@ -159,7 +162,8 @@ namespace LoRa_Controller
 			}
 			else
 			{
-
+				clientHandler = new Client();
+				clientHandler.StartClient();
 			}
 		}
 		
