@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO.Ports;
+﻿using System.IO.Ports;
 using System.Threading.Tasks;
 
 namespace LoRa_Controller.Connection
@@ -21,18 +20,12 @@ namespace LoRa_Controller.Connection
 		#endregion
 
 		#region Private variables
-		private bool _isDisconnectedOnPurpose;
 		#endregion
 		
 		#region Public properties
 		public bool Connected
 		{
 			get { return IsOpen; }
-		}
-
-		public bool DisconnectedOnPurpose
-		{
-			get { return _isDisconnectedOnPurpose; }
 		}
 		#endregion
 
@@ -52,7 +45,6 @@ namespace LoRa_Controller.Connection
 		public new void Close()
 		{
 			base.Close();
-			_isDisconnectedOnPurpose = true;
 		}
 
 		public async Task<bool> SendCharAsync(byte[] byteToSend)
@@ -64,7 +56,6 @@ namespace LoRa_Controller.Connection
 			}
 			catch (System.IO.IOException)
 			{
-				_isDisconnectedOnPurpose = false;
 				return false;
 			}
 		}
@@ -78,7 +69,6 @@ namespace LoRa_Controller.Connection
 			}
 			catch (System.IO.IOException)
 			{
-				_isDisconnectedOnPurpose = false;
 				return false;
 			}
 		}

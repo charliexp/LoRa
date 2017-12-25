@@ -11,11 +11,6 @@ namespace LoRa_Controller.Connection
 		{
 			get;
 		}
-
-		bool DisconnectedOnPurpose
-		{
-			get;
-		}
 		#endregion
 
 		#region Methods

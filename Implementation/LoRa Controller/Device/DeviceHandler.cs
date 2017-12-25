@@ -84,11 +84,6 @@ namespace LoRa_Controller.Device
 		{
 			get { return _connectionHandler.Connected; }
 		}
-
-		public bool DisconnectedOnPurpose
-		{
-			get { return _connectionHandler.DisconnectedOnPurpose; }
-		}
 		#endregion
 
 		#region Constructors
@@ -102,6 +97,18 @@ namespace LoRa_Controller.Device
 			_totalErrors = 0;
 		}
 
+		public DeviceHandler(ConnectionType connectionType) : this()
+		{
+			switch (connectionType)
+			{
+				case ConnectionType.Serial:
+					break;
+				case ConnectionType.Internet:
+					_connectionHandler = new InternetHandler();
+					break;
+			}
+		}
+
 		public DeviceHandler(ConnectionType connectionType, string portName) : this()
 		{
 			switch (connectionType)
@@ -110,6 +117,7 @@ namespace LoRa_Controller.Device
 					_connectionHandler = new SerialHandler(portName);
 					break;
 				case ConnectionType.Internet:
+					_connectionHandler = new InternetHandler();
 					break;
 			}
 		}

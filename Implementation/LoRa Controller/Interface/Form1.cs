@@ -119,54 +119,62 @@ namespace LoRa_Controller
 				deviceHandler.ConnectToBoard();
 				COMPortConnected();
 				deviceNodeTypeProcessed = false;
-				/*
+				
 				serverHandler = new Server();
-				serverHandler.StartListening();
-				*/
-				while (deviceHandler.Connected)
-				{
-					receivedData = await deviceHandler.ReceiveDataAsync();
-					/*foreach (string s in receivedData)
-						serverHandler.sendBuffer.Add(s);*/
-					UpdateLog(receivedData);
-					UpdateRSSI(deviceHandler.RSSI);
-					UpdateSNR(deviceHandler.SNR);
-					UpdateCurrentErrors(deviceHandler.Errors);
-					UpdateTotalErrors(deviceHandler.TotalErrors);
-
-					if (!deviceNodeTypeProcessed && deviceHandler._nodeType != NodeType.Unknown)
-					{
-						if (deviceHandler._nodeType == NodeType.Master)
-						{
-							deviceHandler = new MasterDevice(deviceHandler);
-							radioStatusTextBox.Text = "Master";
-							await logger.write("Connected to master");
-						}
-						else
-						{
-							deviceHandler = new BeaconDevice(deviceHandler);
-							radioStatusTextBox.Text = "Beacon " + deviceHandler.Address;
-							await logger.write("Connected to beacon " + deviceHandler.Address);
-						}
-					}
-					
-					if (deviceHandler is MasterDevice)
-					{
-						UpdateRadioConnectionStatus(((MasterDevice) deviceHandler).HasBeaconConnected);
-					}
-
-					if (deviceHandler.RSSI != 0 && deviceHandler.SNR != 0)
-						await logger.write(deviceHandler.RSSI + ", " + deviceHandler.SNR);
-					else
-						await logger.write("error");
-				}
-				COMPortDisconnected(deviceHandler.DisconnectedOnPurpose);
+				serverHandler.Start();
 			}
 			else
-			{/*
-				clientHandler = new Client();
-				clientHandler.StartClient();*/
+			{
+				if (deviceHandler != null)
+				{
+					logger.finish();
+				}
+
+				deviceHandler = new DeviceHandler(ConnectionType.Internet);
+				deviceHandler.ConnectToBoard();
+				COMPortConnected();
+				deviceNodeTypeProcessed = false;
 			}
+
+			while (deviceHandler.Connected)
+			{
+				receivedData = await deviceHandler.ReceiveDataAsync();
+				if (serverHandler != null)
+					foreach (string s in receivedData)
+						await serverHandler.Send(s);
+				UpdateLog(receivedData);
+				UpdateRSSI(deviceHandler.RSSI);
+				UpdateSNR(deviceHandler.SNR);
+				UpdateCurrentErrors(deviceHandler.Errors);
+				UpdateTotalErrors(deviceHandler.TotalErrors);
+
+				if (!deviceNodeTypeProcessed && deviceHandler._nodeType != NodeType.Unknown)
+				{
+					if (deviceHandler._nodeType == NodeType.Master)
+					{
+						deviceHandler = new MasterDevice(deviceHandler);
+						radioStatusTextBox.Text = "Master";
+						await logger.write("Connected to master");
+					}
+					else
+					{
+						deviceHandler = new BeaconDevice(deviceHandler);
+						radioStatusTextBox.Text = "Beacon " + deviceHandler.Address;
+						await logger.write("Connected to beacon " + deviceHandler.Address);
+					}
+				}
+
+				if (deviceHandler is MasterDevice)
+				{
+					UpdateRadioConnectionStatus(((MasterDevice)deviceHandler).HasBeaconConnected);
+				}
+
+				if (deviceHandler.RSSI != 0 && deviceHandler.SNR != 0)
+					await logger.write(deviceHandler.RSSI + ", " + deviceHandler.SNR);
+				else
+					await logger.write("error");
+			}
+			COMPortDisconnected();
 		}
 		
         public void OnApplicationExit(object sender, EventArgs e)
@@ -212,10 +220,10 @@ namespace LoRa_Controller
 
 		public async void COMPortConnected()
         {
-				physicalStatusTextBox.Text = "Connected to board";
-				EnableLogControls();
-				EnableRadioControls();
-				await deviceHandler.SendCommandAsync(Commands.IsMaster);
+			physicalStatusTextBox.Text = "Connected to board";
+			EnableLogControls();
+			EnableRadioControls();
+			await deviceHandler.SendCommandAsync(Commands.IsMaster);
 		}
 
 		public void COMPortUnableToConnect()
@@ -226,21 +234,12 @@ namespace LoRa_Controller
 			ClearTotalErrors();
 		}
 
-		public void COMPortDisconnected(bool onPurpose)
+		public void COMPortDisconnected()
 		{
-			if (onPurpose)
-			{
-				physicalStatusTextBox.Text = "Board not connected";
-				DisableLogControls();
-				DisableRadioControls();
-				ClearTotalErrors();
-			}
-			else
-			{
-				physicalStatusTextBox.Text = "Board disconnected";
-				DisableLogControls();
-				DisableRadioControls();
-			}
+			physicalStatusTextBox.Text = "Board disconnected";
+			DisableLogControls();
+			DisableRadioControls();
+			ClearTotalErrors();
 		}
 		
 		public void UpdateLog(List<string> data)

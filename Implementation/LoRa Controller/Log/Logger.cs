@@ -65,7 +65,7 @@ namespace LoRa_Controller
 				await streamWriter.WriteLineAsync(DateTime.Now.ToString("HH:mm:ss.fff") + ": " + data);
 				_linesWritten++;
 			}
-			catch (ObjectDisposedException e)
+			catch (ObjectDisposedException)
 			{
 
 			}
