@@ -18,6 +18,7 @@ namespace LoRa_Controller
 		const int logMaxEntries = 12;
 		private FolderBrowserDialog folderBrowserDialog;
 		private const string remoteConnection = "Remote";
+		private bool deviceNodeTypeProcessed;
 		Server serverHandler;
 		Client clientHandler;
 
@@ -117,6 +118,7 @@ namespace LoRa_Controller
 				deviceHandler = new DeviceHandler(ConnectionType.Serial, comPort);
 				deviceHandler.ConnectToBoard();
 				COMPortConnected();
+				deviceNodeTypeProcessed = false;
 				/*
 				serverHandler = new Server();
 				serverHandler.StartListening();
@@ -132,9 +134,9 @@ namespace LoRa_Controller
 					UpdateCurrentErrors(deviceHandler.Errors);
 					UpdateTotalErrors(deviceHandler.TotalErrors);
 
-					if (!deviceHandler.IsMasterStatusProcessed)
+					if (!deviceNodeTypeProcessed && deviceHandler._nodeType != NodeType.Unknown)
 					{
-						if (deviceHandler.IsMaster)
+						if (deviceHandler._nodeType == NodeType.Master)
 						{
 							deviceHandler = new MasterDevice(deviceHandler);
 							radioStatusTextBox.Text = "Master";

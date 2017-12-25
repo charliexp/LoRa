@@ -30,16 +30,22 @@ namespace LoRa_Controller.Device
 			Serial,
 			Internet
 		}
-		#endregion
 
+		public enum NodeType
+		{
+			Unknown,
+			Master,
+			Beacon,
+		}
+		#endregion
+		
 		#region Public variables
 		public static IConnectionHandler _connectionHandler;
+		public NodeType _nodeType;
 		#endregion
 
 		#region Protected variables
 		protected byte _address;
-		protected bool _isMaster;
-		protected bool _isMasterStatusProcessed;
 		protected int _rssi;
 		protected int _snr;
 		protected uint _oldErrors;
@@ -48,16 +54,6 @@ namespace LoRa_Controller.Device
 		#endregion
 
 		#region Public properties
-		public bool IsMaster
-		{
-			get { return _isMaster; }
-		}
-
-		public bool IsMasterStatusProcessed
-		{
-			get { return _isMasterStatusProcessed; }
-		}
-
 		public int RSSI
 		{
 			get { return _rssi; }
@@ -99,7 +95,7 @@ namespace LoRa_Controller.Device
 		public DeviceHandler()
 		{
 			_address = 1;
-			_isMasterStatusProcessed = true;
+			_nodeType = NodeType.Unknown;
 
 			_errors = 0;
 			_oldErrors = 0;
@@ -198,13 +194,11 @@ namespace LoRa_Controller.Device
 		{
 			if (receivedData.Contains("I am a master"))
 			{
-				_isMasterStatusProcessed = false;
-				_isMaster = true;
+				_nodeType = NodeType.Master;
 			}
 			else if (receivedData.Contains("I am a slave"))
 			{
-				_isMasterStatusProcessed = false;
-				_isMaster = false;
+				_nodeType = NodeType.Beacon;
 				String tempString = receivedData.Substring(receivedData.LastIndexOf(' ') + 1);
 				_address = Byte.Parse(tempString);
 			}
