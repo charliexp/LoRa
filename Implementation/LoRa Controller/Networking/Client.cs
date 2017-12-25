@@ -4,11 +4,14 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Text;
 using LoRa_Controller.Networking;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 public class Client
 {
 	// The port number for the remote device.  
 	private const int port = 11000;
+	private Socket client;
 
 	// ManualResetEvent instances signal completion.  
 	private static ManualResetEvent connectDone =
@@ -25,6 +28,11 @@ public class Client
 	{
 	}
 
+	public bool IsConnected
+	{
+		get { return client.Connected; }
+	}
+
 	public void StartClient()
 	{
 		// Connect to a remote device.  
@@ -38,12 +46,10 @@ public class Client
 			IPEndPoint remoteEP = new IPEndPoint(ipAddress, port);
 
 			// Create a TCP/IP socket.  
-			Socket client = new Socket(ipAddress.AddressFamily,
-				SocketType.Stream, ProtocolType.Tcp);
+			client = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 
 			// Connect to the remote endpoint.  
-			client.BeginConnect(remoteEP,
-				new AsyncCallback(ConnectCallback), client);
+			client.BeginConnect(remoteEP, new AsyncCallback(ConnectCallback), client);
 			connectDone.WaitOne();
 
 			// Send test data to the remote device.  
@@ -61,18 +67,13 @@ public class Client
 					Console.WriteLine("Response received : {0}", response);
 					Receive(client);
 				}
-
-			// Release the socket.  
-			client.Shutdown(SocketShutdown.Both);
-			client.Close();
-
 		}
 		catch (Exception e)
 		{
 			Console.WriteLine(e.ToString());
 		}
 	}
-
+	
 	private void ConnectCallback(IAsyncResult ar)
 	{
 		try

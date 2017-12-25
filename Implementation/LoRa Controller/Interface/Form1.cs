@@ -1,4 +1,5 @@
-﻿using LoRa_Controller.Device;
+﻿using LoRa_Controller.Connection;
+using LoRa_Controller.Device;
 using LoRa_Controller.Networking;
 using System;
 using System.Collections.Generic;
@@ -93,7 +94,7 @@ namespace LoRa_Controller
 		private void ComPortComboBox_DropDown(object sender, EventArgs e)
 		{
 			ComboBox comboBox = ((ComboBox)sender);
-			string[] comPortsList = MasterHandler.getAvailablePorts();
+			string[] comPortsList = MasterDevice.getAvailablePorts();
 
 			comboBox.Items.Clear();
 			foreach (string port in comPortsList)
@@ -113,20 +114,18 @@ namespace LoRa_Controller
 					logger.finish();
 				}
 
-				deviceHandler = new DeviceHandler(comPort);
-				deviceHandler.ConnectedToBoard = new EventHandler<ConnectionEventArgs>(COMPortConnected);
-				deviceHandler.UnableToConnectToBoard = new EventHandler<ConnectionEventArgs>(COMPortConnected);
-				deviceHandler.DisconnectedFromBoard = new EventHandler<ConnectionEventArgs>(COMPortDisconnected);
+				deviceHandler = new DeviceHandler(ConnectionType.Serial, comPort);
 				deviceHandler.ConnectToBoard();
-
+				COMPortConnected();
+				/*
 				serverHandler = new Server();
 				serverHandler.StartListening();
-
-				while (deviceHandler.IsConnected)
+				*/
+				while (deviceHandler.Connected)
 				{
 					receivedData = await deviceHandler.ReceiveDataAsync();
-					foreach (string s in receivedData)
-						serverHandler.sendBuffer.Add(s);
+					/*foreach (string s in receivedData)
+						serverHandler.sendBuffer.Add(s);*/
 					UpdateLog(receivedData);
 					UpdateRSSI(deviceHandler.RSSI);
 					UpdateSNR(deviceHandler.SNR);
@@ -137,21 +136,21 @@ namespace LoRa_Controller
 					{
 						if (deviceHandler.IsMaster)
 						{
-							deviceHandler = new MasterHandler(deviceHandler);
+							deviceHandler = new MasterDevice(deviceHandler);
 							radioStatusTextBox.Text = "Master";
 							await logger.write("Connected to master");
 						}
 						else
 						{
-							deviceHandler = new BeaconHandler(deviceHandler);
+							deviceHandler = new BeaconDevice(deviceHandler);
 							radioStatusTextBox.Text = "Beacon " + deviceHandler.Address;
 							await logger.write("Connected to beacon " + deviceHandler.Address);
 						}
 					}
 					
-					if (deviceHandler is MasterHandler)
+					if (deviceHandler is MasterDevice)
 					{
-						UpdateRadioConnectionStatus(((MasterHandler) deviceHandler).HasBeaconConnected);
+						UpdateRadioConnectionStatus(((MasterDevice) deviceHandler).HasBeaconConnected);
 					}
 
 					if (deviceHandler.RSSI != 0 && deviceHandler.SNR != 0)
@@ -159,11 +158,12 @@ namespace LoRa_Controller
 					else
 						await logger.write("error");
 				}
+				COMPortDisconnected(deviceHandler.DisconnectedOnPurpose);
 			}
 			else
-			{
+			{/*
 				clientHandler = new Client();
-				clientHandler.StartClient();
+				clientHandler.StartClient();*/
 			}
 		}
 		
@@ -208,27 +208,25 @@ namespace LoRa_Controller
 			totalErrorsTextBox.Clear();
 		}
 
-		public async void COMPortConnected(object sender, ConnectionEventArgs e)
+		public async void COMPortConnected()
         {
-			if (e.Connected)
-			{
 				physicalStatusTextBox.Text = "Connected to board";
 				EnableLogControls();
 				EnableRadioControls();
 				await deviceHandler.SendCommandAsync(Commands.IsMaster);
-			}
-			else
-			{
-				physicalStatusTextBox.Text = "Couldn't connect to board";
-				DisableLogControls();
-				DisableRadioControls();
-				ClearTotalErrors();
-			}
 		}
 
-		public void COMPortDisconnected(object sender, ConnectionEventArgs e)
+		public void COMPortUnableToConnect()
 		{
-			if (e.DisconnectedOnPurpose)
+			physicalStatusTextBox.Text = "Couldn't connect to board";
+			DisableLogControls();
+			DisableRadioControls();
+			ClearTotalErrors();
+		}
+
+		public void COMPortDisconnected(bool onPurpose)
+		{
+			if (onPurpose)
 			{
 				physicalStatusTextBox.Text = "Board not connected";
 				DisableLogControls();
@@ -314,7 +312,7 @@ namespace LoRa_Controller
             if (sender.Equals(masterBandwidthComboBox))
 			    await deviceHandler.SendCommandAsync(Commands.Bandwidth, (byte) ((ComboBox)sender).SelectedIndex);
             else if (sender.Equals(beaconBandwidthComboBox))
-                await ((MasterHandler)deviceHandler).BeaconHandler.SendCommandAsync(Commands.Bandwidth, (byte)((ComboBox)sender).SelectedIndex);
+                await ((MasterDevice)deviceHandler).BeaconHandler.SendCommandAsync(Commands.Bandwidth, (byte)((ComboBox)sender).SelectedIndex);
         }
 
         private async void CodingRateComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -322,7 +320,7 @@ namespace LoRa_Controller
 			if (sender.Equals(masterCodingRateComboBox))
 				await deviceHandler.SendCommandAsync(Commands.CodingRate, (byte)(((ComboBox)sender).SelectedIndex + 1));
 			else if (sender.Equals(beaconCodingRateComboBox))
-				await ((MasterHandler)deviceHandler).BeaconHandler.SendCommandAsync(Commands.CodingRate, (byte)((ComboBox)sender).SelectedIndex + 1);
+				await ((MasterDevice)deviceHandler).BeaconHandler.SendCommandAsync(Commands.CodingRate, (byte)((ComboBox)sender).SelectedIndex + 1);
 		}
 
         private async void OutputPowerNumericUpDown_ValueChanged(object sender, EventArgs e)
@@ -330,7 +328,7 @@ namespace LoRa_Controller
 			if (sender.Equals(masterOutputPowerNumericUpDown))
 				await deviceHandler.SendCommandAsync(Commands.OutputPower, (byte)(((NumericUpDown)sender).Value));
 			else if (sender.Equals(beaconOutputPowerNumericUpDown))
-				await ((MasterHandler)deviceHandler).BeaconHandler.SendCommandAsync(Commands.OutputPower, (byte)(((NumericUpDown)sender).Value));
+				await ((MasterDevice)deviceHandler).BeaconHandler.SendCommandAsync(Commands.OutputPower, (byte)(((NumericUpDown)sender).Value));
 		}
 
         private async void SpreadingFactorNumericUpDown_ValueChanged(object sender, EventArgs e)
@@ -338,7 +336,7 @@ namespace LoRa_Controller
 			if (sender.Equals(masterSpreadingFactorNumericUpDown))
 				await deviceHandler.SendCommandAsync(Commands.SpreadingFactor, (byte)(((NumericUpDown)sender).Value));
 			else if (sender.Equals(beaconSpreadingFactorNumericUpDown))
-				await ((MasterHandler)deviceHandler).BeaconHandler.SendCommandAsync(Commands.SpreadingFactor, (byte)(((NumericUpDown)sender).Value));
+				await ((MasterDevice)deviceHandler).BeaconHandler.SendCommandAsync(Commands.SpreadingFactor, (byte)(((NumericUpDown)sender).Value));
 		}
 
         private async void RxSymTimeoutNumericUpDown_ValueChanged(object sender, EventArgs e)
@@ -346,7 +344,7 @@ namespace LoRa_Controller
 			if (sender.Equals(masterRxSymTimeoutNumericUpDown))
 				await deviceHandler.SendCommandAsync(Commands.RxSymTimeout, (byte)(((NumericUpDown)sender).Value));
 			else if (sender.Equals(beaconRxSymTimeoutNumericUpDown))
-				await ((MasterHandler)deviceHandler).BeaconHandler.SendCommandAsync(Commands.RxSymTimeout, (byte)(((NumericUpDown)sender).Value));
+				await ((MasterDevice)deviceHandler).BeaconHandler.SendCommandAsync(Commands.RxSymTimeout, (byte)(((NumericUpDown)sender).Value));
 		}
 		
         private async void RxMsTimeoutNumericUpDown_ValueChanged(object sender, EventArgs e)
@@ -354,14 +352,14 @@ namespace LoRa_Controller
 			if (sender.Equals(masterRxMsTimeoutNumericUpDown))
 				await deviceHandler.SendCommandAsync(Commands.RxMsTimeout, (int)(((NumericUpDown)sender).Value));
 			else if (sender.Equals(beaconRxMsTimeoutNumericUpDown))
-				await ((MasterHandler)deviceHandler).BeaconHandler.SendCommandAsync(Commands.RxMsTimeout, (int)(((NumericUpDown)sender).Value));
+				await ((MasterDevice)deviceHandler).BeaconHandler.SendCommandAsync(Commands.RxMsTimeout, (int)(((NumericUpDown)sender).Value));
 		}
         private async void TxTimeoutNumericUpDown_ValueChanged(object sender, EventArgs e)
 		{
 			if (sender.Equals(masterTxTimeoutNumericUpDown))
 				await deviceHandler.SendCommandAsync(Commands.TxTimeout, (int)(((NumericUpDown)sender).Value));
 			else if (sender.Equals(beaconTxTimeoutNumericUpDown))
-				await ((MasterHandler)deviceHandler).BeaconHandler.SendCommandAsync(Commands.TxTimeout, (int)(((NumericUpDown)sender).Value));
+				await ((MasterDevice)deviceHandler).BeaconHandler.SendCommandAsync(Commands.TxTimeout, (int)(((NumericUpDown)sender).Value));
 		}
 
         private async void PreambleNumericUpDown_ValueChanged(object sender, EventArgs e)
@@ -369,7 +367,7 @@ namespace LoRa_Controller
 			if (sender.Equals(masterPreambleNumericUpDown))
 				await deviceHandler.SendCommandAsync(Commands.PreambleSize, (byte)(((NumericUpDown)sender).Value));
 			else if (sender.Equals(beaconPreambleNumericUpDown))
-				await ((MasterHandler)deviceHandler).BeaconHandler.SendCommandAsync(Commands.PreambleSize, (byte)(((NumericUpDown)sender).Value));
+				await ((MasterDevice)deviceHandler).BeaconHandler.SendCommandAsync(Commands.PreambleSize, (byte)(((NumericUpDown)sender).Value));
 		}
 
         private async void PayloadNumericUpDown_ValueChanged(object sender, EventArgs e)
@@ -377,7 +375,7 @@ namespace LoRa_Controller
 			if (sender.Equals(masterPayloadNumericUpDown))
 				await deviceHandler.SendCommandAsync(Commands.PayloadMaxSize, (byte)(((NumericUpDown)sender).Value));
 			else if (sender.Equals(beaconPayloadNumericUpDown))
-				await ((MasterHandler)deviceHandler).BeaconHandler.SendCommandAsync(Commands.PayloadMaxSize, (byte)(((NumericUpDown)sender).Value));
+				await ((MasterDevice)deviceHandler).BeaconHandler.SendCommandAsync(Commands.PayloadMaxSize, (byte)(((NumericUpDown)sender).Value));
 		}
 
         private async void VariablePayloadCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -385,7 +383,7 @@ namespace LoRa_Controller
 			if (sender.Equals(masterVariablePayloadCheckBox))
 				await deviceHandler.SendCommandAsync(Commands.VariablePayload, (byte)(((CheckBox)sender).Checked ? 1 : 0));
 			else if (sender.Equals(beaconVariablePayloadCheckBox))
-				await ((MasterHandler)deviceHandler).BeaconHandler.SendCommandAsync(Commands.VariablePayload, (byte)(((CheckBox)sender).Checked ? 1 : 0));
+				await ((MasterDevice)deviceHandler).BeaconHandler.SendCommandAsync(Commands.VariablePayload, (byte)(((CheckBox)sender).Checked ? 1 : 0));
 		}
 
         private async void CrcCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -393,7 +391,7 @@ namespace LoRa_Controller
 			if (sender.Equals(masterCrcCheckBox))
 				await deviceHandler.SendCommandAsync(Commands.PerformCRC, (byte)(((CheckBox)sender).Checked? 1 : 0));
 			else if (sender.Equals(beaconCrcCheckBox))
-				await ((MasterHandler)deviceHandler).BeaconHandler.SendCommandAsync(Commands.PerformCRC, (byte)(((CheckBox)sender).Checked ? 1 : 0));
+				await ((MasterDevice)deviceHandler).BeaconHandler.SendCommandAsync(Commands.PerformCRC, (byte)(((CheckBox)sender).Checked ? 1 : 0));
 		}
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LoRa_Controller.Connection;
+using System;
 using System.Collections.Generic;
 using System.IO.Ports;
 using System.Threading.Tasks;
@@ -23,10 +24,16 @@ namespace LoRa_Controller.Device
 			PerformCRC = 'k',
 			IsMaster = 'y'
 		}
+
+		public enum ConnectionType
+		{
+			Serial,
+			Internet
+		}
 		#endregion
 
 		#region Public variables
-		public static SerialHandler _serialDevice;
+		public static IConnectionHandler _connectionHandler;
 		#endregion
 
 		#region Protected variables
@@ -60,27 +67,7 @@ namespace LoRa_Controller.Device
 		{
 			get { return _snr; }
 		}
-
-		public bool IsConnected
-		{
-			get { return _serialDevice.isConnected; }
-		}
-
-		public EventHandler<ConnectionEventArgs> ConnectedToBoard
-		{
-			set { _serialDevice.ConnectSucceeded += value; }
-		}
-
-		public EventHandler<ConnectionEventArgs> UnableToConnectToBoard
-		{
-			set { _serialDevice.ConnectFailed += value; }
-		}
-
-		public EventHandler<ConnectionEventArgs> DisconnectedFromBoard
-		{
-			set { _serialDevice.Disconnected += value; }
-		}
-
+		
 		public byte Address
 		{
 			get { return _address; }
@@ -96,6 +83,16 @@ namespace LoRa_Controller.Device
 		{
 			get { return _totalErrors; }
 		}
+
+		public bool Connected
+		{
+			get { return _connectionHandler.Connected; }
+		}
+
+		public bool DisconnectedOnPurpose
+		{
+			get { return _connectionHandler.DisconnectedOnPurpose; }
+		}
 		#endregion
 
 		#region Constructors
@@ -108,19 +105,24 @@ namespace LoRa_Controller.Device
 			_oldErrors = 0;
 			_totalErrors = 0;
 		}
-		public DeviceHandler(string comPortName) : this()
+
+		public DeviceHandler(ConnectionType connectionType, string portName) : this()
 		{
-			_serialDevice = new SerialHandler(comPortName);
-			_serialDevice.ConnectSucceeded += UpdateConnectionStatus;
-			_serialDevice.ConnectFailed += UpdateConnectionStatus;
-			_serialDevice.Disconnected += UpdateConnectionStatus;
+			switch (connectionType)
+			{
+				case ConnectionType.Serial:
+					_connectionHandler = new SerialHandler(portName);
+					break;
+				case ConnectionType.Internet:
+					break;
+			}
 		}
 		#endregion
 
 		#region Public methods
 		public void ConnectToBoard()
 		{
-			_serialDevice.Open();
+			_connectionHandler.Open();
 		}
 
 		public static string[] getAvailablePorts()
@@ -130,35 +132,35 @@ namespace LoRa_Controller.Device
 
 		public async Task SendCommandAsync(Commands command)
 		{
-			await (_serialDevice.SendCharAsync(new byte[] { 0 }));
-			await (_serialDevice.SendCharAsync(new byte[] { _address }));
-			await (_serialDevice.SendCharAsync(new byte[] { Convert.ToByte(command) }));
-			await (_serialDevice.SendCharAsync(new byte[] { 0 }));
-			await (_serialDevice.SendCharAsync(new byte[] { 0 }));
-			await (_serialDevice.SendCharAsync(new byte[] { 0 }));
-			await (_serialDevice.SendCharAsync(new byte[] { 0 }));
+			await (_connectionHandler.SendCharAsync(new byte[] { 0 }));
+			await (_connectionHandler.SendCharAsync(new byte[] { _address }));
+			await (_connectionHandler.SendCharAsync(new byte[] { Convert.ToByte(command) }));
+			await (_connectionHandler.SendCharAsync(new byte[] { 0 }));
+			await (_connectionHandler.SendCharAsync(new byte[] { 0 }));
+			await (_connectionHandler.SendCharAsync(new byte[] { 0 }));
+			await (_connectionHandler.SendCharAsync(new byte[] { 0 }));
 		}
 
 		public async Task SendCommandAsync(Commands command, byte value)
 		{
-			await (_serialDevice.SendCharAsync(new byte[] { 0 }));
-			await (_serialDevice.SendCharAsync(new byte[] { _address }));
-			await (_serialDevice.SendCharAsync(new byte[] { Convert.ToByte(command) }));
-			await (_serialDevice.SendCharAsync(new byte[] { value }));
-			await (_serialDevice.SendCharAsync(new byte[] { 0 }));
-			await (_serialDevice.SendCharAsync(new byte[] { 0 }));
-			await (_serialDevice.SendCharAsync(new byte[] { 0 }));
+			await (_connectionHandler.SendCharAsync(new byte[] { 0 }));
+			await (_connectionHandler.SendCharAsync(new byte[] { _address }));
+			await (_connectionHandler.SendCharAsync(new byte[] { Convert.ToByte(command) }));
+			await (_connectionHandler.SendCharAsync(new byte[] { value }));
+			await (_connectionHandler.SendCharAsync(new byte[] { 0 }));
+			await (_connectionHandler.SendCharAsync(new byte[] { 0 }));
+			await (_connectionHandler.SendCharAsync(new byte[] { 0 }));
 		}
 
 		public async Task SendCommandAsync(Commands command, int value)
 		{
-			await (_serialDevice.SendCharAsync(new byte[] { 0 }));
-			await (_serialDevice.SendCharAsync(new byte[] { _address }));
-			await (_serialDevice.SendCharAsync(new byte[] { Convert.ToByte(command) }));
-			await (_serialDevice.SendCharAsync(new byte[] { (byte)(value >> 24) }));
-			await (_serialDevice.SendCharAsync(new byte[] { (byte)(value >> 16) }));
-			await (_serialDevice.SendCharAsync(new byte[] { (byte)(value >> 8) }));
-			await (_serialDevice.SendCharAsync(new byte[] { (byte)value }));
+			await (_connectionHandler.SendCharAsync(new byte[] { 0 }));
+			await (_connectionHandler.SendCharAsync(new byte[] { _address }));
+			await (_connectionHandler.SendCharAsync(new byte[] { Convert.ToByte(command) }));
+			await (_connectionHandler.SendCharAsync(new byte[] { (byte)(value >> 24) }));
+			await (_connectionHandler.SendCharAsync(new byte[] { (byte)(value >> 16) }));
+			await (_connectionHandler.SendCharAsync(new byte[] { (byte)(value >> 8) }));
+			await (_connectionHandler.SendCharAsync(new byte[] { (byte)value }));
 		}
 
 		public async Task<List<string>> ReceiveDataAsync()
@@ -166,16 +168,16 @@ namespace LoRa_Controller.Device
 			List<string> receivedData = new List<string>();
 			string receivedLine = "";
 
-			while (_serialDevice.IsOpen && !receivedLine.Contains("Done") &&
+			while (_connectionHandler.Connected && !receivedLine.Contains("Done") &&
 										   !receivedLine.Contains("Timeout") &&
 										   !receivedLine.Contains(":"))
 			{
 				receivedLine = "";
-				while (_serialDevice.IsOpen && !receivedLine.Contains("\r"))
+				while (_connectionHandler.Connected && !receivedLine.Contains("\r"))
 				{
 					byte[] receivedByte = new byte[1];
 
-					if (await _serialDevice.ReadCharAsync(receivedByte))
+					if (await _connectionHandler.ReadCharAsync(receivedByte))
 					{
 						if (receivedByte[0] > 0)
 							receivedLine += Convert.ToChar(receivedByte[0]);
@@ -192,11 +194,6 @@ namespace LoRa_Controller.Device
 		#endregion
 
 		#region Protected methods
-		protected void UpdateConnectionStatus(object sender, ConnectionEventArgs e)
-		{
-			_serialDevice.isConnected = e.Connected;
-		}
-
 		protected virtual void ParseData(string receivedData)
 		{
 			if (receivedData.Contains("I am a master"))

@@ -61,14 +61,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Device\ConnectionEventArgs.cs" />
-    <Compile Include="Device\BeaconHandler.cs" />
+    <Compile Include="Device\Connection\IConnectionHandler.cs" />
+    <Compile Include="Device\Connection\ConnectionEventArgs.cs" />
+    <Compile Include="Device\BeaconDevice.cs" />
     <Compile Include="Device\DeviceHandler.cs" />
-    <Compile Include="Device\SerialHandler.cs">
+    <Compile Include="Device\Connection\InternetHandler.cs" />
+    <Compile Include="Device\Connection\SerialHandler.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Log\Logger.cs" />
-    <Compile Include="Device\MasterHandler.cs" />
+    <Compile Include="Device\MasterDevice.cs" />
     <Compile Include="Interface\Form1.cs">
       <SubType>Form</SubType>
     </Compile>

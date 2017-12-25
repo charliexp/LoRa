@@ -2,7 +2,6 @@
 using System.Text;
 using System.Net;
 using System.Net.Sockets;
-using System.Threading;
 using System.Collections.Generic;
 
 namespace LoRa_Controller.Networking
@@ -21,17 +20,13 @@ namespace LoRa_Controller.Networking
 		{
 			// Data buffer for incoming data.  
 			byte[] bytes = new Byte[1024];
-
-			// Establish the local endpoint for the socket.  
-			// The DNS name of the computer  
-			// running the listener is "host.contoso.com".  
+			
 			IPHostEntry ipHostInfo = Dns.GetHostEntry("localhost");
 			IPAddress ipAddress = ipHostInfo.AddressList[0];
 			localEndPoint = new IPEndPoint(ipAddress, 11000);
 
 			// Create a TCP/IP socket.  
-			Socket listener = new Socket(ipAddress.AddressFamily,
-				SocketType.Stream, ProtocolType.Tcp);
+			Socket listener = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 
 			// Bind the socket to the local endpoint and listen for incoming connections.  
 			try
@@ -41,18 +36,12 @@ namespace LoRa_Controller.Networking
 				
 				// Start an asynchronous socket to listen for connections.  
 				Console.WriteLine("Waiting for a connection...");
-				listener.BeginAccept(
-					new AsyncCallback(AcceptCallback),
-					listener);
+				listener.BeginAccept(new AsyncCallback(AcceptCallback), listener);
 			}
 			catch (Exception e)
 			{
 				Console.WriteLine(e.ToString());
 			}
-
-			Console.WriteLine("\nPress ENTER to continue...");
-			Console.Read();
-
 		}
 
 		public void AcceptCallback(IAsyncResult ar)
@@ -81,9 +70,7 @@ namespace LoRa_Controller.Networking
 
 				// Start an asynchronous socket to listen for connections.  
 				Console.WriteLine("Waiting for a connection...");
-				listener.BeginAccept(
-					new AsyncCallback(AcceptCallback),
-					listener);
+				listener.BeginAccept(new AsyncCallback(AcceptCallback), listener);
 			}
 			catch (Exception e)
 			{
@@ -109,8 +96,7 @@ namespace LoRa_Controller.Networking
 			if (bytesRead > 0)
 			{
 				// There  might be more data, so store the data received so far.  
-				state.sb.Append(Encoding.ASCII.GetString(
-					state.buffer, 0, bytesRead));
+				state.sb.Append(Encoding.ASCII.GetString(state.buffer, 0, bytesRead));
 
 				// Check for end-of-file tag. If it is not there, read   
 				// more data.  

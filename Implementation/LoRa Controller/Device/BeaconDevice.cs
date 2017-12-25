@@ -3,19 +3,19 @@ using System.Collections.Generic;
 
 namespace LoRa_Controller
 {
-    class BeaconHandler : DeviceHandler
+    class BeaconDevice : DeviceHandler
 	{
 
 		#region Constructors
-		public BeaconHandler()
+		public BeaconDevice()
 		{
 		}
 
-		public BeaconHandler(string comPortName) : base(comPortName)
+		public BeaconDevice(string comPortName) : base(ConnectionType.Serial, comPortName)
 		{
 		}
 
-		public BeaconHandler(DeviceHandler deviceHandler)
+		public BeaconDevice(DeviceHandler deviceHandler)
 		{
 			Address = deviceHandler.Address;
 		}
