@@ -60,8 +60,15 @@ namespace LoRa_Controller
         
         public async Task write(string data)
         {
-            await streamWriter.WriteLineAsync(DateTime.Now.ToString("HH:mm:ss.fff") + ": " + data);
-			_linesWritten++;
+			try
+			{
+				await streamWriter.WriteLineAsync(DateTime.Now.ToString("HH:mm:ss.fff") + ": " + data);
+				_linesWritten++;
+			}
+			catch (ObjectDisposedException e)
+			{
+
+			}
 			if (_linesWritten == LinesRequiredToSaveFile)
 			{
 				_linesWritten = 0;
@@ -83,7 +90,7 @@ namespace LoRa_Controller
 		}
 
         public void finish()
-        {
+		{
 			streamWriter.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + " Log finished");
             if (streamWriter != null)
                 streamWriter.Close();
