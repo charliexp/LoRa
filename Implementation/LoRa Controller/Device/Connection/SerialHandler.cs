@@ -21,14 +21,13 @@ namespace LoRa_Controller.Connection
 		#endregion
 
 		#region Private variables
-		private bool _isConnected;
 		private bool _isDisconnectedOnPurpose;
 		#endregion
 		
 		#region Public properties
 		public bool Connected
 		{
-			get { return _isConnected; }
+			get { return IsOpen; }
 		}
 
 		public bool DisconnectedOnPurpose
@@ -43,19 +42,16 @@ namespace LoRa_Controller.Connection
 			try
 			{
 				base.Open();
-				_isConnected = true;
 				DiscardInBuffer();
 			}
 			catch
 			{
-				_isConnected = false;
 			}
 		}
 
 		public new void Close()
 		{
 			base.Close();
-			_isConnected = false;
 			_isDisconnectedOnPurpose = true;
 		}
 
@@ -68,7 +64,6 @@ namespace LoRa_Controller.Connection
 			}
 			catch (System.IO.IOException)
 			{
-				_isConnected = false;
 				_isDisconnectedOnPurpose = false;
 				return false;
 			}
@@ -83,7 +78,6 @@ namespace LoRa_Controller.Connection
 			}
 			catch (System.IO.IOException)
 			{
-				_isConnected = false;
 				_isDisconnectedOnPurpose = false;
 				return false;
 			}
