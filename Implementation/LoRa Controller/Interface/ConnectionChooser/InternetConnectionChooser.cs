@@ -4,9 +4,9 @@ using System.Windows.Forms;
 
 namespace LoRa_Controller.Interface.ConnectionChooser
 {
-	public class InternetConnectionInterface : DirectConnectionInterface
+	public class InternetConnectionChooser : ConnectionChooser
 	{
-		public InternetConnectionInterface() : base()
+		public InternetConnectionChooser() : base()
 		{
 			TextBox IPTextBox = new TextBox();
 			ParameterBoxes.Add(IPTextBox);

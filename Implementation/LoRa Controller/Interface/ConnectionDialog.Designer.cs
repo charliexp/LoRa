@@ -91,8 +91,10 @@
 			// 
 			// ConnectionDialog
 			// 
+			this.AcceptButton = this.OKButton;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.CancelButton = this.ExitButton;
 			this.ClientSize = new System.Drawing.Size(455, 300);
 			this.ControlBox = false;
 			this.Controls.Add(this.OKButton);

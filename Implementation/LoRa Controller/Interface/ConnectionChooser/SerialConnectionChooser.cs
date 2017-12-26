@@ -4,9 +4,9 @@ using System.Windows.Forms;
 
 namespace LoRa_Controller.Interface.ConnectionChooser
 {
-	public class SerialConnectionInterface : DirectConnectionInterface
+	public class SerialConnectionChooser : ConnectionChooser
 	{
-		public SerialConnectionInterface() : base()
+		public SerialConnectionChooser() : base()
 		{
 			ComboBox portComboBox = new ComboBox();
 			ParameterBoxes.Add(portComboBox);

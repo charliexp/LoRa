@@ -11,7 +11,7 @@ namespace LoRa_Controller.Interface
 	{
 		public ConnectionType ConnectionType;
 		public List<string> Parameters;
-		private DirectConnectionInterface ConnectionInterface;
+		private ConnectionChooser.ConnectionChooser ConnectionInterface;
 
 		public ConnectionDialog()
 		{
@@ -34,7 +34,7 @@ namespace LoRa_Controller.Interface
 				}
 
 				ConnectionType = ConnectionType.Serial;
-				ConnectionInterface = new SerialConnectionInterface();
+				ConnectionInterface = new SerialConnectionChooser();
 				((ComboBox)ConnectionInterface.ParameterBoxes[0]).SelectedIndexChanged += new EventHandler(PortComboBox_SelectedIndexChanged);
 
 				Controls.Add(ConnectionInterface.ParameterLabels[0]);
@@ -85,7 +85,7 @@ namespace LoRa_Controller.Interface
 				}
 
 				ConnectionType = ConnectionType.Internet;
-				ConnectionInterface = new InternetConnectionInterface();
+				ConnectionInterface = new InternetConnectionChooser();
 				((TextBox)ConnectionInterface.ParameterBoxes[0]).TextChanged += new EventHandler(IPTextBox_TextChanged);
 				((TextBox)ConnectionInterface.ParameterBoxes[1]).TextChanged += new EventHandler(PortTextBox_TextChanged);
 

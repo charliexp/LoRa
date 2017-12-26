@@ -3,10 +3,10 @@ using System.Windows.Forms;
 
 namespace LoRa_Controller.Interface.ConnectionChooser
 {
-	public abstract class DirectConnectionInterface
+	public abstract class ConnectionChooser
 	{
 		#region Constructors
-		public DirectConnectionInterface()
+		public ConnectionChooser()
 		{
 			ParameterLabels = new List<Label>();
 			ParameterBoxes = new List<Control>();
