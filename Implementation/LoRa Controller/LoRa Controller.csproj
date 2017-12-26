@@ -68,29 +68,33 @@
     <Compile Include="Device\Connection\SerialHandler.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Interface\ConnectionTypeDialog.cs">
+    <Compile Include="Interface\ConnectionDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Interface\ConnectionTypeDialog.Designer.cs">
-      <DependentUpon>ConnectionTypeDialog.cs</DependentUpon>
+    <Compile Include="Interface\ConnectionDialog.Designer.cs">
+      <DependentUpon>ConnectionDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Interface\Constants.cs" />
+    <Compile Include="Interface\DirectConnectionInterface\DirectConnectionInterface.cs" />
+    <Compile Include="Interface\DirectConnectionInterface\InternetConnection.cs" />
+    <Compile Include="Interface\DirectConnectionInterface\SerialConnection.cs" />
     <Compile Include="Log\Logger.cs" />
     <Compile Include="Device\MasterDevice.cs" />
-    <Compile Include="Interface\MainInterface.cs">
+    <Compile Include="Interface\MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Interface\MainInterface.Designer.cs">
-      <DependentUpon>MainInterface.cs</DependentUpon>
+    <Compile Include="Interface\MainWindow.Designer.cs">
+      <DependentUpon>MainWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="Networking\Server.cs" />
     <Compile Include="Networking\StateObject.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Interface\ConnectionTypeDialog.resx">
-      <DependentUpon>ConnectionTypeDialog.cs</DependentUpon>
+    <EmbeddedResource Include="Interface\ConnectionDialog.resx">
+      <DependentUpon>ConnectionDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Interface\MainInterface.resx">
-      <DependentUpon>MainInterface.cs</DependentUpon>
+    <EmbeddedResource Include="Interface\MainWindow.resx">
+      <DependentUpon>MainWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

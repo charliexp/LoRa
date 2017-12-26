@@ -1,4 +1,5 @@
-﻿using System.IO.Ports;
+﻿using System.Collections.Generic;
+using System.IO.Ports;
 using System.Threading.Tasks;
 
 namespace LoRa_Controller.Connection
@@ -18,14 +19,16 @@ namespace LoRa_Controller.Connection
 			PortName = portName;
 		}
 		#endregion
-
-		#region Private variables
-		#endregion
 		
 		#region Public properties
 		public bool Connected
 		{
 			get { return IsOpen; }
+		}
+
+		public List<string> Parameters
+		{
+			set { PortName = value[0]; }
 		}
 		#endregion
 

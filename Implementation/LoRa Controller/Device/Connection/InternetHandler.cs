@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
@@ -23,7 +24,18 @@ namespace LoRa_Controller.Connection
 		private string _IPAddress = "127.0.0.1";
 		private int _port = 13000;
 		#endregion
-		
+
+		#region Public properties
+		public List<string> Parameters
+		{
+			set
+			{
+				_IPAddress = value[0];
+				_port = Int32.Parse(value[1]);
+			}
+		}
+		#endregion
+
 		#region Public methods
 		public void Open()
 		{

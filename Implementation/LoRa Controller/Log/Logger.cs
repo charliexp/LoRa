@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LoRa_Controller
+namespace LoRa_Controller.Log
 {
-    class Logger
+    public class Logger
     {
 		private string _folder;
 		public string fileName;
@@ -54,7 +54,7 @@ namespace LoRa_Controller
 
         public Logger(string fileNamePrefix, string dateFormat, string fileFormat)
         {
-            this.dateFormat = dateFormat;
+            dateFormat = dateFormat;
             fileName = fileNamePrefix + DateTime.Now.ToString(dateFormat) + "." + fileFormat;
         }
         

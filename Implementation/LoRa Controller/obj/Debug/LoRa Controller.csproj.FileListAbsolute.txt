@@ -27,5 +27,5 @@ C:\Users\flori\Documents\GitHub\LoRa\Implementation\LoRa Controller\obj\Debug\Lo
 C:\Users\flori\Documents\GitHub\LoRa\Implementation\LoRa Controller\obj\Debug\LoRa Controller.csproj.CoreCompileInputs.cache
 C:\Users\flori\Documents\GitHub\LoRa\Implementation\LoRa Controller\obj\Debug\LoRa Controller.exe
 C:\Users\flori\Documents\GitHub\LoRa\Implementation\LoRa Controller\obj\Debug\LoRa Controller.pdb
-C:\Users\flori\Documents\GitHub\LoRa\Implementation\LoRa Controller\obj\Debug\LoRa_Controller.Interface.ConnectionTypeDialog.resources
-C:\Users\flori\Documents\GitHub\LoRa\Implementation\LoRa Controller\obj\Debug\LoRa_Controller.Interface.MainInterface.resources
+C:\Users\flori\Documents\GitHub\LoRa\Implementation\LoRa Controller\obj\Debug\LoRa_Controller.Interface.MainWindow.resources
+C:\Users\flori\Documents\GitHub\LoRa\Implementation\LoRa Controller\obj\Debug\LoRa_Controller.Interface.ConnectionDialog.resources

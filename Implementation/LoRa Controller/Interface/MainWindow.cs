@@ -1,4 +1,5 @@
 ﻿using LoRa_Controller.Device;
+using LoRa_Controller.Log;
 using LoRa_Controller.Networking;
 using System;
 using System.Collections.Generic;
@@ -8,11 +9,10 @@ using static LoRa_Controller.Device.DeviceHandler;
 
 namespace LoRa_Controller.Interface
 {
-    public partial class MainInterface : Form
+    public partial class MainWindow : Form
     {
 		DeviceHandler deviceHandler;
-        Logger logger;
-        const string settingsFilePath = "settings.ini";
+        public Logger logger;
         StreamWriter settingsFileStreamWriter;
 		const int logMaxEntries = 12;
 		private FolderBrowserDialog folderBrowserDialog;
@@ -21,47 +21,28 @@ namespace LoRa_Controller.Interface
 		public ConnectionType ConnectionType;
 		Server serverHandler;
 
-        public MainInterface()
-        {
-            InitializeComponent();
-        }
-        
-        private void LoadSettings()
-        {
-            string[] settingLines;
-            string settingName;
-            string settingValue;
-            
-            settingLines = File.ReadAllLines(settingsFilePath);
-            
-            if (settingLines.Length > 0)
-            {
-                settingName = settingLines[0].Remove(settingLines[0].IndexOf('=') - 1);
-                settingValue = settingLines[0].Substring(settingLines[0].LastIndexOf('=') + 2);
+        public MainWindow(ConnectionType connectionType, List<string> parameters)
+		{
+			logger = new Logger("log_", "dd.MM.yyyy", "txt");
 
-                if (settingName.Equals("LogFolder"))
-                {
-                    if (logger.isOpen())
-                        logger.finish();
-                    logger.Folder = settingValue;
-                    logFolderTextBox.Text = settingValue;
-                }
-            }
-        }
+			if (connectionType == ConnectionType.Serial)
+			{
+				deviceHandler = new DeviceHandler(ConnectionType.Serial, parameters[0]);
 
-        private void SaveSettings()
-        {
-            string settingName = "LogFolder";
-            string settingValue = logger.Folder;
-            settingsFileStreamWriter = new StreamWriter(File.Open(settingsFilePath, FileMode.Create));
+				serverHandler = new Server();
+				serverHandler.Start();
+			}
+			else if (connectionType == ConnectionType.Internet)
+			{
+				deviceHandler = new DeviceHandler(ConnectionType.Internet);
+			}
 
-            settingsFileStreamWriter.WriteLine(settingName + " = " + settingValue);
-            settingsFileStreamWriter.Close();
+			InitializeComponent();
         }
 		
-        private void Form1_Load(object sender, EventArgs e)
+        private async void Form1_Load(object sender, EventArgs e)
 		{
-            masterBandwidthComboBox.SelectedIndex = 0;
+			masterBandwidthComboBox.SelectedIndex = 0;
             masterCodingRateComboBox.SelectedIndex = 3;
             masterBandwidthComboBox.SelectedIndexChanged += new EventHandler(BandwidthComboBox_SelectedIndexChanged);
             masterCodingRateComboBox.SelectedIndexChanged += new EventHandler(CodingRateComboBox_SelectedIndexChanged);
@@ -76,64 +57,21 @@ namespace LoRa_Controller.Interface
 			folderBrowserDialog.ShowNewFolderButton = true;
 			folderBrowserDialog.RootFolder = Environment.SpecialFolder.MyComputer;
 			Application.ApplicationExit += new EventHandler(OnApplicationExit);
-            logger = new Logger("log_", "dd.MM.yyyy", "txt");
-            LoadSettings();
-            logger.start();
-        }
 
-		private void ChangeLogFolderButton_Click(object sender, EventArgs e)
-		{
-			DialogResult result = folderBrowserDialog.ShowDialog();
-			if (result == DialogResult.OK)
-			{
-				logger.Folder = folderBrowserDialog.SelectedPath;
-				logFolderTextBox.Text = folderBrowserDialog.SelectedPath;
-			}
-		}
-
-		private void ComPortComboBox_DropDown(object sender, EventArgs e)
-		{
-			ComboBox comboBox = ((ComboBox)sender);
-			string[] comPortsList = MasterDevice.getAvailablePorts();
-
-			comboBox.Items.Clear();
-			foreach (string port in comPortsList)
-				if (!comboBox.Items.Contains(port))
-					comboBox.Items.Add(port);
-			comboBox.Items.Add(remoteConnection);
-		}
-
-		private async void ComPortComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-			string comPort = (string)((ComboBox)sender).SelectedItem;
+			logFolderTextBox.Text = logger.Folder;
+			logger.start();
+			
 			List<string> receivedData;
-
-			if (deviceHandler != null)
-			{
-				logger.finish();
-			}
-
-			if (ConnectionType == ConnectionType.Serial)
-			{
-				deviceHandler = new DeviceHandler(ConnectionType.Serial, comPort);
-				
-				serverHandler = new Server();
-				serverHandler.Start();
-			}
-			else
-			{
-				deviceHandler = new DeviceHandler(ConnectionType.Internet);
-			}
 
 			deviceHandler.ConnectToBoard();
 			if (deviceHandler.Connected)
 			{
-				physicalStatusTextBox.Text = "Connected to board";
+				DirectConnectionStatusTextBox.Text = "Connected to board";
 				BoardConnected();
 			}
 			else
 			{
-				physicalStatusTextBox.Text = "Couldn't connect to board";
+				DirectConnectionStatusTextBox.Text = "Couldn't connect to board";
 				BoardUnableToConnect();
 			}
 			deviceNodeTypeProcessed = false;
@@ -144,7 +82,7 @@ namespace LoRa_Controller.Interface
 				if (serverHandler != null)
 				{
 					byte[] command = await serverHandler.Receive();
-					if (command[0] != (byte) Commands.Invalid)
+					if (command[0] != (byte)Commands.Invalid)
 						await deviceHandler.SendCommandAsync(command);
 					foreach (string s in receivedData)
 						await serverHandler.Send(s);
@@ -184,6 +122,26 @@ namespace LoRa_Controller.Interface
 			BoardDisconnected();
 		}
 		
+		private void SaveSettings()
+		{
+			string settingName = "LogFolder";
+			string settingValue = logger.Folder;
+			settingsFileStreamWriter = new StreamWriter(File.Open(Program.settingsFilePath, FileMode.Create));
+
+			settingsFileStreamWriter.WriteLine(settingName + " = " + settingValue);
+			settingsFileStreamWriter.Close();
+		}
+
+		private void ChangeLogFolderButton_Click(object sender, EventArgs e)
+		{
+			DialogResult result = folderBrowserDialog.ShowDialog();
+			if (result == DialogResult.OK)
+			{
+				logger.Folder = folderBrowserDialog.SelectedPath;
+				logFolderTextBox.Text = folderBrowserDialog.SelectedPath;
+			}
+		}
+
         public void OnApplicationExit(object sender, EventArgs e)
         {
             SaveSettings();
@@ -241,7 +199,7 @@ namespace LoRa_Controller.Interface
 
 		public void BoardDisconnected()
 		{
-			physicalStatusTextBox.Text = "Board disconnected";
+			DirectConnectionStatusTextBox.Text = "Board disconnected";
 			DisableLogControls();
 			DisableRadioControls();
 			ClearTotalErrors();
@@ -399,5 +357,5 @@ namespace LoRa_Controller.Interface
 			else if (sender.Equals(beaconCrcCheckBox))
 				await ((MasterDevice)deviceHandler).BeaconHandler.SendCommandAsync(Commands.PerformCRC, (byte)(((CheckBox)sender).Checked ? 1 : 0));
 		}
-    }
+	}
 }

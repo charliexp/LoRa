@@ -1,12 +1,18 @@
 ﻿
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace LoRa_Controller.Connection
 {
 	public interface IConnectionHandler
 	{
-		#region Public properties
+		#region Properties
+		List<string> Parameters
+		{
+			set;
+		}
+
 		bool Connected
 		{
 			get;
