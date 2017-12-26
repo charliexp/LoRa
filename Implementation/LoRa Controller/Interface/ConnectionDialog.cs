@@ -42,7 +42,8 @@ namespace LoRa_Controller.Interface
 				Controls.Add(ConnectionInterface.ParameterBoxes[0]);
 				OKButton.Location = new System.Drawing.Point(Constants.LabelMaxWidth -
 															2 * Constants.ButtonWidth -
-															Constants.WindowMarginX,
+															Constants.LabelLocationX +
+															Constants.InterfaceItemPadding,
 
 															2 * Constants.WindowMarginY +
 															MessageLabel.Height +
@@ -51,16 +52,14 @@ namespace LoRa_Controller.Interface
 															Constants.InterfaceItemPadding);
 
 				ExitButton.Location = new System.Drawing.Point(Constants.LabelMaxWidth -
-															Constants.ButtonWidth -
-															Constants.WindowMarginX,
+															Constants.ButtonWidth,
 
 															2 * Constants.WindowMarginY +
 															MessageLabel.Height +
 															SerialRadioButton.Height +
 															ConnectionInterface.ParameterBoxes[0].Height +
 															Constants.InterfaceItemPadding);
-				ClientSize = new System.Drawing.Size(2 * Constants.WindowMarginX +
-													MessageLabel.Width,
+				ClientSize = new System.Drawing.Size(Constants.LabelMaxWidth,
 
 													2 * Constants.WindowMarginY +
 													MessageLabel.Height +
@@ -101,27 +100,26 @@ namespace LoRa_Controller.Interface
 
 				OKButton.Location = new System.Drawing.Point(Constants.LabelMaxWidth -
 															2 * Constants.ButtonWidth -
-															Constants.WindowMarginX,
+															Constants.LabelLocationX +
+															Constants.InterfaceItemPadding,
 
 															2 * Constants.WindowMarginY +
 															MessageLabel.Height +
 															SerialRadioButton.Height +
 															ConnectionInterface.ParameterBoxes[0].Height +
 															ConnectionInterface.ParameterBoxes[1].Height +
-															Constants.InterfaceItemPadding);
+															2 * Constants.InterfaceItemPadding);
 
 				ExitButton.Location = new System.Drawing.Point(Constants.LabelMaxWidth -
-															Constants.ButtonWidth -
-															Constants.WindowMarginX,
+															Constants.ButtonWidth,
 
 															2 * Constants.WindowMarginY +
 															MessageLabel.Height +
 															SerialRadioButton.Height +
 															ConnectionInterface.ParameterBoxes[0].Height +
 															ConnectionInterface.ParameterBoxes[1].Height +
-															Constants.InterfaceItemPadding);
-				ClientSize = new System.Drawing.Size(2 * Constants.WindowMarginX +
-													MessageLabel.Width,
+															2 * Constants.InterfaceItemPadding);
+				ClientSize = new System.Drawing.Size(Constants.LabelMaxWidth,
 
 													2 * Constants.WindowMarginY +
 													MessageLabel.Height +
@@ -129,7 +127,7 @@ namespace LoRa_Controller.Interface
 													ConnectionInterface.ParameterBoxes[0].Height +
 													ConnectionInterface.ParameterBoxes[1].Height +
 													OKButton.Height +
-													3 * Constants.InterfaceItemPadding);
+													4 * Constants.InterfaceItemPadding);
 
 				ResumeLayout(false);
 				PerformLayout();

@@ -29,8 +29,9 @@ namespace LoRa_Controller.Interface.DirectConnection
 			IPLabel.Text = "IP";
 			
 			IPTextBox.Location = new System.Drawing.Point(Constants.LabelMaxWidth -
-															IPLabel.Width -
-															Constants.TextBoxWidth,
+															Constants.TextBoxWidth -
+															Constants.WindowMarginX -
+															2 * Constants.InterfaceItemPadding,
 
 															Constants.LabelLocationY +
 															Constants.LabelHeight +
@@ -56,8 +57,9 @@ namespace LoRa_Controller.Interface.DirectConnection
 			portLabel.Text = "Port";
 
 			portTextBox.Location = new System.Drawing.Point(Constants.LabelMaxWidth -
-															portLabel.Width -
-															Constants.TextBoxWidth,
+															Constants.TextBoxWidth -
+															Constants.WindowMarginX -
+															2 * Constants.InterfaceItemPadding,
 
 															Constants.LabelLocationY +
 															Constants.LabelHeight +

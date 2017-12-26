@@ -101,7 +101,6 @@
 			this.Controls.Add(this.ExitButton);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.Name = "ConnectionDialog";
-			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Connection";
 			this.ResumeLayout(false);

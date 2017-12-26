@@ -27,8 +27,9 @@ namespace LoRa_Controller.Interface.DirectConnection
 			portComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
 			portComboBox.FormattingEnabled = true;
 			portComboBox.Location = new System.Drawing.Point(Constants.LabelMaxWidth -
-															portLabel.Width -
-															Constants.ComboBoxWidth,
+															Constants.ComboBoxWidth -
+															Constants.WindowMarginX -
+															2 * Constants.InterfaceItemPadding,
 
 															Constants.LabelLocationY +
 															Constants.LabelHeight +
