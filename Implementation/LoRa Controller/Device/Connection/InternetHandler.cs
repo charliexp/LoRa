@@ -7,15 +7,34 @@ namespace LoRa_Controller.Connection
 {
 	class InternetHandler : TcpClient, IConnectionHandler
 	{
-		#region Private constants
-		private const string _IPAddress = "127.0.0.1";
-		private const int _port = 13000;
+		#region Constructors
+		public InternetHandler()
+		{
+
+		}
+
+		public InternetHandler(string IPAddress)
+		{
+			_IPAddress = IPAddress;
+		}
+		#endregion
+
+		#region Private variables
+		private string _IPAddress = "127.0.0.1";
+		private int _port = 13000;
 		#endregion
 		
 		#region Public methods
 		public void Open()
 		{
-			Connect(_IPAddress, _port);
+			try
+			{
+				Connect(_IPAddress, _port);
+			}
+			catch
+			{
+
+			}
 		}
 
 		public async Task<bool> SendCharAsync(byte[] byteToSend)

@@ -22,7 +22,8 @@ namespace LoRa_Controller.Device
 			PayloadMaxSize = 'i',
 			VariablePayload = 'j',
 			PerformCRC = 'k',
-			IsMaster = 'y'
+			IsMaster = 'y',
+			Invalid = 'z'
 		}
 
 		public enum ConnectionType
@@ -38,7 +39,11 @@ namespace LoRa_Controller.Device
 			Beacon,
 		}
 		#endregion
-		
+
+		#region Public constants
+		public const int CommandMaxLength = 7;
+		#endregion
+
 		#region Public variables
 		public static IConnectionHandler _connectionHandler;
 		public NodeType _nodeType;
@@ -109,15 +114,15 @@ namespace LoRa_Controller.Device
 			}
 		}
 
-		public DeviceHandler(ConnectionType connectionType, string portName) : this()
+		public DeviceHandler(ConnectionType connectionType, string connectionName) : this()
 		{
 			switch (connectionType)
 			{
 				case ConnectionType.Serial:
-					_connectionHandler = new SerialHandler(portName);
+					_connectionHandler = new SerialHandler(connectionName);
 					break;
 				case ConnectionType.Internet:
-					_connectionHandler = new InternetHandler();
+					_connectionHandler = new InternetHandler(connectionName);
 					break;
 			}
 		}
@@ -132,6 +137,12 @@ namespace LoRa_Controller.Device
 		public static string[] getAvailablePorts()
 		{
 			return SerialPort.GetPortNames();
+		}
+
+		public async Task SendCommandAsync(byte[] command)
+		{
+			for (int i = 0; i < CommandMaxLength; i++)
+				await (_connectionHandler.SendCharAsync(new byte[] { command[i] }));
 		}
 
 		public async Task SendCommandAsync(Commands command)

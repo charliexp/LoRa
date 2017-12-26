@@ -76,7 +76,6 @@
     <Compile Include="Interface\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Networking\Client.cs" />
     <Compile Include="Networking\Server.cs" />
     <Compile Include="Networking\StateObject.cs" />
     <Compile Include="Program.cs" />

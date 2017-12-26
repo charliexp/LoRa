@@ -91,6 +91,7 @@
 			this.beaconOutputPowerLabel = new System.Windows.Forms.Label();
 			this.beaconBandwidthLabel = new System.Windows.Forms.Label();
 			this.beaconBandwidthComboBox = new System.Windows.Forms.ComboBox();
+			this.textBox1 = new System.Windows.Forms.TextBox();
 			this.logGroupBox.SuspendLayout();
 			this.physicalConnectionGroupBox.SuspendLayout();
 			this.radioConnectionGroupBox.SuspendLayout();
@@ -1034,11 +1035,21 @@
 			this.beaconBandwidthComboBox.Sorted = true;
 			this.beaconBandwidthComboBox.TabIndex = 12;
 			// 
+			// textBox1
+			// 
+			this.textBox1.Location = new System.Drawing.Point(292, 588);
+			this.textBox1.Margin = new System.Windows.Forms.Padding(4);
+			this.textBox1.Name = "textBox1";
+			this.textBox1.Size = new System.Drawing.Size(183, 22);
+			this.textBox1.TabIndex = 8;
+			this.textBox1.Text = "IP";
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(832, 566);
+			this.ClientSize = new System.Drawing.Size(832, 623);
+			this.Controls.Add(this.textBox1);
 			this.Controls.Add(this.beaconSettingsGroupBox);
 			this.Controls.Add(this.masterSettingsGroupBox);
 			this.Controls.Add(this.radioConnectionGroupBox);
@@ -1075,6 +1086,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.beaconSpreadingFactorNumericUpDown)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.beaconOutputPowerNumericUpDown)).EndInit();
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
         }
 
@@ -1143,6 +1155,7 @@
         private System.Windows.Forms.Label beaconOutputPowerLabel;
         private System.Windows.Forms.Label beaconBandwidthLabel;
         private System.Windows.Forms.ComboBox beaconBandwidthComboBox;
-    }
+		private System.Windows.Forms.TextBox textBox1;
+	}
 }
 

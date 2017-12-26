@@ -20,7 +20,6 @@ namespace LoRa_Controller
 		private const string remoteConnection = "Remote";
 		private bool deviceNodeTypeProcessed;
 		Server serverHandler;
-		Client clientHandler;
 
         public Form1()
         {
@@ -108,40 +107,47 @@ namespace LoRa_Controller
 			string comPort = (string)((ComboBox)sender).SelectedItem;
 			List<string> receivedData;
 
+			if (deviceHandler != null)
+			{
+				logger.finish();
+			}
+
 			if (comPort != remoteConnection)
 			{
-				if (deviceHandler != null)
-				{
-					logger.finish();
-				}
-
 				deviceHandler = new DeviceHandler(ConnectionType.Serial, comPort);
-				deviceHandler.ConnectToBoard();
-				COMPortConnected();
-				deviceNodeTypeProcessed = false;
 				
 				serverHandler = new Server();
 				serverHandler.Start();
 			}
 			else
 			{
-				if (deviceHandler != null)
-				{
-					logger.finish();
-				}
-
 				deviceHandler = new DeviceHandler(ConnectionType.Internet);
-				deviceHandler.ConnectToBoard();
-				COMPortConnected();
-				deviceNodeTypeProcessed = false;
 			}
+
+			deviceHandler.ConnectToBoard();
+			if (deviceHandler.Connected)
+			{
+				physicalStatusTextBox.Text = "Connected to board";
+				BoardConnected();
+			}
+			else
+			{
+				physicalStatusTextBox.Text = "Couldn't connect to board";
+				BoardUnableToConnect();
+			}
+			deviceNodeTypeProcessed = false;
 
 			while (deviceHandler.Connected)
 			{
 				receivedData = await deviceHandler.ReceiveDataAsync();
 				if (serverHandler != null)
+				{
+					byte[] command = await serverHandler.Receive();
+					if (command[0] != (byte) Commands.Invalid)
+						await deviceHandler.SendCommandAsync(command);
 					foreach (string s in receivedData)
 						await serverHandler.Send(s);
+				}
 				UpdateLog(receivedData);
 				UpdateRSSI(deviceHandler.RSSI);
 				UpdateSNR(deviceHandler.SNR);
@@ -174,7 +180,7 @@ namespace LoRa_Controller
 				else
 					await logger.write("error");
 			}
-			COMPortDisconnected();
+			BoardDisconnected();
 		}
 		
         public void OnApplicationExit(object sender, EventArgs e)
@@ -218,23 +224,21 @@ namespace LoRa_Controller
 			totalErrorsTextBox.Clear();
 		}
 
-		public async void COMPortConnected()
+		public async void BoardConnected()
         {
-			physicalStatusTextBox.Text = "Connected to board";
 			EnableLogControls();
 			EnableRadioControls();
 			await deviceHandler.SendCommandAsync(Commands.IsMaster);
 		}
 
-		public void COMPortUnableToConnect()
+		public void BoardUnableToConnect()
 		{
-			physicalStatusTextBox.Text = "Couldn't connect to board";
 			DisableLogControls();
 			DisableRadioControls();
 			ClearTotalErrors();
 		}
 
-		public void COMPortDisconnected()
+		public void BoardDisconnected()
 		{
 			physicalStatusTextBox.Text = "Board disconnected";
 			DisableLogControls();

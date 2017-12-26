@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using LoRa_Controller.Device;
 
 namespace LoRa_Controller.Networking
 {
@@ -55,6 +56,19 @@ namespace LoRa_Controller.Networking
 				{
 				}
 			}
+		}
+
+		public async Task<byte[]> Receive()
+		{
+			byte[] data = new byte[DeviceHandler.CommandMaxLength];
+			data[0] = (byte) DeviceHandler.Commands.Invalid;
+			_clients.RemoveAll(client => client.Connected == false);
+
+			foreach (TcpClient client in _clients)
+				if (client.Available == data.Length)
+					await client.GetStream().ReadAsync(data, 0, data.Length);
+
+			return data;
 		}
 		#endregion
 	}
