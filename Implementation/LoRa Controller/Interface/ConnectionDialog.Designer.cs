@@ -87,6 +87,7 @@
 			this.OKButton.TabIndex = 4;
 			this.OKButton.Text = "OK";
 			this.OKButton.UseVisualStyleBackColor = true;
+			this.OKButton.Click += new System.EventHandler(this.OKButton_Click);
 			// 
 			// ConnectionDialog
 			// 

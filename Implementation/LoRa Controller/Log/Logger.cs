@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LoRa_Controller.Settings;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -24,7 +25,7 @@ namespace LoRa_Controller.Log
 			set
 			{
 				_folder = value;
-				Settings.Save(Settings.LogFolder, _folder);
+				SettingHandler.LogFolder.Value = _folder;
                 if (_isOpen)
 				{
 					finish();
@@ -40,7 +41,7 @@ namespace LoRa_Controller.Log
 
         public Logger()
         {
-			_folder = Directory.GetCurrentDirectory();
+			_folder = (string) SettingHandler.LogFolder.Value;
             dateFormat = "HH:mm:ss.fff";
             fileName = "log_" + DateTime.Now.ToString("dd.MM.yyyy") + ".txt";
         }

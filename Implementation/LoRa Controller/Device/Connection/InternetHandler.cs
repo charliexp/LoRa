@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LoRa_Controller.Settings;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
@@ -14,9 +15,10 @@ namespace LoRa_Controller.Connection
 
 		}
 
-		public InternetHandler(string IPAddress)
+		public InternetHandler(string IPAddress, int port)
 		{
 			_IPAddress = IPAddress;
+			_port = port;
 		}
 		#endregion
 
@@ -28,24 +30,27 @@ namespace LoRa_Controller.Connection
 		#region Public properties
 		public string IPAddress
 		{
-			get { return _IPAddress; }
-			set { _IPAddress = value; }
+			get
+			{
+				return _IPAddress;
+			}
+			set
+			{
+				_IPAddress = value;
+				SettingHandler.IPAddress.Value = _IPAddress;
+			}
 		}
 
 		public int Port
 		{
-			get { return _port; }
-			set { _port = value; }
-		}
-
-		public List<string> Parameters
-		{
+			get
+			{
+				return _port;
+			}
 			set
 			{
-				_IPAddress = value[0];
-				_port = Int32.Parse(value[1]);
-				Settings.Save(Settings.IPAddress, _IPAddress);
-				Settings.Save(Settings.TCPPort, _port.ToString());
+				_port = value;
+				SettingHandler.IPAddress.Value = _port;
 			}
 		}
 		#endregion

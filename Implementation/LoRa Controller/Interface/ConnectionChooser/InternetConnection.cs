@@ -1,7 +1,8 @@
-﻿using System;
+﻿using LoRa_Controller.Settings;
+using System;
 using System.Windows.Forms;
 
-namespace LoRa_Controller.Interface.DirectConnection
+namespace LoRa_Controller.Interface.ConnectionChooser
 {
 	public class InternetConnectionInterface : DirectConnectionInterface
 	{
@@ -40,7 +41,7 @@ namespace LoRa_Controller.Interface.DirectConnection
 			IPTextBox.Name = "IPTextBox";
 			IPTextBox.Size = new System.Drawing.Size(Constants.TextBoxWidth, Constants.TextBoxHeight);
 			IPTextBox.TabIndex = 2;
-			IPTextBox.Text = "127.0.0.1";
+			IPTextBox.Text = (string) SettingHandler.IPAddress.Value;
 
 			portLabel.AutoSize = true;
 			portLabel.Location = new System.Drawing.Point(Constants.LabelLocationX,
@@ -70,7 +71,7 @@ namespace LoRa_Controller.Interface.DirectConnection
 			portTextBox.Name = "portTextBox";
 			portTextBox.Size = new System.Drawing.Size(Constants.TextBoxWidth, Constants.TextBoxHeight);
 			portTextBox.TabIndex = 3;
-			portTextBox.Text = "13000";
+			portTextBox.Text = SettingHandler.TCPPort.Value.ToString();
 		}
 	}
 }

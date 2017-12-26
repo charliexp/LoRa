@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace LoRa_Controller.Interface.DirectConnection
+namespace LoRa_Controller.Interface.ConnectionChooser
 {
 	public abstract class DirectConnectionInterface
 	{

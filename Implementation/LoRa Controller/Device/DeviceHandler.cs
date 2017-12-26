@@ -120,8 +120,7 @@ namespace LoRa_Controller.Device
 					_connectionHandler = new SerialHandler(parameters[0]);
 					break;
 				case ConnectionType.Internet:
-					_connectionHandler = new InternetHandler();
-					_connectionHandler.Parameters = parameters;
+					_connectionHandler = new InternetHandler(parameters[0], Int32.Parse(parameters[1]));
 					break;
 			}
 		}
@@ -131,11 +130,6 @@ namespace LoRa_Controller.Device
 		public void ConnectToBoard()
 		{
 			_connectionHandler.Open();
-		}
-
-		public static string[] getAvailablePorts()
-		{
-			return SerialPort.GetPortNames();
 		}
 
 		public async Task SendCommandAsync(byte[] command)

@@ -2,6 +2,7 @@
 using LoRa_Controller.Device;
 using LoRa_Controller.Interface;
 using LoRa_Controller.Log;
+using LoRa_Controller.Settings;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -22,13 +23,14 @@ namespace LoRa_Controller
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+			SettingHandler.Load();
+
 			ConnectionDialog connectionDialog = new ConnectionDialog();
 			DialogResult result = connectionDialog.ShowDialog();
 
 			if (result == DialogResult.OK)
 			{
 				mainWindow = new MainWindow(connectionDialog.ConnectionType, connectionDialog.Parameters);
-				Settings.Load();
 
 				Application.Run(mainWindow);
 			}

@@ -8,11 +8,6 @@ namespace LoRa_Controller.Connection
 	public interface IConnectionHandler
 	{
 		#region Properties
-		List<string> Parameters
-		{
-			set;
-		}
-
 		bool Connected
 		{
 			get;

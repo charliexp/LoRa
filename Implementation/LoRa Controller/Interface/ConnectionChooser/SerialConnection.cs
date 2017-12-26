@@ -1,7 +1,8 @@
 ﻿using System;
+using System.IO.Ports;
 using System.Windows.Forms;
 
-namespace LoRa_Controller.Interface.DirectConnection
+namespace LoRa_Controller.Interface.ConnectionChooser
 {
 	public class SerialConnectionInterface : DirectConnectionInterface
 	{
@@ -40,12 +41,15 @@ namespace LoRa_Controller.Interface.DirectConnection
 			portComboBox.Sorted = true;
 			portComboBox.TabIndex = 1;
 			portComboBox.DropDown += new EventHandler(PortComboBox_DropDown);
+			portComboBox.Items.AddRange(SerialPort.GetPortNames());
+			if (portComboBox.Items.Count != 0)
+				portComboBox.SelectedIndex = 0;
 		}
-
+		
 		private void PortComboBox_DropDown(object sender, EventArgs e)
 		{
 			ComboBox comboBox = ((ComboBox)sender);
-			string[] comPortsList = MasterDevice.getAvailablePorts();
+			string[] comPortsList = SerialPort.GetPortNames();
 
 			comboBox.Items.Clear();
 			foreach (string port in comPortsList)

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using LoRa_Controller.Settings;
+using System.Collections.Generic;
 using System.IO.Ports;
 using System.Threading.Tasks;
 
@@ -17,7 +18,6 @@ namespace LoRa_Controller.Connection
 			ReadTimeout = 1200;
 			WriteTimeout = 1000;
 			PortName = portName;
-			Settings.Save(Settings.COMPort, PortName);
 		}
 		#endregion
 		
@@ -27,12 +27,16 @@ namespace LoRa_Controller.Connection
 			get { return IsOpen; }
 		}
 
-		public List<string> Parameters
+		public new string PortName
 		{
+			get
+			{
+				return base.PortName;
+			}
 			set
 			{
-				PortName = value[0];
-				Settings.Save(Settings.COMPort, PortName);
+				base.PortName = value;
+				SettingHandler.COMPort.Value = base.PortName;
 			}
 		}
 		#endregion

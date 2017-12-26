@@ -1,4 +1,5 @@
-﻿using LoRa_Controller.Interface.DirectConnection;
+﻿using LoRa_Controller.Interface.ConnectionChooser;
+using LoRa_Controller.Settings;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -30,13 +31,11 @@ namespace LoRa_Controller.Interface
 					ConnectionInterface.ParameterBoxes[0].Dispose();
 					ConnectionInterface.ParameterLabels[1].Dispose();
 					ConnectionInterface.ParameterBoxes[1].Dispose();
-					Parameters.Clear();
 				}
 
 				ConnectionType = ConnectionType.Serial;
 				ConnectionInterface = new SerialConnectionInterface();
 				((ComboBox)ConnectionInterface.ParameterBoxes[0]).SelectedIndexChanged += new EventHandler(PortComboBox_SelectedIndexChanged);
-				Parameters.Add("");
 
 				Controls.Add(ConnectionInterface.ParameterLabels[0]);
 				Controls.Add(ConnectionInterface.ParameterBoxes[0]);
@@ -83,15 +82,12 @@ namespace LoRa_Controller.Interface
 				{
 					ConnectionInterface.ParameterLabels[0].Dispose();
 					ConnectionInterface.ParameterBoxes[0].Dispose();
-					Parameters.Clear();
 				}
 
 				ConnectionType = ConnectionType.Internet;
 				ConnectionInterface = new InternetConnectionInterface();
 				((TextBox)ConnectionInterface.ParameterBoxes[0]).TextChanged += new EventHandler(IPTextBox_TextChanged);
 				((TextBox)ConnectionInterface.ParameterBoxes[1]).TextChanged += new EventHandler(PortTextBox_TextChanged);
-				Parameters.Add(((TextBox)ConnectionInterface.ParameterBoxes[0]).Text);
-				Parameters.Add(((TextBox)ConnectionInterface.ParameterBoxes[1]).Text);
 
 				Controls.Add(ConnectionInterface.ParameterLabels[0]);
 				Controls.Add(ConnectionInterface.ParameterBoxes[0]);
@@ -136,17 +132,39 @@ namespace LoRa_Controller.Interface
 
 		private void PortComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			Parameters[0] = (string)((ComboBox)sender).SelectedItem;
+			OKButton.Enabled = true;
 		}
 
 		private void IPTextBox_TextChanged(object sender, EventArgs e)
 		{
-			Parameters[0] = ((TextBox)sender).Text;
+			if (((TextBox)sender).Text.Split(new char[] { '.' }).Length == 4)
+				OKButton.Enabled = true;
+			else
+				OKButton.Enabled = false;
 		}
 
 		private void PortTextBox_TextChanged(object sender, EventArgs e)
 		{
-			Parameters[1] = ((TextBox)sender).Text;
+			if (Int32.TryParse(((TextBox)sender).Text, out int port))
+				OKButton.Enabled = true;
+			else
+				OKButton.Enabled = false;
+		}
+
+		private void OKButton_Click(object sender, EventArgs e)
+		{
+			if (SerialRadioButton.Checked)
+			{
+				Parameters.Add((string)(((ComboBox)ConnectionInterface.ParameterBoxes[0]).SelectedItem));
+				SettingHandler.COMPort.Value = Parameters[0];
+			}
+			else if (RemoteRadioButton.Checked)
+			{
+				Parameters.Add(((TextBox)ConnectionInterface.ParameterBoxes[0]).Text);
+				Parameters.Add(((TextBox)ConnectionInterface.ParameterBoxes[1]).Text);
+				SettingHandler.IPAddress.Value = Parameters[0];
+				SettingHandler.TCPPort.Value = Parameters[1];
+			}
 		}
 	}
 }
