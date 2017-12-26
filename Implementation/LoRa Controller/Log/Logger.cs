@@ -24,8 +24,12 @@ namespace LoRa_Controller.Log
 			set
 			{
 				_folder = value;
+				Settings.Save(Settings.LogFolder, _folder);
                 if (_isOpen)
-                    start();
+				{
+					finish();
+					start();
+				}
             }
 		}
 
@@ -36,24 +40,23 @@ namespace LoRa_Controller.Log
 
         public Logger()
         {
+			_folder = Directory.GetCurrentDirectory();
             dateFormat = "HH:mm:ss.fff";
             fileName = "log_" + DateTime.Now.ToString("dd.MM.yyyy") + ".txt";
         }
 
-        public Logger(string fileNamePrefix)
+        public Logger(string fileNamePrefix) : this()
         {
-            dateFormat = "HH:mm:ss.fff";
             fileName = fileNamePrefix + DateTime.Now.ToString("dd.MM.yyyy")+ ".txt";
         }
 
-        public Logger(string fileNamePrefix, string fileFormat)
-        {
-            dateFormat = "HH:mm:ss.fff";
+        public Logger(string fileNamePrefix, string fileFormat) : this()
+		{
             fileName = fileNamePrefix + DateTime.Now.ToString("dd.MM.yyyy") + "." + fileFormat;
         }
 
-        public Logger(string fileNamePrefix, string dateFormat, string fileFormat)
-        {
+        public Logger(string fileNamePrefix, string dateFormat, string fileFormat) : this()
+		{
             dateFormat = dateFormat;
             fileName = fileNamePrefix + DateTime.Now.ToString(dateFormat) + "." + fileFormat;
         }
@@ -96,5 +99,5 @@ namespace LoRa_Controller.Log
                 streamWriter.Close();
             _isOpen = false;
         }
-    }
+	}
 }

@@ -11,9 +11,8 @@ namespace LoRa_Controller.Interface
 {
     public partial class MainWindow : Form
     {
-		DeviceHandler deviceHandler;
+		public DeviceHandler DeviceHandler;
         public Logger logger;
-        StreamWriter settingsFileStreamWriter;
 		const int logMaxEntries = 12;
 		private FolderBrowserDialog folderBrowserDialog;
 		private const string remoteConnection = "Remote";
@@ -24,17 +23,18 @@ namespace LoRa_Controller.Interface
         public MainWindow(ConnectionType connectionType, List<string> parameters)
 		{
 			logger = new Logger("log_", "dd.MM.yyyy", "txt");
+			ConnectionType = connectionType;
 
 			if (connectionType == ConnectionType.Serial)
 			{
-				deviceHandler = new DeviceHandler(ConnectionType.Serial, parameters[0]);
+				DeviceHandler = new DeviceHandler(ConnectionType.Serial, parameters[0]);
 
 				serverHandler = new Server();
 				serverHandler.Start();
 			}
 			else if (connectionType == ConnectionType.Internet)
 			{
-				deviceHandler = new DeviceHandler(ConnectionType.Internet);
+				DeviceHandler = new DeviceHandler(ConnectionType.Internet, parameters);
 			}
 
 			InitializeComponent();
@@ -63,8 +63,8 @@ namespace LoRa_Controller.Interface
 			
 			List<string> receivedData;
 
-			deviceHandler.ConnectToBoard();
-			if (deviceHandler.Connected)
+			DeviceHandler.ConnectToBoard();
+			if (DeviceHandler.Connected)
 			{
 				DirectConnectionStatusTextBox.Text = "Connected to board";
 				BoardConnected();
@@ -76,62 +76,52 @@ namespace LoRa_Controller.Interface
 			}
 			deviceNodeTypeProcessed = false;
 
-			while (deviceHandler.Connected)
+			while (DeviceHandler.Connected)
 			{
-				receivedData = await deviceHandler.ReceiveDataAsync();
+				receivedData = await DeviceHandler.ReceiveDataAsync();
 				if (serverHandler != null)
 				{
 					byte[] command = await serverHandler.Receive();
 					if (command[0] != (byte)Commands.Invalid)
-						await deviceHandler.SendCommandAsync(command);
+						await DeviceHandler.SendCommandAsync(command);
 					foreach (string s in receivedData)
 						await serverHandler.Send(s);
 				}
 				UpdateLog(receivedData);
-				UpdateRSSI(deviceHandler.RSSI);
-				UpdateSNR(deviceHandler.SNR);
-				UpdateCurrentErrors(deviceHandler.Errors);
-				UpdateTotalErrors(deviceHandler.TotalErrors);
+				UpdateRSSI(DeviceHandler.RSSI);
+				UpdateSNR(DeviceHandler.SNR);
+				UpdateCurrentErrors(DeviceHandler.Errors);
+				UpdateTotalErrors(DeviceHandler.TotalErrors);
 
-				if (!deviceNodeTypeProcessed && deviceHandler._nodeType != NodeType.Unknown)
+				if (!deviceNodeTypeProcessed && DeviceHandler._nodeType != NodeType.Unknown)
 				{
-					if (deviceHandler._nodeType == NodeType.Master)
+					if (DeviceHandler._nodeType == NodeType.Master)
 					{
-						deviceHandler = new MasterDevice(deviceHandler);
+						DeviceHandler = new MasterDevice(DeviceHandler);
 						radioStatusTextBox.Text = "Master";
 						await logger.write("Connected to master");
 					}
 					else
 					{
-						deviceHandler = new BeaconDevice(deviceHandler);
-						radioStatusTextBox.Text = "Beacon " + deviceHandler.Address;
-						await logger.write("Connected to beacon " + deviceHandler.Address);
+						DeviceHandler = new BeaconDevice(DeviceHandler);
+						radioStatusTextBox.Text = "Beacon " + DeviceHandler.Address;
+						await logger.write("Connected to beacon " + DeviceHandler.Address);
 					}
 				}
 
-				if (deviceHandler is MasterDevice)
+				if (DeviceHandler is MasterDevice)
 				{
-					UpdateRadioConnectionStatus(((MasterDevice)deviceHandler).HasBeaconConnected);
+					UpdateRadioConnectionStatus(((MasterDevice)DeviceHandler).HasBeaconConnected);
 				}
 
-				if (deviceHandler.RSSI != 0 && deviceHandler.SNR != 0)
-					await logger.write(deviceHandler.RSSI + ", " + deviceHandler.SNR);
+				if (DeviceHandler.RSSI != 0 && DeviceHandler.SNR != 0)
+					await logger.write(DeviceHandler.RSSI + ", " + DeviceHandler.SNR);
 				else
 					await logger.write("error");
 			}
 			BoardDisconnected();
 		}
 		
-		private void SaveSettings()
-		{
-			string settingName = "LogFolder";
-			string settingValue = logger.Folder;
-			settingsFileStreamWriter = new StreamWriter(File.Open(Program.settingsFilePath, FileMode.Create));
-
-			settingsFileStreamWriter.WriteLine(settingName + " = " + settingValue);
-			settingsFileStreamWriter.Close();
-		}
-
 		private void ChangeLogFolderButton_Click(object sender, EventArgs e)
 		{
 			DialogResult result = folderBrowserDialog.ShowDialog();
@@ -144,7 +134,6 @@ namespace LoRa_Controller.Interface
 
         public void OnApplicationExit(object sender, EventArgs e)
         {
-            SaveSettings();
             if (logger != null)
                 logger.finish();
         }
@@ -187,7 +176,7 @@ namespace LoRa_Controller.Interface
         {
 			EnableLogControls();
 			EnableRadioControls();
-			await deviceHandler.SendCommandAsync(Commands.IsMaster);
+			await DeviceHandler.SendCommandAsync(Commands.IsMaster);
 		}
 
 		public void BoardUnableToConnect()
@@ -274,88 +263,88 @@ namespace LoRa_Controller.Interface
 		private async void BandwidthComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
             if (sender.Equals(masterBandwidthComboBox))
-			    await deviceHandler.SendCommandAsync(Commands.Bandwidth, (byte) ((ComboBox)sender).SelectedIndex);
+			    await DeviceHandler.SendCommandAsync(Commands.Bandwidth, (byte) ((ComboBox)sender).SelectedIndex);
             else if (sender.Equals(beaconBandwidthComboBox))
-                await ((MasterDevice)deviceHandler).BeaconHandler.SendCommandAsync(Commands.Bandwidth, (byte)((ComboBox)sender).SelectedIndex);
+                await ((MasterDevice)DeviceHandler).BeaconHandler.SendCommandAsync(Commands.Bandwidth, (byte)((ComboBox)sender).SelectedIndex);
         }
 
         private async void CodingRateComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (sender.Equals(masterCodingRateComboBox))
-				await deviceHandler.SendCommandAsync(Commands.CodingRate, (byte)(((ComboBox)sender).SelectedIndex + 1));
+				await DeviceHandler.SendCommandAsync(Commands.CodingRate, (byte)(((ComboBox)sender).SelectedIndex + 1));
 			else if (sender.Equals(beaconCodingRateComboBox))
-				await ((MasterDevice)deviceHandler).BeaconHandler.SendCommandAsync(Commands.CodingRate, (byte)((ComboBox)sender).SelectedIndex + 1);
+				await ((MasterDevice)DeviceHandler).BeaconHandler.SendCommandAsync(Commands.CodingRate, (byte)((ComboBox)sender).SelectedIndex + 1);
 		}
 
         private async void OutputPowerNumericUpDown_ValueChanged(object sender, EventArgs e)
 		{
 			if (sender.Equals(masterOutputPowerNumericUpDown))
-				await deviceHandler.SendCommandAsync(Commands.OutputPower, (byte)(((NumericUpDown)sender).Value));
+				await DeviceHandler.SendCommandAsync(Commands.OutputPower, (byte)(((NumericUpDown)sender).Value));
 			else if (sender.Equals(beaconOutputPowerNumericUpDown))
-				await ((MasterDevice)deviceHandler).BeaconHandler.SendCommandAsync(Commands.OutputPower, (byte)(((NumericUpDown)sender).Value));
+				await ((MasterDevice)DeviceHandler).BeaconHandler.SendCommandAsync(Commands.OutputPower, (byte)(((NumericUpDown)sender).Value));
 		}
 
         private async void SpreadingFactorNumericUpDown_ValueChanged(object sender, EventArgs e)
 		{
 			if (sender.Equals(masterSpreadingFactorNumericUpDown))
-				await deviceHandler.SendCommandAsync(Commands.SpreadingFactor, (byte)(((NumericUpDown)sender).Value));
+				await DeviceHandler.SendCommandAsync(Commands.SpreadingFactor, (byte)(((NumericUpDown)sender).Value));
 			else if (sender.Equals(beaconSpreadingFactorNumericUpDown))
-				await ((MasterDevice)deviceHandler).BeaconHandler.SendCommandAsync(Commands.SpreadingFactor, (byte)(((NumericUpDown)sender).Value));
+				await ((MasterDevice)DeviceHandler).BeaconHandler.SendCommandAsync(Commands.SpreadingFactor, (byte)(((NumericUpDown)sender).Value));
 		}
 
         private async void RxSymTimeoutNumericUpDown_ValueChanged(object sender, EventArgs e)
 		{
 			if (sender.Equals(masterRxSymTimeoutNumericUpDown))
-				await deviceHandler.SendCommandAsync(Commands.RxSymTimeout, (byte)(((NumericUpDown)sender).Value));
+				await DeviceHandler.SendCommandAsync(Commands.RxSymTimeout, (byte)(((NumericUpDown)sender).Value));
 			else if (sender.Equals(beaconRxSymTimeoutNumericUpDown))
-				await ((MasterDevice)deviceHandler).BeaconHandler.SendCommandAsync(Commands.RxSymTimeout, (byte)(((NumericUpDown)sender).Value));
+				await ((MasterDevice)DeviceHandler).BeaconHandler.SendCommandAsync(Commands.RxSymTimeout, (byte)(((NumericUpDown)sender).Value));
 		}
 		
         private async void RxMsTimeoutNumericUpDown_ValueChanged(object sender, EventArgs e)
 		{
 			if (sender.Equals(masterRxMsTimeoutNumericUpDown))
-				await deviceHandler.SendCommandAsync(Commands.RxMsTimeout, (int)(((NumericUpDown)sender).Value));
+				await DeviceHandler.SendCommandAsync(Commands.RxMsTimeout, (int)(((NumericUpDown)sender).Value));
 			else if (sender.Equals(beaconRxMsTimeoutNumericUpDown))
-				await ((MasterDevice)deviceHandler).BeaconHandler.SendCommandAsync(Commands.RxMsTimeout, (int)(((NumericUpDown)sender).Value));
+				await ((MasterDevice)DeviceHandler).BeaconHandler.SendCommandAsync(Commands.RxMsTimeout, (int)(((NumericUpDown)sender).Value));
 		}
         private async void TxTimeoutNumericUpDown_ValueChanged(object sender, EventArgs e)
 		{
 			if (sender.Equals(masterTxTimeoutNumericUpDown))
-				await deviceHandler.SendCommandAsync(Commands.TxTimeout, (int)(((NumericUpDown)sender).Value));
+				await DeviceHandler.SendCommandAsync(Commands.TxTimeout, (int)(((NumericUpDown)sender).Value));
 			else if (sender.Equals(beaconTxTimeoutNumericUpDown))
-				await ((MasterDevice)deviceHandler).BeaconHandler.SendCommandAsync(Commands.TxTimeout, (int)(((NumericUpDown)sender).Value));
+				await ((MasterDevice)DeviceHandler).BeaconHandler.SendCommandAsync(Commands.TxTimeout, (int)(((NumericUpDown)sender).Value));
 		}
 
         private async void PreambleNumericUpDown_ValueChanged(object sender, EventArgs e)
 		{
 			if (sender.Equals(masterPreambleNumericUpDown))
-				await deviceHandler.SendCommandAsync(Commands.PreambleSize, (byte)(((NumericUpDown)sender).Value));
+				await DeviceHandler.SendCommandAsync(Commands.PreambleSize, (byte)(((NumericUpDown)sender).Value));
 			else if (sender.Equals(beaconPreambleNumericUpDown))
-				await ((MasterDevice)deviceHandler).BeaconHandler.SendCommandAsync(Commands.PreambleSize, (byte)(((NumericUpDown)sender).Value));
+				await ((MasterDevice)DeviceHandler).BeaconHandler.SendCommandAsync(Commands.PreambleSize, (byte)(((NumericUpDown)sender).Value));
 		}
 
         private async void PayloadNumericUpDown_ValueChanged(object sender, EventArgs e)
 		{
 			if (sender.Equals(masterPayloadNumericUpDown))
-				await deviceHandler.SendCommandAsync(Commands.PayloadMaxSize, (byte)(((NumericUpDown)sender).Value));
+				await DeviceHandler.SendCommandAsync(Commands.PayloadMaxSize, (byte)(((NumericUpDown)sender).Value));
 			else if (sender.Equals(beaconPayloadNumericUpDown))
-				await ((MasterDevice)deviceHandler).BeaconHandler.SendCommandAsync(Commands.PayloadMaxSize, (byte)(((NumericUpDown)sender).Value));
+				await ((MasterDevice)DeviceHandler).BeaconHandler.SendCommandAsync(Commands.PayloadMaxSize, (byte)(((NumericUpDown)sender).Value));
 		}
 
         private async void VariablePayloadCheckBox_CheckedChanged(object sender, EventArgs e)
 		{
 			if (sender.Equals(masterVariablePayloadCheckBox))
-				await deviceHandler.SendCommandAsync(Commands.VariablePayload, (byte)(((CheckBox)sender).Checked ? 1 : 0));
+				await DeviceHandler.SendCommandAsync(Commands.VariablePayload, (byte)(((CheckBox)sender).Checked ? 1 : 0));
 			else if (sender.Equals(beaconVariablePayloadCheckBox))
-				await ((MasterDevice)deviceHandler).BeaconHandler.SendCommandAsync(Commands.VariablePayload, (byte)(((CheckBox)sender).Checked ? 1 : 0));
+				await ((MasterDevice)DeviceHandler).BeaconHandler.SendCommandAsync(Commands.VariablePayload, (byte)(((CheckBox)sender).Checked ? 1 : 0));
 		}
 
         private async void CrcCheckBox_CheckedChanged(object sender, EventArgs e)
 		{
 			if (sender.Equals(masterCrcCheckBox))
-				await deviceHandler.SendCommandAsync(Commands.PerformCRC, (byte)(((CheckBox)sender).Checked? 1 : 0));
+				await DeviceHandler.SendCommandAsync(Commands.PerformCRC, (byte)(((CheckBox)sender).Checked? 1 : 0));
 			else if (sender.Equals(beaconCrcCheckBox))
-				await ((MasterDevice)deviceHandler).BeaconHandler.SendCommandAsync(Commands.PerformCRC, (byte)(((CheckBox)sender).Checked ? 1 : 0));
+				await ((MasterDevice)DeviceHandler).BeaconHandler.SendCommandAsync(Commands.PerformCRC, (byte)(((CheckBox)sender).Checked ? 1 : 0));
 		}
 	}
 }

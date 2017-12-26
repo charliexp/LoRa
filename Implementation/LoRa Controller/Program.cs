@@ -1,6 +1,9 @@
-﻿using LoRa_Controller.Interface;
+﻿using LoRa_Controller.Connection;
+using LoRa_Controller.Device;
+using LoRa_Controller.Interface;
 using LoRa_Controller.Log;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 
@@ -8,8 +11,7 @@ namespace LoRa_Controller
 {
 	static class Program
 	{
-		public const string settingsFilePath = "settings.ini";
-		static MainWindow mainWindow;
+		public static MainWindow mainWindow;
 
 		/// <summary>
 		/// The main entry point for the application.
@@ -26,31 +28,9 @@ namespace LoRa_Controller
 			if (result == DialogResult.OK)
 			{
 				mainWindow = new MainWindow(connectionDialog.ConnectionType, connectionDialog.Parameters);
-				LoadSettings();
+				Settings.Load();
 
 				Application.Run(mainWindow);
-			}
-		}
-
-		static void LoadSettings()
-		{
-			string[] settingLines;
-			string settingName;
-			string settingValue;
-
-			settingLines = File.ReadAllLines(settingsFilePath);
-
-			if (settingLines.Length > 0)
-			{
-				settingName = settingLines[0].Remove(settingLines[0].IndexOf('=') - 1);
-				settingValue = settingLines[0].Substring(settingLines[0].LastIndexOf('=') + 2);
-
-				if (settingName.Equals("LogFolder"))
-				{
-					if (mainWindow.logger.isOpen())
-						mainWindow.logger.finish();
-					mainWindow.logger.Folder = settingValue;
-				}
 			}
 		}
 	}

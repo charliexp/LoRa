@@ -102,18 +102,6 @@ namespace LoRa_Controller.Device
 			_totalErrors = 0;
 		}
 
-		public DeviceHandler(ConnectionType connectionType) : this()
-		{
-			switch (connectionType)
-			{
-				case ConnectionType.Serial:
-					break;
-				case ConnectionType.Internet:
-					_connectionHandler = new InternetHandler();
-					break;
-			}
-		}
-
 		public DeviceHandler(ConnectionType connectionType, string connectionName) : this()
 		{
 			switch (connectionType)
@@ -121,8 +109,19 @@ namespace LoRa_Controller.Device
 				case ConnectionType.Serial:
 					_connectionHandler = new SerialHandler(connectionName);
 					break;
+			}
+		}
+
+		public DeviceHandler(ConnectionType connectionType, List<string> parameters) : this()
+		{
+			switch (connectionType)
+			{
+				case ConnectionType.Serial:
+					_connectionHandler = new SerialHandler(parameters[0]);
+					break;
 				case ConnectionType.Internet:
-					_connectionHandler = new InternetHandler(connectionName);
+					_connectionHandler = new InternetHandler();
+					_connectionHandler.Parameters = parameters;
 					break;
 			}
 		}

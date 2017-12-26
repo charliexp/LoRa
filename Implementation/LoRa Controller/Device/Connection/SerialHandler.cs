@@ -17,6 +17,7 @@ namespace LoRa_Controller.Connection
 			ReadTimeout = 1200;
 			WriteTimeout = 1000;
 			PortName = portName;
+			Settings.Save(Settings.COMPort, PortName);
 		}
 		#endregion
 		
@@ -28,7 +29,11 @@ namespace LoRa_Controller.Connection
 
 		public List<string> Parameters
 		{
-			set { PortName = value[0]; }
+			set
+			{
+				PortName = value[0];
+				Settings.Save(Settings.COMPort, PortName);
+			}
 		}
 		#endregion
 

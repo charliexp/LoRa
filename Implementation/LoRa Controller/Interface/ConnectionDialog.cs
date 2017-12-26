@@ -30,6 +30,7 @@ namespace LoRa_Controller.Interface
 					ConnectionInterface.ParameterBoxes[0].Dispose();
 					ConnectionInterface.ParameterLabels[1].Dispose();
 					ConnectionInterface.ParameterBoxes[1].Dispose();
+					Parameters.Clear();
 				}
 
 				ConnectionType = ConnectionType.Serial;
@@ -83,14 +84,15 @@ namespace LoRa_Controller.Interface
 				{
 					ConnectionInterface.ParameterLabels[0].Dispose();
 					ConnectionInterface.ParameterBoxes[0].Dispose();
+					Parameters.Clear();
 				}
 
 				ConnectionType = ConnectionType.Internet;
 				ConnectionInterface = new InternetConnectionInterface();
 				((TextBox)ConnectionInterface.ParameterBoxes[0]).TextChanged += new EventHandler(IPTextBox_TextChanged);
 				((TextBox)ConnectionInterface.ParameterBoxes[1]).TextChanged += new EventHandler(PortTextBox_TextChanged);
-				Parameters.Add("");
-				Parameters.Add("");
+				Parameters.Add(((TextBox)ConnectionInterface.ParameterBoxes[0]).Text);
+				Parameters.Add(((TextBox)ConnectionInterface.ParameterBoxes[1]).Text);
 
 				Controls.Add(ConnectionInterface.ParameterLabels[0]);
 				Controls.Add(ConnectionInterface.ParameterBoxes[0]);
@@ -141,12 +143,12 @@ namespace LoRa_Controller.Interface
 
 		private void IPTextBox_TextChanged(object sender, EventArgs e)
 		{
-			Parameters[0] = (string)((TextBox)sender).Text;
+			Parameters[0] = ((TextBox)sender).Text;
 		}
 
 		private void PortTextBox_TextChanged(object sender, EventArgs e)
 		{
-			Parameters[1] = (string)((TextBox)sender).Text;
+			Parameters[1] = ((TextBox)sender).Text;
 		}
 	}
 }

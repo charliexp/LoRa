@@ -26,12 +26,26 @@ namespace LoRa_Controller.Connection
 		#endregion
 
 		#region Public properties
+		public string IPAddress
+		{
+			get { return _IPAddress; }
+			set { _IPAddress = value; }
+		}
+
+		public int Port
+		{
+			get { return _port; }
+			set { _port = value; }
+		}
+
 		public List<string> Parameters
 		{
 			set
 			{
 				_IPAddress = value[0];
 				_port = Int32.Parse(value[1]);
+				Settings.Save(Settings.IPAddress, _IPAddress);
+				Settings.Save(Settings.TCPPort, _port.ToString());
 			}
 		}
 		#endregion
