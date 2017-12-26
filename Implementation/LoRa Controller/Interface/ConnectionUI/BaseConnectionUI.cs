@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace LoRa_Controller.Interface.ConnectionChooser
+namespace LoRa_Controller.Interface.ConnectionUI
 {
-	public abstract class ConnectionChooser
+	public abstract class BaseConnectionUI
 	{
 		#region Constructors
-		public ConnectionChooser()
+		public BaseConnectionUI()
 		{
 			ParameterLabels = new List<Label>();
 			ParameterBoxes = new List<Control>();

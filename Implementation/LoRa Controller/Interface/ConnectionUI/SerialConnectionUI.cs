@@ -2,11 +2,11 @@
 using System.IO.Ports;
 using System.Windows.Forms;
 
-namespace LoRa_Controller.Interface.ConnectionChooser
+namespace LoRa_Controller.Interface.ConnectionUI
 {
-	public class SerialConnectionChooser : ConnectionChooser
+	public class SerialConnectionUI : BaseConnectionUI
 	{
-		public SerialConnectionChooser() : base()
+		public SerialConnectionUI() : base()
 		{
 			ComboBox portComboBox = new ComboBox();
 			ParameterBoxes.Add(portComboBox);

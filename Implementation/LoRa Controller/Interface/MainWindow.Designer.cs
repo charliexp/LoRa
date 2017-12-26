@@ -44,27 +44,6 @@
 			this.totalErrorsTextBox = new System.Windows.Forms.TextBox();
 			this.totalErrorsLabel = new System.Windows.Forms.Label();
 			this.radioConnectionGroupBox = new System.Windows.Forms.GroupBox();
-			this.masterSettingsGroupBox = new System.Windows.Forms.GroupBox();
-			this.masterRxMsTimeoutNumericUpDown = new System.Windows.Forms.NumericUpDown();
-			this.masterRxMsTimeoutLabel = new System.Windows.Forms.Label();
-			this.masterTxTimeoutNumericUpDown = new System.Windows.Forms.NumericUpDown();
-			this.masterTxTimeoutLabel = new System.Windows.Forms.Label();
-			this.masterRxSymTimeoutNumericUpDown = new System.Windows.Forms.NumericUpDown();
-			this.masterRxSymTimeoutLabel = new System.Windows.Forms.Label();
-			this.masterCrcCheckBox = new System.Windows.Forms.CheckBox();
-			this.masterVariablePayloadCheckBox = new System.Windows.Forms.CheckBox();
-			this.masterPayloadNumericUpDown = new System.Windows.Forms.NumericUpDown();
-			this.masterPayloadLabel = new System.Windows.Forms.Label();
-			this.masterPreambleNumericUpDown = new System.Windows.Forms.NumericUpDown();
-			this.masterPreambleLabel = new System.Windows.Forms.Label();
-			this.masterCodingRateLabel = new System.Windows.Forms.Label();
-			this.masterCodingRateComboBox = new System.Windows.Forms.ComboBox();
-			this.masterSpreadingFactorNumericUpDown = new System.Windows.Forms.NumericUpDown();
-			this.masterSpreadingFactorLabel = new System.Windows.Forms.Label();
-			this.masterOutputPowerNumericUpDown = new System.Windows.Forms.NumericUpDown();
-			this.masterOutputPowerLabel = new System.Windows.Forms.Label();
-			this.masterBandwidthLabel = new System.Windows.Forms.Label();
-			this.masterBandwidthComboBox = new System.Windows.Forms.ComboBox();
 			this.beaconSettingsGroupBox = new System.Windows.Forms.GroupBox();
 			this.beaconRxMsTimeoutNumericUpDown = new System.Windows.Forms.NumericUpDown();
 			this.beaconRxMsTimeoutLabel = new System.Windows.Forms.Label();
@@ -86,18 +65,8 @@
 			this.beaconOutputPowerLabel = new System.Windows.Forms.Label();
 			this.beaconBandwidthLabel = new System.Windows.Forms.Label();
 			this.beaconBandwidthComboBox = new System.Windows.Forms.ComboBox();
-			this.DirectConnectionStatusTextBox = new System.Windows.Forms.TextBox();
-			this.DirectConnectionStatusLabel = new System.Windows.Forms.Label();
 			this.logGroupBox.SuspendLayout();
 			this.radioConnectionGroupBox.SuspendLayout();
-			this.masterSettingsGroupBox.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.masterRxMsTimeoutNumericUpDown)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.masterTxTimeoutNumericUpDown)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.masterRxSymTimeoutNumericUpDown)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.masterPayloadNumericUpDown)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.masterPreambleNumericUpDown)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.masterSpreadingFactorNumericUpDown)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.masterOutputPowerNumericUpDown)).BeginInit();
 			this.beaconSettingsGroupBox.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.beaconRxMsTimeoutNumericUpDown)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.beaconTxTimeoutNumericUpDown)).BeginInit();
@@ -126,7 +95,7 @@
 			this.logGroupBox.Controls.Add(this.logListBox);
 			this.logGroupBox.Controls.Add(this.logFolderLabel);
 			this.logGroupBox.Enabled = false;
-			this.logGroupBox.Location = new System.Drawing.Point(25, 334);
+			this.logGroupBox.Location = new System.Drawing.Point(339, 412);
 			this.logGroupBox.Margin = new System.Windows.Forms.Padding(4);
 			this.logGroupBox.Name = "logGroupBox";
 			this.logGroupBox.Padding = new System.Windows.Forms.Padding(4);
@@ -267,7 +236,7 @@
 			this.radioConnectionGroupBox.Controls.Add(this.totalErrorsLabel);
 			this.radioConnectionGroupBox.Controls.Add(this.rssiLabel);
 			this.radioConnectionGroupBox.Enabled = false;
-			this.radioConnectionGroupBox.Location = new System.Drawing.Point(108, 168);
+			this.radioConnectionGroupBox.Location = new System.Drawing.Point(632, 467);
 			this.radioConnectionGroupBox.Margin = new System.Windows.Forms.Padding(4);
 			this.radioConnectionGroupBox.Name = "radioConnectionGroupBox";
 			this.radioConnectionGroupBox.Padding = new System.Windows.Forms.Padding(4);
@@ -275,355 +244,6 @@
 			this.radioConnectionGroupBox.TabIndex = 10;
 			this.radioConnectionGroupBox.TabStop = false;
 			this.radioConnectionGroupBox.Text = "Radio Connection";
-			// 
-			// masterSettingsGroupBox
-			// 
-			this.masterSettingsGroupBox.Controls.Add(this.masterRxMsTimeoutNumericUpDown);
-			this.masterSettingsGroupBox.Controls.Add(this.masterRxMsTimeoutLabel);
-			this.masterSettingsGroupBox.Controls.Add(this.masterTxTimeoutNumericUpDown);
-			this.masterSettingsGroupBox.Controls.Add(this.masterTxTimeoutLabel);
-			this.masterSettingsGroupBox.Controls.Add(this.masterRxSymTimeoutNumericUpDown);
-			this.masterSettingsGroupBox.Controls.Add(this.masterRxSymTimeoutLabel);
-			this.masterSettingsGroupBox.Controls.Add(this.masterCrcCheckBox);
-			this.masterSettingsGroupBox.Controls.Add(this.masterVariablePayloadCheckBox);
-			this.masterSettingsGroupBox.Controls.Add(this.masterPayloadNumericUpDown);
-			this.masterSettingsGroupBox.Controls.Add(this.masterPayloadLabel);
-			this.masterSettingsGroupBox.Controls.Add(this.masterPreambleNumericUpDown);
-			this.masterSettingsGroupBox.Controls.Add(this.masterPreambleLabel);
-			this.masterSettingsGroupBox.Controls.Add(this.masterCodingRateLabel);
-			this.masterSettingsGroupBox.Controls.Add(this.masterCodingRateComboBox);
-			this.masterSettingsGroupBox.Controls.Add(this.masterSpreadingFactorNumericUpDown);
-			this.masterSettingsGroupBox.Controls.Add(this.masterSpreadingFactorLabel);
-			this.masterSettingsGroupBox.Controls.Add(this.masterOutputPowerNumericUpDown);
-			this.masterSettingsGroupBox.Controls.Add(this.masterOutputPowerLabel);
-			this.masterSettingsGroupBox.Controls.Add(this.masterBandwidthLabel);
-			this.masterSettingsGroupBox.Controls.Add(this.masterBandwidthComboBox);
-			this.masterSettingsGroupBox.Enabled = false;
-			this.masterSettingsGroupBox.Location = new System.Drawing.Point(427, 24);
-			this.masterSettingsGroupBox.Margin = new System.Windows.Forms.Padding(4);
-			this.masterSettingsGroupBox.Name = "masterSettingsGroupBox";
-			this.masterSettingsGroupBox.Padding = new System.Windows.Forms.Padding(4);
-			this.masterSettingsGroupBox.Size = new System.Drawing.Size(263, 537);
-			this.masterSettingsGroupBox.TabIndex = 10;
-			this.masterSettingsGroupBox.TabStop = false;
-			this.masterSettingsGroupBox.Text = "Master Settings";
-			// 
-			// masterRxMsTimeoutNumericUpDown
-			// 
-			this.masterRxMsTimeoutNumericUpDown.Location = new System.Drawing.Point(138, 184);
-			this.masterRxMsTimeoutNumericUpDown.Margin = new System.Windows.Forms.Padding(4);
-			this.masterRxMsTimeoutNumericUpDown.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-			this.masterRxMsTimeoutNumericUpDown.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-			this.masterRxMsTimeoutNumericUpDown.Name = "masterRxMsTimeoutNumericUpDown";
-			this.masterRxMsTimeoutNumericUpDown.Size = new System.Drawing.Size(117, 22);
-			this.masterRxMsTimeoutNumericUpDown.TabIndex = 30;
-			this.masterRxMsTimeoutNumericUpDown.Value = new decimal(new int[] {
-            3000,
-            0,
-            0,
-            0});
-			this.masterRxMsTimeoutNumericUpDown.ValueChanged += new System.EventHandler(this.RxMsTimeoutNumericUpDown_ValueChanged);
-			// 
-			// masterRxMsTimeoutLabel
-			// 
-			this.masterRxMsTimeoutLabel.AutoSize = true;
-			this.masterRxMsTimeoutLabel.Location = new System.Drawing.Point(9, 186);
-			this.masterRxMsTimeoutLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-			this.masterRxMsTimeoutLabel.Name = "masterRxMsTimeoutLabel";
-			this.masterRxMsTimeoutLabel.Size = new System.Drawing.Size(111, 17);
-			this.masterRxMsTimeoutLabel.TabIndex = 29;
-			this.masterRxMsTimeoutLabel.Text = "Rx Timeout (ms)";
-			// 
-			// masterTxTimeoutNumericUpDown
-			// 
-			this.masterTxTimeoutNumericUpDown.Location = new System.Drawing.Point(138, 214);
-			this.masterTxTimeoutNumericUpDown.Margin = new System.Windows.Forms.Padding(4);
-			this.masterTxTimeoutNumericUpDown.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-			this.masterTxTimeoutNumericUpDown.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-			this.masterTxTimeoutNumericUpDown.Name = "masterTxTimeoutNumericUpDown";
-			this.masterTxTimeoutNumericUpDown.Size = new System.Drawing.Size(117, 22);
-			this.masterTxTimeoutNumericUpDown.TabIndex = 28;
-			this.masterTxTimeoutNumericUpDown.Value = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-			this.masterTxTimeoutNumericUpDown.ValueChanged += new System.EventHandler(this.TxTimeoutNumericUpDown_ValueChanged);
-			// 
-			// masterTxTimeoutLabel
-			// 
-			this.masterTxTimeoutLabel.AutoSize = true;
-			this.masterTxTimeoutLabel.Location = new System.Drawing.Point(9, 216);
-			this.masterTxTimeoutLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-			this.masterTxTimeoutLabel.Name = "masterTxTimeoutLabel";
-			this.masterTxTimeoutLabel.Size = new System.Drawing.Size(110, 17);
-			this.masterTxTimeoutLabel.TabIndex = 27;
-			this.masterTxTimeoutLabel.Text = "Tx Timeout (ms)";
-			// 
-			// masterRxSymTimeoutNumericUpDown
-			// 
-			this.masterRxSymTimeoutNumericUpDown.Location = new System.Drawing.Point(137, 154);
-			this.masterRxSymTimeoutNumericUpDown.Margin = new System.Windows.Forms.Padding(4);
-			this.masterRxSymTimeoutNumericUpDown.Maximum = new decimal(new int[] {
-            30,
-            0,
-            0,
-            0});
-			this.masterRxSymTimeoutNumericUpDown.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-			this.masterRxSymTimeoutNumericUpDown.Name = "masterRxSymTimeoutNumericUpDown";
-			this.masterRxSymTimeoutNumericUpDown.Size = new System.Drawing.Size(117, 22);
-			this.masterRxSymTimeoutNumericUpDown.TabIndex = 26;
-			this.masterRxSymTimeoutNumericUpDown.Value = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
-			this.masterRxSymTimeoutNumericUpDown.ValueChanged += new System.EventHandler(this.RxSymTimeoutNumericUpDown_ValueChanged);
-			// 
-			// masterRxSymTimeoutLabel
-			// 
-			this.masterRxSymTimeoutLabel.AutoSize = true;
-			this.masterRxSymTimeoutLabel.Location = new System.Drawing.Point(8, 156);
-			this.masterRxSymTimeoutLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-			this.masterRxSymTimeoutLabel.Name = "masterRxSymTimeoutLabel";
-			this.masterRxSymTimeoutLabel.Size = new System.Drawing.Size(118, 17);
-			this.masterRxSymTimeoutLabel.TabIndex = 25;
-			this.masterRxSymTimeoutLabel.Text = "Rx Timeout (sym)";
-			// 
-			// masterCrcCheckBox
-			// 
-			this.masterCrcCheckBox.AutoSize = true;
-			this.masterCrcCheckBox.Checked = true;
-			this.masterCrcCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.masterCrcCheckBox.Location = new System.Drawing.Point(9, 338);
-			this.masterCrcCheckBox.Margin = new System.Windows.Forms.Padding(4);
-			this.masterCrcCheckBox.Name = "masterCrcCheckBox";
-			this.masterCrcCheckBox.Size = new System.Drawing.Size(112, 21);
-			this.masterCrcCheckBox.TabIndex = 24;
-			this.masterCrcCheckBox.Text = "Perform CRC";
-			this.masterCrcCheckBox.UseVisualStyleBackColor = true;
-			this.masterCrcCheckBox.CheckedChanged += new System.EventHandler(this.CrcCheckBox_CheckedChanged);
-			// 
-			// masterVariablePayloadCheckBox
-			// 
-			this.masterVariablePayloadCheckBox.AutoSize = true;
-			this.masterVariablePayloadCheckBox.Checked = true;
-			this.masterVariablePayloadCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.masterVariablePayloadCheckBox.Location = new System.Drawing.Point(9, 310);
-			this.masterVariablePayloadCheckBox.Margin = new System.Windows.Forms.Padding(4);
-			this.masterVariablePayloadCheckBox.Name = "masterVariablePayloadCheckBox";
-			this.masterVariablePayloadCheckBox.Size = new System.Drawing.Size(168, 21);
-			this.masterVariablePayloadCheckBox.TabIndex = 23;
-			this.masterVariablePayloadCheckBox.Text = "Variable Payload Size";
-			this.masterVariablePayloadCheckBox.UseVisualStyleBackColor = true;
-			this.masterVariablePayloadCheckBox.CheckedChanged += new System.EventHandler(this.VariablePayloadCheckBox_CheckedChanged);
-			// 
-			// masterPayloadNumericUpDown
-			// 
-			this.masterPayloadNumericUpDown.Location = new System.Drawing.Point(138, 278);
-			this.masterPayloadNumericUpDown.Margin = new System.Windows.Forms.Padding(4);
-			this.masterPayloadNumericUpDown.Maximum = new decimal(new int[] {
-            64,
-            0,
-            0,
-            0});
-			this.masterPayloadNumericUpDown.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-			this.masterPayloadNumericUpDown.Name = "masterPayloadNumericUpDown";
-			this.masterPayloadNumericUpDown.Size = new System.Drawing.Size(117, 22);
-			this.masterPayloadNumericUpDown.TabIndex = 22;
-			this.masterPayloadNumericUpDown.Value = new decimal(new int[] {
-            64,
-            0,
-            0,
-            0});
-			this.masterPayloadNumericUpDown.ValueChanged += new System.EventHandler(this.PayloadNumericUpDown_ValueChanged);
-			// 
-			// masterPayloadLabel
-			// 
-			this.masterPayloadLabel.AutoSize = true;
-			this.masterPayloadLabel.Location = new System.Drawing.Point(9, 280);
-			this.masterPayloadLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-			this.masterPayloadLabel.Name = "masterPayloadLabel";
-			this.masterPayloadLabel.Size = new System.Drawing.Size(119, 17);
-			this.masterPayloadLabel.TabIndex = 21;
-			this.masterPayloadLabel.Text = "Payload Max Size";
-			// 
-			// masterPreambleNumericUpDown
-			// 
-			this.masterPreambleNumericUpDown.Location = new System.Drawing.Point(138, 246);
-			this.masterPreambleNumericUpDown.Margin = new System.Windows.Forms.Padding(4);
-			this.masterPreambleNumericUpDown.Maximum = new decimal(new int[] {
-            30,
-            0,
-            0,
-            0});
-			this.masterPreambleNumericUpDown.Minimum = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
-			this.masterPreambleNumericUpDown.Name = "masterPreambleNumericUpDown";
-			this.masterPreambleNumericUpDown.Size = new System.Drawing.Size(117, 22);
-			this.masterPreambleNumericUpDown.TabIndex = 20;
-			this.masterPreambleNumericUpDown.Value = new decimal(new int[] {
-            8,
-            0,
-            0,
-            0});
-			this.masterPreambleNumericUpDown.ValueChanged += new System.EventHandler(this.PreambleNumericUpDown_ValueChanged);
-			// 
-			// masterPreambleLabel
-			// 
-			this.masterPreambleLabel.AutoSize = true;
-			this.masterPreambleLabel.Location = new System.Drawing.Point(9, 248);
-			this.masterPreambleLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-			this.masterPreambleLabel.Name = "masterPreambleLabel";
-			this.masterPreambleLabel.Size = new System.Drawing.Size(99, 17);
-			this.masterPreambleLabel.TabIndex = 19;
-			this.masterPreambleLabel.Text = "Preamble Size";
-			// 
-			// masterCodingRateLabel
-			// 
-			this.masterCodingRateLabel.AutoSize = true;
-			this.masterCodingRateLabel.Location = new System.Drawing.Point(8, 124);
-			this.masterCodingRateLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-			this.masterCodingRateLabel.Name = "masterCodingRateLabel";
-			this.masterCodingRateLabel.Size = new System.Drawing.Size(86, 17);
-			this.masterCodingRateLabel.TabIndex = 17;
-			this.masterCodingRateLabel.Text = "Coding Rate";
-			// 
-			// masterCodingRateComboBox
-			// 
-			this.masterCodingRateComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.masterCodingRateComboBox.FormattingEnabled = true;
-			this.masterCodingRateComboBox.Items.AddRange(new object[] {
-            "4/5",
-            "4/6",
-            "4/7",
-            "4/8"});
-			this.masterCodingRateComboBox.Location = new System.Drawing.Point(137, 121);
-			this.masterCodingRateComboBox.Margin = new System.Windows.Forms.Padding(4);
-			this.masterCodingRateComboBox.Name = "masterCodingRateComboBox";
-			this.masterCodingRateComboBox.Size = new System.Drawing.Size(116, 24);
-			this.masterCodingRateComboBox.Sorted = true;
-			this.masterCodingRateComboBox.TabIndex = 18;
-			// 
-			// masterSpreadingFactorNumericUpDown
-			// 
-			this.masterSpreadingFactorNumericUpDown.Location = new System.Drawing.Point(137, 89);
-			this.masterSpreadingFactorNumericUpDown.Margin = new System.Windows.Forms.Padding(4);
-			this.masterSpreadingFactorNumericUpDown.Maximum = new decimal(new int[] {
-            12,
-            0,
-            0,
-            0});
-			this.masterSpreadingFactorNumericUpDown.Minimum = new decimal(new int[] {
-            7,
-            0,
-            0,
-            0});
-			this.masterSpreadingFactorNumericUpDown.Name = "masterSpreadingFactorNumericUpDown";
-			this.masterSpreadingFactorNumericUpDown.Size = new System.Drawing.Size(117, 22);
-			this.masterSpreadingFactorNumericUpDown.TabIndex = 16;
-			this.masterSpreadingFactorNumericUpDown.Value = new decimal(new int[] {
-            12,
-            0,
-            0,
-            0});
-			this.masterSpreadingFactorNumericUpDown.ValueChanged += new System.EventHandler(this.SpreadingFactorNumericUpDown_ValueChanged);
-			// 
-			// masterSpreadingFactorLabel
-			// 
-			this.masterSpreadingFactorLabel.AutoSize = true;
-			this.masterSpreadingFactorLabel.Location = new System.Drawing.Point(8, 91);
-			this.masterSpreadingFactorLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-			this.masterSpreadingFactorLabel.Name = "masterSpreadingFactorLabel";
-			this.masterSpreadingFactorLabel.Size = new System.Drawing.Size(117, 17);
-			this.masterSpreadingFactorLabel.TabIndex = 15;
-			this.masterSpreadingFactorLabel.Text = "Spreading Factor";
-			// 
-			// masterOutputPowerNumericUpDown
-			// 
-			this.masterOutputPowerNumericUpDown.Location = new System.Drawing.Point(137, 57);
-			this.masterOutputPowerNumericUpDown.Margin = new System.Windows.Forms.Padding(4);
-			this.masterOutputPowerNumericUpDown.Maximum = new decimal(new int[] {
-            14,
-            0,
-            0,
-            0});
-			this.masterOutputPowerNumericUpDown.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-			this.masterOutputPowerNumericUpDown.Name = "masterOutputPowerNumericUpDown";
-			this.masterOutputPowerNumericUpDown.Size = new System.Drawing.Size(117, 22);
-			this.masterOutputPowerNumericUpDown.TabIndex = 14;
-			this.masterOutputPowerNumericUpDown.Value = new decimal(new int[] {
-            14,
-            0,
-            0,
-            0});
-			this.masterOutputPowerNumericUpDown.ValueChanged += new System.EventHandler(this.OutputPowerNumericUpDown_ValueChanged);
-			// 
-			// masterOutputPowerLabel
-			// 
-			this.masterOutputPowerLabel.AutoSize = true;
-			this.masterOutputPowerLabel.Location = new System.Drawing.Point(8, 59);
-			this.masterOutputPowerLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-			this.masterOutputPowerLabel.Name = "masterOutputPowerLabel";
-			this.masterOutputPowerLabel.Size = new System.Drawing.Size(94, 17);
-			this.masterOutputPowerLabel.TabIndex = 13;
-			this.masterOutputPowerLabel.Text = "Output Power";
-			// 
-			// masterBandwidthLabel
-			// 
-			this.masterBandwidthLabel.AutoSize = true;
-			this.masterBandwidthLabel.Location = new System.Drawing.Point(8, 27);
-			this.masterBandwidthLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-			this.masterBandwidthLabel.Name = "masterBandwidthLabel";
-			this.masterBandwidthLabel.Size = new System.Drawing.Size(73, 17);
-			this.masterBandwidthLabel.TabIndex = 10;
-			this.masterBandwidthLabel.Text = "Bandwidth";
-			// 
-			// masterBandwidthComboBox
-			// 
-			this.masterBandwidthComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.masterBandwidthComboBox.FormattingEnabled = true;
-			this.masterBandwidthComboBox.Items.AddRange(new object[] {
-            "125 kHz",
-            "250 kHz",
-            "500 kHz"});
-			this.masterBandwidthComboBox.Location = new System.Drawing.Point(137, 23);
-			this.masterBandwidthComboBox.Margin = new System.Windows.Forms.Padding(4);
-			this.masterBandwidthComboBox.Name = "masterBandwidthComboBox";
-			this.masterBandwidthComboBox.Size = new System.Drawing.Size(116, 24);
-			this.masterBandwidthComboBox.Sorted = true;
-			this.masterBandwidthComboBox.TabIndex = 12;
 			// 
 			// beaconSettingsGroupBox
 			// 
@@ -648,11 +268,11 @@
 			this.beaconSettingsGroupBox.Controls.Add(this.beaconBandwidthLabel);
 			this.beaconSettingsGroupBox.Controls.Add(this.beaconBandwidthComboBox);
 			this.beaconSettingsGroupBox.Enabled = false;
-			this.beaconSettingsGroupBox.Location = new System.Drawing.Point(698, 22);
+			this.beaconSettingsGroupBox.Location = new System.Drawing.Point(655, 66);
 			this.beaconSettingsGroupBox.Margin = new System.Windows.Forms.Padding(4);
 			this.beaconSettingsGroupBox.Name = "beaconSettingsGroupBox";
 			this.beaconSettingsGroupBox.Padding = new System.Windows.Forms.Padding(4);
-			this.beaconSettingsGroupBox.Size = new System.Drawing.Size(263, 537);
+			this.beaconSettingsGroupBox.Size = new System.Drawing.Size(263, 374);
 			this.beaconSettingsGroupBox.TabIndex = 31;
 			this.beaconSettingsGroupBox.TabStop = false;
 			this.beaconSettingsGroupBox.Text = "Beacon Settings";
@@ -974,33 +594,12 @@
 			this.beaconBandwidthComboBox.Sorted = true;
 			this.beaconBandwidthComboBox.TabIndex = 12;
 			// 
-			// DirectConnectionStatusTextBox
-			// 
-			this.DirectConnectionStatusTextBox.Location = new System.Drawing.Point(69, 13);
-			this.DirectConnectionStatusTextBox.Margin = new System.Windows.Forms.Padding(4);
-			this.DirectConnectionStatusTextBox.Name = "DirectConnectionStatusTextBox";
-			this.DirectConnectionStatusTextBox.Size = new System.Drawing.Size(183, 22);
-			this.DirectConnectionStatusTextBox.TabIndex = 13;
-			// 
-			// DirectConnectionStatusLabel
-			// 
-			this.DirectConnectionStatusLabel.AutoSize = true;
-			this.DirectConnectionStatusLabel.Location = new System.Drawing.Point(13, 16);
-			this.DirectConnectionStatusLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-			this.DirectConnectionStatusLabel.Name = "DirectConnectionStatusLabel";
-			this.DirectConnectionStatusLabel.Size = new System.Drawing.Size(48, 17);
-			this.DirectConnectionStatusLabel.TabIndex = 12;
-			this.DirectConnectionStatusLabel.Text = "Status";
-			// 
 			// MainWindow
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(1026, 685);
-			this.Controls.Add(this.DirectConnectionStatusTextBox);
-			this.Controls.Add(this.DirectConnectionStatusLabel);
+			this.ClientSize = new System.Drawing.Size(1026, 744);
 			this.Controls.Add(this.beaconSettingsGroupBox);
-			this.Controls.Add(this.masterSettingsGroupBox);
 			this.Controls.Add(this.radioConnectionGroupBox);
 			this.Controls.Add(this.logGroupBox);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -1013,15 +612,6 @@
 			this.logGroupBox.PerformLayout();
 			this.radioConnectionGroupBox.ResumeLayout(false);
 			this.radioConnectionGroupBox.PerformLayout();
-			this.masterSettingsGroupBox.ResumeLayout(false);
-			this.masterSettingsGroupBox.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.masterRxMsTimeoutNumericUpDown)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.masterTxTimeoutNumericUpDown)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.masterRxSymTimeoutNumericUpDown)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.masterPayloadNumericUpDown)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.masterPreambleNumericUpDown)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.masterSpreadingFactorNumericUpDown)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.masterOutputPowerNumericUpDown)).EndInit();
 			this.beaconSettingsGroupBox.ResumeLayout(false);
 			this.beaconSettingsGroupBox.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.beaconRxMsTimeoutNumericUpDown)).EndInit();
@@ -1032,7 +622,6 @@
 			((System.ComponentModel.ISupportInitialize)(this.beaconSpreadingFactorNumericUpDown)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.beaconOutputPowerNumericUpDown)).EndInit();
 			this.ResumeLayout(false);
-			this.PerformLayout();
 
 		}
 
@@ -1051,30 +640,9 @@
 		private System.Windows.Forms.TextBox totalErrorsTextBox;
 		private System.Windows.Forms.Label totalErrorsLabel;
 		private System.Windows.Forms.GroupBox radioConnectionGroupBox;
-		private System.Windows.Forms.GroupBox masterSettingsGroupBox;
-		private System.Windows.Forms.Label masterCodingRateLabel;
-		private System.Windows.Forms.ComboBox masterCodingRateComboBox;
-		private System.Windows.Forms.NumericUpDown masterSpreadingFactorNumericUpDown;
-		private System.Windows.Forms.Label masterSpreadingFactorLabel;
-		private System.Windows.Forms.NumericUpDown masterOutputPowerNumericUpDown;
-		private System.Windows.Forms.Label masterOutputPowerLabel;
-		private System.Windows.Forms.Label masterBandwidthLabel;
-		private System.Windows.Forms.ComboBox masterBandwidthComboBox;
-		private System.Windows.Forms.NumericUpDown masterTxTimeoutNumericUpDown;
-		private System.Windows.Forms.Label masterTxTimeoutLabel;
-		private System.Windows.Forms.NumericUpDown masterRxSymTimeoutNumericUpDown;
-		private System.Windows.Forms.Label masterRxSymTimeoutLabel;
-		private System.Windows.Forms.CheckBox masterCrcCheckBox;
-		private System.Windows.Forms.CheckBox masterVariablePayloadCheckBox;
-		private System.Windows.Forms.NumericUpDown masterPayloadNumericUpDown;
-		private System.Windows.Forms.Label masterPayloadLabel;
-		private System.Windows.Forms.NumericUpDown masterPreambleNumericUpDown;
-		private System.Windows.Forms.Label masterPreambleLabel;
 		private System.Windows.Forms.Button changeLogFolderButton;
 		private System.Windows.Forms.TextBox logFolderTextBox;
 		private System.Windows.Forms.Label logFolderLabel;
-		private System.Windows.Forms.NumericUpDown masterRxMsTimeoutNumericUpDown;
-		private System.Windows.Forms.Label masterRxMsTimeoutLabel;
 		private System.Windows.Forms.GroupBox beaconSettingsGroupBox;
 		private System.Windows.Forms.NumericUpDown beaconRxMsTimeoutNumericUpDown;
 		private System.Windows.Forms.Label beaconRxMsTimeoutLabel;
@@ -1096,8 +664,6 @@
 		private System.Windows.Forms.Label beaconOutputPowerLabel;
 		private System.Windows.Forms.Label beaconBandwidthLabel;
 		private System.Windows.Forms.ComboBox beaconBandwidthComboBox;
-		private System.Windows.Forms.TextBox DirectConnectionStatusTextBox;
-		private System.Windows.Forms.Label DirectConnectionStatusLabel;
 	}
 }
 

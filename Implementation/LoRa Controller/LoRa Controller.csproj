@@ -75,9 +75,10 @@
       <DependentUpon>ConnectionDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Interface\Constants.cs" />
-    <Compile Include="Interface\ConnectionChooser\DirectConnectionInterface.cs" />
-    <Compile Include="Interface\ConnectionChooser\InternetConnection.cs" />
-    <Compile Include="Interface\ConnectionChooser\SerialConnection.cs" />
+    <Compile Include="Interface\ConnectionUI\BaseConnectionUI.cs" />
+    <Compile Include="Interface\ConnectionUI\InternetConnectionUI.cs" />
+    <Compile Include="Interface\ConnectionUI\SerialConnectionUI.cs" />
+    <Compile Include="Interface\DirectlyConnected\DirectlyConnectedUI.cs" />
     <Compile Include="Log\Logger.cs" />
     <Compile Include="Device\MasterDevice.cs" />
     <Compile Include="Interface\MainWindow.cs">
