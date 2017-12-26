@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using LoRa_Controller.Interface;
+using System;
 using System.Windows.Forms;
 
 namespace LoRa_Controller
@@ -16,7 +14,17 @@ namespace LoRa_Controller
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+
+			ConnectionTypeDialog connectionTypeDialog = new ConnectionTypeDialog();
+			DialogResult result = connectionTypeDialog.ShowDialog();
+
+			if (result == DialogResult.OK)
+			{
+				MainInterface mainInterface = new MainInterface();
+				mainInterface.ConnectionType = connectionTypeDialog.connectionType;
+
+				Application.Run(mainInterface);
+			}
         }
     }
 }

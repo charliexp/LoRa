@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LoRa_Controller.Device
 {
-	class DeviceHandler
+	public class DeviceHandler
 	{
 		#region Public enums
 		public enum Commands

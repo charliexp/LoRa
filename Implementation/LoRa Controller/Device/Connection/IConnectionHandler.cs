@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace LoRa_Controller.Connection
 {
-	interface IConnectionHandler
+	public interface IConnectionHandler
 	{
 		#region Public properties
 		bool Connected

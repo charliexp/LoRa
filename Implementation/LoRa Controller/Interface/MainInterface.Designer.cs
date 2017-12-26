@@ -1,33 +1,33 @@
-﻿namespace LoRa_Controller
+﻿namespace LoRa_Controller.Interface
 {
-    partial class Form1
-    {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
+	partial class MainInterface
+	{
+		/// <summary>
+		/// Required designer variable.
+		/// </summary>
+		private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+		/// <summary>
+		/// Clean up any resources being used.
+		/// </summary>
+		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+		protected override void Dispose(bool disposing)
+		{
+			if (disposing && (components != null))
+			{
+				components.Dispose();
+			}
+			base.Dispose(disposing);
+		}
 
-        #region Windows Form Designer generated code
+		#region Windows Form Designer generated code
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
-        private void InitializeComponent()
-        {
+		/// <summary>
+		/// Required method for Designer support - do not modify
+		/// the contents of this method with the code editor.
+		/// </summary>
+		private void InitializeComponent()
+		{
 			this.logListBox = new System.Windows.Forms.ListBox();
 			this.portComboBox = new System.Windows.Forms.ComboBox();
 			this.portLabel = new System.Windows.Forms.Label();
@@ -128,7 +128,7 @@
 			// 
 			this.portComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.portComboBox.FormattingEnabled = true;
-			this.portComboBox.Location = new System.Drawing.Point(64, 20);
+			this.portComboBox.Location = new System.Drawing.Point(68, 23);
 			this.portComboBox.Margin = new System.Windows.Forms.Padding(4);
 			this.portComboBox.Name = "portComboBox";
 			this.portComboBox.Size = new System.Drawing.Size(183, 24);
@@ -140,7 +140,7 @@
 			// portLabel
 			// 
 			this.portLabel.AutoSize = true;
-			this.portLabel.Location = new System.Drawing.Point(8, 27);
+			this.portLabel.Location = new System.Drawing.Point(8, 26);
 			this.portLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
 			this.portLabel.Name = "portLabel";
 			this.portLabel.Size = new System.Drawing.Size(34, 17);
@@ -154,7 +154,7 @@
 			this.logGroupBox.Controls.Add(this.logListBox);
 			this.logGroupBox.Controls.Add(this.logFolderLabel);
 			this.logGroupBox.Enabled = false;
-			this.logGroupBox.Location = new System.Drawing.Point(13, 250);
+			this.logGroupBox.Location = new System.Drawing.Point(25, 334);
 			this.logGroupBox.Margin = new System.Windows.Forms.Padding(4);
 			this.logGroupBox.Name = "logGroupBox";
 			this.logGroupBox.Padding = new System.Windows.Forms.Padding(4);
@@ -194,9 +194,9 @@
 			// 
 			// physicalConnectionGroupBox
 			// 
-			this.physicalConnectionGroupBox.Controls.Add(this.physicalStatusTextBox);
 			this.physicalConnectionGroupBox.Controls.Add(this.physicalStatusLabel);
 			this.physicalConnectionGroupBox.Controls.Add(this.portComboBox);
+			this.physicalConnectionGroupBox.Controls.Add(this.physicalStatusTextBox);
 			this.physicalConnectionGroupBox.Controls.Add(this.portLabel);
 			this.physicalConnectionGroupBox.Location = new System.Drawing.Point(13, 13);
 			this.physicalConnectionGroupBox.Margin = new System.Windows.Forms.Padding(4);
@@ -209,7 +209,7 @@
 			// 
 			// physicalStatusTextBox
 			// 
-			this.physicalStatusTextBox.Location = new System.Drawing.Point(64, 56);
+			this.physicalStatusTextBox.Location = new System.Drawing.Point(68, 55);
 			this.physicalStatusTextBox.Margin = new System.Windows.Forms.Padding(4);
 			this.physicalStatusTextBox.Name = "physicalStatusTextBox";
 			this.physicalStatusTextBox.Size = new System.Drawing.Size(183, 22);
@@ -218,7 +218,7 @@
 			// physicalStatusLabel
 			// 
 			this.physicalStatusLabel.AutoSize = true;
-			this.physicalStatusLabel.Location = new System.Drawing.Point(8, 60);
+			this.physicalStatusLabel.Location = new System.Drawing.Point(8, 58);
 			this.physicalStatusLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
 			this.physicalStatusLabel.Name = "physicalStatusLabel";
 			this.physicalStatusLabel.Size = new System.Drawing.Size(48, 17);
@@ -328,7 +328,7 @@
 			this.radioConnectionGroupBox.Controls.Add(this.totalErrorsLabel);
 			this.radioConnectionGroupBox.Controls.Add(this.rssiLabel);
 			this.radioConnectionGroupBox.Enabled = false;
-			this.radioConnectionGroupBox.Location = new System.Drawing.Point(13, 115);
+			this.radioConnectionGroupBox.Location = new System.Drawing.Point(108, 168);
 			this.radioConnectionGroupBox.Margin = new System.Windows.Forms.Padding(4);
 			this.radioConnectionGroupBox.Name = "radioConnectionGroupBox";
 			this.radioConnectionGroupBox.Padding = new System.Windows.Forms.Padding(4);
@@ -360,7 +360,7 @@
 			this.masterSettingsGroupBox.Controls.Add(this.masterBandwidthLabel);
 			this.masterSettingsGroupBox.Controls.Add(this.masterBandwidthComboBox);
 			this.masterSettingsGroupBox.Enabled = false;
-			this.masterSettingsGroupBox.Location = new System.Drawing.Point(280, 13);
+			this.masterSettingsGroupBox.Location = new System.Drawing.Point(427, 24);
 			this.masterSettingsGroupBox.Margin = new System.Windows.Forms.Padding(4);
 			this.masterSettingsGroupBox.Name = "masterSettingsGroupBox";
 			this.masterSettingsGroupBox.Padding = new System.Windows.Forms.Padding(4);
@@ -374,23 +374,23 @@
 			this.masterRxMsTimeoutNumericUpDown.Location = new System.Drawing.Point(138, 184);
 			this.masterRxMsTimeoutNumericUpDown.Margin = new System.Windows.Forms.Padding(4);
 			this.masterRxMsTimeoutNumericUpDown.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
+			10000,
+			0,
+			0,
+			0});
 			this.masterRxMsTimeoutNumericUpDown.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
+			1,
+			0,
+			0,
+			0});
 			this.masterRxMsTimeoutNumericUpDown.Name = "masterRxMsTimeoutNumericUpDown";
 			this.masterRxMsTimeoutNumericUpDown.Size = new System.Drawing.Size(117, 22);
 			this.masterRxMsTimeoutNumericUpDown.TabIndex = 30;
 			this.masterRxMsTimeoutNumericUpDown.Value = new decimal(new int[] {
-            3000,
-            0,
-            0,
-            0});
+			3000,
+			0,
+			0,
+			0});
 			this.masterRxMsTimeoutNumericUpDown.ValueChanged += new System.EventHandler(this.RxMsTimeoutNumericUpDown_ValueChanged);
 			// 
 			// masterRxMsTimeoutLabel
@@ -408,23 +408,23 @@
 			this.masterTxTimeoutNumericUpDown.Location = new System.Drawing.Point(138, 214);
 			this.masterTxTimeoutNumericUpDown.Margin = new System.Windows.Forms.Padding(4);
 			this.masterTxTimeoutNumericUpDown.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
+			10000,
+			0,
+			0,
+			0});
 			this.masterTxTimeoutNumericUpDown.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
+			1,
+			0,
+			0,
+			0});
 			this.masterTxTimeoutNumericUpDown.Name = "masterTxTimeoutNumericUpDown";
 			this.masterTxTimeoutNumericUpDown.Size = new System.Drawing.Size(117, 22);
 			this.masterTxTimeoutNumericUpDown.TabIndex = 28;
 			this.masterTxTimeoutNumericUpDown.Value = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
+			1000,
+			0,
+			0,
+			0});
 			this.masterTxTimeoutNumericUpDown.ValueChanged += new System.EventHandler(this.TxTimeoutNumericUpDown_ValueChanged);
 			// 
 			// masterTxTimeoutLabel
@@ -442,23 +442,23 @@
 			this.masterRxSymTimeoutNumericUpDown.Location = new System.Drawing.Point(137, 154);
 			this.masterRxSymTimeoutNumericUpDown.Margin = new System.Windows.Forms.Padding(4);
 			this.masterRxSymTimeoutNumericUpDown.Maximum = new decimal(new int[] {
-            30,
-            0,
-            0,
-            0});
+			30,
+			0,
+			0,
+			0});
 			this.masterRxSymTimeoutNumericUpDown.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
+			1,
+			0,
+			0,
+			0});
 			this.masterRxSymTimeoutNumericUpDown.Name = "masterRxSymTimeoutNumericUpDown";
 			this.masterRxSymTimeoutNumericUpDown.Size = new System.Drawing.Size(117, 22);
 			this.masterRxSymTimeoutNumericUpDown.TabIndex = 26;
 			this.masterRxSymTimeoutNumericUpDown.Value = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
+			5,
+			0,
+			0,
+			0});
 			this.masterRxSymTimeoutNumericUpDown.ValueChanged += new System.EventHandler(this.RxSymTimeoutNumericUpDown_ValueChanged);
 			// 
 			// masterRxSymTimeoutLabel
@@ -504,23 +504,23 @@
 			this.masterPayloadNumericUpDown.Location = new System.Drawing.Point(138, 278);
 			this.masterPayloadNumericUpDown.Margin = new System.Windows.Forms.Padding(4);
 			this.masterPayloadNumericUpDown.Maximum = new decimal(new int[] {
-            64,
-            0,
-            0,
-            0});
+			64,
+			0,
+			0,
+			0});
 			this.masterPayloadNumericUpDown.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
+			1,
+			0,
+			0,
+			0});
 			this.masterPayloadNumericUpDown.Name = "masterPayloadNumericUpDown";
 			this.masterPayloadNumericUpDown.Size = new System.Drawing.Size(117, 22);
 			this.masterPayloadNumericUpDown.TabIndex = 22;
 			this.masterPayloadNumericUpDown.Value = new decimal(new int[] {
-            64,
-            0,
-            0,
-            0});
+			64,
+			0,
+			0,
+			0});
 			this.masterPayloadNumericUpDown.ValueChanged += new System.EventHandler(this.PayloadNumericUpDown_ValueChanged);
 			// 
 			// masterPayloadLabel
@@ -538,23 +538,23 @@
 			this.masterPreambleNumericUpDown.Location = new System.Drawing.Point(138, 246);
 			this.masterPreambleNumericUpDown.Margin = new System.Windows.Forms.Padding(4);
 			this.masterPreambleNumericUpDown.Maximum = new decimal(new int[] {
-            30,
-            0,
-            0,
-            0});
+			30,
+			0,
+			0,
+			0});
 			this.masterPreambleNumericUpDown.Minimum = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
+			2,
+			0,
+			0,
+			0});
 			this.masterPreambleNumericUpDown.Name = "masterPreambleNumericUpDown";
 			this.masterPreambleNumericUpDown.Size = new System.Drawing.Size(117, 22);
 			this.masterPreambleNumericUpDown.TabIndex = 20;
 			this.masterPreambleNumericUpDown.Value = new decimal(new int[] {
-            8,
-            0,
-            0,
-            0});
+			8,
+			0,
+			0,
+			0});
 			this.masterPreambleNumericUpDown.ValueChanged += new System.EventHandler(this.PreambleNumericUpDown_ValueChanged);
 			// 
 			// masterPreambleLabel
@@ -582,10 +582,10 @@
 			this.masterCodingRateComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.masterCodingRateComboBox.FormattingEnabled = true;
 			this.masterCodingRateComboBox.Items.AddRange(new object[] {
-            "4/5",
-            "4/6",
-            "4/7",
-            "4/8"});
+			"4/5",
+			"4/6",
+			"4/7",
+			"4/8"});
 			this.masterCodingRateComboBox.Location = new System.Drawing.Point(137, 121);
 			this.masterCodingRateComboBox.Margin = new System.Windows.Forms.Padding(4);
 			this.masterCodingRateComboBox.Name = "masterCodingRateComboBox";
@@ -598,23 +598,23 @@
 			this.masterSpreadingFactorNumericUpDown.Location = new System.Drawing.Point(137, 89);
 			this.masterSpreadingFactorNumericUpDown.Margin = new System.Windows.Forms.Padding(4);
 			this.masterSpreadingFactorNumericUpDown.Maximum = new decimal(new int[] {
-            12,
-            0,
-            0,
-            0});
+			12,
+			0,
+			0,
+			0});
 			this.masterSpreadingFactorNumericUpDown.Minimum = new decimal(new int[] {
-            7,
-            0,
-            0,
-            0});
+			7,
+			0,
+			0,
+			0});
 			this.masterSpreadingFactorNumericUpDown.Name = "masterSpreadingFactorNumericUpDown";
 			this.masterSpreadingFactorNumericUpDown.Size = new System.Drawing.Size(117, 22);
 			this.masterSpreadingFactorNumericUpDown.TabIndex = 16;
 			this.masterSpreadingFactorNumericUpDown.Value = new decimal(new int[] {
-            12,
-            0,
-            0,
-            0});
+			12,
+			0,
+			0,
+			0});
 			this.masterSpreadingFactorNumericUpDown.ValueChanged += new System.EventHandler(this.SpreadingFactorNumericUpDown_ValueChanged);
 			// 
 			// masterSpreadingFactorLabel
@@ -632,23 +632,23 @@
 			this.masterOutputPowerNumericUpDown.Location = new System.Drawing.Point(137, 57);
 			this.masterOutputPowerNumericUpDown.Margin = new System.Windows.Forms.Padding(4);
 			this.masterOutputPowerNumericUpDown.Maximum = new decimal(new int[] {
-            14,
-            0,
-            0,
-            0});
+			14,
+			0,
+			0,
+			0});
 			this.masterOutputPowerNumericUpDown.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
+			1,
+			0,
+			0,
+			0});
 			this.masterOutputPowerNumericUpDown.Name = "masterOutputPowerNumericUpDown";
 			this.masterOutputPowerNumericUpDown.Size = new System.Drawing.Size(117, 22);
 			this.masterOutputPowerNumericUpDown.TabIndex = 14;
 			this.masterOutputPowerNumericUpDown.Value = new decimal(new int[] {
-            14,
-            0,
-            0,
-            0});
+			14,
+			0,
+			0,
+			0});
 			this.masterOutputPowerNumericUpDown.ValueChanged += new System.EventHandler(this.OutputPowerNumericUpDown_ValueChanged);
 			// 
 			// masterOutputPowerLabel
@@ -676,9 +676,9 @@
 			this.masterBandwidthComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.masterBandwidthComboBox.FormattingEnabled = true;
 			this.masterBandwidthComboBox.Items.AddRange(new object[] {
-            "125 kHz",
-            "250 kHz",
-            "500 kHz"});
+			"125 kHz",
+			"250 kHz",
+			"500 kHz"});
 			this.masterBandwidthComboBox.Location = new System.Drawing.Point(137, 23);
 			this.masterBandwidthComboBox.Margin = new System.Windows.Forms.Padding(4);
 			this.masterBandwidthComboBox.Name = "masterBandwidthComboBox";
@@ -709,7 +709,7 @@
 			this.beaconSettingsGroupBox.Controls.Add(this.beaconBandwidthLabel);
 			this.beaconSettingsGroupBox.Controls.Add(this.beaconBandwidthComboBox);
 			this.beaconSettingsGroupBox.Enabled = false;
-			this.beaconSettingsGroupBox.Location = new System.Drawing.Point(551, 11);
+			this.beaconSettingsGroupBox.Location = new System.Drawing.Point(698, 22);
 			this.beaconSettingsGroupBox.Margin = new System.Windows.Forms.Padding(4);
 			this.beaconSettingsGroupBox.Name = "beaconSettingsGroupBox";
 			this.beaconSettingsGroupBox.Padding = new System.Windows.Forms.Padding(4);
@@ -723,23 +723,23 @@
 			this.beaconRxMsTimeoutNumericUpDown.Location = new System.Drawing.Point(138, 184);
 			this.beaconRxMsTimeoutNumericUpDown.Margin = new System.Windows.Forms.Padding(4);
 			this.beaconRxMsTimeoutNumericUpDown.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
+			10000,
+			0,
+			0,
+			0});
 			this.beaconRxMsTimeoutNumericUpDown.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
+			1,
+			0,
+			0,
+			0});
 			this.beaconRxMsTimeoutNumericUpDown.Name = "beaconRxMsTimeoutNumericUpDown";
 			this.beaconRxMsTimeoutNumericUpDown.Size = new System.Drawing.Size(117, 22);
 			this.beaconRxMsTimeoutNumericUpDown.TabIndex = 30;
 			this.beaconRxMsTimeoutNumericUpDown.Value = new decimal(new int[] {
-            3000,
-            0,
-            0,
-            0});
+			3000,
+			0,
+			0,
+			0});
 			this.beaconRxMsTimeoutNumericUpDown.ValueChanged += new System.EventHandler(this.RxMsTimeoutNumericUpDown_ValueChanged);
 			// 
 			// beaconRxMsTimeoutLabel
@@ -757,23 +757,23 @@
 			this.beaconTxTimeoutNumericUpDown.Location = new System.Drawing.Point(138, 214);
 			this.beaconTxTimeoutNumericUpDown.Margin = new System.Windows.Forms.Padding(4);
 			this.beaconTxTimeoutNumericUpDown.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
+			10000,
+			0,
+			0,
+			0});
 			this.beaconTxTimeoutNumericUpDown.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
+			1,
+			0,
+			0,
+			0});
 			this.beaconTxTimeoutNumericUpDown.Name = "beaconTxTimeoutNumericUpDown";
 			this.beaconTxTimeoutNumericUpDown.Size = new System.Drawing.Size(117, 22);
 			this.beaconTxTimeoutNumericUpDown.TabIndex = 28;
 			this.beaconTxTimeoutNumericUpDown.Value = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
+			1000,
+			0,
+			0,
+			0});
 			this.beaconTxTimeoutNumericUpDown.ValueChanged += new System.EventHandler(this.TxTimeoutNumericUpDown_ValueChanged);
 			// 
 			// beaconTxTimeoutLabel
@@ -791,23 +791,23 @@
 			this.beaconRxSymTimeoutNumericUpDown.Location = new System.Drawing.Point(137, 154);
 			this.beaconRxSymTimeoutNumericUpDown.Margin = new System.Windows.Forms.Padding(4);
 			this.beaconRxSymTimeoutNumericUpDown.Maximum = new decimal(new int[] {
-            30,
-            0,
-            0,
-            0});
+			30,
+			0,
+			0,
+			0});
 			this.beaconRxSymTimeoutNumericUpDown.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
+			1,
+			0,
+			0,
+			0});
 			this.beaconRxSymTimeoutNumericUpDown.Name = "beaconRxSymTimeoutNumericUpDown";
 			this.beaconRxSymTimeoutNumericUpDown.Size = new System.Drawing.Size(117, 22);
 			this.beaconRxSymTimeoutNumericUpDown.TabIndex = 26;
 			this.beaconRxSymTimeoutNumericUpDown.Value = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
+			5,
+			0,
+			0,
+			0});
 			this.beaconRxSymTimeoutNumericUpDown.ValueChanged += new System.EventHandler(this.RxSymTimeoutNumericUpDown_ValueChanged);
 			// 
 			// beaconRxSymTimeoutLabel
@@ -853,23 +853,23 @@
 			this.beaconPayloadNumericUpDown.Location = new System.Drawing.Point(138, 278);
 			this.beaconPayloadNumericUpDown.Margin = new System.Windows.Forms.Padding(4);
 			this.beaconPayloadNumericUpDown.Maximum = new decimal(new int[] {
-            64,
-            0,
-            0,
-            0});
+			64,
+			0,
+			0,
+			0});
 			this.beaconPayloadNumericUpDown.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
+			1,
+			0,
+			0,
+			0});
 			this.beaconPayloadNumericUpDown.Name = "beaconPayloadNumericUpDown";
 			this.beaconPayloadNumericUpDown.Size = new System.Drawing.Size(117, 22);
 			this.beaconPayloadNumericUpDown.TabIndex = 22;
 			this.beaconPayloadNumericUpDown.Value = new decimal(new int[] {
-            64,
-            0,
-            0,
-            0});
+			64,
+			0,
+			0,
+			0});
 			this.beaconPayloadNumericUpDown.ValueChanged += new System.EventHandler(this.PayloadNumericUpDown_ValueChanged);
 			// 
 			// beaconPayloadLabel
@@ -887,23 +887,23 @@
 			this.beaconPreambleNumericUpDown.Location = new System.Drawing.Point(138, 246);
 			this.beaconPreambleNumericUpDown.Margin = new System.Windows.Forms.Padding(4);
 			this.beaconPreambleNumericUpDown.Maximum = new decimal(new int[] {
-            30,
-            0,
-            0,
-            0});
+			30,
+			0,
+			0,
+			0});
 			this.beaconPreambleNumericUpDown.Minimum = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
+			2,
+			0,
+			0,
+			0});
 			this.beaconPreambleNumericUpDown.Name = "beaconPreambleNumericUpDown";
 			this.beaconPreambleNumericUpDown.Size = new System.Drawing.Size(117, 22);
 			this.beaconPreambleNumericUpDown.TabIndex = 20;
 			this.beaconPreambleNumericUpDown.Value = new decimal(new int[] {
-            8,
-            0,
-            0,
-            0});
+			8,
+			0,
+			0,
+			0});
 			this.beaconPreambleNumericUpDown.ValueChanged += new System.EventHandler(this.PreambleNumericUpDown_ValueChanged);
 			// 
 			// beaconPreambleLabel
@@ -931,10 +931,10 @@
 			this.beaconCodingRateComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.beaconCodingRateComboBox.FormattingEnabled = true;
 			this.beaconCodingRateComboBox.Items.AddRange(new object[] {
-            "4/5",
-            "4/6",
-            "4/7",
-            "4/8"});
+			"4/5",
+			"4/6",
+			"4/7",
+			"4/8"});
 			this.beaconCodingRateComboBox.Location = new System.Drawing.Point(137, 121);
 			this.beaconCodingRateComboBox.Margin = new System.Windows.Forms.Padding(4);
 			this.beaconCodingRateComboBox.Name = "beaconCodingRateComboBox";
@@ -947,23 +947,23 @@
 			this.beaconSpreadingFactorNumericUpDown.Location = new System.Drawing.Point(137, 89);
 			this.beaconSpreadingFactorNumericUpDown.Margin = new System.Windows.Forms.Padding(4);
 			this.beaconSpreadingFactorNumericUpDown.Maximum = new decimal(new int[] {
-            12,
-            0,
-            0,
-            0});
+			12,
+			0,
+			0,
+			0});
 			this.beaconSpreadingFactorNumericUpDown.Minimum = new decimal(new int[] {
-            7,
-            0,
-            0,
-            0});
+			7,
+			0,
+			0,
+			0});
 			this.beaconSpreadingFactorNumericUpDown.Name = "beaconSpreadingFactorNumericUpDown";
 			this.beaconSpreadingFactorNumericUpDown.Size = new System.Drawing.Size(117, 22);
 			this.beaconSpreadingFactorNumericUpDown.TabIndex = 16;
 			this.beaconSpreadingFactorNumericUpDown.Value = new decimal(new int[] {
-            12,
-            0,
-            0,
-            0});
+			12,
+			0,
+			0,
+			0});
 			this.beaconSpreadingFactorNumericUpDown.ValueChanged += new System.EventHandler(this.SpreadingFactorNumericUpDown_ValueChanged);
 			// 
 			// beaconSpreadingFactorLabel
@@ -981,23 +981,23 @@
 			this.beaconOutputPowerNumericUpDown.Location = new System.Drawing.Point(137, 57);
 			this.beaconOutputPowerNumericUpDown.Margin = new System.Windows.Forms.Padding(4);
 			this.beaconOutputPowerNumericUpDown.Maximum = new decimal(new int[] {
-            14,
-            0,
-            0,
-            0});
+			14,
+			0,
+			0,
+			0});
 			this.beaconOutputPowerNumericUpDown.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
+			1,
+			0,
+			0,
+			0});
 			this.beaconOutputPowerNumericUpDown.Name = "beaconOutputPowerNumericUpDown";
 			this.beaconOutputPowerNumericUpDown.Size = new System.Drawing.Size(117, 22);
 			this.beaconOutputPowerNumericUpDown.TabIndex = 14;
 			this.beaconOutputPowerNumericUpDown.Value = new decimal(new int[] {
-            14,
-            0,
-            0,
-            0});
+			14,
+			0,
+			0,
+			0});
 			this.beaconOutputPowerNumericUpDown.ValueChanged += new System.EventHandler(this.OutputPowerNumericUpDown_ValueChanged);
 			// 
 			// beaconOutputPowerLabel
@@ -1025,9 +1025,9 @@
 			this.beaconBandwidthComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.beaconBandwidthComboBox.FormattingEnabled = true;
 			this.beaconBandwidthComboBox.Items.AddRange(new object[] {
-            "125 kHz",
-            "250 kHz",
-            "500 kHz"});
+			"125 kHz",
+			"250 kHz",
+			"500 kHz"});
 			this.beaconBandwidthComboBox.Location = new System.Drawing.Point(137, 23);
 			this.beaconBandwidthComboBox.Margin = new System.Windows.Forms.Padding(4);
 			this.beaconBandwidthComboBox.Name = "beaconBandwidthComboBox";
@@ -1037,7 +1037,7 @@
 			// 
 			// textBox1
 			// 
-			this.textBox1.Location = new System.Drawing.Point(292, 588);
+			this.textBox1.Location = new System.Drawing.Point(550, 599);
 			this.textBox1.Margin = new System.Windows.Forms.Padding(4);
 			this.textBox1.Name = "textBox1";
 			this.textBox1.Size = new System.Drawing.Size(183, 22);
@@ -1048,7 +1048,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(832, 623);
+			this.ClientSize = new System.Drawing.Size(1026, 685);
 			this.Controls.Add(this.textBox1);
 			this.Controls.Add(this.beaconSettingsGroupBox);
 			this.Controls.Add(this.masterSettingsGroupBox);
@@ -1088,21 +1088,21 @@
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        private System.Windows.Forms.ListBox logListBox;
-        private System.Windows.Forms.ComboBox portComboBox;
-        private System.Windows.Forms.Label portLabel;
-        private System.Windows.Forms.GroupBox logGroupBox;
-        private System.Windows.Forms.GroupBox physicalConnectionGroupBox;
-        private System.Windows.Forms.Label rssiLabel;
-        private System.Windows.Forms.TextBox snrTextBox;
-        private System.Windows.Forms.Label snrLabel;
-        private System.Windows.Forms.TextBox rssiTextBox;
-        private System.Windows.Forms.TextBox currentErrorsTextBox;
-        private System.Windows.Forms.Label currentErrorsLabel;
+		private System.Windows.Forms.ListBox logListBox;
+		private System.Windows.Forms.ComboBox portComboBox;
+		private System.Windows.Forms.Label portLabel;
+		private System.Windows.Forms.GroupBox logGroupBox;
+		private System.Windows.Forms.GroupBox physicalConnectionGroupBox;
+		private System.Windows.Forms.Label rssiLabel;
+		private System.Windows.Forms.TextBox snrTextBox;
+		private System.Windows.Forms.Label snrLabel;
+		private System.Windows.Forms.TextBox rssiTextBox;
+		private System.Windows.Forms.TextBox currentErrorsTextBox;
+		private System.Windows.Forms.Label currentErrorsLabel;
 		private System.Windows.Forms.TextBox radioStatusTextBox;
 		private System.Windows.Forms.Label radioStatusLabel;
 		private System.Windows.Forms.TextBox physicalStatusTextBox;
@@ -1132,29 +1132,29 @@
 		private System.Windows.Forms.Button changeLogFolderButton;
 		private System.Windows.Forms.TextBox logFolderTextBox;
 		private System.Windows.Forms.Label logFolderLabel;
-        private System.Windows.Forms.NumericUpDown masterRxMsTimeoutNumericUpDown;
-        private System.Windows.Forms.Label masterRxMsTimeoutLabel;
-        private System.Windows.Forms.GroupBox beaconSettingsGroupBox;
-        private System.Windows.Forms.NumericUpDown beaconRxMsTimeoutNumericUpDown;
-        private System.Windows.Forms.Label beaconRxMsTimeoutLabel;
-        private System.Windows.Forms.NumericUpDown beaconTxTimeoutNumericUpDown;
-        private System.Windows.Forms.Label beaconTxTimeoutLabel;
-        private System.Windows.Forms.NumericUpDown beaconRxSymTimeoutNumericUpDown;
-        private System.Windows.Forms.Label beaconRxSymTimeoutLabel;
-        private System.Windows.Forms.CheckBox beaconCrcCheckBox;
-        private System.Windows.Forms.CheckBox beaconVariablePayloadCheckBox;
-        private System.Windows.Forms.NumericUpDown beaconPayloadNumericUpDown;
-        private System.Windows.Forms.Label beaconPayloadLabel;
-        private System.Windows.Forms.NumericUpDown beaconPreambleNumericUpDown;
-        private System.Windows.Forms.Label beaconPreambleLabel;
-        private System.Windows.Forms.Label beaconCodingRateLabel;
-        private System.Windows.Forms.ComboBox beaconCodingRateComboBox;
-        private System.Windows.Forms.NumericUpDown beaconSpreadingFactorNumericUpDown;
-        private System.Windows.Forms.Label beaconSpreadingFactorLabel;
-        private System.Windows.Forms.NumericUpDown beaconOutputPowerNumericUpDown;
-        private System.Windows.Forms.Label beaconOutputPowerLabel;
-        private System.Windows.Forms.Label beaconBandwidthLabel;
-        private System.Windows.Forms.ComboBox beaconBandwidthComboBox;
+		private System.Windows.Forms.NumericUpDown masterRxMsTimeoutNumericUpDown;
+		private System.Windows.Forms.Label masterRxMsTimeoutLabel;
+		private System.Windows.Forms.GroupBox beaconSettingsGroupBox;
+		private System.Windows.Forms.NumericUpDown beaconRxMsTimeoutNumericUpDown;
+		private System.Windows.Forms.Label beaconRxMsTimeoutLabel;
+		private System.Windows.Forms.NumericUpDown beaconTxTimeoutNumericUpDown;
+		private System.Windows.Forms.Label beaconTxTimeoutLabel;
+		private System.Windows.Forms.NumericUpDown beaconRxSymTimeoutNumericUpDown;
+		private System.Windows.Forms.Label beaconRxSymTimeoutLabel;
+		private System.Windows.Forms.CheckBox beaconCrcCheckBox;
+		private System.Windows.Forms.CheckBox beaconVariablePayloadCheckBox;
+		private System.Windows.Forms.NumericUpDown beaconPayloadNumericUpDown;
+		private System.Windows.Forms.Label beaconPayloadLabel;
+		private System.Windows.Forms.NumericUpDown beaconPreambleNumericUpDown;
+		private System.Windows.Forms.Label beaconPreambleLabel;
+		private System.Windows.Forms.Label beaconCodingRateLabel;
+		private System.Windows.Forms.ComboBox beaconCodingRateComboBox;
+		private System.Windows.Forms.NumericUpDown beaconSpreadingFactorNumericUpDown;
+		private System.Windows.Forms.Label beaconSpreadingFactorLabel;
+		private System.Windows.Forms.NumericUpDown beaconOutputPowerNumericUpDown;
+		private System.Windows.Forms.Label beaconOutputPowerLabel;
+		private System.Windows.Forms.Label beaconBandwidthLabel;
+		private System.Windows.Forms.ComboBox beaconBandwidthComboBox;
 		private System.Windows.Forms.TextBox textBox1;
 	}
 }

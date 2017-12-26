@@ -22,9 +22,10 @@ C:\Users\flori\Documents\GitHub\LoRa\Implementation\LoRa Controller\bin\Debug\Lo
 C:\Users\flori\Documents\GitHub\LoRa\Implementation\LoRa Controller\bin\Debug\LoRa Controller.exe
 C:\Users\flori\Documents\GitHub\LoRa\Implementation\LoRa Controller\bin\Debug\LoRa Controller.pdb
 C:\Users\flori\Documents\GitHub\LoRa\Implementation\LoRa Controller\obj\Debug\LoRa Controller.csprojResolveAssemblyReference.cache
-C:\Users\flori\Documents\GitHub\LoRa\Implementation\LoRa Controller\obj\Debug\LoRa_Controller.Form1.resources
 C:\Users\flori\Documents\GitHub\LoRa\Implementation\LoRa Controller\obj\Debug\LoRa_Controller.Properties.Resources.resources
 C:\Users\flori\Documents\GitHub\LoRa\Implementation\LoRa Controller\obj\Debug\LoRa Controller.csproj.GenerateResource.Cache
 C:\Users\flori\Documents\GitHub\LoRa\Implementation\LoRa Controller\obj\Debug\LoRa Controller.csproj.CoreCompileInputs.cache
 C:\Users\flori\Documents\GitHub\LoRa\Implementation\LoRa Controller\obj\Debug\LoRa Controller.exe
 C:\Users\flori\Documents\GitHub\LoRa\Implementation\LoRa Controller\obj\Debug\LoRa Controller.pdb
+C:\Users\flori\Documents\GitHub\LoRa\Implementation\LoRa Controller\obj\Debug\LoRa_Controller.Interface.ConnectionTypeDialog.resources
+C:\Users\flori\Documents\GitHub\LoRa\Implementation\LoRa Controller\obj\Debug\LoRa_Controller.Interface.MainInterface.resources

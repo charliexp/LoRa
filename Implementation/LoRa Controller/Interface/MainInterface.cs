@@ -1,5 +1,4 @@
-﻿using LoRa_Controller.Connection;
-using LoRa_Controller.Device;
+﻿using LoRa_Controller.Device;
 using LoRa_Controller.Networking;
 using System;
 using System.Collections.Generic;
@@ -7,9 +6,9 @@ using System.IO;
 using System.Windows.Forms;
 using static LoRa_Controller.Device.DeviceHandler;
 
-namespace LoRa_Controller
+namespace LoRa_Controller.Interface
 {
-    public partial class Form1 : Form
+    public partial class MainInterface : Form
     {
 		DeviceHandler deviceHandler;
         Logger logger;
@@ -19,9 +18,10 @@ namespace LoRa_Controller
 		private FolderBrowserDialog folderBrowserDialog;
 		private const string remoteConnection = "Remote";
 		private bool deviceNodeTypeProcessed;
+		public ConnectionType ConnectionType;
 		Server serverHandler;
 
-        public Form1()
+        public MainInterface()
         {
             InitializeComponent();
         }
@@ -58,7 +58,7 @@ namespace LoRa_Controller
             settingsFileStreamWriter.WriteLine(settingName + " = " + settingValue);
             settingsFileStreamWriter.Close();
         }
-
+		
         private void Form1_Load(object sender, EventArgs e)
 		{
             masterBandwidthComboBox.SelectedIndex = 0;
@@ -102,6 +102,7 @@ namespace LoRa_Controller
 					comboBox.Items.Add(port);
 			comboBox.Items.Add(remoteConnection);
 		}
+
 		private async void ComPortComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
 			string comPort = (string)((ComboBox)sender).SelectedItem;
@@ -112,7 +113,7 @@ namespace LoRa_Controller
 				logger.finish();
 			}
 
-			if (comPort != remoteConnection)
+			if (ConnectionType == ConnectionType.Serial)
 			{
 				deviceHandler = new DeviceHandler(ConnectionType.Serial, comPort);
 				
