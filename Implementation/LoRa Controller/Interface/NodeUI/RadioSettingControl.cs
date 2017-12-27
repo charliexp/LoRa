@@ -1,32 +1,24 @@
-﻿using LoRa_Controller.Device;
-using System;
+﻿using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using static LoRa_Controller.Device.DeviceHandler;
 
-namespace LoRa_Controller.Interface
+namespace LoRa_Controller.Interface.NodeUI
 {
-	public class RadioParameterUI
+	public class RadioSettingControl
 	{
-		public static int Count;
 		public Commands Parameter;
 		public Label Label;
 		public Control Field;
 
-		public RadioParameterUI(Commands parameter, GroupBox parent, Control control)
+		public RadioSettingControl(Commands parameter, Control control)
 		{
 			Parameter = parameter;
 			Label = new Label();
 			Field = control;
-
-			Label.Parent = parent;
+			
 			Label.AutoSize = true;
-			Label.Location = new System.Drawing.Point(Constants.LabelLocationX,
-
-													Constants.GroupBoxFirstItemY +
-													Count * (Constants.InputHeight + 2 * Constants.ItemPadding) +
-													Constants.LabelToBoxOffset);
 			Label.Margin = new Padding(Constants.ItemPadding, 0, Constants.ItemPadding, 0);
 			Label.Name = Parameter.ToString() + "Label";
 			Label.Size = new System.Drawing.Size(Constants.LabelWidth, Constants.LabelHeight);
@@ -36,21 +28,13 @@ namespace LoRa_Controller.Interface
 											.Select(m => m.Value)
 											.ToArray();
 			Label.Text = string.Join(" ", words);
-
-			Field.Parent = parent;
-			Field.Location = new System.Drawing.Point(Constants.LabelLocationX +
-													Constants.LabelWidth +
-													2 * Constants.ItemPadding,
-
-													Constants.GroupBoxFirstItemY +
-													Count * (Constants.InputHeight + 2 * Constants.ItemPadding));
+			
 			Field.Margin = new Padding(Constants.ItemPadding);
 			Field.Name = Parameter.ToString() + "Input";
 			Field.Size = new System.Drawing.Size(Constants.InputWidth, Constants.InputHeight);
 
 			if (control is ComboBox)
 			{
-				Field.TabIndex = Count;
 				((ComboBox)Field).DropDownStyle = ComboBoxStyle.DropDownList;
 				((ComboBox)Field).FormattingEnabled = true;
 				((ComboBox)Field).Sorted = true;
@@ -58,7 +42,6 @@ namespace LoRa_Controller.Interface
 			}
 			else if (control is NumericUpDown)
 			{
-				Field.TabIndex = Count;
 				((System.ComponentModel.ISupportInitialize)Field).BeginInit();
 				((NumericUpDown)Field).ValueChanged += new EventHandler(NumericUpDown_ValueChanged);
 				((System.ComponentModel.ISupportInitialize)Field).EndInit();
@@ -72,26 +55,41 @@ namespace LoRa_Controller.Interface
 			{
 				((TextBox)Field).BackColor = System.Drawing.Color.White;
 			}
+		}
 
-			Count++;
+		public void Draw(int index)
+		{
+			Label.Location = new System.Drawing.Point(Constants.LabelLocationX,
+
+													Constants.GroupBoxFirstItemY +
+													index * (Constants.InputHeight + 2 * Constants.ItemPadding) +
+													Constants.LabelToBoxOffset);
+			Field.Location = new System.Drawing.Point(Constants.LabelLocationX +
+													Constants.LabelWidth +
+													2 * Constants.ItemPadding,
+
+													Constants.GroupBoxFirstItemY +
+													index * (Constants.InputHeight + 2 * Constants.ItemPadding));
+
+			Field.TabIndex = index;
 		}
 
 		private async void ComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (Program.DeviceHandler != null)
-				await Program.DeviceHandler.SendCommandAsync(Parameter, (byte)((ComboBox)sender).SelectedIndex);
+				await Program.DeviceHandler.SendCommandAsync(Parameter, ((ComboBox)sender).SelectedIndex);
 		}
 
 		private async void NumericUpDown_ValueChanged(object sender, EventArgs e)
 		{
 			if (Program.DeviceHandler != null)
-				await Program.DeviceHandler.SendCommandAsync(Parameter, (byte)(((NumericUpDown)sender).Value));
+				await Program.DeviceHandler.SendCommandAsync(Parameter, Decimal.ToInt32(((NumericUpDown)sender).Value));
 		}
 		
 		private async void CheckBox_CheckStateChanged(object sender, EventArgs e)
 		{
 			if (Program.DeviceHandler != null)
-				await Program.DeviceHandler.SendCommandAsync(Parameter, (byte)((((CheckBox)sender).CheckState == CheckState.Checked) ? 1 : 0));
+				await Program.DeviceHandler.SendCommandAsync(Parameter, ((((CheckBox)sender).CheckState == CheckState.Checked) ? 1 : 0));
 		}
 	}
 }

@@ -1,5 +1,5 @@
 ﻿using LoRa_Controller.Device;
-using LoRa_Controller.Interface.DirectlyConnected;
+using LoRa_Controller.Interface.NodeUI;
 using LoRa_Controller.Log;
 using LoRa_Controller.Networking;
 using System;
@@ -13,12 +13,16 @@ namespace LoRa_Controller.Interface
 	{
 		const int logMaxEntries = 12;
 		private const string remoteConnection = "Remote";
-		public DirectlyConnectedUI DirectlyConnectedUI;
+		public DirectlyConnectedUI directlyConnectedUI;
+		public List<RadioConnectedUI> radioConnectedUIs;
 
         public MainWindow()
 		{
-			DirectlyConnectedUI = new DirectlyConnectedUI();
-			Controls.Add(DirectlyConnectedUI.GroupBox);
+			directlyConnectedUI = new DirectlyConnectedUI();
+			radioConnectedUIs = new List<RadioConnectedUI>();
+
+			Controls.Add(directlyConnectedUI.groupBox);
+			directlyConnectedUI.Draw();
 			InitializeComponent();
         }
 		
@@ -63,24 +67,24 @@ namespace LoRa_Controller.Interface
 			logFolderTextBox.Clear();
 			logListBox.Items.Clear();
 		}
-
+		
 		public void EnableRadioControls()
 		{
-			radioConnectionGroupBox.Enabled = true;
+			//radioConnectionGroupBox.Enabled = true;
 		}
 
 		public void DisableRadioControls()
-		{
+		{/*
 			radioConnectionGroupBox.Enabled = false;
 			radioStatusTextBox.Clear();
 			rssiTextBox.Clear();
 			snrTextBox.Clear();
-			currentErrorsTextBox.Clear();
+			currentErrorsTextBox.Clear();*/
 		}
 
 		public void ClearTotalErrors()
 		{
-			totalErrorsTextBox.Clear();
+			//totalErrorsTextBox.Clear();
 		}
 
 		public void BoardConnected()
@@ -115,109 +119,65 @@ namespace LoRa_Controller.Interface
 		}
 
 		public void UpdateRSSI(int value)
-		{
+		{/*
 			if (radioConnectionGroupBox.Enabled && rssiTextBox.Enabled)
 			{
 				if (value != 0)
 					rssiTextBox.Text = value.ToString();
 				else
 					rssiTextBox.Clear();
-			}
+			}*/
 		}
 
 		public void UpdateSNR(int value)
-		{
+		{/*
 			if (radioConnectionGroupBox.Enabled && snrTextBox.Enabled)
 			{
 				if (value != 0)
 					snrTextBox.Text = value.ToString();
 				else
 					snrTextBox.Clear();
-			}
+			}*/
 		}
 
 		public void UpdateCurrentErrors(uint value)
-		{
+		{/*
 			if (radioConnectionGroupBox.Enabled && currentErrorsTextBox.Enabled)
 			{
 				if (value != 0)
 					currentErrorsTextBox.Text = value.ToString();
 				else
 					currentErrorsTextBox.Clear();
-			}
+			}*/
 		}
 
 		public void UpdateTotalErrors(uint value)
-		{
+		{/*
 			if (radioConnectionGroupBox.Enabled && totalErrorsTextBox.Enabled)
 			{
 				if (value != 0)
 					totalErrorsTextBox.Text = value.ToString();
 				else
 					totalErrorsTextBox.Clear();
-			}
+			}*/
 		}
 
 		public void UpdateDirectlyConnectedNodeType()
 		{
 			if (Program.DeviceHandler is MasterDevice)
-				DirectlyConnectedUI.NodeType.Field.Text = "Master";
+				directlyConnectedUI.radioParameters.NodeType.Field.Text = "Master";
 			else
-				DirectlyConnectedUI.NodeType.Field.Text = "Beacon " + Program.DeviceHandler.Address;
+				directlyConnectedUI.radioParameters.NodeType.Field.Text = "Beacon " + Program.DeviceHandler.Address;
 		}
 
-		private async void BandwidthComboBox_SelectedIndexChanged(object sender, EventArgs e)
+		public void UpdateRadioConnectedNodeType()
 		{
-            await ((MasterDevice)Program.DeviceHandler).BeaconHandler.SendCommandAsync(Commands.Bandwidth, (byte)((ComboBox)sender).SelectedIndex);
-        }
-
-        private async void CodingRateComboBox_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			await ((MasterDevice)Program.DeviceHandler).BeaconHandler.SendCommandAsync(Commands.CodingRate, (byte)((ComboBox)sender).SelectedIndex + 1);
-		}
-
-        private async void OutputPowerNumericUpDown_ValueChanged(object sender, EventArgs e)
-		{
-			await ((MasterDevice)Program.DeviceHandler).BeaconHandler.SendCommandAsync(Commands.OutputPower, (byte)(((NumericUpDown)sender).Value));
-		}
-
-        private async void SpreadingFactorNumericUpDown_ValueChanged(object sender, EventArgs e)
-		{
-			await ((MasterDevice)Program.DeviceHandler).BeaconHandler.SendCommandAsync(Commands.SpreadingFactor, (byte)(((NumericUpDown)sender).Value));
-		}
-
-        private async void RxSymTimeoutNumericUpDown_ValueChanged(object sender, EventArgs e)
-		{
-			await ((MasterDevice)Program.DeviceHandler).BeaconHandler.SendCommandAsync(Commands.RxSymTimeout, (byte)(((NumericUpDown)sender).Value));
-		}
-		
-        private async void RxMsTimeoutNumericUpDown_ValueChanged(object sender, EventArgs e)
-		{
-			await ((MasterDevice)Program.DeviceHandler).BeaconHandler.SendCommandAsync(Commands.RxMsTimeout, (int)(((NumericUpDown)sender).Value));
-		}
-        private async void TxTimeoutNumericUpDown_ValueChanged(object sender, EventArgs e)
-		{
-			await ((MasterDevice)Program.DeviceHandler).BeaconHandler.SendCommandAsync(Commands.TxTimeout, (int)(((NumericUpDown)sender).Value));
-		}
-
-        private async void PreambleNumericUpDown_ValueChanged(object sender, EventArgs e)
-		{
-			await ((MasterDevice)Program.DeviceHandler).BeaconHandler.SendCommandAsync(Commands.PreambleSize, (byte)(((NumericUpDown)sender).Value));
-		}
-
-        private async void PayloadNumericUpDown_ValueChanged(object sender, EventArgs e)
-		{
-			await ((MasterDevice)Program.DeviceHandler).BeaconHandler.SendCommandAsync(Commands.PayloadMaxSize, (byte)(((NumericUpDown)sender).Value));
-		}
-
-        private async void VariablePayloadCheckBox_CheckedChanged(object sender, EventArgs e)
-		{
-			await ((MasterDevice)Program.DeviceHandler).BeaconHandler.SendCommandAsync(Commands.VariablePayload, (byte)(((CheckBox)sender).Checked ? 1 : 0));
-		}
-
-        private async void CrcCheckBox_CheckedChanged(object sender, EventArgs e)
-		{
-			await ((MasterDevice)Program.DeviceHandler).BeaconHandler.SendCommandAsync(Commands.PerformCRC, (byte)(((CheckBox)sender).Checked ? 1 : 0));
+			if (radioConnectedUIs.Count < 2)
+			{
+				radioConnectedUIs.Add(new RadioConnectedUI("New beacon", radioConnectedUIs.Count + 1));
+				Controls.Add(radioConnectedUIs[radioConnectedUIs.Count - 1].groupBox);
+				radioConnectedUIs[radioConnectedUIs.Count - 1].Draw();
+			}
 		}
 	}
 }

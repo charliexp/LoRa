@@ -189,27 +189,27 @@ namespace LoRa_Controller.Device
 			await (_connectionHandler.SendCharAsync(new byte[] { 0 }));
 			await (_connectionHandler.SendCharAsync(new byte[] { 0 }));
 		}
-
-		public async Task SendCommandAsync(Commands command, byte value)
-		{
-			await (_connectionHandler.SendCharAsync(new byte[] { 0 }));
-			await (_connectionHandler.SendCharAsync(new byte[] { _address }));
-			await (_connectionHandler.SendCharAsync(new byte[] { Convert.ToByte(command) }));
-			await (_connectionHandler.SendCharAsync(new byte[] { value }));
-			await (_connectionHandler.SendCharAsync(new byte[] { 0 }));
-			await (_connectionHandler.SendCharAsync(new byte[] { 0 }));
-			await (_connectionHandler.SendCharAsync(new byte[] { 0 }));
-		}
-
+		
 		public async Task SendCommandAsync(Commands command, int value)
 		{
 			await (_connectionHandler.SendCharAsync(new byte[] { 0 }));
 			await (_connectionHandler.SendCharAsync(new byte[] { _address }));
 			await (_connectionHandler.SendCharAsync(new byte[] { Convert.ToByte(command) }));
-			await (_connectionHandler.SendCharAsync(new byte[] { (byte)(value >> 24) }));
-			await (_connectionHandler.SendCharAsync(new byte[] { (byte)(value >> 16) }));
-			await (_connectionHandler.SendCharAsync(new byte[] { (byte)(value >> 8) }));
-			await (_connectionHandler.SendCharAsync(new byte[] { (byte)value }));
+
+			if (value <= byte.MaxValue)
+			{
+				await (_connectionHandler.SendCharAsync(new byte[] { (byte)value }));
+				await (_connectionHandler.SendCharAsync(new byte[] { 0 }));
+				await (_connectionHandler.SendCharAsync(new byte[] { 0 }));
+				await (_connectionHandler.SendCharAsync(new byte[] { 0 }));
+			}
+			else
+			{
+				await (_connectionHandler.SendCharAsync(new byte[] { (byte)(value >> 24) }));
+				await (_connectionHandler.SendCharAsync(new byte[] { (byte)(value >> 16) }));
+				await (_connectionHandler.SendCharAsync(new byte[] { (byte)(value >> 8) }));
+				await (_connectionHandler.SendCharAsync(new byte[] { (byte)value }));
+			}
 		}
 
 		public List<string> ReceiveData()

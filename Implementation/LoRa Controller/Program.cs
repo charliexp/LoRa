@@ -93,16 +93,12 @@ namespace LoRa_Controller
 
 		private static void BackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
 		{
-			if (DeviceHandler.Connected)
-				MainWindow.BoardConnected();
-			else
-				MainWindow.BoardUnableToConnect();
-
 			MainWindow.UpdateLog(ReceivedData);
 			MainWindow.UpdateRSSI(DeviceHandler.RSSI);
 			MainWindow.UpdateSNR(DeviceHandler.SNR);
 			MainWindow.UpdateCurrentErrors(DeviceHandler.Errors);
 			MainWindow.UpdateTotalErrors(DeviceHandler.TotalErrors);
+			//MainWindow.UpdateRadioConnectedNodeType();
 
 			if (!DeviceNodeTypeProcessed && DeviceHandler._nodeType != NodeType.Unknown)
 			{
