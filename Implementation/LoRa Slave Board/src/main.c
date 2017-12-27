@@ -40,7 +40,7 @@ uint8_t LoRa_CodingRate = 4;        // [1: 4/5,
                                     //  4: 4/8]
 uint8_t LoRa_RxSymTimeout = 5;      // Symbols
 uint16_t LoRa_RxMsTimeout = 3000;   // Milliseconds
-uint32_t LoRa_TxTimeout = 3000000;  // Milliseconds
+uint32_t LoRa_TxTimeout = 2000;  		// Milliseconds
 uint8_t LoRa_PreambleSize = 8;      // Same for Tx and Rx
 uint8_t LoRa_PayloadMaxSize = 7;
 bool LoRa_VariablePayload = true;
