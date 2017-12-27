@@ -14,6 +14,7 @@ namespace LoRa_Controller.Interface
 		public ConnectionDialog()
 		{
 			InitializeComponent();
+			SerialRadioButton_CheckedChanged(SerialRadioButton, new EventArgs());
 		}
 
 		private void SerialRadioButton_CheckedChanged(object sender, EventArgs e)
@@ -35,18 +36,8 @@ namespace LoRa_Controller.Interface
 
 				Controls.Add(ConnectionUI.ParameterLabels[0]);
 				Controls.Add(ConnectionUI.ParameterBoxes[0]);
+
 				OKButton.Location = new System.Drawing.Point(Constants.LabelMaxWidth -
-															2 * Constants.ButtonWidth -
-															Constants.LabelLocationX +
-															Constants.InterfaceItemPadding,
-
-															2 * Constants.WindowMarginY +
-															MessageLabel.Height +
-															SerialRadioButton.Height +
-															ConnectionUI.ParameterBoxes[0].Height +
-															Constants.InterfaceItemPadding);
-
-				ExitButton.Location = new System.Drawing.Point(Constants.LabelMaxWidth -
 															Constants.ButtonWidth,
 
 															2 * Constants.WindowMarginY +
@@ -90,18 +81,6 @@ namespace LoRa_Controller.Interface
 				Controls.Add(ConnectionUI.ParameterBoxes[1]);
 
 				OKButton.Location = new System.Drawing.Point(Constants.LabelMaxWidth -
-															2 * Constants.ButtonWidth -
-															Constants.LabelLocationX +
-															Constants.InterfaceItemPadding,
-
-															2 * Constants.WindowMarginY +
-															MessageLabel.Height +
-															SerialRadioButton.Height +
-															ConnectionUI.ParameterBoxes[0].Height +
-															ConnectionUI.ParameterBoxes[1].Height +
-															2 * Constants.InterfaceItemPadding);
-
-				ExitButton.Location = new System.Drawing.Point(Constants.LabelMaxWidth -
 															Constants.ButtonWidth,
 
 															2 * Constants.WindowMarginY +

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LoRa_Controller.Settings;
+using System;
 using System.IO.Ports;
 using System.Windows.Forms;
 
@@ -42,8 +43,8 @@ namespace LoRa_Controller.Interface.ConnectionUI
 			portComboBox.TabIndex = 1;
 			portComboBox.DropDown += new EventHandler(PortComboBox_DropDown);
 			portComboBox.Items.AddRange(SerialPort.GetPortNames());
-			if (portComboBox.Items.Count != 0)
-				portComboBox.SelectedIndex = 0;
+			if (portComboBox.Items.Contains(SettingHandler.COMPort.Value))
+				portComboBox.SelectedItem = SettingHandler.COMPort.Value;
 		}
 		
 		private void PortComboBox_DropDown(object sender, EventArgs e)

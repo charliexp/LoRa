@@ -28,22 +28,11 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.ExitButton = new System.Windows.Forms.Button();
 			this.MessageLabel = new System.Windows.Forms.Label();
 			this.SerialRadioButton = new System.Windows.Forms.RadioButton();
 			this.RemoteRadioButton = new System.Windows.Forms.RadioButton();
 			this.OKButton = new System.Windows.Forms.Button();
 			this.SuspendLayout();
-			// 
-			// ExitButton
-			// 
-			this.ExitButton.DialogResult = System.Windows.Forms.DialogResult.Abort;
-			this.ExitButton.Location = new System.Drawing.Point(226, 181);
-			this.ExitButton.Name = "ExitButton";
-			this.ExitButton.Size = new System.Drawing.Size(75, 23);
-			this.ExitButton.TabIndex = 5;
-			this.ExitButton.Text = "Exit";
-			this.ExitButton.UseVisualStyleBackColor = true;
 			// 
 			// MessageLabel
 			// 
@@ -57,7 +46,8 @@
 			// SerialRadioButton
 			// 
 			this.SerialRadioButton.AutoSize = true;
-			this.SerialRadioButton.Location = new System.Drawing.Point(12, 29);
+			this.SerialRadioButton.Checked = true;
+			this.SerialRadioButton.Location = new System.Drawing.Point(15, 29);
 			this.SerialRadioButton.Name = "SerialRadioButton";
 			this.SerialRadioButton.Size = new System.Drawing.Size(65, 21);
 			this.SerialRadioButton.TabIndex = 1;
@@ -69,11 +59,10 @@
 			// RemoteRadioButton
 			// 
 			this.RemoteRadioButton.AutoSize = true;
-			this.RemoteRadioButton.Location = new System.Drawing.Point(84, 29);
+			this.RemoteRadioButton.Location = new System.Drawing.Point(87, 29);
 			this.RemoteRadioButton.Name = "RemoteRadioButton";
 			this.RemoteRadioButton.Size = new System.Drawing.Size(78, 21);
 			this.RemoteRadioButton.TabIndex = 2;
-			this.RemoteRadioButton.TabStop = true;
 			this.RemoteRadioButton.Text = "Remote";
 			this.RemoteRadioButton.UseVisualStyleBackColor = true;
 			this.RemoteRadioButton.CheckedChanged += new System.EventHandler(this.RemoteRadioButton_CheckedChanged);
@@ -94,15 +83,14 @@
 			this.AcceptButton = this.OKButton;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.CancelButton = this.ExitButton;
 			this.ClientSize = new System.Drawing.Size(455, 300);
-			this.ControlBox = false;
 			this.Controls.Add(this.OKButton);
 			this.Controls.Add(this.RemoteRadioButton);
 			this.Controls.Add(this.SerialRadioButton);
 			this.Controls.Add(this.MessageLabel);
-			this.Controls.Add(this.ExitButton);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+			this.MaximizeBox = false;
+			this.MinimizeBox = false;
 			this.Name = "ConnectionDialog";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Connection";
@@ -113,7 +101,6 @@
 		}
 
 		#endregion
-		private System.Windows.Forms.Button ExitButton;
 		private System.Windows.Forms.Label MessageLabel;
 		private System.Windows.Forms.RadioButton SerialRadioButton;
 		private System.Windows.Forms.RadioButton RemoteRadioButton;
