@@ -8,7 +8,7 @@ namespace LoRa_Controller.Interface.DirectlyConnected
 	{
 		public GroupBox GroupBox;
 
-		public Label StatusLabel;
+		public Label NodeTypeLabel;
 		public Label CodingRateLabel;
 		public Label SpreadingFactorLabel;
 		public Label OutputPowerLabel;
@@ -19,7 +19,7 @@ namespace LoRa_Controller.Interface.DirectlyConnected
 		public Label PayloadLabel;
 		public Label PreambleLabel;
 
-		public TextBox StatusTextBox;
+		public TextBox NodeTypeTextBox;
 		public ComboBox BandwidthComboBox;
 		public ComboBox CodingRateComboBox;
 		public NumericUpDown SpreadingFactorNumericUpDown;
@@ -45,9 +45,9 @@ namespace LoRa_Controller.Interface.DirectlyConnected
 			TxTimeoutLabel = new Label();
 			RxMsTimeoutLabel = new Label();
 			RxSymTimeoutLabel = new Label();
-			StatusLabel = new Label();
+			NodeTypeLabel = new Label();
 
-			StatusTextBox = new TextBox();
+			NodeTypeTextBox = new TextBox();
 			RxMsTimeoutNumericUpDown = new NumericUpDown();
 			TxTimeoutNumericUpDown = new NumericUpDown();
 			RxSymTimeoutNumericUpDown = new NumericUpDown();
@@ -69,8 +69,8 @@ namespace LoRa_Controller.Interface.DirectlyConnected
 			((System.ComponentModel.ISupportInitialize)(SpreadingFactorNumericUpDown)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(OutputPowerNumericUpDown)).BeginInit();
 			
-			GroupBox.Controls.Add(StatusLabel);
-			GroupBox.Controls.Add(StatusTextBox);
+			GroupBox.Controls.Add(NodeTypeLabel);
+			GroupBox.Controls.Add(NodeTypeTextBox);
 			GroupBox.Controls.Add(RxMsTimeoutNumericUpDown);
 			GroupBox.Controls.Add(RxMsTimeoutLabel);
 			GroupBox.Controls.Add(TxTimeoutNumericUpDown);
@@ -100,21 +100,21 @@ namespace LoRa_Controller.Interface.DirectlyConnected
 			GroupBox.TabStop = false;
 			GroupBox.Text = "Connected device";
 			
-			StatusTextBox.Location = new System.Drawing.Point(139, 23);
-			StatusTextBox.Margin = new Padding(4);
-			StatusTextBox.Name = "DirectConnectionStatusTextBox";
-			StatusTextBox.ReadOnly = true;
-			StatusTextBox.BackColor = System.Drawing.Color.White;
-			StatusTextBox.Size = new System.Drawing.Size(116, 22);
-			StatusTextBox.TabIndex = 13;
+			NodeTypeTextBox.Location = new System.Drawing.Point(139, 23);
+			NodeTypeTextBox.Margin = new Padding(4);
+			NodeTypeTextBox.Name = "NodeTypeTextBox";
+			NodeTypeTextBox.ReadOnly = true;
+			NodeTypeTextBox.BackColor = System.Drawing.Color.White;
+			NodeTypeTextBox.Size = new System.Drawing.Size(116, 22);
+			NodeTypeTextBox.TabIndex = 13;
 
-			StatusLabel.AutoSize = true;
-			StatusLabel.Location = new System.Drawing.Point(8, 26);
-			StatusLabel.Margin = new Padding(4, 0, 4, 0);
-			StatusLabel.Name = "DirectConnectionStatusLabel";
-			StatusLabel.Size = new System.Drawing.Size(48, 17);
-			StatusLabel.TabIndex = 12;
-			StatusLabel.Text = "Status";
+			NodeTypeLabel.AutoSize = true;
+			NodeTypeLabel.Location = new System.Drawing.Point(8, 26);
+			NodeTypeLabel.Margin = new Padding(4, 0, 4, 0);
+			NodeTypeLabel.Name = "NodeTypeLabel";
+			NodeTypeLabel.Size = new System.Drawing.Size(48, 17);
+			NodeTypeLabel.TabIndex = 12;
+			NodeTypeLabel.Text = "NodeType";
 			// 
 			// RxMsTimeoutNumericUpDown
 			// 

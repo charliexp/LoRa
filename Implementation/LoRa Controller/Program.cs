@@ -116,11 +116,7 @@ namespace LoRa_Controller
 					DeviceHandler = new BeaconDevice(DeviceHandler);
 					logger.Write("Connected to beacon " + DeviceHandler.Address);
 				}
-			}
-
-			if (DeviceHandler is MasterDevice)
-			{
-				MainWindow.UpdateRadioConnectionStatus(((MasterDevice)DeviceHandler).HasBeaconConnected);
+				MainWindow.UpdateDirectlyConnectedNodeType();
 			}
 			
 			if (DeviceHandler.RSSI != 0 && DeviceHandler.SNR != 0)

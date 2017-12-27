@@ -91,7 +91,6 @@ namespace LoRa_Controller.Interface
 
 		public void BoardConnected()
 		{
-			DirectlyConnectedUI.StatusTextBox.Text = "Connected";
 			EnableLogControls();
 			EnableRadioControls();
 		}
@@ -105,7 +104,6 @@ namespace LoRa_Controller.Interface
 
 		public void BoardDisconnected()
 		{
-			DirectlyConnectedUI.StatusTextBox.Text = "Disconnected";
 			DisableLogControls();
 			DisableRadioControls();
 			ClearTotalErrors();
@@ -166,19 +164,12 @@ namespace LoRa_Controller.Interface
 			}
 		}
 
-		public void UpdateRadioConnectionStatus(bool connected)
+		public void UpdateDirectlyConnectedNodeType()
 		{
 			if (Program.DeviceHandler is MasterDevice)
-				radioStatusTextBox.Text = "Master";
+				DirectlyConnectedUI.NodeTypeTextBox.Text = "Master";
 			else
-				radioStatusTextBox.Text = "Beacon " + Program.DeviceHandler.Address;
-			if (radioConnectionGroupBox.Enabled && radioStatusTextBox.Enabled)
-			{
-				if (connected)
-                    beaconSettingsGroupBox.Enabled = true;
-                else
-                    beaconSettingsGroupBox.Enabled = false;
-            }
+				DirectlyConnectedUI.NodeTypeTextBox.Text = "Beacon " + Program.DeviceHandler.Address;
 		}
 
 		private async void BandwidthComboBox_SelectedIndexChanged(object sender, EventArgs e)
