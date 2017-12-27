@@ -37,22 +37,22 @@ namespace LoRa_Controller.Interface
 				Controls.Add(ConnectionUI.ParameterLabels[0]);
 				Controls.Add(ConnectionUI.ParameterBoxes[0]);
 
-				OKButton.Location = new System.Drawing.Point(Constants.LabelMaxWidth -
+				OKButton.Location = new System.Drawing.Point(Constants.MessageLabelMaxWidth -
 															Constants.ButtonWidth,
 
 															2 * Constants.WindowMarginY +
 															MessageLabel.Height +
 															SerialRadioButton.Height +
 															ConnectionUI.ParameterBoxes[0].Height +
-															Constants.InterfaceItemPadding);
-				ClientSize = new System.Drawing.Size(Constants.LabelMaxWidth,
+															Constants.ItemPadding);
+				ClientSize = new System.Drawing.Size(Constants.MessageLabelMaxWidth,
 
 													2 * Constants.WindowMarginY +
 													MessageLabel.Height +
 													SerialRadioButton.Height +
 													ConnectionUI.ParameterBoxes[0].Height +
 													OKButton.Height +
-													3 * Constants.InterfaceItemPadding);
+													3 * Constants.ItemPadding);
 
 				ResumeLayout(false);
 				PerformLayout();
@@ -80,7 +80,7 @@ namespace LoRa_Controller.Interface
 				Controls.Add(ConnectionUI.ParameterLabels[1]);
 				Controls.Add(ConnectionUI.ParameterBoxes[1]);
 
-				OKButton.Location = new System.Drawing.Point(Constants.LabelMaxWidth -
+				OKButton.Location = new System.Drawing.Point(Constants.MessageLabelMaxWidth -
 															Constants.ButtonWidth,
 
 															2 * Constants.WindowMarginY +
@@ -88,8 +88,8 @@ namespace LoRa_Controller.Interface
 															SerialRadioButton.Height +
 															ConnectionUI.ParameterBoxes[0].Height +
 															ConnectionUI.ParameterBoxes[1].Height +
-															2 * Constants.InterfaceItemPadding);
-				ClientSize = new System.Drawing.Size(Constants.LabelMaxWidth,
+															2 * Constants.ItemPadding);
+				ClientSize = new System.Drawing.Size(Constants.MessageLabelMaxWidth,
 
 													2 * Constants.WindowMarginY +
 													MessageLabel.Height +
@@ -97,7 +97,7 @@ namespace LoRa_Controller.Interface
 													ConnectionUI.ParameterBoxes[0].Height +
 													ConnectionUI.ParameterBoxes[1].Height +
 													OKButton.Height +
-													4 * Constants.InterfaceItemPadding);
+													4 * Constants.ItemPadding);
 
 				ResumeLayout(false);
 				PerformLayout();

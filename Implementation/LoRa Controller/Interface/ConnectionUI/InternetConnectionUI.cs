@@ -29,17 +29,17 @@ namespace LoRa_Controller.Interface.ConnectionUI
 			IPLabel.Size = new System.Drawing.Size(34, Constants.LabelHeight);
 			IPLabel.Text = "IP";
 			
-			IPTextBox.Location = new System.Drawing.Point(Constants.LabelMaxWidth -
-															Constants.TextBoxWidth -
+			IPTextBox.Location = new System.Drawing.Point(Constants.MessageLabelMaxWidth -
+															Constants.InputWidth -
 															Constants.WindowMarginX -
-															2 * Constants.InterfaceItemPadding,
+															2 * Constants.ItemPadding,
 
 															Constants.LabelLocationY +
 															Constants.LabelHeight +
 															Constants.RadioButtonHeight);
 			IPTextBox.Margin = new Padding(4);
 			IPTextBox.Name = "IPTextBox";
-			IPTextBox.Size = new System.Drawing.Size(Constants.TextBoxWidth, Constants.TextBoxHeight);
+			IPTextBox.Size = new System.Drawing.Size(Constants.InputWidth, Constants.InputHeight);
 			IPTextBox.TabIndex = 2;
 			IPTextBox.Text = (string) SettingHandler.IPAddress.Value;
 
@@ -49,27 +49,27 @@ namespace LoRa_Controller.Interface.ConnectionUI
 														Constants.LabelLocationY +
 														Constants.LabelHeight +
 														Constants.RadioButtonHeight +
-														Constants.TextBoxHeight +
-														Constants.InterfaceItemPadding +
+														Constants.InputHeight +
+														Constants.ItemPadding +
 														Constants.LabelToBoxOffset);
 			portLabel.Margin = new Padding(4, 0, 4, 0);
 			portLabel.Name = "portLabel";
 			portLabel.Size = new System.Drawing.Size(34, 17);
 			portLabel.Text = "Port";
 
-			portTextBox.Location = new System.Drawing.Point(Constants.LabelMaxWidth -
-															Constants.TextBoxWidth -
+			portTextBox.Location = new System.Drawing.Point(Constants.MessageLabelMaxWidth -
+															Constants.InputWidth -
 															Constants.WindowMarginX -
-															2 * Constants.InterfaceItemPadding,
+															2 * Constants.ItemPadding,
 
 															Constants.LabelLocationY +
 															Constants.LabelHeight +
 															Constants.RadioButtonHeight +
-															Constants.InterfaceItemPadding +
-															Constants.TextBoxHeight);
+															Constants.ItemPadding +
+															Constants.InputHeight);
 			portTextBox.Margin = new Padding(4);
 			portTextBox.Name = "portTextBox";
-			portTextBox.Size = new System.Drawing.Size(Constants.TextBoxWidth, Constants.TextBoxHeight);
+			portTextBox.Size = new System.Drawing.Size(Constants.InputWidth, Constants.InputHeight);
 			portTextBox.TabIndex = 3;
 			portTextBox.Text = SettingHandler.TCPPort.Value.ToString();
 		}

@@ -79,6 +79,7 @@
     <Compile Include="Interface\ConnectionUI\InternetConnectionUI.cs" />
     <Compile Include="Interface\ConnectionUI\SerialConnectionUI.cs" />
     <Compile Include="Interface\DirectlyConnected\DirectlyConnectedUI.cs" />
+    <Compile Include="Interface\RadioParameterUI.cs" />
     <Compile Include="Log\Logger.cs" />
     <Compile Include="Device\MasterDevice.cs" />
     <Compile Include="Interface\MainWindow.cs">

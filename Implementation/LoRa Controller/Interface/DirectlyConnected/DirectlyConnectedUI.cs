@@ -7,12 +7,12 @@ namespace LoRa_Controller.Interface.DirectlyConnected
 	public class DirectlyConnectedUI
 	{
 		public GroupBox GroupBox;
+		public RadioParameterUI Bandwidth;
 
 		public Label NodeTypeLabel;
 		public Label CodingRateLabel;
 		public Label SpreadingFactorLabel;
 		public Label OutputPowerLabel;
-		public Label BandwidthLabel;
 		public Label TxTimeoutLabel;
 		public Label RxMsTimeoutLabel;
 		public Label RxSymTimeoutLabel;
@@ -20,7 +20,6 @@ namespace LoRa_Controller.Interface.DirectlyConnected
 		public Label PreambleLabel;
 
 		public TextBox NodeTypeTextBox;
-		public ComboBox BandwidthComboBox;
 		public ComboBox CodingRateComboBox;
 		public NumericUpDown SpreadingFactorNumericUpDown;
 		public NumericUpDown OutputPowerNumericUpDown;
@@ -35,8 +34,8 @@ namespace LoRa_Controller.Interface.DirectlyConnected
 		public DirectlyConnectedUI()
 		{
 			GroupBox = new GroupBox();
-
-			BandwidthLabel = new Label();
+			Bandwidth = new RadioParameterUI("Bandwidth", GroupBox, new ComboBox());
+			
 			OutputPowerLabel = new Label();
 			CodingRateLabel = new Label();
 			SpreadingFactorLabel = new Label();
@@ -58,7 +57,6 @@ namespace LoRa_Controller.Interface.DirectlyConnected
 			CodingRateComboBox = new ComboBox();
 			SpreadingFactorNumericUpDown = new NumericUpDown();
 			OutputPowerNumericUpDown = new NumericUpDown();
-			BandwidthComboBox = new ComboBox();
 
 			GroupBox.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(RxMsTimeoutNumericUpDown)).BeginInit();
@@ -89,37 +87,37 @@ namespace LoRa_Controller.Interface.DirectlyConnected
 			GroupBox.Controls.Add(SpreadingFactorLabel);
 			GroupBox.Controls.Add(OutputPowerNumericUpDown);
 			GroupBox.Controls.Add(OutputPowerLabel);
-			GroupBox.Controls.Add(BandwidthLabel);
-			GroupBox.Controls.Add(BandwidthComboBox);
-			
-			GroupBox.Location = new System.Drawing.Point(13, 13);
-			GroupBox.Margin = new Padding(4);
-			GroupBox.Name = "GroupBox";
-			GroupBox.Padding = new Padding(4);
-			GroupBox.Size = new System.Drawing.Size(263, 435);
-			GroupBox.TabStop = false;
-			GroupBox.Text = "Connected device";
-			
-			NodeTypeTextBox.Location = new System.Drawing.Point(139, 23);
-			NodeTypeTextBox.Margin = new Padding(4);
+			GroupBox.Controls.Add(Bandwidth.Label);
+			GroupBox.Controls.Add(Bandwidth.Input);
+
+			NodeTypeLabel.Parent = GroupBox;
+			NodeTypeLabel.AutoSize = true;
+			NodeTypeLabel.Location = new System.Drawing.Point(Constants.LabelLocationX, Constants.GroupBoxFirstItemY + Constants.LabelToBoxOffset);
+			NodeTypeLabel.Margin = new Padding(Constants.ItemPadding, 0, Constants.ItemPadding, 0);
+			NodeTypeLabel.Name = "NodeTypeLabel";
+			NodeTypeLabel.Size = new System.Drawing.Size(Constants.LabelWidth, Constants.LabelHeight);
+			NodeTypeLabel.Text = "Node Type";
+
+			NodeTypeTextBox.Parent = GroupBox;
+			NodeTypeTextBox.Location = new System.Drawing.Point(Constants.LabelLocationX +
+																Constants.LabelWidth +
+																2 * Constants.ItemPadding,
+				
+																Constants.GroupBoxFirstItemY);
+			NodeTypeTextBox.Margin = new Padding(Constants.ItemPadding);
 			NodeTypeTextBox.Name = "NodeTypeTextBox";
 			NodeTypeTextBox.ReadOnly = true;
 			NodeTypeTextBox.BackColor = System.Drawing.Color.White;
-			NodeTypeTextBox.Size = new System.Drawing.Size(116, 22);
-			NodeTypeTextBox.TabIndex = 13;
+			NodeTypeTextBox.Size = new System.Drawing.Size(Constants.InputWidth, Constants.InputHeight);
+			NodeTypeTextBox.TabStop = false;
 
-			NodeTypeLabel.AutoSize = true;
-			NodeTypeLabel.Location = new System.Drawing.Point(8, 26);
-			NodeTypeLabel.Margin = new Padding(4, 0, 4, 0);
-			NodeTypeLabel.Name = "NodeTypeLabel";
-			NodeTypeLabel.Size = new System.Drawing.Size(48, 17);
-			NodeTypeLabel.TabIndex = 12;
-			NodeTypeLabel.Text = "NodeType";
+			Bandwidth.Input.TabIndex = 1;
+			((ComboBox) Bandwidth.Input).Items.AddRange(new object[] { "125 kHz", "250 kHz", "500 kHz" });
 			// 
 			// RxMsTimeoutNumericUpDown
 			// 
 			RxMsTimeoutNumericUpDown.Location = new System.Drawing.Point(140, 214);
-			RxMsTimeoutNumericUpDown.Margin = new Padding(4);
+			RxMsTimeoutNumericUpDown.Margin = new Padding(Constants.ItemPadding);
 			RxMsTimeoutNumericUpDown.Maximum = new decimal(new int[] {
 			10000,
 			0,
@@ -144,7 +142,7 @@ namespace LoRa_Controller.Interface.DirectlyConnected
 			// 
 			RxMsTimeoutLabel.AutoSize = true;
 			RxMsTimeoutLabel.Location = new System.Drawing.Point(8, 216);
-			RxMsTimeoutLabel.Margin = new Padding(4, 0, 4, 0);
+			RxMsTimeoutLabel.Margin = new Padding(Constants.ItemPadding, 0, Constants.ItemPadding, 0);
 			RxMsTimeoutLabel.Name = "RxMsTimeoutLabel";
 			RxMsTimeoutLabel.Size = new System.Drawing.Size(111, 17);
 			RxMsTimeoutLabel.TabIndex = 29;
@@ -153,7 +151,7 @@ namespace LoRa_Controller.Interface.DirectlyConnected
 			// TxTimeoutNumericUpDown
 			// 
 			TxTimeoutNumericUpDown.Location = new System.Drawing.Point(140, 244);
-			TxTimeoutNumericUpDown.Margin = new Padding(4);
+			TxTimeoutNumericUpDown.Margin = new Padding(Constants.ItemPadding);
 			TxTimeoutNumericUpDown.Maximum = new decimal(new int[] {
 			10000,
 			0,
@@ -178,7 +176,7 @@ namespace LoRa_Controller.Interface.DirectlyConnected
 			// 
 			TxTimeoutLabel.AutoSize = true;
 			TxTimeoutLabel.Location = new System.Drawing.Point(8, 246);
-			TxTimeoutLabel.Margin = new Padding(4, 0, 4, 0);
+			TxTimeoutLabel.Margin = new Padding(Constants.ItemPadding, 0, Constants.ItemPadding, 0);
 			TxTimeoutLabel.Name = "TxTimeoutLabel";
 			TxTimeoutLabel.Size = new System.Drawing.Size(110, 17);
 			TxTimeoutLabel.TabIndex = 27;
@@ -187,7 +185,7 @@ namespace LoRa_Controller.Interface.DirectlyConnected
 			// RxSymTimeoutNumericUpDown
 			// 
 			RxSymTimeoutNumericUpDown.Location = new System.Drawing.Point(139, 184);
-			RxSymTimeoutNumericUpDown.Margin = new Padding(4);
+			RxSymTimeoutNumericUpDown.Margin = new Padding(Constants.ItemPadding);
 			RxSymTimeoutNumericUpDown.Maximum = new decimal(new int[] {
 			30,
 			0,
@@ -212,7 +210,7 @@ namespace LoRa_Controller.Interface.DirectlyConnected
 			// 
 			RxSymTimeoutLabel.AutoSize = true;
 			RxSymTimeoutLabel.Location = new System.Drawing.Point(8, 186);
-			RxSymTimeoutLabel.Margin = new Padding(4, 0, 4, 0);
+			RxSymTimeoutLabel.Margin = new Padding(Constants.ItemPadding, 0, Constants.ItemPadding, 0);
 			RxSymTimeoutLabel.Name = "RxSymTimeoutLabel";
 			RxSymTimeoutLabel.Size = new System.Drawing.Size(118, 17);
 			RxSymTimeoutLabel.TabIndex = 25;
@@ -224,7 +222,7 @@ namespace LoRa_Controller.Interface.DirectlyConnected
 			CrcCheckBox.Checked = true;
 			CrcCheckBox.CheckState = CheckState.Checked;
 			CrcCheckBox.Location = new System.Drawing.Point(8, 367);
-			CrcCheckBox.Margin = new Padding(4);
+			CrcCheckBox.Margin = new Padding(Constants.ItemPadding);
 			CrcCheckBox.Name = "CrcCheckBox";
 			CrcCheckBox.Size = new System.Drawing.Size(112, 21);
 			CrcCheckBox.TabIndex = 24;
@@ -238,7 +236,7 @@ namespace LoRa_Controller.Interface.DirectlyConnected
 			VariablePayloadCheckBox.Checked = true;
 			VariablePayloadCheckBox.CheckState = CheckState.Checked;
 			VariablePayloadCheckBox.Location = new System.Drawing.Point(8, 338);
-			VariablePayloadCheckBox.Margin = new Padding(4);
+			VariablePayloadCheckBox.Margin = new Padding(Constants.ItemPadding);
 			VariablePayloadCheckBox.Name = "VariablePayloadCheckBox";
 			VariablePayloadCheckBox.Size = new System.Drawing.Size(168, 21);
 			VariablePayloadCheckBox.TabIndex = 23;
@@ -249,7 +247,7 @@ namespace LoRa_Controller.Interface.DirectlyConnected
 			// PayloadNumericUpDown
 			// 
 			PayloadNumericUpDown.Location = new System.Drawing.Point(140, 308);
-			PayloadNumericUpDown.Margin = new Padding(4);
+			PayloadNumericUpDown.Margin = new Padding(Constants.ItemPadding);
 			PayloadNumericUpDown.Maximum = new decimal(new int[] {
 			64,
 			0,
@@ -274,7 +272,7 @@ namespace LoRa_Controller.Interface.DirectlyConnected
 			// 
 			PayloadLabel.AutoSize = true;
 			PayloadLabel.Location = new System.Drawing.Point(8, 310);
-			PayloadLabel.Margin = new Padding(4, 0, 4, 0);
+			PayloadLabel.Margin = new Padding(Constants.ItemPadding, 0, Constants.ItemPadding, 0);
 			PayloadLabel.Name = "PayloadLabel";
 			PayloadLabel.Size = new System.Drawing.Size(119, 17);
 			PayloadLabel.TabIndex = 21;
@@ -283,7 +281,7 @@ namespace LoRa_Controller.Interface.DirectlyConnected
 			// PreambleNumericUpDown
 			// 
 			PreambleNumericUpDown.Location = new System.Drawing.Point(140, 276);
-			PreambleNumericUpDown.Margin = new Padding(4);
+			PreambleNumericUpDown.Margin = new Padding(Constants.ItemPadding);
 			PreambleNumericUpDown.Maximum = new decimal(new int[] {
 			30,
 			0,
@@ -308,7 +306,7 @@ namespace LoRa_Controller.Interface.DirectlyConnected
 			// 
 			PreambleLabel.AutoSize = true;
 			PreambleLabel.Location = new System.Drawing.Point(8, 278);
-			PreambleLabel.Margin = new Padding(4, 0, 4, 0);
+			PreambleLabel.Margin = new Padding(Constants.ItemPadding, 0, Constants.ItemPadding, 0);
 			PreambleLabel.Name = "PreambleLabel";
 			PreambleLabel.Size = new System.Drawing.Size(99, 17);
 			PreambleLabel.TabIndex = 19;
@@ -318,7 +316,7 @@ namespace LoRa_Controller.Interface.DirectlyConnected
 			// 
 			CodingRateLabel.AutoSize = true;
 			CodingRateLabel.Location = new System.Drawing.Point(8, 154);
-			CodingRateLabel.Margin = new Padding(4, 0, 4, 0);
+			CodingRateLabel.Margin = new Padding(Constants.ItemPadding, 0, Constants.ItemPadding, 0);
 			CodingRateLabel.Name = "CodingRateLabel";
 			CodingRateLabel.Size = new System.Drawing.Size(86, 17);
 			CodingRateLabel.TabIndex = 17;
@@ -334,7 +332,7 @@ namespace LoRa_Controller.Interface.DirectlyConnected
 			"4/7",
 			"4/8"});
 			CodingRateComboBox.Location = new System.Drawing.Point(139, 151);
-			CodingRateComboBox.Margin = new Padding(4);
+			CodingRateComboBox.Margin = new Padding(Constants.ItemPadding);
 			CodingRateComboBox.Name = "CodingRateComboBox";
 			CodingRateComboBox.Size = new System.Drawing.Size(116, 24);
 			CodingRateComboBox.Sorted = true;
@@ -343,7 +341,7 @@ namespace LoRa_Controller.Interface.DirectlyConnected
 			// SpreadingFactorNumericUpDown
 			// 
 			SpreadingFactorNumericUpDown.Location = new System.Drawing.Point(139, 119);
-			SpreadingFactorNumericUpDown.Margin = new Padding(4);
+			SpreadingFactorNumericUpDown.Margin = new Padding(Constants.ItemPadding);
 			SpreadingFactorNumericUpDown.Maximum = new decimal(new int[] {
 			12,
 			0,
@@ -368,7 +366,7 @@ namespace LoRa_Controller.Interface.DirectlyConnected
 			// 
 			SpreadingFactorLabel.AutoSize = true;
 			SpreadingFactorLabel.Location = new System.Drawing.Point(8, 121);
-			SpreadingFactorLabel.Margin = new Padding(4, 0, 4, 0);
+			SpreadingFactorLabel.Margin = new Padding(Constants.ItemPadding, 0, Constants.ItemPadding, 0);
 			SpreadingFactorLabel.Name = "SpreadingFactorLabel";
 			SpreadingFactorLabel.Size = new System.Drawing.Size(117, 17);
 			SpreadingFactorLabel.TabIndex = 15;
@@ -377,7 +375,7 @@ namespace LoRa_Controller.Interface.DirectlyConnected
 			// OutputPowerNumericUpDown
 			// 
 			OutputPowerNumericUpDown.Location = new System.Drawing.Point(138, 85);
-			OutputPowerNumericUpDown.Margin = new Padding(4);
+			OutputPowerNumericUpDown.Margin = new Padding(Constants.ItemPadding);
 			OutputPowerNumericUpDown.Maximum = new decimal(new int[] {
 			14,
 			0,
@@ -402,40 +400,29 @@ namespace LoRa_Controller.Interface.DirectlyConnected
 			// 
 			OutputPowerLabel.AutoSize = true;
 			OutputPowerLabel.Location = new System.Drawing.Point(8, 87);
-			OutputPowerLabel.Margin = new Padding(4, 0, 4, 0);
+			OutputPowerLabel.Margin = new Padding(Constants.ItemPadding, 0, Constants.ItemPadding, 0);
 			OutputPowerLabel.Name = "OutputPowerLabel";
 			OutputPowerLabel.Size = new System.Drawing.Size(94, 17);
 			OutputPowerLabel.TabIndex = 13;
 			OutputPowerLabel.Text = "Output Power";
-			// 
-			// BandwidthLabel
-			// 
-			BandwidthLabel.AutoSize = true;
-			BandwidthLabel.Location = new System.Drawing.Point(8, 57);
-			BandwidthLabel.Margin = new Padding(4, 0, 4, 0);
-			BandwidthLabel.Name = "BandwidthLabel";
-			BandwidthLabel.Size = new System.Drawing.Size(73, 17);
-			BandwidthLabel.TabIndex = 10;
-			BandwidthLabel.Text = "Bandwidth";
-			// 
-			// BandwidthComboBox
-			// 
-			BandwidthComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-			BandwidthComboBox.FormattingEnabled = true;
-			BandwidthComboBox.Items.AddRange(new object[] {
-			"125 kHz",
-			"250 kHz",
-			"500 kHz"});
-			BandwidthComboBox.Location = new System.Drawing.Point(139, 53);
-			BandwidthComboBox.Margin = new Padding(4);
-			BandwidthComboBox.Name = "BandwidthComboBox";
-			BandwidthComboBox.Size = new System.Drawing.Size(116, 24);
-			BandwidthComboBox.Sorted = true;
-			BandwidthComboBox.TabIndex = 12;
-			
-			BandwidthComboBox.SelectedIndex = 0;
+
+			GroupBox.Location = new System.Drawing.Point(Constants.GroupBoxLocationX, Constants.GroupBoxLocationY);
+			GroupBox.Margin = new Padding(Constants.ItemPadding);
+			GroupBox.Name = "GroupBox";
+			GroupBox.Padding = new Padding(Constants.ItemPadding);
+			GroupBox.Size = new System.Drawing.Size(2 * Constants.LabelLocationX +
+													4 * Constants.ItemPadding +
+													Constants.LabelWidth +
+													Constants.InputWidth,
+
+													435);
+			GroupBox.TabStop = false;
+			GroupBox.Text = "Connected device";
+
+			((ComboBox) Bandwidth.Input).SelectedIndex = 0;
+			((ComboBox)Bandwidth.Input).SelectedIndexChanged += new EventHandler(BandwidthComboBox_SelectedIndexChanged);
+
 			CodingRateComboBox.SelectedIndex = 3;
-			BandwidthComboBox.SelectedIndexChanged += new EventHandler(BandwidthComboBox_SelectedIndexChanged);
 			CodingRateComboBox.SelectedIndexChanged += new EventHandler(CodingRateComboBox_SelectedIndexChanged);
 
 

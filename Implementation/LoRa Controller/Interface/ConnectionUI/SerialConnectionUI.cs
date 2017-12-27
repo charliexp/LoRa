@@ -28,17 +28,17 @@ namespace LoRa_Controller.Interface.ConnectionUI
 
 			portComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
 			portComboBox.FormattingEnabled = true;
-			portComboBox.Location = new System.Drawing.Point(Constants.LabelMaxWidth -
-															Constants.ComboBoxWidth -
+			portComboBox.Location = new System.Drawing.Point(Constants.MessageLabelMaxWidth -
+															Constants.InputWidth -
 															Constants.WindowMarginX -
-															2 * Constants.InterfaceItemPadding,
+															2 * Constants.ItemPadding,
 
 															Constants.LabelLocationY +
 															Constants.LabelHeight +
 															Constants.RadioButtonHeight);
 			portComboBox.Margin = new Padding(4);
 			portComboBox.Name = "portComboBox";
-			portComboBox.Size = new System.Drawing.Size(Constants.ComboBoxWidth, Constants.ComboBoxHeight);
+			portComboBox.Size = new System.Drawing.Size(Constants.InputWidth, Constants.InputHeight);
 			portComboBox.Sorted = true;
 			portComboBox.TabIndex = 1;
 			portComboBox.DropDown += new EventHandler(PortComboBox_DropDown);

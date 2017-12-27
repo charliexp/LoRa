@@ -5,13 +5,16 @@
 		public const int WindowMarginX = 12;
 		public const int WindowMarginY = 12;
 
-		public const int GroupBoxLocationX = 12;
-		public const int GroupBoxLocationY = 12;
+		public const int MessageLabelMaxWidth = 264;
+
+		public const int GroupBoxLocationX = 13;
+		public const int GroupBoxLocationY = 13;
+		public const int GroupBoxFirstItemY = 23;
 		public const int GroupBoxWidth = 264;
 
 		public const int LabelLocationX = 8;
 		public const int LabelLocationY = 9;
-		public const int LabelMaxWidth = 264;
+		public const int LabelWidth = 120;
 		public const int LabelHeight = 17;
 
 		public const int RadioButtonLocationX = 12;
@@ -23,15 +26,11 @@
 		public const int ButtonWidth = 75;
 		public const int ButtonHeight = 23;
 
-		public const int ComboBoxLocationY = 12;
-		public const int ComboBoxWidth = 100;
-		public const int ComboBoxHeight = 24;
+		public const int InputLocationY = 12;
+		public const int InputWidth = 100;
+		public const int InputHeight = 24;
 
-		public const int TextBoxLocationY = 12;
-		public const int TextBoxWidth = 100;
-		public const int TextBoxHeight = 22;
-
-		public const int InterfaceItemPadding = 4;
+		public const int ItemPadding = 4;
 
 		public const int LabelToBoxOffset = 3;
 	}
