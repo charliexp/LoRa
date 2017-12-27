@@ -1,4 +1,4 @@
-﻿using LoRa_Controller.Interface.ConnectionUI;
+﻿using LoRa_Controller.Interface.Connection;
 using LoRa_Controller.Settings;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ namespace LoRa_Controller.Interface
 {
 	public partial class ConnectionDialog : Form
 	{
-		private BaseConnectionUI ConnectionUI;
+		private BaseConnection ConnectionUI;
 
 		public ConnectionDialog()
 		{
@@ -31,28 +31,28 @@ namespace LoRa_Controller.Interface
 					ConnectionUI.ParameterBoxes[1].Dispose();
 				}
 				
-				ConnectionUI = new SerialConnectionUI();
+				ConnectionUI = new SerialConnection();
 				((ComboBox)ConnectionUI.ParameterBoxes[0]).SelectedIndexChanged += new EventHandler(PortComboBox_SelectedIndexChanged);
 
 				Controls.Add(ConnectionUI.ParameterLabels[0]);
 				Controls.Add(ConnectionUI.ParameterBoxes[0]);
 
-				OKButton.Location = new System.Drawing.Point(Constants.MessageLabelMaxWidth -
-															Constants.ButtonWidth,
+				OKButton.Location = new System.Drawing.Point(InterfaceConstants.MessageLabelMaxWidth -
+															InterfaceConstants.ButtonWidth,
 
-															2 * Constants.WindowMarginY +
+															2 * InterfaceConstants.WindowMarginY +
 															MessageLabel.Height +
 															SerialRadioButton.Height +
 															ConnectionUI.ParameterBoxes[0].Height +
-															Constants.ItemPadding);
-				ClientSize = new System.Drawing.Size(Constants.MessageLabelMaxWidth,
+															InterfaceConstants.ItemPadding);
+				ClientSize = new System.Drawing.Size(InterfaceConstants.MessageLabelMaxWidth,
 
-													2 * Constants.WindowMarginY +
+													2 * InterfaceConstants.WindowMarginY +
 													MessageLabel.Height +
 													SerialRadioButton.Height +
 													ConnectionUI.ParameterBoxes[0].Height +
 													OKButton.Height +
-													3 * Constants.ItemPadding);
+													3 * InterfaceConstants.ItemPadding);
 
 				ResumeLayout(false);
 				PerformLayout();
@@ -71,7 +71,7 @@ namespace LoRa_Controller.Interface
 					ConnectionUI.ParameterBoxes[0].Dispose();
 				}
 				
-				ConnectionUI = new InternetConnectionUI();
+				ConnectionUI = new InternetConnection();
 				((TextBox)ConnectionUI.ParameterBoxes[0]).TextChanged += new EventHandler(IPTextBox_TextChanged);
 				((TextBox)ConnectionUI.ParameterBoxes[1]).TextChanged += new EventHandler(PortTextBox_TextChanged);
 
@@ -80,24 +80,24 @@ namespace LoRa_Controller.Interface
 				Controls.Add(ConnectionUI.ParameterLabels[1]);
 				Controls.Add(ConnectionUI.ParameterBoxes[1]);
 
-				OKButton.Location = new System.Drawing.Point(Constants.MessageLabelMaxWidth -
-															Constants.ButtonWidth,
+				OKButton.Location = new System.Drawing.Point(InterfaceConstants.MessageLabelMaxWidth -
+															InterfaceConstants.ButtonWidth,
 
-															2 * Constants.WindowMarginY +
+															2 * InterfaceConstants.WindowMarginY +
 															MessageLabel.Height +
 															SerialRadioButton.Height +
 															ConnectionUI.ParameterBoxes[0].Height +
 															ConnectionUI.ParameterBoxes[1].Height +
-															2 * Constants.ItemPadding);
-				ClientSize = new System.Drawing.Size(Constants.MessageLabelMaxWidth,
+															2 * InterfaceConstants.ItemPadding);
+				ClientSize = new System.Drawing.Size(InterfaceConstants.MessageLabelMaxWidth,
 
-													2 * Constants.WindowMarginY +
+													2 * InterfaceConstants.WindowMarginY +
 													MessageLabel.Height +
 													SerialRadioButton.Height +
 													ConnectionUI.ParameterBoxes[0].Height +
 													ConnectionUI.ParameterBoxes[1].Height +
 													OKButton.Height +
-													4 * Constants.ItemPadding);
+													4 * InterfaceConstants.ItemPadding);
 
 				ResumeLayout(false);
 				PerformLayout();

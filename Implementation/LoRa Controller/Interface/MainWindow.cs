@@ -1,5 +1,5 @@
 ﻿using LoRa_Controller.Device;
-using LoRa_Controller.Interface.NodeUI;
+using LoRa_Controller.Interface.Node;
 using LoRa_Controller.Log;
 using LoRa_Controller.Networking;
 using System;
@@ -13,21 +13,22 @@ namespace LoRa_Controller.Interface
 	{
 		const int logMaxEntries = 12;
 		private const string remoteConnection = "Remote";
-		public DirectlyConnectedUI directlyConnectedUI;
-		public List<RadioConnectedUI> radioConnectedUIs;
+		public NodeGroupBox directNodeGroupBox;
+		public List<NodeGroupBox> radioNodeGroupBox;
 
         public MainWindow()
 		{
-			directlyConnectedUI = new DirectlyConnectedUI();
-			radioConnectedUIs = new List<RadioConnectedUI>();
+			directNodeGroupBox = new NodeGroupBox("Directly Connected Node");
+			radioNodeGroupBox = new List<NodeGroupBox>();
 
-			Controls.Add(directlyConnectedUI.groupBox);
-			directlyConnectedUI.Draw();
 			InitializeComponent();
         }
 		
         private void Form1_Load(object sender, EventArgs e)
 		{
+			Controls.Add(directNodeGroupBox);
+			directNodeGroupBox.Draw(0);
+
 			Application.ApplicationExit += new EventHandler(OnFormExit);
 			logFolderTextBox.Text = Program.logger.Folder;
 		}
@@ -89,22 +90,17 @@ namespace LoRa_Controller.Interface
 
 		public void BoardConnected()
 		{
-			EnableLogControls();
-			EnableRadioControls();
+			directNodeGroupBox.Status.field.Text = "Connected";
 		}
 
 		public void BoardUnableToConnect()
 		{
-			DisableLogControls();
-			DisableRadioControls();
-			ClearTotalErrors();
+			directNodeGroupBox.Status.field.Text = "Could not connect";
 		}
 
 		public void BoardDisconnected()
 		{
-			DisableLogControls();
-			DisableRadioControls();
-			ClearTotalErrors();
+			directNodeGroupBox.Status.field.Text = "Disonnected";
 		}
 		
 		public void UpdateLog(List<string> data)
@@ -165,18 +161,19 @@ namespace LoRa_Controller.Interface
 		public void UpdateDirectlyConnectedNodeType()
 		{
 			if (Program.DeviceHandler is MasterDevice)
-				directlyConnectedUI.radioParameters.NodeType.Field.Text = "Master";
+				directNodeGroupBox.NodeType.field.Text = "Master";
 			else
-				directlyConnectedUI.radioParameters.NodeType.Field.Text = "Beacon " + Program.DeviceHandler.Address;
+				directNodeGroupBox.NodeType.field.Text = "Beacon " + Program.DeviceHandler.Address;
 		}
 
 		public void UpdateRadioConnectedNodeType()
 		{
-			if (radioConnectedUIs.Count < 2)
+			if (radioNodeGroupBox.Count < 2)
 			{
-				radioConnectedUIs.Add(new RadioConnectedUI("New beacon", radioConnectedUIs.Count + 1));
-				Controls.Add(radioConnectedUIs[radioConnectedUIs.Count - 1].groupBox);
-				radioConnectedUIs[radioConnectedUIs.Count - 1].Draw();
+				radioNodeGroupBox.Add(new NodeGroupBox("Radio node"));
+				Controls.Add(radioNodeGroupBox[radioNodeGroupBox.Count - 1]);
+				radioNodeGroupBox[radioNodeGroupBox.Count - 1].Draw(radioNodeGroupBox.Count);
+
 			}
 		}
 	}

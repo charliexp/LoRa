@@ -60,6 +60,7 @@ namespace LoRa_Controller
 			}
 
 			DeviceHandler.ConnectToBoard();
+			MainWindow.BoardConnected();
 			logger.Start();
 
 			BackgroundWorker BackgroundWorker = new BackgroundWorker();
@@ -98,7 +99,7 @@ namespace LoRa_Controller
 			MainWindow.UpdateSNR(DeviceHandler.SNR);
 			MainWindow.UpdateCurrentErrors(DeviceHandler.Errors);
 			MainWindow.UpdateTotalErrors(DeviceHandler.TotalErrors);
-			//MainWindow.UpdateRadioConnectedNodeType();
+			MainWindow.UpdateRadioConnectedNodeType();
 
 			if (!DeviceNodeTypeProcessed && DeviceHandler._nodeType != NodeType.Unknown)
 			{

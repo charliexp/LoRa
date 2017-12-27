@@ -74,15 +74,21 @@
     <Compile Include="Interface\ConnectionDialog.Designer.cs">
       <DependentUpon>ConnectionDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Interface\Constants.cs" />
-    <Compile Include="Interface\ConnectionUI\BaseConnectionUI.cs" />
-    <Compile Include="Interface\ConnectionUI\InternetConnectionUI.cs" />
-    <Compile Include="Interface\ConnectionUI\SerialConnectionUI.cs" />
-    <Compile Include="Interface\NodeUI\BaseNodeUI.cs" />
-    <Compile Include="Interface\NodeUI\DirectlyConnectedUI.cs" />
-    <Compile Include="Interface\NodeUI\RadioConnectedUI.cs" />
-    <Compile Include="Interface\NodeUI\RadioSettingControl.cs" />
-    <Compile Include="Interface\NodeUI\RadioSettingsUI.cs" />
+    <Compile Include="Interface\Controls\CheckBoxControl.cs" />
+    <Compile Include="Interface\Controls\ComboBoxControl.cs" />
+    <Compile Include="Interface\Controls\TextBoxControl.cs" />
+    <Compile Include="Interface\Controls\SpinBoxControl.cs" />
+    <Compile Include="Interface\InterfaceConstants.cs" />
+    <Compile Include="Interface\Connection\BaseConnection.cs" />
+    <Compile Include="Interface\Connection\InternetConnection.cs" />
+    <Compile Include="Interface\Connection\SerialConnection.cs" />
+    <Compile Include="Interface\Controls\BaseControl.cs" />
+    <Compile Include="Interface\Node\NodeGroupBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Interface\Node\ParameterControls\ParameterCheckBox.cs" />
+    <Compile Include="Interface\Node\ParameterControls\ParameterComboBox.cs" />
+    <Compile Include="Interface\Node\ParameterControls\ParameterSpinBox.cs" />
     <Compile Include="Log\Logger.cs" />
     <Compile Include="Device\MasterDevice.cs" />
     <Compile Include="Interface\MainWindow.cs">
@@ -137,5 +143,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
