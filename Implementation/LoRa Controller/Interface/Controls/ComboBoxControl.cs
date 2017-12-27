@@ -1,14 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace LoRa_Controller.Interface.Controls
 {
 	public class ComboBoxControl : BaseControl
 	{
-		protected ValueChangedAsync indexChangedCallbackAsync;
 		protected ValueChanged indexChangedCallback;
 
-		private ComboBoxControl(string name) : base(name)
+		public ComboBoxControl(string name, List<string> values, int defaultIndex) : base(name)
 		{
 			field = new ComboBox
 			{
@@ -19,28 +19,15 @@ namespace LoRa_Controller.Interface.Controls
 				FormattingEnabled = true,
 				Sorted = true
 			};
-		}
-
-		public ComboBoxControl(string name, ValueChanged callback) : this(name)
-		{
-			indexChangedCallback = callback;
+			((ComboBox)field).Items.AddRange(values.ToArray());
+			((ComboBox)field).SelectedIndex = defaultIndex;
 			((ComboBox)field).SelectedIndexChanged += new EventHandler(SelectedIndexChanged);
 		}
-
-		public ComboBoxControl(string name, ValueChangedAsync callback) : this(name)
+		
+		private async void SelectedIndexChanged(object sender, EventArgs e)
 		{
-			indexChangedCallbackAsync = callback;
-			((ComboBox)field).SelectedIndexChanged += new EventHandler(SelectedIndexChangedAsync);
-		}
-
-		private void SelectedIndexChanged(object sender, EventArgs e)
-		{
-			indexChangedCallback(((ComboBox)sender).SelectedIndex);
-		}
-
-		private async void SelectedIndexChangedAsync(object sender, EventArgs e)
-		{
-			await indexChangedCallbackAsync(((ComboBox)sender).SelectedIndex);
+			if (indexChangedCallback != null)
+				await indexChangedCallback(((ComboBox)sender).SelectedIndex);
 		}
 	}
 }

@@ -5,41 +5,29 @@ namespace LoRa_Controller.Interface.Controls
 {
 	public class SpinBoxControl : BaseControl
 	{
-		protected ValueChangedAsync valueChangedCallbackAsync;
 		protected ValueChanged valueChangedCallback;
 
-		private SpinBoxControl(string name) : base(name)
+		public SpinBoxControl(string name, int minValue, int maxValue, int defaultValue) : base(name)
 		{
 			field = new NumericUpDown
 			{
 				Margin = field.Margin,
 				Name = field.Name,
 				Size = field.Size,
-			};
+
+		};
 			((System.ComponentModel.ISupportInitialize)field).BeginInit();
+			((NumericUpDown)field).Maximum = new decimal(new int[] { maxValue, 0, 0, 0 });
+			((NumericUpDown)field).Minimum = new decimal(new int[] { minValue, 0, 0, 0 });
+			((NumericUpDown)field).Value = new decimal(new int[] { defaultValue, 0, 0, 0 });
+			((NumericUpDown)field).ValueChanged += new EventHandler(ValueChanged);
 			((System.ComponentModel.ISupportInitialize)field).EndInit();
 		}
-
-		public SpinBoxControl(string name, ValueChanged callback) : this(name)
+		
+		private async void ValueChanged(object sender, EventArgs e)
 		{
-			valueChangedCallback = callback;
-			((NumericUpDown)field).ValueChanged += new EventHandler(SelectedIndexChanged);
-		}
-
-		public SpinBoxControl(string name, ValueChangedAsync callback) : this(name)
-		{
-			valueChangedCallbackAsync = callback;
-			((NumericUpDown)field).ValueChanged += new EventHandler(SelectedIndexChangedAsync);
-		}
-
-		private void SelectedIndexChanged(object sender, EventArgs e)
-		{
-			valueChangedCallback(((ComboBox)sender).SelectedIndex);
-		}
-
-		private async void SelectedIndexChangedAsync(object sender, EventArgs e)
-		{
-			await valueChangedCallbackAsync(Decimal.ToInt32(((NumericUpDown)sender).Value));
+			if (valueChangedCallback != null)
+				await valueChangedCallback(Decimal.ToInt32(((NumericUpDown)sender).Value));
 		}
 	}
 }

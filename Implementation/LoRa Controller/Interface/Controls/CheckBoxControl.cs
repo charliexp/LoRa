@@ -9,10 +9,9 @@ namespace LoRa_Controller.Interface.Controls
 {
 	public class CheckBoxControl : BaseControl
 	{
-		protected ValueChangedAsync checkedChangedCallbackAsync;
-		protected ValueChanged checkedChangedCallback;
+		protected ValueChanged checkChangedCallback;
 
-		public CheckBoxControl(string name) : base(name)
+		public CheckBoxControl(string name, bool defaultState) : base(name)
 		{
 			field = new CheckBox
 			{
@@ -21,28 +20,14 @@ namespace LoRa_Controller.Interface.Controls
 				Size = field.Size,
 			};
 			((CheckBox)field).CheckAlign = System.Drawing.ContentAlignment.TopRight;
+			((CheckBox)field).CheckState = defaultState?CheckState.Checked : CheckState.Unchecked;
+			((CheckBox)field).CheckStateChanged += new EventHandler(CheckChanged);
 		}
-
-		public CheckBoxControl(string name, ValueChanged callback) : this(name)
+		
+		private async void CheckChanged(object sender, EventArgs e)
 		{
-			checkedChangedCallback = callback;
-			((CheckBox)field).CheckStateChanged += new EventHandler(SelectedIndexChanged);
-		}
-
-		public CheckBoxControl(string name, ValueChangedAsync callback) : this(name)
-		{
-			checkedChangedCallbackAsync = callback;
-			((CheckBox)field).CheckStateChanged += new EventHandler(SelectedIndexChangedAsync);
-		}
-
-		private void SelectedIndexChanged(object sender, EventArgs e)
-		{
-			checkedChangedCallback(((ComboBox)sender).SelectedIndex);
-		}
-
-		private async void SelectedIndexChangedAsync(object sender, EventArgs e)
-		{
-			await checkedChangedCallbackAsync(((((CheckBox)sender).CheckState == CheckState.Checked) ? 1 : 0));
+			if (checkChangedCallback != null)
+				await checkChangedCallback(((((CheckBox)sender).CheckState == CheckState.Checked) ? 1 : 0));
 		}
 	}
 }

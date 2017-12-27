@@ -1,5 +1,7 @@
 ﻿using LoRa_Controller.Interface.Controls;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using static LoRa_Controller.Device.DeviceHandler;
 
 namespace LoRa_Controller.Interface.Node.ParameterControls
@@ -8,16 +10,15 @@ namespace LoRa_Controller.Interface.Node.ParameterControls
 	{
 		private Commands parameter;
 
-		public ParameterComboBox(Commands parameter) : base(parameter.ToString(), null)
+		public ParameterComboBox(Commands parameter, List<string> values, int defaultIndex) : base(parameter.ToString(), values, defaultIndex)
 		{
 			this.parameter = parameter;
-			indexChangedCallbackAsync = ParameterChangedCallbackAsync;
+			indexChangedCallback = ParameterChangedCallback;
 		}
 		
-		private async Task ParameterChangedCallbackAsync(int value)
+		private async Task ParameterChangedCallback(int value)
 		{
-			if (Program.DeviceHandler != null)
-				await Program.DeviceHandler.SendCommandAsync(parameter, value);
+			await Program.DeviceHandler.SendCommandAsync(parameter, value);
 		}
 	}
 }

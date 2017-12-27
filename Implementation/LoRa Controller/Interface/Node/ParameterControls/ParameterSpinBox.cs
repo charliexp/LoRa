@@ -12,13 +12,13 @@ namespace LoRa_Controller.Interface.Node.ParameterControls
 	{
 		private Commands parameter;
 
-		public ParameterSpinBox(Commands parameter) : base(parameter.ToString(), null)
+		public ParameterSpinBox(Commands parameter, int minValue, int maxValue, int defaultValue) : base(parameter.ToString(), minValue, maxValue, defaultValue)
 		{
 			this.parameter = parameter;
-			valueChangedCallbackAsync = ParameterChangedCallbackAsync;
+			valueChangedCallback = ParameterChangedCallback;
 		}
 
-		private async Task ParameterChangedCallbackAsync(int value)
+		private async Task ParameterChangedCallback(int value)
 		{
 			if (Program.DeviceHandler != null)
 				await Program.DeviceHandler.SendCommandAsync(parameter, value);

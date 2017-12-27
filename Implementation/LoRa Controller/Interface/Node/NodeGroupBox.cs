@@ -30,17 +30,17 @@ namespace LoRa_Controller.Interface.Node
 		{
 			NodeType = new TextBoxControl("NodeType", TextBoxControl.Type.Output);
 			Status = new TextBoxControl("Status", TextBoxControl.Type.Output);
-			Bandwidth = new ParameterComboBox(Commands.Bandwidth);
-			OutputPower = new ParameterSpinBox(Commands.OutputPower);
-			SpreadingFactor = new ParameterSpinBox(Commands.SpreadingFactor);
-			CodingRate = new ParameterComboBox(Commands.CodingRate);
-			RxSymTimeout = new ParameterSpinBox(Commands.RxSymTimeout);
-			RxMsTimeout = new ParameterSpinBox(Commands.RxMsTimeout);
-			TxTimeout = new ParameterSpinBox(Commands.TxTimeout);
-			PreambleSize = new ParameterSpinBox(Commands.PreambleSize);
-			PayloadMaxSize = new ParameterSpinBox(Commands.PayloadMaxSize);
-			VariablePayload = new ParameterCheckBox(Commands.VariablePayload);
-			PerformCRC = new ParameterCheckBox(Commands.PerformCRC);
+			Bandwidth = new ParameterComboBox(Commands.Bandwidth, new List<string> { "125 kHz", "250 kHz", "500 kHz" }, 0);
+			OutputPower = new ParameterSpinBox(Commands.OutputPower, 1, 14, 14);
+			SpreadingFactor = new ParameterSpinBox(Commands.SpreadingFactor, 7, 12, 12);
+			CodingRate = new ParameterComboBox(Commands.CodingRate, new List<string> { "4/5", "4/6", "4/7", "4/8" }, 3);
+			RxSymTimeout = new ParameterSpinBox(Commands.RxSymTimeout, 1, 30, 5);
+			RxMsTimeout = new ParameterSpinBox(Commands.RxMsTimeout, 1, 10000, 3000);
+			TxTimeout = new ParameterSpinBox(Commands.TxTimeout, 1, 10000, 2000);
+			PreambleSize = new ParameterSpinBox(Commands.PreambleSize, 2, 30, 8);
+			PayloadMaxSize = new ParameterSpinBox(Commands.PayloadMaxSize, 1, 64, 64);
+			VariablePayload = new ParameterCheckBox(Commands.VariablePayload, true);
+			PerformCRC = new ParameterCheckBox(Commands.PerformCRC, true);
 
 			controls = new List<BaseControl>
 			{
@@ -58,46 +58,7 @@ namespace LoRa_Controller.Interface.Node
 				VariablePayload,
 				PerformCRC
 			};
-
-			((ComboBox)Bandwidth.field).Items.AddRange(new object[] { "125 kHz", "250 kHz", "500 kHz" });
-			((ComboBox)Bandwidth.field).SelectedIndex = 0;
-
-			((NumericUpDown)OutputPower.field).Maximum = new decimal(new int[] { 14, 0, 0, 0 });
-			((NumericUpDown)OutputPower.field).Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-			((NumericUpDown)OutputPower.field).Value = new decimal(new int[] { 14, 0, 0, 0 });
-
-			((NumericUpDown)SpreadingFactor.field).Maximum = new decimal(new int[] { 12, 0, 0, 0 });
-			((NumericUpDown)SpreadingFactor.field).Minimum = new decimal(new int[] { 7, 0, 0, 0 });
-			((NumericUpDown)SpreadingFactor.field).Value = new decimal(new int[] { 12, 0, 0, 0 });
-
-			((ComboBox)CodingRate.field).Items.AddRange(new object[] { "4/5", "4/6", "4/7", "4/8" });
-			((ComboBox)CodingRate.field).SelectedIndex = 3;
-
-			((NumericUpDown)RxSymTimeout.field).Maximum = new decimal(new int[] { 30, 0, 0, 0 });
-			((NumericUpDown)RxSymTimeout.field).Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-			((NumericUpDown)RxSymTimeout.field).Value = new decimal(new int[] { 5, 0, 0, 0 });
-
-			((NumericUpDown)RxMsTimeout.field).Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
-			((NumericUpDown)RxMsTimeout.field).Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-			((NumericUpDown)RxMsTimeout.field).Value = new decimal(new int[] { 3000, 0, 0, 0 });
-
-			((NumericUpDown)TxTimeout.field).Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
-			((NumericUpDown)TxTimeout.field).Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-			((NumericUpDown)TxTimeout.field).Value = new decimal(new int[] { 2000, 0, 0, 0 });
-
-			((NumericUpDown)PreambleSize.field).Maximum = new decimal(new int[] { 30, 0, 0, 0 });
-			((NumericUpDown)PreambleSize.field).Minimum = new decimal(new int[] { 2, 0, 0, 0 });
-			((NumericUpDown)PreambleSize.field).Value = new decimal(new int[] { 8, 0, 0, 0 });
-
-			((NumericUpDown)PayloadMaxSize.field).Maximum = new decimal(new int[] { 64, 0, 0, 0 });
-			((NumericUpDown)PayloadMaxSize.field).Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-			((NumericUpDown)PayloadMaxSize.field).Value = new decimal(new int[] { 64, 0, 0, 0 });
-
-			((CheckBox)VariablePayload.field).CheckState = CheckState.Checked;
-
-			((CheckBox)PerformCRC.field).CheckState = CheckState.Checked;
-
-			Enabled = false;
+			
 			Name = name.Replace(" ", "") + "GroupBox";
 			Text = name;
 			Margin = new Padding(InterfaceConstants.ItemPadding);

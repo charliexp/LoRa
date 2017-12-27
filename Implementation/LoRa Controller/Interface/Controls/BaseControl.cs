@@ -5,8 +5,7 @@ using System.Windows.Forms;
 
 namespace LoRa_Controller.Interface.Controls
 {
-	public delegate Task ValueChangedAsync(int index);
-	public delegate void ValueChanged(int index);
+	public delegate Task ValueChanged(int index);
 
 	public abstract class BaseControl
 	{

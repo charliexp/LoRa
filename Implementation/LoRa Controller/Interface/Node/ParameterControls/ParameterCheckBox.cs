@@ -12,13 +12,13 @@ namespace LoRa_Controller.Interface.Node.ParameterControls
 	{
 		private Commands parameter;
 
-		public ParameterCheckBox(Commands parameter) : base(parameter.ToString(), null)
+		public ParameterCheckBox(Commands parameter, bool defaultState) : base(parameter.ToString(), defaultState)
 		{
 			this.parameter = parameter;
-			checkedChangedCallbackAsync = ParameterChangedCallbackAsync;
+			checkChangedCallback = ParameterChangedCallback;
 		}
 
-		private async Task ParameterChangedCallbackAsync(int value)
+		private async Task ParameterChangedCallback(int value)
 		{
 			if (Program.DeviceHandler != null)
 				await Program.DeviceHandler.SendCommandAsync(parameter, value);
