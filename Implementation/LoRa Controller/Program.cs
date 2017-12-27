@@ -104,21 +104,22 @@ namespace LoRa_Controller
 			MainWindow.UpdateCurrentErrors(DeviceHandler.Errors);
 			MainWindow.UpdateTotalErrors(DeviceHandler.TotalErrors);
 
+			if (!DeviceNodeTypeProcessed && DeviceHandler._nodeType != NodeType.Unknown)
+			{
+				if (DeviceHandler._nodeType == NodeType.Master)
+				{
+					DeviceHandler = new MasterDevice(DeviceHandler);
+					logger.Write("Connected to master");
+				}
+				else
+				{
+					DeviceHandler = new BeaconDevice(DeviceHandler);
+					logger.Write("Connected to beacon " + DeviceHandler.Address);
+				}
+			}
+
 			if (DeviceHandler is MasterDevice)
 			{
-				if (!DeviceNodeTypeProcessed && DeviceHandler._nodeType != NodeType.Unknown)
-				{
-					if (DeviceHandler._nodeType == NodeType.Master)
-					{
-						DeviceHandler = new MasterDevice(DeviceHandler);
-						logger.Write("Connected to master");
-					}
-					else
-					{
-						DeviceHandler = new BeaconDevice(DeviceHandler);
-						logger.Write("Connected to beacon " + DeviceHandler.Address);
-					}
-				}
 				MainWindow.UpdateRadioConnectionStatus(((MasterDevice)DeviceHandler).HasBeaconConnected);
 			}
 			
