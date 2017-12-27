@@ -13,7 +13,6 @@ namespace LoRa_Controller.Log
 		private string _folder;
 		public string fileName;
         private StreamWriter streamWriter;
-        private string dateFormat;
         private bool _isOpen = false;
 		private uint _linesWritten;
 
@@ -28,8 +27,8 @@ namespace LoRa_Controller.Log
 				SettingHandler.LogFolder.Value = _folder;
                 if (_isOpen)
 				{
-					finish();
-					start();
+					Finish();
+					Start();
 				}
             }
 		}
@@ -42,7 +41,6 @@ namespace LoRa_Controller.Log
         public Logger()
         {
 			_folder = (string) SettingHandler.LogFolder.Value;
-            dateFormat = "HH:mm:ss.fff";
             fileName = "log_" + DateTime.Now.ToString("dd.MM.yyyy") + ".txt";
         }
 
@@ -54,15 +52,27 @@ namespace LoRa_Controller.Log
         public Logger(string fileNamePrefix, string fileFormat) : this()
 		{
             fileName = fileNamePrefix + DateTime.Now.ToString("dd.MM.yyyy") + "." + fileFormat;
-        }
+		}
 
-        public Logger(string fileNamePrefix, string dateFormat, string fileFormat) : this()
+		public void Write(string data)
 		{
-            dateFormat = dateFormat;
-            fileName = fileNamePrefix + DateTime.Now.ToString(dateFormat) + "." + fileFormat;
-        }
-        
-        public async Task write(string data)
+			try
+			{
+				streamWriter.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + ": " + data);
+				_linesWritten++;
+			}
+			catch (ObjectDisposedException)
+			{
+
+			}
+			if (_linesWritten == LinesRequiredToSaveFile)
+			{
+				_linesWritten = 0;
+				streamWriter.Flush();
+			}
+		}
+
+		public async Task WriteAsync(string data)
         {
 			try
 			{
@@ -80,12 +90,12 @@ namespace LoRa_Controller.Log
 			}
         }
 
-        public bool isOpen()
+        public bool IsOpen()
         {
             return _isOpen;
         }
 
-        public void start()
+        public void Start()
         {
             streamWriter = File.AppendText(_folder + "\\" + fileName);
 			streamWriter.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + " Log started");
@@ -93,7 +103,7 @@ namespace LoRa_Controller.Log
 			_linesWritten = 0;
 		}
 
-        public void finish()
+        public void Finish()
 		{
 			streamWriter.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + " Log finished");
             if (streamWriter != null)

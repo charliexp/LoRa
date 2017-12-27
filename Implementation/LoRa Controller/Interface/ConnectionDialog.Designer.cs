@@ -106,6 +106,7 @@
 			this.Name = "ConnectionDialog";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Connection";
+			this.TopMost = true;
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

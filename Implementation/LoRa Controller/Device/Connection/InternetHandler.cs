@@ -68,30 +68,24 @@ namespace LoRa_Controller.Connection
 			}
 		}
 
-		public async Task<bool> SendCharAsync(byte[] byteToSend)
+		public void SendChar(byte[] byteToSend)
 		{
-			try
-			{
-				await GetStream().WriteAsync(byteToSend, 0, 1);
-				return true;
-			}
-			catch (System.IO.IOException)
-			{
-				return false;
-			}
+			GetStream().Write(byteToSend, 0, 1);
 		}
 
-		public async Task<bool> ReadCharAsync(byte[] receiveBuffer)
+		public void ReadChar(byte[] receiveBuffer)
 		{
-			try
-			{
-				await GetStream().ReadAsync(receiveBuffer, 0, 1);
-				return true;
-			}
-			catch (System.IO.IOException)
-			{
-				return false;
-			}
+			GetStream().Read(receiveBuffer, 0, 1);
+		}
+
+		public async Task SendCharAsync(byte[] byteToSend)
+		{
+			await GetStream().WriteAsync(byteToSend, 0, 1);
+		}
+
+		public async Task ReadCharAsync(byte[] receiveBuffer)
+		{
+			await GetStream().ReadAsync(receiveBuffer, 0, 1);
 		}
 		#endregion
 	}

@@ -98,7 +98,7 @@ namespace LoRa_Controller.Interface.DirectlyConnected
 			GroupBox.Padding = new Padding(4);
 			GroupBox.Size = new System.Drawing.Size(263, 435);
 			GroupBox.TabStop = false;
-			GroupBox.Text = "Directly connected device";
+			GroupBox.Text = "Connected device";
 			
 			StatusTextBox.Location = new System.Drawing.Point(139, 23);
 			StatusTextBox.Margin = new Padding(4);
@@ -452,56 +452,56 @@ namespace LoRa_Controller.Interface.DirectlyConnected
 
 		private async void BandwidthComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			await MainWindow.DeviceHandler.SendCommandAsync(Commands.Bandwidth, (byte)((ComboBox)sender).SelectedIndex);
+			await Program.DeviceHandler.SendCommandAsync(Commands.Bandwidth, (byte)((ComboBox)sender).SelectedIndex);
 		}
 
 		private async void CodingRateComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			await MainWindow.DeviceHandler.SendCommandAsync(Commands.CodingRate, (byte)(((ComboBox)sender).SelectedIndex + 1));
+			await Program.DeviceHandler.SendCommandAsync(Commands.CodingRate, (byte)(((ComboBox)sender).SelectedIndex + 1));
 		}
 
 		private async void OutputPowerNumericUpDown_ValueChanged(object sender, EventArgs e)
 		{
-			await MainWindow.DeviceHandler.SendCommandAsync(Commands.OutputPower, (byte)(((NumericUpDown)sender).Value));
+			await Program.DeviceHandler.SendCommandAsync(Commands.OutputPower, (byte)(((NumericUpDown)sender).Value));
 		}
 
 		private async void SpreadingFactorNumericUpDown_ValueChanged(object sender, EventArgs e)
 		{
-			await MainWindow.DeviceHandler.SendCommandAsync(Commands.SpreadingFactor, (byte)(((NumericUpDown)sender).Value));
+			await Program.DeviceHandler.SendCommandAsync(Commands.SpreadingFactor, (byte)(((NumericUpDown)sender).Value));
 		}
 
 		private async void RxSymTimeoutNumericUpDown_ValueChanged(object sender, EventArgs e)
 		{
-			await MainWindow.DeviceHandler.SendCommandAsync(Commands.RxSymTimeout, (byte)(((NumericUpDown)sender).Value));
+			await Program.DeviceHandler.SendCommandAsync(Commands.RxSymTimeout, (byte)(((NumericUpDown)sender).Value));
 		}
 
 		private async void RxMsTimeoutNumericUpDown_ValueChanged(object sender, EventArgs e)
 		{
-			await MainWindow.DeviceHandler.SendCommandAsync(Commands.RxMsTimeout, (int)(((NumericUpDown)sender).Value));
+			await Program.DeviceHandler.SendCommandAsync(Commands.RxMsTimeout, (int)(((NumericUpDown)sender).Value));
 		}
 		private async void TxTimeoutNumericUpDown_ValueChanged(object sender, EventArgs e)
 		{
-			await MainWindow.DeviceHandler.SendCommandAsync(Commands.TxTimeout, (int)(((NumericUpDown)sender).Value));
+			await Program.DeviceHandler.SendCommandAsync(Commands.TxTimeout, (int)(((NumericUpDown)sender).Value));
 		}
 
 		private async void PreambleNumericUpDown_ValueChanged(object sender, EventArgs e)
 		{
-			await MainWindow.DeviceHandler.SendCommandAsync(Commands.PreambleSize, (byte)(((NumericUpDown)sender).Value));
+			await Program.DeviceHandler.SendCommandAsync(Commands.PreambleSize, (byte)(((NumericUpDown)sender).Value));
 		}
 
 		private async void PayloadNumericUpDown_ValueChanged(object sender, EventArgs e)
 		{
-			await MainWindow.DeviceHandler.SendCommandAsync(Commands.PayloadMaxSize, (byte)(((NumericUpDown)sender).Value));
+			await Program.DeviceHandler.SendCommandAsync(Commands.PayloadMaxSize, (byte)(((NumericUpDown)sender).Value));
 		}
 
 		private async void VariablePayloadCheckBox_CheckedChanged(object sender, EventArgs e)
 		{
-			await MainWindow.DeviceHandler.SendCommandAsync(Commands.VariablePayload, (byte)(((CheckBox)sender).Checked ? 1 : 0));
+			await Program.DeviceHandler.SendCommandAsync(Commands.VariablePayload, (byte)(((CheckBox)sender).Checked ? 1 : 0));
 		}
 
 		private async void CrcCheckBox_CheckedChanged(object sender, EventArgs e)
 		{
-			await MainWindow.DeviceHandler.SendCommandAsync(Commands.PerformCRC, (byte)(((CheckBox)sender).Checked ? 1 : 0));
+			await Program.DeviceHandler.SendCommandAsync(Commands.PerformCRC, (byte)(((CheckBox)sender).Checked ? 1 : 0));
 		}
 	}
 }

@@ -602,6 +602,7 @@
 			this.Controls.Add(this.beaconSettingsGroupBox);
 			this.Controls.Add(this.radioConnectionGroupBox);
 			this.Controls.Add(this.logGroupBox);
+			this.Enabled = false;
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.Margin = new System.Windows.Forms.Padding(4);
 			this.MaximizeBox = false;

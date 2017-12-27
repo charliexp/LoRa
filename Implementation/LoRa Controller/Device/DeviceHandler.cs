@@ -130,6 +130,46 @@ namespace LoRa_Controller.Device
 		public void ConnectToBoard()
 		{
 			_connectionHandler.Open();
+			SendCommandAsync(Commands.IsMaster);
+		}
+
+		public void SendCommand(byte[] command)
+		{
+			for (int i = 0; i < CommandMaxLength; i++)
+				_connectionHandler.SendChar(new byte[] { command[i] });
+		}
+
+		public void SendCommand(Commands command)
+		{
+			_connectionHandler.SendChar(new byte[] { 0 });
+			_connectionHandler.SendChar(new byte[] { _address });
+			_connectionHandler.SendChar(new byte[] { Convert.ToByte(command) });
+			_connectionHandler.SendChar(new byte[] { 0 });
+			_connectionHandler.SendChar(new byte[] { 0 });
+			_connectionHandler.SendChar(new byte[] { 0 });
+			_connectionHandler.SendChar(new byte[] { 0 });
+		}
+
+		public void SendCommand(Commands command, byte value)
+		{
+			_connectionHandler.SendChar(new byte[] { 0 });
+			_connectionHandler.SendChar(new byte[] { _address });
+			_connectionHandler.SendChar(new byte[] { Convert.ToByte(command) });
+			_connectionHandler.SendChar(new byte[] { value });
+			_connectionHandler.SendChar(new byte[] { 0 });
+			_connectionHandler.SendChar(new byte[] { 0 });
+			_connectionHandler.SendChar(new byte[] { 0 });
+		}
+
+		public void SendCommand(Commands command, int value)
+		{
+			_connectionHandler.SendChar(new byte[] { 0 });
+			_connectionHandler.SendChar(new byte[] { _address });
+			_connectionHandler.SendChar(new byte[] { Convert.ToByte(command) });
+			_connectionHandler.SendChar(new byte[] { (byte)(value >> 24) });
+			_connectionHandler.SendChar(new byte[] { (byte)(value >> 16) });
+			_connectionHandler.SendChar(new byte[] { (byte)(value >> 8) });
+			_connectionHandler.SendChar(new byte[] { (byte)value });
 		}
 
 		public async Task SendCommandAsync(byte[] command)
@@ -171,6 +211,33 @@ namespace LoRa_Controller.Device
 			await (_connectionHandler.SendCharAsync(new byte[] { (byte)value }));
 		}
 
+		public List<string> ReceiveData()
+		{
+			List<string> receivedData = new List<string>();
+			string receivedLine = "";
+
+			while (_connectionHandler.Connected && !receivedLine.Contains("Done") &&
+										   !receivedLine.Contains("Timeout") &&
+										   !receivedLine.Contains(":"))
+			{
+				receivedLine = "";
+				while (_connectionHandler.Connected && !receivedLine.Contains("\r"))
+				{
+					byte[] receivedByte = new byte[1];
+
+					_connectionHandler.ReadChar(receivedByte);
+					if (receivedByte[0] > 0)
+						receivedLine += Convert.ToChar(receivedByte[0]);
+				}
+				receivedLine = receivedLine.TrimEnd(new char[] { '\n', '\r' });
+
+				ParseData(receivedLine);
+				receivedData.Add(receivedLine);
+			}
+
+			return receivedData;
+		}
+
 		public async Task<List<string>> ReceiveDataAsync()
 		{
 			List<string> receivedData = new List<string>();
@@ -185,11 +252,9 @@ namespace LoRa_Controller.Device
 				{
 					byte[] receivedByte = new byte[1];
 
-					if (await _connectionHandler.ReadCharAsync(receivedByte))
-					{
-						if (receivedByte[0] > 0)
-							receivedLine += Convert.ToChar(receivedByte[0]);
-					}
+					await _connectionHandler.ReadCharAsync(receivedByte);
+					if (receivedByte[0] > 0)
+						receivedLine += Convert.ToChar(receivedByte[0]);
 				}
 				receivedLine = receivedLine.TrimEnd(new char[] { '\n', '\r' });
 

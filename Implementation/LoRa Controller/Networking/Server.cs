@@ -41,7 +41,37 @@ namespace LoRa_Controller.Networking
 			BeginAcceptTcpClient(new AsyncCallback(ClientConnected), this);
 		}
 
-		public async Task Send(string data)
+		public void Send(string data)
+		{
+			data += "\n\r";
+			_clients.RemoveAll(client => client.Connected == false);
+
+			foreach (TcpClient client in _clients)
+			{
+				try
+				{
+					client.GetStream().Write(Encoding.ASCII.GetBytes(data), 0, data.Length);
+				}
+				catch (System.IO.IOException)
+				{
+				}
+			}
+		}
+
+		public byte[] Receive()
+		{
+			byte[] data = new byte[DeviceHandler.CommandMaxLength];
+			data[0] = (byte)DeviceHandler.Commands.Invalid;
+			_clients.RemoveAll(client => client.Connected == false);
+
+			foreach (TcpClient client in _clients)
+				if (client.Available == data.Length)
+					client.GetStream().Read(data, 0, data.Length);
+
+			return data;
+		}
+
+		public async Task SendAsync(string data)
 		{
 			data += "\n\r";
 			_clients.RemoveAll(client => client.Connected == false);
@@ -58,7 +88,7 @@ namespace LoRa_Controller.Networking
 			}
 		}
 
-		public async Task<byte[]> Receive()
+		public async Task<byte[]> ReceiveAsync()
 		{
 			byte[] data = new byte[DeviceHandler.CommandMaxLength];
 			data[0] = (byte) DeviceHandler.Commands.Invalid;

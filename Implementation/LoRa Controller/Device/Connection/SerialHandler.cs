@@ -15,8 +15,6 @@ namespace LoRa_Controller.Connection
 			DataBits = 8;
 			StopBits = StopBits.One;
 			Handshake = Handshake.None;
-			ReadTimeout = 1200;
-			WriteTimeout = 1000;
 			PortName = portName;
 		}
 		#endregion
@@ -59,30 +57,24 @@ namespace LoRa_Controller.Connection
 			base.Close();
 		}
 
-		public async Task<bool> SendCharAsync(byte[] byteToSend)
+		public void SendChar(byte[] byteToSend)
 		{
-			try
-			{
-				await BaseStream.WriteAsync(byteToSend, 0, 1);
-				return true;
-			}
-			catch (System.IO.IOException)
-			{
-				return false;
-			}
+			BaseStream.Write(byteToSend, 0, 1);
 		}
 
-		public async Task<bool> ReadCharAsync(byte[] receiveBuffer)
+		public void ReadChar(byte[] receiveBuffer)
 		{
-			try
-			{
-				await BaseStream.ReadAsync(receiveBuffer, 0, 1);
-				return true;
-			}
-			catch (System.IO.IOException)
-			{
-				return false;
-			}
+			BaseStream.Read(receiveBuffer, 0, 1);
+		}
+
+		public async Task SendCharAsync(byte[] byteToSend)
+		{
+			await BaseStream.WriteAsync(byteToSend, 0, 1);
+		}
+
+		public async Task ReadCharAsync(byte[] receiveBuffer)
+		{
+			await BaseStream.ReadAsync(receiveBuffer, 0, 1);
 		}
 		#endregion
 	}
