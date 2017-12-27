@@ -24,13 +24,7 @@ namespace LoRa_Controller.Interface
 		
         private void Form1_Load(object sender, EventArgs e)
 		{
-            beaconBandwidthComboBox.SelectedIndex = 0;
-            beaconCodingRateComboBox.SelectedIndex = 3;
-            beaconBandwidthComboBox.SelectedIndexChanged += new EventHandler(BandwidthComboBox_SelectedIndexChanged);
-            beaconCodingRateComboBox.SelectedIndexChanged += new EventHandler(CodingRateComboBox_SelectedIndexChanged);
-
 			Application.ApplicationExit += new EventHandler(OnFormExit);
-
 			logFolderTextBox.Text = Program.logger.Folder;
 		}
 		
@@ -167,9 +161,9 @@ namespace LoRa_Controller.Interface
 		public void UpdateDirectlyConnectedNodeType()
 		{
 			if (Program.DeviceHandler is MasterDevice)
-				DirectlyConnectedUI.NodeTypeTextBox.Text = "Master";
+				DirectlyConnectedUI.NodeType.Field.Text = "Master";
 			else
-				DirectlyConnectedUI.NodeTypeTextBox.Text = "Beacon " + Program.DeviceHandler.Address;
+				DirectlyConnectedUI.NodeType.Field.Text = "Beacon " + Program.DeviceHandler.Address;
 		}
 
 		private async void BandwidthComboBox_SelectedIndexChanged(object sender, EventArgs e)

@@ -22,7 +22,8 @@ namespace LoRa_Controller.Device
 			PayloadMaxSize = 'i',
 			VariablePayload = 'j',
 			PerformCRC = 'k',
-			IsMaster = 'y',
+			
+			NodeType = 'y',
 			Invalid = 'z'
 		}
 
@@ -130,7 +131,7 @@ namespace LoRa_Controller.Device
 		public void ConnectToBoard()
 		{
 			_connectionHandler.Open();
-			SendCommandAsync(Commands.IsMaster);
+			SendCommand(Commands.NodeType);
 		}
 
 		public void SendCommand(byte[] command)
