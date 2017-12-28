@@ -10,12 +10,13 @@ namespace LoRa_Controller.DirectConnection
 	class InternetHandler : BaseConnectionHandler
 	{
 		#region Constructors
+
 		public InternetHandler()
 		{
 			tcpClient = new TcpClient();
 		}
 
-		public InternetHandler(string IPAddress, int port) : base()
+		public InternetHandler(string IPAddress, int port) : this()
 		{
 			ipAddress = IPAddress;
 			this.port = port;

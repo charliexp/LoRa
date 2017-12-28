@@ -94,8 +94,8 @@ namespace LoRa_Controller.DirectConnection
 			List<string> receivedData = new List<string>();
 			string receivedLine = "";
 
-			while (Connected && !receivedLine.Contains("Done") &&
-										   !receivedLine.Contains("Timeout") &&
+			while (Connected && !receivedLine.Contains("rxDone") &&
+										   !receivedLine.Contains("not responding") &&
 										   !receivedLine.Contains(":"))
 			{
 				receivedLine = "";

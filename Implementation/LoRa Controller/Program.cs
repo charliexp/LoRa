@@ -133,6 +133,8 @@ namespace LoRa_Controller
 						radioDeviceAddress = Int32.Parse(line.Remove(line.LastIndexOf(' ')).Substring(line.IndexOf(' ') + 1));
 					else if (line.Contains("Asked if present"))
 						radioDeviceAddress = 1;
+					else if (line.Contains("not responding"))
+						radioDeviceAddress = Int32.Parse(line.Remove(line.LastIndexOf(' ')).Substring(line.IndexOf(' ') + 1));
 
 					newRadioDevice = true;
 					foreach (RadioDevice device in radioDevices)
