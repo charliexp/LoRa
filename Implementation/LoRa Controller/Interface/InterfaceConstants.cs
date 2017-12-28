@@ -15,7 +15,7 @@
 
 		public const int LabelLocationX = 8;
 		public const int LabelLocationY = 9;
-		public const int LabelWidth = 90;
+		public const int LabelWidth = 120;
 		public const int LabelHeight = 17;
 
 		public const int RadioButtonLocationX = 12;
@@ -28,7 +28,7 @@
 		public const int ButtonHeight = 23;
 
 		public const int InputLocationY = 12;
-		public const int InputWidth = 80;
+		public const int InputWidth = 100;
 		public const int InputHeight = 24;
 
 		public const int ItemPadding = 4;
