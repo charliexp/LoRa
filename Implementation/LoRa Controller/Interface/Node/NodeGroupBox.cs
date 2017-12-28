@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using static LoRa_Controller.Device.DeviceHandler;
+using static LoRa_Controller.Device.DirectDevice;
 
 namespace LoRa_Controller.Interface.Node
 {

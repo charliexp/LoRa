@@ -5,7 +5,7 @@ using LoRa_Controller.Networking;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using static LoRa_Controller.Device.DeviceHandler;
+using static LoRa_Controller.Device.DirectDevice;
 
 namespace LoRa_Controller.Interface
 {
@@ -160,15 +160,15 @@ namespace LoRa_Controller.Interface
 
 		public void UpdateDirectlyConnectedNodeType()
 		{
-			if (Program.DeviceHandler is MasterDevice)
+			if (Program.DirectDevice is MasterDevice)
 				directNodeGroupBox.NodeType.field.Text = "Master";
 			else
-				directNodeGroupBox.NodeType.field.Text = "Beacon " + Program.DeviceHandler.Address;
+				directNodeGroupBox.NodeType.field.Text = "Beacon " + Program.DirectDevice.Address;
 		}
 
 		public void UpdateRadioConnectedNodeType()
 		{
-			if (radioNodeGroupBox.Count < 2)
+			if (radioNodeGroupBox.Count == 0)
 			{
 				radioNodeGroupBox.Add(new NodeGroupBox("Radio node"));
 				Controls.Add(radioNodeGroupBox[radioNodeGroupBox.Count - 1]);

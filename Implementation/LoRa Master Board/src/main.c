@@ -26,7 +26,7 @@
 #define SOURCE_ADDRESS				0
 #define TARGET_ADDRESS				1
 #define COMMAND_CODE					2
-#define COMMAND_PARAMETER			3
+#define COMMAND_PARAMETER			6
 
 uint8_t LoRa_Bandwidth = 0;         // [0: 125 kHz,
 																		//  1: 250 kHz,
@@ -39,8 +39,8 @@ uint8_t LoRa_CodingRate = 4;        // [1: 4/5,
                                     //  3: 4/7,
                                     //  4: 4/8]
 uint8_t LoRa_RxSymTimeout = 5;      // Symbols
-uint16_t LoRa_RxMsTimeout = 3000;   // Milliseconds
-uint32_t LoRa_TxTimeout = 2000;  		// Milliseconds
+uint16_t LoRa_RxMsTimeout = 5000;   // Milliseconds
+uint32_t LoRa_TxTimeout = 5000;  		// Milliseconds
 uint8_t LoRa_PreambleSize = 8;      // Same for Tx and Rx
 uint8_t LoRa_PayloadMaxSize = 7;
 bool LoRa_VariablePayload = true;
@@ -223,25 +223,25 @@ int main( void )
 							RadioSetupRequired = 1;
 							break;
 						case COMMAND_RX_MS_TIMEOUT:
-							PRINTF("Rx Timeout (ms): %u\n\r", (uint32_t) UartRxBuffer[COMMAND_PARAMETER] << 24 |
-																								(uint32_t) UartRxBuffer[COMMAND_PARAMETER + 1] << 16 |
-																								(uint32_t) UartRxBuffer[COMMAND_PARAMETER + 2] << 8 |
-																													 UartRxBuffer[COMMAND_PARAMETER + 3]);
-							LoRa_RxMsTimeout = (uint32_t) UartRxBuffer[COMMAND_PARAMETER] << 24 |
-															 (uint32_t) UartRxBuffer[COMMAND_PARAMETER + 1] << 16 |
-															 (uint32_t) UartRxBuffer[COMMAND_PARAMETER + 2] << 8 |
-																					UartRxBuffer[COMMAND_PARAMETER + 3];
+							PRINTF("Rx Timeout (ms): %u\n\r", (uint32_t) UartRxBuffer[COMMAND_PARAMETER - 3] << 24 |
+																								(uint32_t) UartRxBuffer[COMMAND_PARAMETER - 2] << 16 |
+																								(uint32_t) UartRxBuffer[COMMAND_PARAMETER - 1] << 8 |
+																													 UartRxBuffer[COMMAND_PARAMETER]);
+							LoRa_RxMsTimeout = (uint32_t) UartRxBuffer[COMMAND_PARAMETER - 3] << 24 |
+															 (uint32_t) UartRxBuffer[COMMAND_PARAMETER - 2] << 16 |
+															 (uint32_t) UartRxBuffer[COMMAND_PARAMETER - 1] << 8 |
+																					UartRxBuffer[COMMAND_PARAMETER];
 							RadioSetupRequired = 1;
 							break;
 						case COMMAND_TX_TIMEOUT:
-							PRINTF("Tx Timeout (ms): %u\n\r", (uint32_t) UartRxBuffer[COMMAND_PARAMETER] << 24 |
-																								(uint32_t) UartRxBuffer[COMMAND_PARAMETER + 1] << 16 |
-																								(uint32_t) UartRxBuffer[COMMAND_PARAMETER + 2] << 8 |
-																													 UartRxBuffer[COMMAND_PARAMETER + 3]);
-							LoRa_TxTimeout = (uint32_t) UartRxBuffer[COMMAND_PARAMETER] << 24 |
-															 (uint32_t) UartRxBuffer[COMMAND_PARAMETER + 1] << 16 |
-															 (uint32_t) UartRxBuffer[COMMAND_PARAMETER + 2] << 8 |
-																					UartRxBuffer[COMMAND_PARAMETER + 3];
+							PRINTF("Tx Timeout (ms): %u\n\r", (uint32_t) UartRxBuffer[COMMAND_PARAMETER - 3] << 24 |
+																								(uint32_t) UartRxBuffer[COMMAND_PARAMETER - 2] << 16 |
+																								(uint32_t) UartRxBuffer[COMMAND_PARAMETER - 1] << 8 |
+																													 UartRxBuffer[COMMAND_PARAMETER]);
+							LoRa_TxTimeout = (uint32_t) UartRxBuffer[COMMAND_PARAMETER - 3] << 24 |
+															 (uint32_t) UartRxBuffer[COMMAND_PARAMETER - 2] << 16 |
+															 (uint32_t) UartRxBuffer[COMMAND_PARAMETER - 1] << 8 |
+																					UartRxBuffer[COMMAND_PARAMETER];
 							RadioSetupRequired = 1;
 							break;
 						case COMMAND_PREAMBLE_SIZE:

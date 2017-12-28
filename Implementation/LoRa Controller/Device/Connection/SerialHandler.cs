@@ -57,24 +57,28 @@ namespace LoRa_Controller.Connection
 			base.Close();
 		}
 
-		public void SendChar(byte[] byteToSend)
+		public void WriteByte(byte data)
 		{
-			BaseStream.Write(byteToSend, 0, 1);
+			BaseStream.Write(new byte[] { data }, 0, 1);
 		}
 
-		public void ReadChar(byte[] receiveBuffer)
+		public byte ReadByte()
 		{
+			byte[] receiveBuffer = new byte[1];
 			BaseStream.Read(receiveBuffer, 0, 1);
+			return receiveBuffer[0];
 		}
 
-		public async Task SendCharAsync(byte[] byteToSend)
+		public async Task SendByteAsync(byte data)
 		{
-			await BaseStream.WriteAsync(byteToSend, 0, 1);
+			await BaseStream.WriteAsync(new byte[] { data }, 0, 1);
 		}
 
-		public async Task ReadCharAsync(byte[] receiveBuffer)
+		public async Task<byte> ReadByteAsync()
 		{
+			byte[] receiveBuffer = new byte[1];
 			await BaseStream.ReadAsync(receiveBuffer, 0, 1);
+			return receiveBuffer[0];
 		}
 		#endregion
 	}

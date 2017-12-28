@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static LoRa_Controller.Device.DeviceHandler;
+using static LoRa_Controller.Device.DirectDevice;
 
 namespace LoRa_Controller.Interface.Node.ParameterControls
 {
@@ -20,8 +20,8 @@ namespace LoRa_Controller.Interface.Node.ParameterControls
 
 		private async Task ParameterChangedCallback(int value)
 		{
-			if (Program.DeviceHandler != null)
-				await Program.DeviceHandler.SendCommandAsync(parameter, value);
+			if (Program.DirectDevice != null)
+				await Program.DirectDevice.SendCommandAsync(parameter, value);
 		}
 	}
 }

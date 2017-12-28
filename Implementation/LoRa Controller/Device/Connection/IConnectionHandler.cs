@@ -19,13 +19,13 @@ namespace LoRa_Controller.Connection
 
 		void Close();
 
-		void SendChar(byte[] byteToSend);
+		void WriteByte(byte byteToSend);
 
-		void ReadChar(byte[] receiveBuffer);
+		byte ReadByte();
 
-		Task SendCharAsync(byte[] byteToSend);
+		Task SendByteAsync(byte byteToSend);
 
-		Task ReadCharAsync(byte[] receiveBuffer);
+		Task<byte> ReadByteAsync();
 		#endregion
 	}
 }

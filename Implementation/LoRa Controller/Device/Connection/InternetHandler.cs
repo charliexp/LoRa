@@ -25,6 +25,7 @@ namespace LoRa_Controller.Connection
 		#region Private variables
 		private string _IPAddress = "127.0.0.1";
 		private int _port = 13000;
+		private NetworkStream baseStream;
 		#endregion
 
 		#region Public properties
@@ -61,6 +62,7 @@ namespace LoRa_Controller.Connection
 			try
 			{
 				Connect(_IPAddress, _port);
+				baseStream = GetStream();
 			}
 			catch
 			{
@@ -68,24 +70,28 @@ namespace LoRa_Controller.Connection
 			}
 		}
 
-		public void SendChar(byte[] byteToSend)
+		public void WriteByte(byte data)
 		{
-			GetStream().Write(byteToSend, 0, 1);
+			baseStream.Write(new byte[] { data }, 0, 1);
 		}
 
-		public void ReadChar(byte[] receiveBuffer)
+		public byte ReadByte()
 		{
-			GetStream().Read(receiveBuffer, 0, 1);
+			byte[] receiveBuffer = new byte[1];
+			baseStream.Read(receiveBuffer, 0, 1);
+			return receiveBuffer[0];
 		}
 
-		public async Task SendCharAsync(byte[] byteToSend)
+		public async Task SendByteAsync(byte data)
 		{
-			await GetStream().WriteAsync(byteToSend, 0, 1);
+			await baseStream.WriteAsync(new byte[] { data }, 0, 1);
 		}
 
-		public async Task ReadCharAsync(byte[] receiveBuffer)
+		public async Task<byte> ReadByteAsync()
 		{
-			await GetStream().ReadAsync(receiveBuffer, 0, 1);
+			byte[] receiveBuffer = new byte[1];
+			await baseStream.ReadAsync(receiveBuffer, 0, 1);
+			return receiveBuffer[0];
 		}
 		#endregion
 	}

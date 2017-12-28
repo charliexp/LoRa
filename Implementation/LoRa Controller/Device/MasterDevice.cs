@@ -5,7 +5,7 @@ using System.Timers;
 
 namespace LoRa_Controller
 {
-    class MasterDevice : DeviceHandler
+    class MasterDevice : DirectDevice
 	{
 		#region Private constants
 		private const uint NotConnectedErrorThreshold = 10;
@@ -13,7 +13,7 @@ namespace LoRa_Controller
 
 		#region Private variables
 		private bool _hasBeaconConnected;
-		private DeviceHandler _beaconHandler;
+		private DirectDevice _beaconHandler;
         #endregion
 		
 		#region Public properties
@@ -22,7 +22,7 @@ namespace LoRa_Controller
 			get { return _hasBeaconConnected; }
 		}
 
-		public DeviceHandler BeaconHandler
+		public DirectDevice BeaconHandler
 		{
 			get { return _beaconHandler; }
 		}
@@ -34,7 +34,7 @@ namespace LoRa_Controller
 			_hasBeaconConnected = false;
 		}
 
-		public MasterDevice(DeviceHandler deviceHandler)
+		public MasterDevice(DirectDevice deviceHandler)
 		{
 			Address = deviceHandler.Address;
 		}
@@ -46,7 +46,7 @@ namespace LoRa_Controller
 			base.ParseData(receivedData);
 			if (receivedData.Contains("ACK"))
 			{
-				_errors = 0;
+				errors = 0;
 				_hasBeaconConnected = true;
 
 				_beaconHandler = new BeaconDevice();
@@ -54,19 +54,19 @@ namespace LoRa_Controller
 			}
 			else if (receivedData.Contains("not responding"))
 			{
-				_errors++;
-				_totalErrors++;
+				errors++;
+				totalErrors++;
 
-				if (_errors >= NotConnectedErrorThreshold)
+				if (errors >= NotConnectedErrorThreshold)
 				{
 					_hasBeaconConnected = false;
-					_rssi = 0;
-					_snr = 0;
+					rssi = 0;
+					snr = 0;
 				}
 			}
 			if (!_hasBeaconConnected)
 			{
-				_errors = 0;
+				errors = 0;
 			}
 		}
 		#endregion

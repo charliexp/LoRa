@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace LoRa_Controller
 {
-    class BeaconDevice : DeviceHandler
+    class BeaconDevice : DirectDevice
 	{
 
 		#region Constructors
@@ -15,7 +15,7 @@ namespace LoRa_Controller
 		{
 		}
 
-		public BeaconDevice(DeviceHandler deviceHandler)
+		public BeaconDevice(DirectDevice deviceHandler)
 		{
 			Address = deviceHandler.Address;
 		}
@@ -27,7 +27,7 @@ namespace LoRa_Controller
 			base.ParseData(receivedData);
 			if (receivedData.Contains("Asked"))
 			{
-				_errors = 0;
+				errors = 0;
 			}
 		}
 		#endregion

@@ -3,7 +3,7 @@ using LoRa_Controller.Settings;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using static LoRa_Controller.Device.DeviceHandler;
+using static LoRa_Controller.Device.DirectDevice;
 
 namespace LoRa_Controller.Interface
 {
