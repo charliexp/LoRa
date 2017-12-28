@@ -122,7 +122,7 @@ namespace LoRa_Controller
 					}
 					else if (line.Contains("I am a beacon"))
 					{
-						directDevice.Address = Byte.Parse(line.Substring(line.LastIndexOf(' ') + 1));
+						directDevice.Address = Int32.Parse(line.Substring(line.LastIndexOf(' ') + 1));
 						mainWindow.SetDirectlyConnectedNodeType();
 						logger.Write("Direct device beacon " + directDevice.Address);
 					}

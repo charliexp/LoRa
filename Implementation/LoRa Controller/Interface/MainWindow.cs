@@ -55,38 +55,6 @@ namespace LoRa_Controller.Interface
 				Program.logger.Finish();
         }
         
-		public void EnableLogControls()
-		{
-			logGroupBox.Enabled = true;
-			logListBox.Enabled = true;
-		}
-
-		public void DisableLogControls()
-		{
-			logGroupBox.Enabled = false;
-			logFolderTextBox.Clear();
-			logListBox.Items.Clear();
-		}
-		
-		public void EnableRadioControls()
-		{
-			//radioConnectionGroupBox.Enabled = true;
-		}
-
-		public void DisableRadioControls()
-		{/*
-			radioConnectionGroupBox.Enabled = false;
-			radioStatusTextBox.Clear();
-			rssiTextBox.Clear();
-			snrTextBox.Clear();
-			currentErrorsTextBox.Clear();*/
-		}
-
-		public void ClearTotalErrors()
-		{
-			//totalErrorsTextBox.Clear();
-		}
-
 		public void BoardConnected()
 		{
 			directNodeGroupBox.Status.field.Text = "Connected";
@@ -118,6 +86,7 @@ namespace LoRa_Controller.Interface
 
 		public void SetDirectlyConnectedNodeType()
 		{
+			directNodeGroupBox.address = Program.directDevice.Address;
 			if (Program.directDevice.nodeType == NodeType.Master)
 				directNodeGroupBox.NodeType.field.Text = "Master";
 			else
@@ -129,6 +98,7 @@ namespace LoRa_Controller.Interface
 			for (int i = radioNodeGroupBoxes.Count; i < Program.radioDevices.Count; i++)
 			{
 				radioNodeGroupBoxes.Add(new RadioNodeGroupBox("Radio Node"));
+				radioNodeGroupBoxes[i].address = Program.radioDevices[i].Address;
 				if (Program.radioDevices[i].nodeType == NodeType.Master)
 					radioNodeGroupBoxes[i].Text = "Master";
 				else

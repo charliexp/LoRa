@@ -30,6 +30,11 @@ namespace LoRa_Controller.DirectConnection
 			Serial,
 			Internet
 		}
+
+		internal Task SendCommandAsync(object address, Commands parameter, int value)
+		{
+			throw new NotImplementedException();
+		}
 		#endregion
 
 		#region Public abstract properties
@@ -62,7 +67,7 @@ namespace LoRa_Controller.DirectConnection
 			string receivedLine = "";
 
 			while (Connected && !receivedLine.Contains("rxDone") &&
-										   !receivedLine.Contains("Timeout") &&
+										   !receivedLine.Contains("not responding") &&
 										   !receivedLine.Contains(":"))
 			{
 				receivedLine = "";

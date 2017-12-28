@@ -7,8 +7,9 @@ using static LoRa_Controller.DirectConnection.BaseConnectionHandler;
 
 namespace LoRa_Controller.Interface.Node.GroupBoxes
 {
-	public class BaseNodeGroupBox : GroupBox
+	public abstract class BaseNodeGroupBox : GroupBox
 	{
+		public int address;
 		public TextBoxControl Status;
 		public ParameterComboBox Bandwidth;
 		public ParameterSpinBox OutputPower;
