@@ -1,12 +1,10 @@
 ﻿using LoRa_Controller.Device;
-using LoRa_Controller.Interface.Node;
-using LoRa_Controller.Log;
-using LoRa_Controller.Networking;
+using LoRa_Controller.Interface.Node.GroupBoxes;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 using static LoRa_Controller.Device.BaseDevice;
-using static LoRa_Controller.Device.DirectDevice;
 
 namespace LoRa_Controller.Interface
 {
@@ -14,13 +12,13 @@ namespace LoRa_Controller.Interface
 	{
 		const int logMaxEntries = 12;
 		private const string remoteConnection = "Remote";
-		public NodeGroupBox directNodeGroupBox;
-		public List<NodeGroupBox> radioNodeGroupBoxes;
+		public DirectNodeGroupBox directNodeGroupBox;
+		public List<RadioNodeGroupBox> radioNodeGroupBoxes;
 
         public MainWindow()
 		{
-			directNodeGroupBox = new NodeGroupBox("Directly Connected Node");
-			radioNodeGroupBoxes = new List<NodeGroupBox>();
+			directNodeGroupBox = new DirectNodeGroupBox("Directly Connected Node");
+			radioNodeGroupBoxes = new List<RadioNodeGroupBox>();
 
 			InitializeComponent();
         }
@@ -92,16 +90,19 @@ namespace LoRa_Controller.Interface
 		public void BoardConnected()
 		{
 			directNodeGroupBox.Status.field.Text = "Connected";
+			directNodeGroupBox.Status.field.BackColor = Color.LightGreen;
 		}
 
 		public void BoardUnableToConnect()
 		{
 			directNodeGroupBox.Status.field.Text = "Could not connect";
+			directNodeGroupBox.Status.field.BackColor = Color.PaleVioletRed;
 		}
 
 		public void BoardDisconnected()
 		{
 			directNodeGroupBox.Status.field.Text = "Disonnected";
+			directNodeGroupBox.Status.field.BackColor = Color.PaleVioletRed;
 		}
 		
 		public void UpdateLog(List<string> data)
@@ -136,29 +137,7 @@ namespace LoRa_Controller.Interface
 					snrTextBox.Clear();
 			}*/
 		}
-
-		public void UpdateCurrentErrors(uint value)
-		{/*
-			if (radioConnectionGroupBox.Enabled && currentErrorsTextBox.Enabled)
-			{
-				if (value != 0)
-					currentErrorsTextBox.Text = value.ToString();
-				else
-					currentErrorsTextBox.Clear();
-			}*/
-		}
-
-		public void UpdateTotalErrors(uint value)
-		{/*
-			if (radioConnectionGroupBox.Enabled && totalErrorsTextBox.Enabled)
-			{
-				if (value != 0)
-					totalErrorsTextBox.Text = value.ToString();
-				else
-					totalErrorsTextBox.Clear();
-			}*/
-		}
-
+		
 		public void UpdateDirectlyConnectedNodeType()
 		{
 			if (Program.DirectDevice.nodeType == NodeType.Master)
@@ -171,18 +150,19 @@ namespace LoRa_Controller.Interface
 		{
 			for (int i = radioNodeGroupBoxes.Count; i < Program.DirectDevice.radioDevices.Count; i++)
 			{
-				radioNodeGroupBoxes.Add(new NodeGroupBox("Radio Node"));
+				radioNodeGroupBoxes.Add(new RadioNodeGroupBox("Radio Node"));
 				if (Program.DirectDevice.radioDevices[i].nodeType == NodeType.Master)
-					((TextBox)radioNodeGroupBoxes[i].NodeType.field).Text = "Master";
+					radioNodeGroupBoxes[i].Text = "Master";
 				else
-					((TextBox)radioNodeGroupBoxes[i].NodeType.field).Text = "Beacon " + Program.DirectDevice.radioDevices[i].Address;
+					radioNodeGroupBoxes[i].Text = "Beacon " + Program.DirectDevice.radioDevices[i].Address;
 				Controls.Add(radioNodeGroupBoxes[i]);
 				radioNodeGroupBoxes[i].Draw(radioNodeGroupBoxes.Count);
 			}
 
-			foreach (NodeGroupBox radioNodeGroupBox in radioNodeGroupBoxes)
+			foreach (BaseNodeGroupBox radioNodeGroupBox in radioNodeGroupBoxes)
 			{
 				((TextBox)radioNodeGroupBox.Status.field).Text = "Connected";
+				((TextBox)radioNodeGroupBox.Status.field).BackColor = Color.LightGreen;
 			}
 		}
 	}

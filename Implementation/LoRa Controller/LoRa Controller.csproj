@@ -84,7 +84,13 @@
     <Compile Include="Interface\Connection\InternetConnection.cs" />
     <Compile Include="Interface\Connection\SerialConnection.cs" />
     <Compile Include="Interface\Controls\BaseControl.cs" />
-    <Compile Include="Interface\Node\NodeGroupBox.cs">
+    <Compile Include="Interface\Node\GroupBoxes\BaseNodeGroupBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Interface\Node\GroupBoxes\DirectNodeGroupBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Interface\Node\GroupBoxes\RadioNodeGroupBox.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Interface\Node\ParameterControls\ParameterCheckBox.cs" />

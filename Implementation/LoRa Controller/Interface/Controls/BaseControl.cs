@@ -41,7 +41,7 @@ namespace LoRa_Controller.Interface.Controls
 													index * (InterfaceConstants.InputHeight + InterfaceConstants.ItemPadding) +
 													InterfaceConstants.LabelToBoxOffset);
 			field.Location = new System.Drawing.Point(InterfaceConstants.LabelLocationX +
-													InterfaceConstants.LabelWidth +
+													label.Width +
 													InterfaceConstants.ItemPadding,
 
 													InterfaceConstants.GroupBoxFirstItemY +

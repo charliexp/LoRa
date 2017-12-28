@@ -86,9 +86,9 @@ namespace LoRa_Controller.Device
 				}
 				receivedLine = receivedLine.TrimEnd(new char[] { '\n', '\r' });
 
-				ParseData(receivedLine);
 				receivedData.Add(receivedLine);
 			}
+			ParseData(receivedData);
 
 			return receivedData;
 		}
@@ -109,70 +109,73 @@ namespace LoRa_Controller.Device
 				}
 				receivedLine = receivedLine.TrimEnd(new char[] { '\n', '\r' });
 
-				ParseData(receivedLine);
 				receivedData.Add(receivedLine);
 			}
+			ParseData(receivedData);
 
 			return receivedData;
 		}
 		#endregion
 
 		#region Protected methods
-		protected virtual void ParseData(string receivedData)
+		protected virtual void ParseData(List<string> receivedData)
 		{
-			if (receivedData.Contains("I am a master"))
+			foreach (string line in receivedData)
 			{
-				nodeType = NodeType.Master;
-				Address = 1;
-			}
-			else if (receivedData.Contains("I am a beacon"))
-			{
-				nodeType = NodeType.Beacon;
-				Address = Byte.Parse(receivedData.Substring(receivedData.LastIndexOf(' ') + 1));
-			}
-			else if (receivedData.Contains("ACK"))
-			{
-				int radioDeviceAddress = Int32.Parse(receivedData.Remove(receivedData.LastIndexOf(' ')).Substring(receivedData.IndexOf(' ') + 1));
-				bool newDevice = true;
-
-				foreach (RadioDevice device in radioDevices)
+				if (line.Contains("I am a master"))
 				{
-					if (device.Address == radioDeviceAddress)
+					nodeType = NodeType.Master;
+					Address = 1;
+				}
+				else if (line.Contains("I am a beacon"))
+				{
+					nodeType = NodeType.Beacon;
+					Address = Byte.Parse(line.Substring(line.LastIndexOf(' ') + 1));
+				}
+				else if (line.Contains("ACK"))
+				{
+					int radioDeviceAddress = Int32.Parse(line.Remove(line.LastIndexOf(' ')).Substring(line.IndexOf(' ') + 1));
+					bool newDevice = true;
+
+					foreach (RadioDevice device in radioDevices)
 					{
-						newDevice = false;
-						break;
+						if (device.Address == radioDeviceAddress)
+						{
+							newDevice = false;
+							break;
+						}
 					}
+					if (newDevice)
+						radioDevices.Add(new RadioDevice(radioDeviceAddress));
 				}
-				if (newDevice)
-					radioDevices.Add(new RadioDevice(radioDeviceAddress));
-			}
-			else if (receivedData.Contains("Asked if present"))
-			{
-				int radioDeviceAddress = 1;
-				bool newDevice = true;
-
-				foreach (RadioDevice device in radioDevices)
+				else if (line.Contains("Asked if present"))
 				{
-					if (device.Address == radioDeviceAddress)
+					int radioDeviceAddress = 1;
+					bool newDevice = true;
+
+					foreach (RadioDevice device in radioDevices)
 					{
-						newDevice = false;
-						break;
+						if (device.Address == radioDeviceAddress)
+						{
+							newDevice = false;
+							break;
+						}
 					}
+					if (newDevice)
+						radioDevices.Add(new RadioDevice(radioDeviceAddress));
 				}
-				if (newDevice)
-					radioDevices.Add(new RadioDevice(radioDeviceAddress));
-			}
-			else if (receivedData.Contains("Rssi") && receivedData.Contains(","))
-			{
-				String tempString = receivedData.Remove(receivedData.IndexOf(' '));
-
-				if (tempString.Length != 0)
+				else if (line.Contains("Rssi") && line.Contains(","))
 				{
-					tempString = tempString.Substring(receivedData.IndexOf('=') + 1);
-					//rssi = Int16.Parse(tempString);
+					String tempString = line.Remove(line.IndexOf(' '));
+
+					if (tempString.Length != 0)
+					{
+						tempString = tempString.Substring(line.IndexOf('=') + 1);
+						//rssi = Int16.Parse(tempString);
+					}
+					tempString = line.Substring(line.LastIndexOf('=') + 1);
+					//snr = Int16.Parse(tempString);
 				}
-				tempString = receivedData.Substring(receivedData.LastIndexOf('=') + 1);
-				//snr = Int16.Parse(tempString);
 			}
 		}
 		#endregion
