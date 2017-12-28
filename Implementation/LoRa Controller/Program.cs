@@ -1,4 +1,4 @@
-﻿using LoRa_Controller.Connection;
+﻿using LoRa_Controller.DirectConnection;
 using LoRa_Controller.Device;
 using LoRa_Controller.Interface;
 using LoRa_Controller.Log;
@@ -12,18 +12,21 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static LoRa_Controller.Device.BaseDevice;
 using static LoRa_Controller.Device.DirectDevice;
+using static LoRa_Controller.DirectConnection.BaseConnectionHandler;
 
 namespace LoRa_Controller
 {
 	static class Program
 	{
+		#region Public variables
+		public static List<RadioDevice> radioDevices;
+		public static BaseConnectionHandler connectionHandler;
 		public static Logger logger;
-		public static DirectDevice DirectDevice;
-		public static bool DeviceNodeTypeProcessed;
-		public static MainWindow MainWindow;
+		public static DirectDevice directDevice;
+		public static MainWindow mainWindow;
 		public static Server serverHandler;
-		public static List<string> ReceivedData;
-		public static ConnectionDialog ConnectionDialog;
+		public static ConnectionDialog connectionDialog;
+		#endregion
 
 		/// <summary>
 		/// The main entry point for the application.
@@ -34,37 +37,40 @@ namespace LoRa_Controller
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+			directDevice = new DirectDevice();
+			radioDevices = new List<RadioDevice>();
 			SettingHandler.Load();
 
 			logger = new Logger("log_", "txt");
 
-			ConnectionDialog = new ConnectionDialog();
-			MainWindow = new MainWindow();
+			connectionDialog = new ConnectionDialog();
+			mainWindow = new MainWindow();
 
-			ConnectionDialog.Show();
-			Application.Run(MainWindow);
+			connectionDialog.Show();
+			Application.Run(mainWindow);
 		}
 
+		#region Public methods
 		public static void StartConnection(ConnectionType connectionType, List<string> parameters)
 		{
-			MainWindow.Enabled = true;
+			mainWindow.Enabled = true;
 			if (connectionType == ConnectionType.Serial)
 			{
-				DirectDevice = new DirectDevice(ConnectionType.Serial, parameters[0]);
+				connectionHandler = new SerialHandler(parameters[0]);
 
 				serverHandler = new Server();
 				serverHandler.Start();
 			}
 			else if (connectionType == ConnectionType.Internet)
 			{
-				DirectDevice = new DirectDevice(ConnectionType.Internet, parameters);
+				connectionHandler = new InternetHandler(parameters[0], Int32.Parse(parameters[1]));
 			}
 
-			DirectDevice.Connect();
-			if (DirectDevice.Connected)
-				MainWindow.BoardConnected();
+			connectionHandler.Open();
+			if (connectionHandler.Connected)
+				mainWindow.BoardConnected();
 			else
-				MainWindow.BoardUnableToConnect();
+				mainWindow.BoardUnableToConnect();
 			logger.Start();
 
 			BackgroundWorker BackgroundWorker = new BackgroundWorker();
@@ -75,58 +81,102 @@ namespace LoRa_Controller
 
 			BackgroundWorker.RunWorkerAsync();
 		}
+		#endregion
 
+		#region Private methods
 		private static void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
 		{
+			List<string> receivedData;
 			BackgroundWorker worker = (BackgroundWorker)sender;
-			DeviceNodeTypeProcessed = false;
 
-			while (DirectDevice.Connected)
+			while (connectionHandler.Connected)
 			{
-				ReceivedData = DirectDevice.ReceiveData();
+				receivedData = connectionHandler.ReceiveData();
 				if (serverHandler != null)
 				{
 					byte[] command = serverHandler.Receive();
 					if (command[0] != (byte)Commands.Invalid)
-						DirectDevice.SendCommand(command);
-					foreach (string s in ReceivedData)
+						connectionHandler.SendCommand(command);
+					foreach (string s in receivedData)
 						serverHandler.Send(s);
 				}
-				worker.ReportProgress(0);
+				worker.ReportProgress(0, receivedData);
 			}
 		}
 
 		private static void BackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
 		{
-			MainWindow.UpdateLog(ReceivedData);
-			/*MainWindow.UpdateRSSI(DirectDevice.RSSI);
-			MainWindow.UpdateSNR(DirectDevice.SNR);
-			MainWindow.UpdateCurrentErrors(DirectDevice.Errors);
-			MainWindow.UpdateTotalErrors(DirectDevice.TotalErrors);*/
-			MainWindow.UpdateRadioConnectedNodes();
+			int radioDeviceAddress = 0;
+			bool newRadioDevice;
 
-			if (!DeviceNodeTypeProcessed && DirectDevice.nodeType != NodeType.Unknown)
+			foreach (string line in (List<string>)e.UserState)
 			{
-				if (DirectDevice.nodeType == NodeType.Master)
+				if (directDevice.Address == 0)
 				{
-					logger.Write("Connected to master");
+					if (line.Contains("I am a master"))
+					{
+						directDevice.Address = MasterDeviceAddress;
+						mainWindow.SetDirectlyConnectedNodeType();
+						logger.Write("Direct device master");
+					}
+					else if (line.Contains("I am a beacon"))
+					{
+						directDevice.Address = Byte.Parse(line.Substring(line.LastIndexOf(' ') + 1));
+						mainWindow.SetDirectlyConnectedNodeType();
+						logger.Write("Direct device beacon " + directDevice.Address);
+					}
 				}
 				else
 				{
-					logger.Write("Connected to beacon " + DirectDevice.Address);
+					if (directDevice.Address == MasterDeviceAddress && line.Contains("ACK"))
+						radioDeviceAddress = Int32.Parse(line.Remove(line.LastIndexOf(' ')).Substring(line.IndexOf(' ') + 1));
+					else if (line.Contains("Asked if present"))
+						radioDeviceAddress = 1;
+
+					newRadioDevice = true;
+					foreach (RadioDevice device in radioDevices)
+						if (device.Address == radioDeviceAddress)
+						{
+							newRadioDevice = false;
+							break;
+						}
+					if (radioDeviceAddress != 0 && newRadioDevice)
+					{
+						radioDevices.Add(new RadioDevice(radioDeviceAddress));
+						mainWindow.UpdateRadioConnectedNodes();
+						if (radioDeviceAddress == MasterDeviceAddress)
+							logger.Write("Radio device master");
+						else
+							logger.Write("Radio device beacon " + directDevice.Address);
+					}
 				}
-				MainWindow.UpdateDirectlyConnectedNodeType();
+
+				if (line.Contains("Rssi") && line.Contains(","))
+				{
+					foreach (RadioDevice device in radioDevices)
+						if (device.Address == radioDeviceAddress)
+						{
+							string logString;
+							device.updateSignalQuality(line);
+							mainWindow.radioNodeGroupBoxes[radioDevices.IndexOf(device)].UpdateRSSI(device.RSSI);
+							mainWindow.radioNodeGroupBoxes[radioDevices.IndexOf(device)].UpdateSNR(device.SNR);
+							if (radioDeviceAddress == MasterDeviceAddress)
+								logString = "Master, ";
+							else
+								logString = "Beacon " + directDevice.Address;
+							logString += device.RSSI + ", " + device.SNR;
+							logger.Write(logString);
+							break;
+						}
+				}
 			}
-			
-			/*if (DirectDevice.Connected)
-				logger.Write(DirectDevice.RSSI + ", " + DirectDevice.SNR);
-			else
-				logger.Write("error");*/
+			mainWindow.UpdateLog((List<string>)e.UserState);
 		}
 
 		private static void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
-			MainWindow.BoardDisconnected();
+			mainWindow.BoardDisconnected();
 		}
+		#endregion
 	}
 }

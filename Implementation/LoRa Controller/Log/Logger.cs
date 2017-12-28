@@ -58,7 +58,7 @@ namespace LoRa_Controller.Log
 		{
 			try
 			{
-				streamWriter.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + ": " + data);
+				streamWriter.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + ", " + data + ",");
 				_linesWritten++;
 			}
 			catch (ObjectDisposedException)
@@ -76,7 +76,7 @@ namespace LoRa_Controller.Log
         {
 			try
 			{
-				await streamWriter.WriteLineAsync(DateTime.Now.ToString("HH:mm:ss.fff") + ": " + data);
+				await streamWriter.WriteLineAsync(DateTime.Now.ToString("HH:mm:ss.fff") + ", " + data + ",");
 				_linesWritten++;
 			}
 			catch (ObjectDisposedException)
@@ -97,15 +97,15 @@ namespace LoRa_Controller.Log
 
         public void Start()
         {
-            streamWriter = File.AppendText(_folder + "\\" + fileName);
-			streamWriter.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + " Log started");
+			streamWriter = File.AppendText(_folder + "\\" + fileName);
+			Write("Log started");
             _isOpen = true;
 			_linesWritten = 0;
 		}
 
         public void Finish()
 		{
-			streamWriter.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + " Log finished");
+			Write("Log finished");
             if (streamWriter != null)
                 streamWriter.Close();
             _isOpen = false;

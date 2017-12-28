@@ -32,9 +32,24 @@ namespace LoRa_Controller.Device
 			get { return snr; }
 		}
 
-		public override bool Connected
+		public bool Connected
 		{
 			get { return connected; }
+		}
+		#endregion
+
+		#region Public methods
+		public void updateSignalQuality(string line)
+		{
+			String tempString = line.Remove(line.IndexOf(' '));
+
+			if (tempString.Length != 0)
+			{
+				tempString = tempString.Substring(line.IndexOf('=') + 1);
+				rssi = Int32.Parse(tempString);
+			}
+			tempString = line.Substring(line.LastIndexOf('=') + 1);
+			snr = Int32.Parse(tempString);
 		}
 		#endregion
 	}

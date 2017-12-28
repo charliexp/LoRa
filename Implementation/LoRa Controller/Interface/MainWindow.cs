@@ -116,45 +116,23 @@ namespace LoRa_Controller.Interface
 			}
 		}
 
-		public void UpdateRSSI(int value)
-		{/*
-			if (radioConnectionGroupBox.Enabled && rssiTextBox.Enabled)
-			{
-				if (value != 0)
-					rssiTextBox.Text = value.ToString();
-				else
-					rssiTextBox.Clear();
-			}*/
-		}
-
-		public void UpdateSNR(int value)
-		{/*
-			if (radioConnectionGroupBox.Enabled && snrTextBox.Enabled)
-			{
-				if (value != 0)
-					snrTextBox.Text = value.ToString();
-				else
-					snrTextBox.Clear();
-			}*/
-		}
-		
-		public void UpdateDirectlyConnectedNodeType()
+		public void SetDirectlyConnectedNodeType()
 		{
-			if (Program.DirectDevice.nodeType == NodeType.Master)
+			if (Program.directDevice.nodeType == NodeType.Master)
 				directNodeGroupBox.NodeType.field.Text = "Master";
 			else
-				directNodeGroupBox.NodeType.field.Text = "Beacon " + Program.DirectDevice.Address;
+				directNodeGroupBox.NodeType.field.Text = "Beacon " + Program.directDevice.Address;
 		}
 
 		public void UpdateRadioConnectedNodes()
 		{
-			for (int i = radioNodeGroupBoxes.Count; i < Program.DirectDevice.radioDevices.Count; i++)
+			for (int i = radioNodeGroupBoxes.Count; i < Program.radioDevices.Count; i++)
 			{
 				radioNodeGroupBoxes.Add(new RadioNodeGroupBox("Radio Node"));
-				if (Program.DirectDevice.radioDevices[i].nodeType == NodeType.Master)
+				if (Program.radioDevices[i].nodeType == NodeType.Master)
 					radioNodeGroupBoxes[i].Text = "Master";
 				else
-					radioNodeGroupBoxes[i].Text = "Beacon " + Program.DirectDevice.radioDevices[i].Address;
+					radioNodeGroupBoxes[i].Text = "Beacon " + Program.radioDevices[i].Address;
 				Controls.Add(radioNodeGroupBoxes[i]);
 				radioNodeGroupBoxes[i].Draw(radioNodeGroupBoxes.Count);
 			}
