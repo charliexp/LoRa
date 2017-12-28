@@ -24,6 +24,7 @@ namespace LoRa_Controller.Interface.Node.GroupBoxes
 
 			RSSI.label.Width = RSSI.label.Width / 2 - 2 * InterfaceConstants.ItemPadding;
 			RSSI.field.Width = RSSI.field.Width / 2;
+			SNR.label.Width = SNR.label.Width / 2 - 2 * InterfaceConstants.ItemPadding;
 			SNR.field.Width = SNR.field.Width / 2;
 			newControls.AddRange(controls.GetRange(1, controls.Count - 1));
 			controls = newControls;
@@ -45,15 +46,15 @@ namespace LoRa_Controller.Interface.Node.GroupBoxes
 
 			SNR.Draw(controlIndex++);
 			SNR.label.Location = new System.Drawing.Point(InterfaceConstants.LabelLocationX +
-				RSSI.label.Width +
-				RSSI.field.Width +
-				4 * InterfaceConstants.ItemPadding,
+				InterfaceConstants.LabelWidth / 2 +
+				InterfaceConstants.InputWidth / 2 +
+				InterfaceConstants.ItemPadding,
 				SNR.label.Location.Y);
-			SNR.field.Location = new System.Drawing.Point(2 * InterfaceConstants.LabelLocationX +
-				RSSI.label.Width +
-				RSSI.field.Width +
-				SNR.label.Width +
-				5 * InterfaceConstants.ItemPadding,
+			SNR.field.Location = new System.Drawing.Point(InterfaceConstants.LabelLocationX +
+				InterfaceConstants.LabelWidth / 2 +
+				InterfaceConstants.InputWidth / 2 +
+				InterfaceConstants.LabelWidth / 2 +
+				InterfaceConstants.ItemPadding,
 				SNR.field.Location.Y);
 			Controls.Add(SNR.label);
 			Controls.Add(SNR.field);
