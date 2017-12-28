@@ -1,8 +1,7 @@
 ﻿using LoRa_Controller.Interface.Controls;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Windows.Forms;
-using static LoRa_Controller.Device.DirectDevice;
+using static LoRa_Controller.Device.BaseDevice;
 
 namespace LoRa_Controller.Interface.Node.ParameterControls
 {

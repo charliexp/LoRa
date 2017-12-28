@@ -10,6 +10,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static LoRa_Controller.Device.BaseDevice;
 using static LoRa_Controller.Device.DirectDevice;
 
 namespace LoRa_Controller
@@ -98,31 +99,29 @@ namespace LoRa_Controller
 		private static void BackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
 		{
 			MainWindow.UpdateLog(ReceivedData);
-			MainWindow.UpdateRSSI(DirectDevice.RSSI);
+			/*MainWindow.UpdateRSSI(DirectDevice.RSSI);
 			MainWindow.UpdateSNR(DirectDevice.SNR);
 			MainWindow.UpdateCurrentErrors(DirectDevice.Errors);
-			MainWindow.UpdateTotalErrors(DirectDevice.TotalErrors);
-			MainWindow.UpdateRadioConnectedNodeType();
+			MainWindow.UpdateTotalErrors(DirectDevice.TotalErrors);*/
+			MainWindow.UpdateRadioConnectedNodes();
 
 			if (!DeviceNodeTypeProcessed && DirectDevice.nodeType != NodeType.Unknown)
 			{
 				if (DirectDevice.nodeType == NodeType.Master)
 				{
-					DirectDevice = new MasterDevice(DirectDevice);
 					logger.Write("Connected to master");
 				}
 				else
 				{
-					DirectDevice = new BeaconDevice(DirectDevice);
 					logger.Write("Connected to beacon " + DirectDevice.Address);
 				}
 				MainWindow.UpdateDirectlyConnectedNodeType();
 			}
 			
-			if (DirectDevice.RSSI != 0 && DirectDevice.SNR != 0)
+			/*if (DirectDevice.Connected)
 				logger.Write(DirectDevice.RSSI + ", " + DirectDevice.SNR);
 			else
-				logger.Write("error");
+				logger.Write("error");*/
 		}
 
 		private static void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)

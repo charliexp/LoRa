@@ -62,7 +62,7 @@ namespace LoRa_Controller.Connection
 			BaseStream.Write(new byte[] { data }, 0, 1);
 		}
 
-		public byte ReadByte()
+		public new byte ReadByte()
 		{
 			byte[] receiveBuffer = new byte[1];
 			BaseStream.Read(receiveBuffer, 0, 1);

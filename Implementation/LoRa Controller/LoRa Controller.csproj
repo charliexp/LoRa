@@ -61,13 +61,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Device\BaseDevice.cs" />
     <Compile Include="Device\Connection\IConnectionHandler.cs" />
-    <Compile Include="Device\BeaconDevice.cs" />
     <Compile Include="Device\DirectDevice.cs" />
     <Compile Include="Device\Connection\InternetHandler.cs" />
     <Compile Include="Device\Connection\SerialHandler.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Device\RadioDevice.cs" />
     <Compile Include="Interface\ConnectionDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -90,7 +91,6 @@
     <Compile Include="Interface\Node\ParameterControls\ParameterComboBox.cs" />
     <Compile Include="Interface\Node\ParameterControls\ParameterSpinBox.cs" />
     <Compile Include="Log\Logger.cs" />
-    <Compile Include="Device\MasterDevice.cs" />
     <Compile Include="Interface\MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>

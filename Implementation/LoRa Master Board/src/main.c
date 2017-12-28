@@ -264,9 +264,6 @@ int main( void )
 							LoRa_PerformCRC = UartRxBuffer[COMMAND_PARAMETER];
 							RadioSetupRequired = 1;
 							break;
-						case COMMAND_IS_MASTER:
-							PRINTF("I am a master\n\r");
-							break;
 						default:
 							PRINTF("Received unknown command: %c\n\r", UartRxBuffer[COMMAND_CODE]);
 							break;
@@ -274,9 +271,14 @@ int main( void )
 				}
 				else
 				{
-					PRINTF("Forwarding command %c to: %d\n\r", UartRxBuffer[COMMAND_CODE], UartRxBuffer[TARGET_ADDRESS]);
-					memcpy((uint8_t *) RadioTxBuffer, (uint8_t *) UartRxBuffer, LoRa_PayloadMaxSize);
-					BeaconCommandPending = true;
+					if (UartRxBuffer[TARGET_ADDRESS] == 0 && UartRxBuffer[COMMAND_CODE] == COMMAND_IS_MASTER)
+							PRINTF("I am a master\n\r");
+					else
+					{
+						PRINTF("Forwarding command %c to: %d\n\r", UartRxBuffer[COMMAND_CODE], UartRxBuffer[TARGET_ADDRESS]);
+						memcpy((uint8_t *) RadioTxBuffer, (uint8_t *) UartRxBuffer, LoRa_PayloadMaxSize);
+						BeaconCommandPending = true;
+					}
 				}
 				UartState = UART_IDLE;
 				break;

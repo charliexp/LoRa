@@ -1,10 +1,6 @@
 ﻿using LoRa_Controller.Interface.Controls;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using static LoRa_Controller.Device.DirectDevice;
+using static LoRa_Controller.Device.BaseDevice;
 
 namespace LoRa_Controller.Interface.Node.ParameterControls
 {

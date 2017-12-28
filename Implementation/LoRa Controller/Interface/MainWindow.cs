@@ -5,6 +5,7 @@ using LoRa_Controller.Networking;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using static LoRa_Controller.Device.BaseDevice;
 using static LoRa_Controller.Device.DirectDevice;
 
 namespace LoRa_Controller.Interface
@@ -14,12 +15,12 @@ namespace LoRa_Controller.Interface
 		const int logMaxEntries = 12;
 		private const string remoteConnection = "Remote";
 		public NodeGroupBox directNodeGroupBox;
-		public List<NodeGroupBox> radioNodeGroupBox;
+		public List<NodeGroupBox> radioNodeGroupBoxes;
 
         public MainWindow()
 		{
 			directNodeGroupBox = new NodeGroupBox("Directly Connected Node");
-			radioNodeGroupBox = new List<NodeGroupBox>();
+			radioNodeGroupBoxes = new List<NodeGroupBox>();
 
 			InitializeComponent();
         }
@@ -160,20 +161,28 @@ namespace LoRa_Controller.Interface
 
 		public void UpdateDirectlyConnectedNodeType()
 		{
-			if (Program.DirectDevice is MasterDevice)
+			if (Program.DirectDevice.nodeType == NodeType.Master)
 				directNodeGroupBox.NodeType.field.Text = "Master";
 			else
 				directNodeGroupBox.NodeType.field.Text = "Beacon " + Program.DirectDevice.Address;
 		}
 
-		public void UpdateRadioConnectedNodeType()
+		public void UpdateRadioConnectedNodes()
 		{
-			if (radioNodeGroupBox.Count == 0)
+			for (int i = radioNodeGroupBoxes.Count; i < Program.DirectDevice.radioDevices.Count; i++)
 			{
-				radioNodeGroupBox.Add(new NodeGroupBox("Radio node"));
-				Controls.Add(radioNodeGroupBox[radioNodeGroupBox.Count - 1]);
-				radioNodeGroupBox[radioNodeGroupBox.Count - 1].Draw(radioNodeGroupBox.Count);
+				radioNodeGroupBoxes.Add(new NodeGroupBox("Radio Node"));
+				if (Program.DirectDevice.radioDevices[i].nodeType == NodeType.Master)
+					((TextBox)radioNodeGroupBoxes[i].NodeType.field).Text = "Master";
+				else
+					((TextBox)radioNodeGroupBoxes[i].NodeType.field).Text = "Beacon " + Program.DirectDevice.radioDevices[i].Address;
+				Controls.Add(radioNodeGroupBoxes[i]);
+				radioNodeGroupBoxes[i].Draw(radioNodeGroupBoxes.Count);
+			}
 
+			foreach (NodeGroupBox radioNodeGroupBox in radioNodeGroupBoxes)
+			{
+				((TextBox)radioNodeGroupBox.Status.field).Text = "Connected";
 			}
 		}
 	}
