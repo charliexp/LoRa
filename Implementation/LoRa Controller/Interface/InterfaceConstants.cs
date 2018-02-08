@@ -24,8 +24,8 @@
 
 		public const int ButtonLocationX = 12;
 		public const int ButtonLocationY = 12;
-		public const int ButtonWidth = 75;
-		public const int ButtonHeight = 23;
+		public const int ButtonWidth = 100;
+		public const int ButtonHeight = 24;
 
 		public const int InputLocationY = 12;
 		public const int InputWidth = 100;

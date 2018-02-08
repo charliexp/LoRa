@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace LoRa_Controller.Interface.Controls
 {
-	public class SpinBoxControl : BaseControl
+	public class SpinBoxControl : LabeledControl
 	{
 		protected ValueChanged valueChangedCallback;
 

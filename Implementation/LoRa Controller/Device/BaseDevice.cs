@@ -26,6 +26,7 @@ namespace LoRa_Controller.Device
 		#endregion
 
 		#region Public constants
+		public const int GeneralCallAddress = 0;
 		public const int MasterDeviceAddress = 1;
 		#endregion
 

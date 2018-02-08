@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LoRa_Controller.Device;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -22,7 +23,8 @@ namespace LoRa_Controller.DirectConnection
 			PerformCRC = 'k',
 
 			NodeType = 'y',
-			Invalid = 'z'
+			IsPresent = 'z',
+			Invalid = 0
 		}
 
 		public enum ConnectionType
@@ -51,7 +53,6 @@ namespace LoRa_Controller.DirectConnection
 		#region Public abstract methods
 		public virtual void Open()
 		{
-			SendGeneralCommand(Commands.NodeType);
 		}
 		public abstract void Close();
 		public abstract void WriteByte(byte byteToSend);
@@ -68,7 +69,8 @@ namespace LoRa_Controller.DirectConnection
 
 			while (Connected && !receivedLine.Contains("rxDone") &&
 										   !receivedLine.Contains("not responding") &&
-										   !receivedLine.Contains(":"))
+										   !receivedLine.Contains(":") &&
+										   !receivedLine.Contains("I am a"))
 			{
 				receivedLine = "";
 				while (Connected && !receivedLine.Contains("\r"))
@@ -119,7 +121,7 @@ namespace LoRa_Controller.DirectConnection
 		public void SendGeneralCommand(Commands command)
 		{
 			byte[] commandBytes = new byte[7];
-			commandBytes[1] = 0;
+			commandBytes[1] = BaseDevice.GeneralCallAddress;
 			commandBytes[2] = Convert.ToByte(command);
 			SendGeneralCommand(commandBytes);
 		}
@@ -127,7 +129,7 @@ namespace LoRa_Controller.DirectConnection
 		public void SendGeneralCommand(Commands command, int value)
 		{
 			byte[] commandBytes = new byte[7];
-			commandBytes[1] = 0;
+			commandBytes[1] = BaseDevice.GeneralCallAddress;
 			commandBytes[2] = Convert.ToByte(command);
 			commandBytes[3] = (byte)(value >> 24);
 			commandBytes[4] = (byte)(value >> 16);

@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace LoRa_Controller.Interface.Controls
 {
-	public class CheckBoxControl : BaseControl
+	public class CheckBoxControl : LabeledControl
 	{
 		protected ValueChanged checkChangedCallback;
 

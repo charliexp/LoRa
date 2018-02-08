@@ -298,6 +298,7 @@ int main( void )
 					{
 						case COMMAND_IS_PRESENT:
 							PRINTF("Asked if present\n\r");
+							DelayMs((DEVICE_ADDRESS - 2) * 1000);
 							break;
 						case COMMAND_BANDWIDTH:
 							PRINTF("Bandwidth: %u\n\r", RadioRxBuffer[COMMAND_PARAMETER]);
@@ -378,7 +379,7 @@ int main( void )
 				}
 				else
 					PRINTF("Received message from: %u to: %u\n\r", RadioRxBuffer[SOURCE_ADDRESS], RadioRxBuffer[TARGET_ADDRESS]);
-					Radio.Rx( LoRa_RxMsTimeout );
+				Radio.Rx( LoRa_RxMsTimeout );
 				RadioState = RADIO_LOWPOWER;
 				break;
 			case RADIO_RX_TIMEOUT:

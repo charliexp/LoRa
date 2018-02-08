@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace LoRa_Controller.Interface.Controls
 {
-	public class ComboBoxControl : BaseControl
+	public class ComboBoxControl : LabeledControl
 	{
 		protected ValueChanged indexChangedCallback;
 

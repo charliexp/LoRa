@@ -41,7 +41,7 @@ namespace LoRa_Controller.Device
 		#endregion
 
 		#region Public methods
-		public void updateSignalQuality(string line)
+		public void UpdateSignalQuality(string line)
 		{
 			String tempString = line.Remove(line.IndexOf(' '));
 

@@ -200,26 +200,31 @@ int main( void )
 					{
 						case COMMAND_BANDWIDTH:
 							PRINTF("Bandwidth: %u\n\r", UartRxBuffer[COMMAND_PARAMETER]);
+							RadioTxBuffer[TARGET_ADDRESS] = BEACON_ADDRESS;
 							LoRa_Bandwidth = UartRxBuffer[COMMAND_PARAMETER];
 							RadioSetupRequired = 1;
 							break;
 						case COMMAND_OUTPUT_POWER:
 							PRINTF("Output Power: %u\n\r", UartRxBuffer[COMMAND_PARAMETER]);
+							RadioTxBuffer[TARGET_ADDRESS] = BEACON_ADDRESS;
 							LoRa_OutputPower = UartRxBuffer[COMMAND_PARAMETER];
 							RadioSetupRequired = 1;
 							break;
 						case COMMAND_CODING_RATE:
 							PRINTF("Coding Rate: %u\n\r", UartRxBuffer[COMMAND_PARAMETER]);
+							RadioTxBuffer[TARGET_ADDRESS] = BEACON_ADDRESS;
 							LoRa_CodingRate = UartRxBuffer[COMMAND_PARAMETER];
 							RadioSetupRequired = 1;
 							break;
 						case COMMAND_SPREAD_FACTOR:
 							PRINTF("Spreading Factor: %u\n\r", UartRxBuffer[COMMAND_PARAMETER]);
+							RadioTxBuffer[TARGET_ADDRESS] = BEACON_ADDRESS;
 							LoRa_SpreadingFactor = UartRxBuffer[COMMAND_PARAMETER];
 							RadioSetupRequired = 1;
 							break;
 						case COMMAND_RX_SYM_TIMEOUT:
 							PRINTF("Rx Timeout (sym): %u\n\r", UartRxBuffer[COMMAND_PARAMETER]);
+							RadioTxBuffer[TARGET_ADDRESS] = BEACON_ADDRESS;
 							LoRa_RxSymTimeout = UartRxBuffer[COMMAND_PARAMETER];
 							RadioSetupRequired = 1;
 							break;
@@ -228,6 +233,7 @@ int main( void )
 																								(uint32_t) UartRxBuffer[COMMAND_PARAMETER - 2] << 16 |
 																								(uint32_t) UartRxBuffer[COMMAND_PARAMETER - 1] << 8 |
 																													 UartRxBuffer[COMMAND_PARAMETER]);
+							RadioTxBuffer[TARGET_ADDRESS] = BEACON_ADDRESS;
 							LoRa_RxMsTimeout = (uint32_t) UartRxBuffer[COMMAND_PARAMETER - 3] << 24 |
 															 (uint32_t) UartRxBuffer[COMMAND_PARAMETER - 2] << 16 |
 															 (uint32_t) UartRxBuffer[COMMAND_PARAMETER - 1] << 8 |
@@ -239,6 +245,7 @@ int main( void )
 																								(uint32_t) UartRxBuffer[COMMAND_PARAMETER - 2] << 16 |
 																								(uint32_t) UartRxBuffer[COMMAND_PARAMETER - 1] << 8 |
 																													 UartRxBuffer[COMMAND_PARAMETER]);
+							RadioTxBuffer[TARGET_ADDRESS] = BEACON_ADDRESS;
 							LoRa_TxTimeout = (uint32_t) UartRxBuffer[COMMAND_PARAMETER - 3] << 24 |
 															 (uint32_t) UartRxBuffer[COMMAND_PARAMETER - 2] << 16 |
 															 (uint32_t) UartRxBuffer[COMMAND_PARAMETER - 1] << 8 |
@@ -247,21 +254,25 @@ int main( void )
 							break;
 						case COMMAND_PREAMBLE_SIZE:
 							PRINTF("Preamble Size: %u\n\r", UartRxBuffer[COMMAND_PARAMETER]);
+							RadioTxBuffer[TARGET_ADDRESS] = BEACON_ADDRESS;
 							LoRa_PreambleSize = UartRxBuffer[COMMAND_PARAMETER];
 							RadioSetupRequired = 1;
 							break;
 						case COMMAND_PAYLOAD_MAX_SIZE:
 							PRINTF("Payload Max Size: %u\n\r", UartRxBuffer[COMMAND_PARAMETER]);
+							RadioTxBuffer[TARGET_ADDRESS] = BEACON_ADDRESS;
 							LoRa_PayloadMaxSize = UartRxBuffer[COMMAND_PARAMETER];
 							RadioSetupRequired = 1;
 							break;
 						case COMMAND_VARIABLE_PAYLOAD:
 							PRINTF("Variable Payload: %u\n\r", UartRxBuffer[COMMAND_PARAMETER]);
+							RadioTxBuffer[TARGET_ADDRESS] = BEACON_ADDRESS;
 							LoRa_VariablePayload = UartRxBuffer[COMMAND_PARAMETER];
 							RadioSetupRequired = 1;
 							break;
 						case COMMAND_PERFORM_CRC:
 							PRINTF("Perform CRC: %u\n\r", UartRxBuffer[COMMAND_PARAMETER]);
+							RadioTxBuffer[TARGET_ADDRESS] = BEACON_ADDRESS;
 							LoRa_PerformCRC = UartRxBuffer[COMMAND_PARAMETER];
 							RadioSetupRequired = 1;
 							break;
@@ -270,16 +281,27 @@ int main( void )
 							break;
 					}
 				}
+				else if (UartRxBuffer[TARGET_ADDRESS] == 0)
+				{
+					switch (UartRxBuffer[COMMAND_CODE])
+					{
+						case COMMAND_IS_PRESENT:
+							PRINTF("Checking for present beacons\n\r");
+							RadioTxBuffer[TARGET_ADDRESS] = GENERAL_ADDRESS;
+							RadioTxBuffer[COMMAND_CODE] = COMMAND_IS_PRESENT;
+							Radio.Send( (uint8_t *) RadioTxBuffer, LoRa_PayloadMaxSize );
+							BeaconCommandPending = true;
+							break;
+						case COMMAND_IS_MASTER:
+							PRINTF("I am a master\n\r");
+							break;
+					}
+				}
 				else
 				{
-					if (UartRxBuffer[TARGET_ADDRESS] == 0 && UartRxBuffer[COMMAND_CODE] == COMMAND_IS_MASTER)
-							PRINTF("I am a master\n\r");
-					else
-					{
-						PRINTF("Forwarding command %c to: %d\n\r", UartRxBuffer[COMMAND_CODE], UartRxBuffer[TARGET_ADDRESS]);
-						memcpy((uint8_t *) RadioTxBuffer, (uint8_t *) UartRxBuffer, LoRa_PayloadMaxSize);
-						BeaconCommandPending = true;
-					}
+					PRINTF("Forwarding command %c to: %d\n\r", UartRxBuffer[COMMAND_CODE], UartRxBuffer[TARGET_ADDRESS]);
+					memcpy((uint8_t *) RadioTxBuffer, (uint8_t *) UartRxBuffer, LoRa_PayloadMaxSize);
+					BeaconCommandPending = true;
 				}
 				UartState = UART_IDLE;
 				break;
@@ -314,12 +336,6 @@ int main( void )
 				{
 					BeaconCommandPending = false;
 				}
-				else
-				{
-					RadioTxBuffer[TARGET_ADDRESS] = BEACON_ADDRESS;
-					RadioTxBuffer[COMMAND_CODE] = COMMAND_IS_PRESENT;
-				}
-				Radio.Send( (uint8_t *) RadioTxBuffer, LoRa_PayloadMaxSize );
 				
 				RadioState = RADIO_LOWPOWER;
 				break;

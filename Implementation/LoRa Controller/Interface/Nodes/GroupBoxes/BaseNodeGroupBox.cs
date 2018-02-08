@@ -73,7 +73,8 @@ namespace LoRa_Controller.Interface.Node.GroupBoxes
 			foreach (BaseControl control in controls)
 			{
 				control.Draw(controlIndex++);
-				Controls.Add(control.label);
+				if (control is LabeledControl)
+					Controls.Add(((LabeledControl)control).label);
 				Controls.Add(control.field);
 			}
 
@@ -82,11 +83,11 @@ namespace LoRa_Controller.Interface.Node.GroupBoxes
 				InterfaceConstants.InputWidth +
 				InterfaceConstants.ItemPadding;
 			Height = InterfaceConstants.GroupBoxFirstItemY +
-				(Controls.Count / 2) * InterfaceConstants.InputHeight +
-				((Controls.Count / 2) - 1) * InterfaceConstants.ItemPadding +
+				controls.Count * InterfaceConstants.InputHeight +
+				(controls.Count - 1) * InterfaceConstants.ItemPadding +
 				InterfaceConstants.GroupBoxLastItemY;
 
-			Location = new System.Drawing.Point(InterfaceConstants.GroupBoxLocationX +
+			Location = new Point(InterfaceConstants.GroupBoxLocationX +
 				groupBoxIndex * (Width + InterfaceConstants.GroupBoxLocationX),
 				InterfaceConstants.GroupBoxLocationY);
 

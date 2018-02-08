@@ -2,7 +2,7 @@
 
 namespace LoRa_Controller.Interface.Controls
 {
-	public class TextBoxControl : BaseControl
+	public class TextBoxControl : LabeledControl
 	{
 		public enum Type
 		{

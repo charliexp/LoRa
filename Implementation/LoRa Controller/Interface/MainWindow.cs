@@ -26,7 +26,6 @@ namespace LoRa_Controller.Interface
         private void Form1_Load(object sender, EventArgs e)
 		{
 			Controls.Add(directNodeGroupBox);
-			directNodeGroupBox.Draw(0);
 
 			Application.ApplicationExit += new EventHandler(OnFormExit);
 			logFolderTextBox.Text = Program.logger.Folder;
@@ -85,7 +84,10 @@ namespace LoRa_Controller.Interface
 		{
 			directNodeGroupBox.address = Program.directDevice.Address;
 			if (Program.directDevice.nodeType == NodeType.Master)
+			{
 				directNodeGroupBox.NodeType.field.Text = "Master";
+				directNodeGroupBox.Draw(0);
+			}
 			else
 				directNodeGroupBox.NodeType.field.Text = "Beacon " + Program.directDevice.Address;
 		}

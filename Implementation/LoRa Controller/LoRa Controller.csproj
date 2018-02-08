@@ -73,8 +73,10 @@
     <Compile Include="Interface\ConnectionDialog.Designer.cs">
       <DependentUpon>ConnectionDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Interface\Controls\LabeledControl.cs" />
     <Compile Include="Interface\Controls\CheckBoxControl.cs" />
     <Compile Include="Interface\Controls\ComboBoxControl.cs" />
+    <Compile Include="Interface\Controls\ButtonControl.cs" />
     <Compile Include="Interface\Controls\TextBoxControl.cs" />
     <Compile Include="Interface\Controls\SpinBoxControl.cs" />
     <Compile Include="Interface\InterfaceConstants.cs" />

@@ -13,6 +13,7 @@ using System.Windows.Forms;
 using static LoRa_Controller.Device.BaseDevice;
 using static LoRa_Controller.Device.DirectDevice;
 using static LoRa_Controller.DirectConnection.BaseConnectionHandler;
+using LoRa_Controller.Interface.Controls;
 
 namespace LoRa_Controller
 {
@@ -90,6 +91,8 @@ namespace LoRa_Controller
 			List<string> receivedData;
 			BackgroundWorker worker = (BackgroundWorker)sender;
 
+			connectionHandler.SendGeneralCommand(Commands.NodeType);
+
 			while (connectionHandler.Connected)
 			{
 				receivedData = connectionHandler.ReceiveData();
@@ -118,6 +121,7 @@ namespace LoRa_Controller
 					{
 						directDevice.Address = MasterDeviceAddress;
 						mainWindow.SetDirectlyConnectedNodeType();
+						((Button)mainWindow.directNodeGroupBox.CheckBeacons.field).Click += new EventHandler(SendDevicesPresent);
 						logger.Write("Direct device master");
 					}
 					else if (line.Contains("I am a beacon"))
@@ -153,7 +157,9 @@ namespace LoRa_Controller
 						radioDevices.Add(new RadioDevice(radioDeviceAddress));
 						mainWindow.UpdateRadioConnectedNodes();
 						if (radioDeviceAddress == MasterDeviceAddress)
+						{
 							logger.Write("Radio device master");
+						}
 						else
 							logger.Write("Radio device beacon " + directDevice.Address);
 					}
@@ -171,7 +177,7 @@ namespace LoRa_Controller
 						{
 							string logString;
 							device.Connected = true;
-							device.updateSignalQuality(line);
+							device.UpdateSignalQuality(line);
 							mainWindow.radioNodeGroupBoxes[radioDevices.IndexOf(device)].UpdateConnectedStatus(true);
 							mainWindow.radioNodeGroupBoxes[radioDevices.IndexOf(device)].UpdateRSSI(device.RSSI);
 							mainWindow.radioNodeGroupBoxes[radioDevices.IndexOf(device)].UpdateSNR(device.SNR);
@@ -191,6 +197,11 @@ namespace LoRa_Controller
 		private static void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
 			mainWindow.BoardDisconnected();
+		}
+
+		private static void SendDevicesPresent(object sender, EventArgs e)
+		{
+			connectionHandler.SendGeneralCommand(Commands.IsPresent);
 		}
 		#endregion
 
