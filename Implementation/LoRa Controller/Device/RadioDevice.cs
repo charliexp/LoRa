@@ -12,6 +12,7 @@ namespace LoRa_Controller.Device
 		public RadioDevice(int address) : base()
 		{
 			Address = address;
+			connected = false;
 		}
 		#endregion
 
@@ -35,6 +36,7 @@ namespace LoRa_Controller.Device
 		public bool Connected
 		{
 			get { return connected; }
+			set { connected = value; }
 		}
 		#endregion
 
@@ -43,13 +45,18 @@ namespace LoRa_Controller.Device
 		{
 			String tempString = line.Remove(line.IndexOf(' '));
 
-			if (tempString.Length != 0)
+			if (line.Contains("not responding"))
+				connected = false;
+			else
 			{
-				tempString = tempString.Substring(line.IndexOf('=') + 1);
-				rssi = Int32.Parse(tempString);
+				if (tempString.Length != 0)
+				{
+					tempString = tempString.Substring(line.IndexOf('=') + 1);
+					rssi = Int32.Parse(tempString);
+				}
+				tempString = line.Substring(line.LastIndexOf('=') + 1);
+				snr = Int32.Parse(tempString);
 			}
-			tempString = line.Substring(line.LastIndexOf('=') + 1);
-			snr = Int32.Parse(tempString);
 		}
 		#endregion
 	}

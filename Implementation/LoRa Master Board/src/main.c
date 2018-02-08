@@ -21,6 +21,7 @@
 #define UART_BUFFER_SIZE			7
 #define DEVICE_ADDRESS				1
 #define BEACON_ADDRESS				2
+#define GENERAL_ADDRESS				0
 									 
 //Indexes in Radio buffer
 #define SOURCE_ADDRESS				0
@@ -323,8 +324,10 @@ int main( void )
 				RadioState = RADIO_LOWPOWER;
 				break;
 			case RADIO_RX_TIMEOUT:
-				PRINTF("Beacon not responding\n\r");
-				RadioTxBuffer[TARGET_ADDRESS] = BEACON_ADDRESS;
+				if (TARGET_ADDRESS == GENERAL_ADDRESS)
+					PRINTF("No beacon responding\n\r");
+				else
+					PRINTF("Beacon %u not responding\n\r", RadioTxBuffer[TARGET_ADDRESS]);
 				RadioTxBuffer[COMMAND_CODE] = COMMAND_IS_PRESENT;
 				Radio.Send( (uint8_t *) RadioTxBuffer, LoRa_PayloadMaxSize );
 				RadioState = RADIO_LOWPOWER;

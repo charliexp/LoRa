@@ -134,7 +134,12 @@ namespace LoRa_Controller
 					else if (line.Contains("Asked if present"))
 						radioDeviceAddress = 1;
 					else if (line.Contains("not responding"))
-						radioDeviceAddress = Int32.Parse(line.Remove(line.LastIndexOf(' ')).Substring(line.IndexOf(' ') + 1));
+					{
+						string s;
+						s = line.Substring(line.IndexOf(' ') + 1);
+						s = s.Remove(s.IndexOf(' '));
+						radioDeviceAddress = Int32.Parse(s);
+					}
 
 					newRadioDevice = true;
 					foreach (RadioDevice device in radioDevices)
@@ -153,14 +158,21 @@ namespace LoRa_Controller
 							logger.Write("Radio device beacon " + directDevice.Address);
 					}
 				}
-
-				if (line.Contains("Rssi") && line.Contains(","))
-				{
-					foreach (RadioDevice device in radioDevices)
-						if (device.Address == radioDeviceAddress)
+				
+				foreach (RadioDevice device in radioDevices)
+					if (device.Address == radioDeviceAddress)
+					{
+						if (line.Contains("not responding"))
+						{
+							device.Connected = false;
+							mainWindow.radioNodeGroupBoxes[radioDevices.IndexOf(device)].UpdateConnectedStatus(false);
+						}
+						else if (line.Contains("Rssi") && line.Contains(","))
 						{
 							string logString;
+							device.Connected = true;
 							device.updateSignalQuality(line);
+							mainWindow.radioNodeGroupBoxes[radioDevices.IndexOf(device)].UpdateConnectedStatus(true);
 							mainWindow.radioNodeGroupBoxes[radioDevices.IndexOf(device)].UpdateRSSI(device.RSSI);
 							mainWindow.radioNodeGroupBoxes[radioDevices.IndexOf(device)].UpdateSNR(device.SNR);
 							if (radioDeviceAddress == MasterDeviceAddress)
@@ -169,9 +181,9 @@ namespace LoRa_Controller
 								logString = "Beacon " + directDevice.Address;
 							logString += device.RSSI + ", " + device.SNR;
 							logger.Write(logString);
-							break;
 						}
-				}
+						break;
+					}
 			}
 			mainWindow.UpdateLog((List<string>)e.UserState);
 		}

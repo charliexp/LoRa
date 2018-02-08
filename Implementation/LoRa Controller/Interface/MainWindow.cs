@@ -57,20 +57,17 @@ namespace LoRa_Controller.Interface
         
 		public void BoardConnected()
 		{
-			directNodeGroupBox.Status.field.Text = "Connected";
-			directNodeGroupBox.Status.field.BackColor = Color.LightGreen;
+			directNodeGroupBox.UpdateConnectedStatus(true);
 		}
 
 		public void BoardUnableToConnect()
 		{
-			directNodeGroupBox.Status.field.Text = "Could not connect";
-			directNodeGroupBox.Status.field.BackColor = Color.PaleVioletRed;
+			//directNodeGroupBox.UpdateStatus(false);
 		}
 
 		public void BoardDisconnected()
 		{
-			directNodeGroupBox.Status.field.Text = "Disonnected";
-			directNodeGroupBox.Status.field.BackColor = Color.PaleVioletRed;
+			directNodeGroupBox.UpdateConnectedStatus(false);
 		}
 		
 		public void UpdateLog(List<string> data)
@@ -105,12 +102,6 @@ namespace LoRa_Controller.Interface
 					radioNodeGroupBoxes[i].Text = "Beacon " + Program.radioDevices[i].Address;
 				Controls.Add(radioNodeGroupBoxes[i]);
 				radioNodeGroupBoxes[i].Draw(radioNodeGroupBoxes.Count);
-			}
-
-			foreach (BaseNodeGroupBox radioNodeGroupBox in radioNodeGroupBoxes)
-			{
-				((TextBox)radioNodeGroupBox.Status.field).Text = "Connected";
-				((TextBox)radioNodeGroupBox.Status.field).BackColor = Color.LightGreen;
 			}
 		}
 	}
