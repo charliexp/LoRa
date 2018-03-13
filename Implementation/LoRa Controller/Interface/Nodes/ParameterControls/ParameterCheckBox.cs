@@ -17,7 +17,7 @@ namespace LoRa_Controller.Interface.Node.ParameterControls
 
 		private async Task ParameterChangedCallback(int value)
 		{
-			await Program.connectionHandler.SendCommandAsync(((BaseNodeGroupBox)field.Parent).address, parameter, value);
+			await Program.connectionHandler.SendCommandAsync(((BaseNodeGroupBox)field.Parent).Address, parameter, value);
 		}
 	}
 }

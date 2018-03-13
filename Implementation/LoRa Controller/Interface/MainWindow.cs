@@ -69,27 +69,33 @@ namespace LoRa_Controller.Interface
 			directNodeGroupBox.UpdateConnectedStatus(false);
 		}
 		
-		public void UpdateLog(List<string> data)
+		public void UpdateLog(string data)
 		{
 			if (logGroupBox.Enabled)
 			{
-				while (logListBox.Items.Count + data.Count > logMaxEntries)
+				logListBox.Items.Add(data);
+				if (logListBox.Items.Count > logMaxEntries)
 					logListBox.Items.RemoveAt(0);
-				logListBox.Items.AddRange(data.ToArray());
 				logListBox.TopIndex = logListBox.Items.Count - 1;
 			}
 		}
 
 		public void SetDirectlyConnectedNodeType()
 		{
-			directNodeGroupBox.address = Program.directDevice.Address;
-			if (Program.directDevice.nodeType == NodeType.Master)
+			directNodeGroupBox.Address = Program.directDevice.Address;
+			switch(Program.directDevice.nodeType)
 			{
-				directNodeGroupBox.NodeType.field.Text = "Master";
-				directNodeGroupBox.Draw(0);
+				case NodeType.Master:
+					directNodeGroupBox.NodeType.field.Text = "Master";
+					break;
+				case NodeType.Beacon:
+					directNodeGroupBox.NodeType.field.Text = "Beacon " + Program.directDevice.Address;
+					break;
+				case NodeType.Unknown:
+					directNodeGroupBox.NodeType.field.Text = "Unknown/new";
+					break;
 			}
-			else
-				directNodeGroupBox.NodeType.field.Text = "Beacon " + Program.directDevice.Address;
+			directNodeGroupBox.Draw(0);
 		}
 
 		public void UpdateRadioConnectedNodes()
@@ -97,7 +103,7 @@ namespace LoRa_Controller.Interface
 			for (int i = radioNodeGroupBoxes.Count; i < Program.radioDevices.Count; i++)
 			{
 				radioNodeGroupBoxes.Add(new RadioNodeGroupBox("Radio Node"));
-				radioNodeGroupBoxes[i].address = Program.radioDevices[i].Address;
+				radioNodeGroupBoxes[i].Address = Program.radioDevices[i].Address;
 				if (Program.radioDevices[i].nodeType == NodeType.Master)
 					radioNodeGroupBoxes[i].Text = "Master";
 				else

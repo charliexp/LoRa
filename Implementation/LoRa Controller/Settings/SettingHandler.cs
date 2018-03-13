@@ -21,39 +21,56 @@ namespace LoRa_Controller.Settings
 		#region Public methods
 		public static void Load()
 		{
+			StreamWriter settingsFileStreamWriter;
+
 			string[] settingLines;
-			string settingName;
-			string settingValue;
+			string name;
+			string value;
 
-			settingLines = File.ReadAllLines(FilePath);
-
-			foreach (string settingLine in settingLines)
+			try
 			{
-				settingName = settingLine.Remove(settingLine.IndexOf('=') - 1);
-				settingValue = settingLine.Substring(settingLine.LastIndexOf('=') + 2);
+				settingLines = File.ReadAllLines(FilePath);
 
-				if (settingName.Equals(LogFolder.Name))
+				foreach (string setting in settingLines)
 				{
-					LogFolder.Value = settingValue;
-				}
+					name = setting.Remove(setting.IndexOf('=') - 1);
+					value = setting.Substring(setting.LastIndexOf('=') + 2);
 
-				if (settingName.Equals(COMPort.Name))
-				{
-					COMPort.Value = settingValue;
-				}
+					if (name.Equals(LogFolder.Name))
+					{
+						LogFolder.Value = value;
+					}
 
-				if (settingName.Equals(IPAddress.Name))
-				{
-					IPAddress.Value = settingValue;
-				}
+					if (name.Equals(COMPort.Name))
+					{
+						COMPort.Value = value;
+					}
 
-				if (settingName.Equals(TCPPort.Name))
-				{
-					TCPPort.Value = Int32.Parse(settingValue);
+					if (name.Equals(IPAddress.Name))
+					{
+						IPAddress.Value = value;
+					}
+
+					if (name.Equals(TCPPort.Name))
+					{
+						TCPPort.Value = Int32.Parse(value);
+					}
 				}
 			}
+			catch (FileNotFoundException)
+			{
+				settingsFileStreamWriter = new StreamWriter(File.Open(FilePath, FileMode.Create));
+				settingsFileStreamWriter.Close();
+			}
+			finally
+			{
+				GetDefaultSettings();
 
-			GetDefaultSettings();
+				Save(LogFolder);
+				Save(COMPort);
+				Save(IPAddress);
+				Save(TCPPort);
+			}
 		}
 
 		private static void GetDefaultSettings()
@@ -61,54 +78,42 @@ namespace LoRa_Controller.Settings
 			if (LogFolder.Value == null)
 			{
 				LogFolder.Value = Directory.GetCurrentDirectory();
-				Save(LogFolder);
 			}
 			if (COMPort.Value == null)
 			{
 				COMPort.Value = "None";
-				Save(COMPort);
 			}
 			if (IPAddress.Value == null)
 			{
 				IPAddress.Value = DefaultIPAddress;
-				Save(IPAddress);
 			}
 			if (TCPPort.Value == null)
 			{
 				TCPPort.Value = DefaultTCPPort;
-				Save(TCPPort);
 			}
 		}
 		
 		public static void Save(Setting setting)
 		{
 			StreamWriter settingsFileStreamWriter;
+			
+			bool written = false;
+			string[] settingLines = File.ReadAllLines(FilePath);
+			settingsFileStreamWriter = new StreamWriter(File.Open(FilePath, FileMode.Create));
 
-			if (File.Exists(FilePath))
+			foreach (string settingLine in settingLines)
 			{
-				bool written = false;
-				string[] settingLines = File.ReadAllLines(FilePath);
-				settingsFileStreamWriter = new StreamWriter(File.Open(FilePath, FileMode.Create));
-
-				foreach (string settingLine in settingLines)
+				if (settingLine.Contains(setting.Name))
 				{
-					if (settingLine.Contains(setting.Name))
-					{
-						settingsFileStreamWriter.WriteLine(setting.Name + " = " + setting.Value);
-						written = true;
-					}
-					else
-						settingsFileStreamWriter.WriteLine(settingLine);
-				}
-
-				if (!written)
 					settingsFileStreamWriter.WriteLine(setting.Name + " = " + setting.Value);
+					written = true;
+				}
+				else
+					settingsFileStreamWriter.WriteLine(settingLine);
 			}
-			else
-			{
-				settingsFileStreamWriter = new StreamWriter(File.Open(FilePath, FileMode.Create));
+
+			if (!written)
 				settingsFileStreamWriter.WriteLine(setting.Name + " = " + setting.Value);
-			}
 
 			settingsFileStreamWriter.Close();
 		}

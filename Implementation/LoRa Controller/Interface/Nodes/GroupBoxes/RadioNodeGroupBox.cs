@@ -15,19 +15,13 @@ namespace LoRa_Controller.Interface.Node.GroupBoxes
 			RSSI = new TextBoxControl("RSSI", TextBoxControl.Type.Output);
 			SNR = new TextBoxControl("SNR", TextBoxControl.Type.Output);
 
-			List<BaseControl> newControls = new List<BaseControl>
-			{
-				Status,
-				RSSI,
-				SNR
-			};
+			statusControls.Add(RSSI);
+			statusControls.Add(SNR);
 
 			RSSI.label.Width = RSSI.label.Width / 2 - 2 * InterfaceConstants.ItemPadding;
 			RSSI.field.Width = RSSI.field.Width / 2;
 			SNR.label.Width = SNR.label.Width / 2 - 2 * InterfaceConstants.ItemPadding;
 			SNR.field.Width = SNR.field.Width / 2;
-			newControls.AddRange(controls.GetRange(1, controls.Count - 1));
-			controls = newControls;
 		}
 		
 		public void UpdateRSSI(int value)

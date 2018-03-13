@@ -1,5 +1,6 @@
 ﻿using LoRa_Controller.Interface.Controls;
 using LoRa_Controller.Interface.Node.ParameterControls;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -10,8 +11,20 @@ namespace LoRa_Controller.Interface.Node.GroupBoxes
 {
 	public abstract class BaseNodeGroupBox : GroupBox
 	{
-		public int address;
+		public int Address
+		{
+			get
+			{
+				return Int32.Parse(((TextBox)AddressControl.field).Text);
+			}
+			set
+			{
+				((TextBox)AddressControl.field).Text = value.ToString();
+			}
+		}
+
 		public TextBoxControl Status;
+		public TextBoxControl AddressControl;
 		public ParameterComboBox Bandwidth;
 		public ParameterSpinBox OutputPower;
 		public ParameterSpinBox SpreadingFactor;
@@ -24,11 +37,13 @@ namespace LoRa_Controller.Interface.Node.GroupBoxes
 		public ParameterCheckBox VariablePayload;
 		public ParameterCheckBox PerformCRC;
 
-		public List<BaseControl> controls;
-		
+		public List<BaseControl> statusControls;
+		public List<BaseControl> LoRaControls;
+
 		public BaseNodeGroupBox(string name) : base()
 		{
 			Status = new TextBoxControl("Status", TextBoxControl.Type.Output);
+			AddressControl = new TextBoxControl("Address", TextBoxControl.Type.Input);
 			Bandwidth = new ParameterComboBox(Commands.Bandwidth, new List<string> { "125 kHz", "250 kHz", "500 kHz" }, 0);
 			OutputPower = new ParameterSpinBox(Commands.OutputPower, 1, 14, 14);
 			SpreadingFactor = new ParameterSpinBox(Commands.SpreadingFactor, 7, 12, 12);
@@ -41,9 +56,14 @@ namespace LoRa_Controller.Interface.Node.GroupBoxes
 			VariablePayload = new ParameterCheckBox(Commands.VariablePayload, true);
 			PerformCRC = new ParameterCheckBox(Commands.PerformCRC, true);
 
-			controls = new List<BaseControl>
+			statusControls = new List<BaseControl>
 			{
 				Status,
+				AddressControl,
+			};
+
+			LoRaControls = new List<BaseControl>
+			{
 				Bandwidth,
 				OutputPower,
 				SpreadingFactor,
@@ -70,7 +90,15 @@ namespace LoRa_Controller.Interface.Node.GroupBoxes
 			
 			SuspendLayout();
 			
-			foreach (BaseControl control in controls)
+			foreach (BaseControl control in statusControls)
+			{
+				control.Draw(controlIndex++);
+				if (control is LabeledControl)
+					Controls.Add(((LabeledControl)control).label);
+				Controls.Add(control.field);
+			}
+
+			foreach (BaseControl control in LoRaControls)
 			{
 				control.Draw(controlIndex++);
 				if (control is LabeledControl)
@@ -83,8 +111,8 @@ namespace LoRa_Controller.Interface.Node.GroupBoxes
 				InterfaceConstants.InputWidth +
 				InterfaceConstants.ItemPadding;
 			Height = InterfaceConstants.GroupBoxFirstItemY +
-				controls.Count * InterfaceConstants.InputHeight +
-				(controls.Count - 1) * InterfaceConstants.ItemPadding +
+				Controls.Count * InterfaceConstants.InputHeight +
+				(Controls.Count - 1) * InterfaceConstants.ItemPadding +
 				InterfaceConstants.GroupBoxLastItemY;
 
 			Location = new Point(InterfaceConstants.GroupBoxLocationX +
