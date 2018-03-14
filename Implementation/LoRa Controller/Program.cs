@@ -127,27 +127,96 @@ namespace LoRa_Controller
 			switch (source)
 			{
 				case Address_master:
+					radioDeviceAddress = 1;
+					switch (command)
+					{
+						case Command.IsPresent:
+							receivedDataString = "Master asked if present";
+							break;
+						case Command.Bandwidth:
+							receivedDataString = "Bandwidth set by master to " + receivedData[Idx_commandParameter + 3];
+							break;
+						case Command.OutputPower:
+							receivedDataString = "Output power set by master to " + receivedData[Idx_commandParameter + 3];
+							break;
+						case Command.CodingRate:
+							receivedDataString = "Coding rate set by master to " + receivedData[Idx_commandParameter + 3];
+							break;
+						case Command.SpreadingFactor:
+							receivedDataString = "Spreading factor set by master to " + receivedData[Idx_commandParameter + 3];
+							break;
+						case Command.RxSymTimeout:
+							receivedDataString = "Rx timeout (sym) set by master to " + receivedData[Idx_commandParameter + 3];
+							break;
+						case Command.RxMsTimeout:
+							int rxTimeout = receivedData[Idx_commandParameter + 0] << 24 |
+											receivedData[Idx_commandParameter + 1] << 16 |
+											receivedData[Idx_commandParameter + 2] << 8 |
+											receivedData[Idx_commandParameter + 3];
+							receivedDataString = "Rx timeout (ms) set by master to " + rxTimeout.ToString();
+							break;
+						case Command.TxTimeout:
+							int txTimeout = receivedData[Idx_commandParameter + 0] << 24 |
+											receivedData[Idx_commandParameter + 1] << 16 |
+											receivedData[Idx_commandParameter + 2] << 8 |
+											receivedData[Idx_commandParameter + 3];
+							receivedDataString = "Tx timeout (ms) set by master to " + txTimeout.ToString();
+							break;
+						case Command.PreambleSize:
+							receivedDataString = "Preamble size set by master to " + receivedData[Idx_commandParameter + 3];
+							break;
+						case Command.PayloadMaxSize:
+							receivedDataString = "Payload max size set by master to " + receivedData[Idx_commandParameter + 3];
+							break;
+						case Command.VariablePayload:
+							receivedDataString = "Variable payload set by master to " + ((receivedData[Idx_commandParameter + 3] == 1)? "true" : "false");
+							break;
+						case Command.PerformCRC:
+							receivedDataString = "Perform CRC set by master to " + ((receivedData[Idx_commandParameter + 3] == 1) ? "true" : "false");
+							break;
+						default:
+							receivedDataString = "Unknown command " + command + " from " + source + " to " + target;
+							break;
+					}
+					break;
+				case Address_general:
+					if (directDevice.Address >= Address_beacon)
+						radioDeviceAddress = 1;
+
+					switch (command)
+					{
+						default:
+							receivedDataString = "Unknown command " + command + " from " + source + " to " + target;
+							break;
+					}
+					break;
+				case Address_PC:
 					switch (command)
 					{
 						case Command.GetAddress:
 							if (!directDeviceInitialized)
 							{
-								directDevice.Address = source;
+								directDevice.Address = target;
 								((Button)mainWindow.directNodeGroupBox.CheckBeacons.field).Click += new EventHandler(SendDevicesPresent);
 								((TextBox)mainWindow.directNodeGroupBox.AddressControl.field).TextChanged += new EventHandler(AddressFieldChanged);
 								((Button)mainWindow.directNodeGroupBox.SetAddress.field).Click += new EventHandler(SetAddress);
 								directDeviceInitialized = true;
 								mainWindow.SetDirectlyConnectedNodeType();
 
-								receivedDataString = "Connected to master";
+								if (directDevice.Address == Address_master)
+									receivedDataString = "Connected to master";
+								else if (directDevice.Address >= Address_beacon)
+									receivedDataString = "Connected to beacon " + directDevice.Address;
+								else if (directDevice.Address >= Address_general)
+									receivedDataString = "Connected to new/unknown device";
 							}
 							break;
 						case Command.SetAddress:
 							if (response == Response.ACK)
 							{
-								if (directDevice.Address != source)
+								if (directDevice.Address != target)
 								{
-									directDevice.Address = source;
+									directDevice.Address = target;
 									mainWindow.SetDirectlyConnectedNodeType();
 
 									receivedDataString = "Changed to master";
@@ -159,82 +228,8 @@ namespace LoRa_Controller
 							}
 							break;
 						case Command.IsPresent:
-							if (response == Response.ACK)
-								receivedDataString = "Checking for present devices";
+							receivedDataString = "Checking for present devices";
 							break;
-						case Command.Bandwidth:
-							receivedDataString = "Bandwidth set to " + receivedData[Idx_commandParameter + 3];
-							break;
-						case Command.OutputPower:
-							receivedDataString = "Output power set to " + receivedData[Idx_commandParameter + 3];
-							break;
-						case Command.CodingRate:
-							receivedDataString = "Coding rate set to " + receivedData[Idx_commandParameter + 3];
-							break;
-						case Command.SpreadingFactor:
-							receivedDataString = "Spreading factor set to " + receivedData[Idx_commandParameter + 3];
-							break;
-						case Command.RxSymTimeout:
-							receivedDataString = "Rx timeout (sym) set to " + receivedData[Idx_commandParameter + 3];
-							break;
-						case Command.RxMsTimeout:
-							int rxTimeout = receivedData[Idx_commandParameter + 0] << 24 |
-											receivedData[Idx_commandParameter + 1] << 16 |
-											receivedData[Idx_commandParameter + 2] << 8 |
-											receivedData[Idx_commandParameter + 3];
-							receivedDataString = "Rx timeout (ms) set to " + rxTimeout.ToString();
-							break;
-						case Command.TxTimeout:
-							int txTimeout = receivedData[Idx_commandParameter + 0] << 24 |
-											receivedData[Idx_commandParameter + 1] << 16 |
-											receivedData[Idx_commandParameter + 2] << 8 |
-											receivedData[Idx_commandParameter + 3];
-							receivedDataString = "Tx timeout (ms) set to " + txTimeout.ToString();
-							break;
-						case Command.PreambleSize:
-							receivedDataString = "Preamble size set to " + receivedData[Idx_commandParameter + 3];
-							break;
-						case Command.PayloadMaxSize:
-							receivedDataString = "Payload max size set to " + receivedData[Idx_commandParameter + 3];
-							break;
-						case Command.VariablePayload:
-							receivedDataString = "Variable payload set to " + ((receivedData[Idx_commandParameter + 3] == 1)? "true" : "false");
-							break;
-						case Command.PerformCRC:
-							receivedDataString = "Perform CRC set to " + ((receivedData[Idx_commandParameter + 3] == 1) ? "true" : "false");
-							break;
-						default:
-							receivedDataString = "Unknown command " + command + " from " + source + " to " + target;
-							break;
-					}
-					break;
-				case Address_general:
-					switch (command)
-					{
-						case Command.GetAddress:
-							if (!directDeviceInitialized)
-							{
-								directDevice.Address = source;
-								((TextBox)mainWindow.directNodeGroupBox.AddressControl.field).TextChanged += new EventHandler(AddressFieldChanged);
-								((Button)mainWindow.directNodeGroupBox.SetAddress.field).Click += new EventHandler(SetAddress);
-								directDeviceInitialized = true;
-								mainWindow.SetDirectlyConnectedNodeType();
-
-								receivedDataString = "Connected to new/unknown device";
-							}
-							break;
-						case Command.SetAddress:
-							break;
-						case Command.IsPresent:
-							break;
-						default:
-							receivedDataString = "Unknown command " + command + " from " + source + " to " + target;
-							break;
-					}
-					break;
-				case Address_PC:
-					switch (command)
-					{
 						case Command.Bandwidth:
 							receivedDataString = "Bandwidth set to " + receivedData[Idx_commandParameter + 3];
 							break;
@@ -276,42 +271,16 @@ namespace LoRa_Controller
 						case Command.PerformCRC:
 							receivedDataString = "Perform CRC set to " + ((receivedData[Idx_commandParameter + 3] == 1) ? "true" : "false");
 							break;
+						default:
+							receivedDataString = "Unknown command " + command + " from " + source + " to " + target;
+							break;
 					}
 					break;
 				default: //beacon
+					radioDeviceAddress = source;
+
 					switch (command)
 					{
-						case Command.GetAddress:
-							if (!directDeviceInitialized)
-							{
-								directDevice.Address = source;
-								directDevice.nodeType = NodeType.Beacon;
-								((Button)mainWindow.directNodeGroupBox.CheckBeacons.field).Click += new EventHandler(SendDevicesPresent);
-								((TextBox)mainWindow.directNodeGroupBox.AddressControl.field).TextChanged += new EventHandler(AddressFieldChanged);
-								((Button)mainWindow.directNodeGroupBox.SetAddress.field).Click += new EventHandler(SetAddress);
-								directDeviceInitialized = true;
-								mainWindow.SetDirectlyConnectedNodeType();
-
-								receivedDataString = "Connected to beacon " + directDevice.Address;
-							}
-							break;
-						case Command.SetAddress:
-							if (response == Response.ACK)
-							{
-								if (directDevice.Address != source)
-								{
-									directDevice.Address = source;
-									directDevice.nodeType = NodeType.Beacon;
-									mainWindow.SetDirectlyConnectedNodeType();
-
-									receivedDataString = "Changed to beacon " + directDevice.Address;
-								}
-							}
-							else
-							{
-								receivedDataString = "Could not set address";
-							}
-							break;
 						case Command.IsPresent:
 							if (response == Response.ACK)
 								receivedDataString = "Beacon " + source + " present";
@@ -332,52 +301,43 @@ namespace LoRa_Controller
 							receivedDataString = "No beacon responded";
 						else
 							receivedDataString = "Beacon " + target + " did not respond";
+						foreach (RadioDevice device in radioDevices)
+							if (device.Address == radioDeviceAddress)
+							{
+								device.Connected = false;
+								mainWindow.radioNodeGroupBoxes[radioDevices.IndexOf(device)].UpdateConnectedStatus(false);
+							}
 						break;
 					case Error.RADIO_TX_TIMEOUT:
 						receivedDataString = "Tx timeout too small to send messages";
 						break;
 				}
-			/*
-			if (directDevice.Address == MasterDeviceAddress && line.Contains("ACK"))
-				radioDeviceAddress = Int32.Parse(line.Remove(line.LastIndexOf(' ')).Substring(line.IndexOf(' ') + 1));
-			else if (line.Contains("Asked if present"))
-				radioDeviceAddress = 1;
-			else if (line.Contains("not responding"))
+			
+			if (radioDeviceAddress != 0)
 			{
-				string s;
-				s = line.Substring(line.IndexOf(' ') + 1);
-				s = s.Remove(s.IndexOf(' '));
-				radioDeviceAddress = Int32.Parse(s);
-			}
-
-			newRadioDevice = true;
-			foreach (RadioDevice device in radioDevices)
-				if (device.Address == radioDeviceAddress)
-				{
-					newRadioDevice = false;
-					break;
-				}
-			if (radioDeviceAddress != 0 && newRadioDevice)
-			{
-				radioDevices.Add(new RadioDevice(radioDeviceAddress));
-				mainWindow.UpdateRadioConnectedNodes();
-				if (radioDeviceAddress == MasterDeviceAddress)
-				{
-					logger.Write("Radio device master");
-				}
-				else
-					logger.Write("Radio device beacon " + directDevice.Address);
-			}
-				
-			foreach (RadioDevice device in radioDevices)
-				if (device.Address == radioDeviceAddress)
-				{
-					if (line.Contains("not responding"))
+				newRadioDevice = true;
+				foreach (RadioDevice device in radioDevices)
+					if (device.Address == radioDeviceAddress)
 					{
-						device.Connected = false;
-						mainWindow.radioNodeGroupBoxes[radioDevices.IndexOf(device)].UpdateConnectedStatus(false);
+						newRadioDevice = false;
+						break;
 					}
-					else if (line.Contains("Rssi") && line.Contains(","))
+				if (radioDeviceAddress != 0 && newRadioDevice)
+				{
+					radioDevices.Add(new RadioDevice(radioDeviceAddress));
+					mainWindow.UpdateRadioConnectedNodes();
+					if (radioDeviceAddress == Address_master)
+					{
+						logger.Write("Radio device master");
+					}
+					else
+						logger.Write("Radio device beacon " + directDevice.Address);
+				}
+
+				foreach (RadioDevice device in radioDevices)
+					if (device.Address == radioDeviceAddress)
+					{/*
+					if (line.Contains("Rssi") && line.Contains(","))
 					{
 						string logString;
 						device.Connected = true;
@@ -392,8 +352,9 @@ namespace LoRa_Controller
 						logString += device.RSSI + ", " + device.SNR;
 						logger.Write(logString);
 					}
-					break;
-				}*/
+					break;*/
+					}
+			}
 			if (receivedDataString != null)
 			{
 				logger.Write(receivedDataString);

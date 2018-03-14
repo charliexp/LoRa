@@ -63,12 +63,12 @@ void processCommunicationCommand(uint8_t source, uint8_t command, uint8_t* param
 					DelayMs((myAddress - 2) * 1000);
 					parameters[3] = RESPONSE_ACK;
 					response[0] = RESPONSE_ACK;
-					PC_send(myAddress, ADDRESS_MASTER, command, response, 4);
+					PC_send(ADDRESS_MASTER, myAddress, command, response, 4);
 					LoRa_send(ADDRESS_MASTER, COMMAND_IS_PRESENT, parameters, PARAMETERS_MAX_SIZE);
 					break;
 				default:
 					response[0] = RESPONSE_NACK;
-					PC_send(myAddress, ADDRESS_MASTER, command, response, 4);
+					PC_send(ADDRESS_MASTER, myAddress, command, response, 4);
 					break;
 			}
 		}
@@ -82,16 +82,16 @@ void processPCCommand(uint8_t source, uint8_t command, uint8_t* parameters)
 	{
 		case COMMAND_GET_ADDRESS:
 			response[0] = RESPONSE_ACK;
-			PC_send(myAddress, ADDRESS_PC, command, response, 4);
+			PC_send(ADDRESS_PC, myAddress, command, response, 4);
 			break;
 		case COMMAND_SET_ADDRESS:
 			setAddress(parameters[3]);
 			response[0] = RESPONSE_ACK;
-			PC_send(myAddress, ADDRESS_PC, command, response, 4);
+			PC_send(ADDRESS_PC, myAddress, command, response, 4);
 			break;
 		default:
 			response[0] = RESPONSE_NACK;
-			PC_send(myAddress, ADDRESS_PC, command, response, 4);
+			PC_send(ADDRESS_PC, myAddress, command, response, 4);
 			break;
 	}
 }
@@ -208,7 +208,7 @@ int main(void)
 				else if (myAddress == ADDRESS_MASTER)
 				{
 					response[0] = RESPONSE_ACK;
-					PC_send(myAddress, ADDRESS_GENERAL, command, response, 4);
+					PC_send(ADDRESS_PC, ADDRESS_GENERAL, command, response, 4);
 					LoRa_send(ADDRESS_GENERAL, command, parameters, PARAMETERS_MAX_SIZE);
 				}
 			}
