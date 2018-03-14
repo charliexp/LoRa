@@ -26,6 +26,18 @@ void PC_receive(uint8_t* target, uint8_t* command, uint8_t* parameters)
 	UartState = UART_IDLE;
 }
 
+void PC_send(uint8_t source, uint8_t target, uint8_t command, uint8_t* data, uint8_t length)
+{
+	uint8_t i;
+	UartTxBuffer[IDX_SOURCE_ADDRESS] = source;
+	UartTxBuffer[IDX_TARGET_ADDRESS] = target;
+	UartTxBuffer[IDX_COMMAND] = command;
+	for (i = 0; i < length; i++)
+		UartTxBuffer[IDX_COMMAND_PARAMETER + i] = data[i];
+	for (i = 0; i < length + 3; i++)
+		PRINTF("%c", UartTxBuffer[i]);
+}
+
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
 	UartState = UART_RX;

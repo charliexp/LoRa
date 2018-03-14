@@ -90,7 +90,7 @@ namespace LoRa_Controller.DirectConnection
 		{
 			baseStream.Write(new byte[] { data }, 0, 1);
 		}
-
+		
 		public override byte ReadByte()
 		{
 			byte[] receiveBuffer = new byte[1];

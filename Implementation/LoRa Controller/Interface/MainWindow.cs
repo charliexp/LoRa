@@ -83,6 +83,7 @@ namespace LoRa_Controller.Interface
 		public void SetDirectlyConnectedNodeType()
 		{
 			directNodeGroupBox.Address = Program.directDevice.Address;
+			directNodeGroupBox.SetAddress.field.Enabled = false;
 			switch(Program.directDevice.nodeType)
 			{
 				case NodeType.Master:

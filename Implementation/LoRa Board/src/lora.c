@@ -51,7 +51,7 @@ static void OnRxDone( uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr 
 	RSSI = rssi;
 	SNR = snr;
   
-	PRINTF("RSSI=%d dBm, SNR=%d\n\r", rssi, snr);
+	//PRINTF("RSSI=%d dBm, SNR=%d\n\r", rssi, snr);
 }
 
 static void OnTxTimeout( void )

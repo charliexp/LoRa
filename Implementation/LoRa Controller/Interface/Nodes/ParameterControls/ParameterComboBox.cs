@@ -8,9 +8,9 @@ namespace LoRa_Controller.Interface.Node.ParameterControls
 {
 	public class ParameterComboBox : ComboBoxControl
 	{
-		private Commands parameter;
+		private Command parameter;
 
-		public ParameterComboBox(Commands parameter, List<string> values, int defaultIndex) : base(parameter.ToString(), values, defaultIndex)
+		public ParameterComboBox(Command parameter, List<string> values, int defaultIndex) : base(parameter.ToString(), values, defaultIndex)
 		{
 			this.parameter = parameter;
 			indexChangedCallback = ParameterChangedCallback;

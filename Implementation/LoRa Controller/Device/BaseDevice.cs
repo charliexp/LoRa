@@ -24,12 +24,7 @@ namespace LoRa_Controller.Device
 			Beacon,
 		}
 		#endregion
-
-		#region Public constants
-		public const int GeneralCallAddress = 0;
-		public const int MasterDeviceAddress = 1;
-		#endregion
-
+		
 		#region Public variables
 		public NodeType nodeType;
 		#endregion
@@ -45,8 +40,10 @@ namespace LoRa_Controller.Device
 			set
 			{
 				address = value;
-				if (address == MasterDeviceAddress)
+				if (address == BaseConnectionHandler.Address_master)
 					nodeType = NodeType.Master;
+				else if (address == BaseConnectionHandler.Address_general)
+					nodeType = NodeType.Unknown;
 				else
 					nodeType = NodeType.Beacon;
 			}

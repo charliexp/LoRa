@@ -44,17 +44,17 @@ namespace LoRa_Controller.Interface.Node.GroupBoxes
 		{
 			Status = new TextBoxControl("Status", TextBoxControl.Type.Output);
 			AddressControl = new TextBoxControl("Address", TextBoxControl.Type.Input);
-			Bandwidth = new ParameterComboBox(Commands.Bandwidth, new List<string> { "125 kHz", "250 kHz", "500 kHz" }, 0);
-			OutputPower = new ParameterSpinBox(Commands.OutputPower, 1, 14, 14);
-			SpreadingFactor = new ParameterSpinBox(Commands.SpreadingFactor, 7, 12, 12);
-			CodingRate = new ParameterComboBox(Commands.CodingRate, new List<string> { "4/5", "4/6", "4/7", "4/8" }, 3);
-			RxSymTimeout = new ParameterSpinBox(Commands.RxSymTimeout, 1, 30, 5);
-			RxMsTimeout = new ParameterSpinBox(Commands.RxMsTimeout, 1, 10000, 5000);
-			TxTimeout = new ParameterSpinBox(Commands.TxTimeout, 1, 10000, 5000);
-			PreambleSize = new ParameterSpinBox(Commands.PreambleSize, 2, 30, 8);
-			PayloadMaxSize = new ParameterSpinBox(Commands.PayloadMaxSize, 1, 64, 64);
-			VariablePayload = new ParameterCheckBox(Commands.VariablePayload, true);
-			PerformCRC = new ParameterCheckBox(Commands.PerformCRC, true);
+			Bandwidth = new ParameterComboBox(Command.Bandwidth, new List<string> { "125 kHz", "250 kHz", "500 kHz" }, 0);
+			OutputPower = new ParameterSpinBox(Command.OutputPower, 1, 14, 14);
+			SpreadingFactor = new ParameterSpinBox(Command.SpreadingFactor, 7, 12, 12);
+			CodingRate = new ParameterComboBox(Command.CodingRate, new List<string> { "4/5", "4/6", "4/7", "4/8" }, 3);
+			RxSymTimeout = new ParameterSpinBox(Command.RxSymTimeout, 1, 30, 5);
+			RxMsTimeout = new ParameterSpinBox(Command.RxMsTimeout, 1, 10000, 5000);
+			TxTimeout = new ParameterSpinBox(Command.TxTimeout, 1, 10000, 5000);
+			PreambleSize = new ParameterSpinBox(Command.PreambleSize, 2, 30, 8);
+			PayloadMaxSize = new ParameterSpinBox(Command.PayloadMaxSize, 1, 64, 64);
+			VariablePayload = new ParameterCheckBox(Command.VariablePayload, true);
+			PerformCRC = new ParameterCheckBox(Command.PerformCRC, true);
 
 			statusControls = new List<BaseControl>
 			{

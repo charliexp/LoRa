@@ -8,12 +8,12 @@
 
 typedef enum RadioStates_t
 {
-	RADIO_LOWPOWER,
-	RADIO_RX,
-	RADIO_RX_TIMEOUT,
-	RADIO_RX_ERROR,
-	RADIO_TX,
-	RADIO_TX_TIMEOUT
+	RADIO_LOWPOWER = 0xf0,
+	RADIO_RX = 0xf1,
+	RADIO_RX_TIMEOUT = 0xf2,
+	RADIO_RX_ERROR = 0xf3,
+	RADIO_TX = 0xf4,
+	RADIO_TX_TIMEOUT = 0xf5,
 }RadioStates_t;
 
 extern RadioStates_t RadioState;

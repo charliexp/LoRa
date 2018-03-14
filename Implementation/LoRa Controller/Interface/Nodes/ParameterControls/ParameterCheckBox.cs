@@ -7,9 +7,9 @@ namespace LoRa_Controller.Interface.Node.ParameterControls
 {
 	public class ParameterCheckBox : CheckBoxControl
 	{
-		private Commands parameter;
+		private Command parameter;
 
-		public ParameterCheckBox(Commands parameter, bool defaultState) : base(parameter.ToString(), defaultState)
+		public ParameterCheckBox(Command parameter, bool defaultState) : base(parameter.ToString(), defaultState)
 		{
 			this.parameter = parameter;
 			checkChangedCallback = ParameterChangedCallback;

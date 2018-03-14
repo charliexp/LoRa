@@ -63,7 +63,7 @@ namespace LoRa_Controller.Networking
 		public byte[] Receive()
 		{
 			byte[] data = new byte[BaseConnectionHandler.CommandMaxLength];
-			data[0] = (byte)Commands.Invalid;
+			data[0] = (byte)Command.Invalid;
 			_clients.RemoveAll(client => client.Connected == false);
 
 			foreach (TcpClient client in _clients)
@@ -93,7 +93,7 @@ namespace LoRa_Controller.Networking
 		public async Task<byte[]> ReceiveAsync()
 		{
 			byte[] data = new byte[CommandMaxLength];
-			data[0] = (byte) BaseConnectionHandler.Commands.Invalid;
+			data[0] = (byte) BaseConnectionHandler.Command.Invalid;
 			_clients.RemoveAll(client => client.Connected == false);
 
 			foreach (TcpClient client in _clients)
