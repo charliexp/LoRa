@@ -1,7 +1,7 @@
 ﻿
 using LoRa_Controller.Interface.Controls;
-using System.Collections.Generic;
 using System.Windows.Forms;
+using static LoRa_Controller.DirectConnection.BaseConnectionHandler;
 
 namespace LoRa_Controller.Interface.Node.GroupBoxes
 {
@@ -33,6 +33,13 @@ namespace LoRa_Controller.Interface.Node.GroupBoxes
 		{
 			((TextBox)SNR.field).Text = value.ToString();
 		}
+		
+		public new void Draw(int groupBoxIndex)
+		{
+			if (Address == Address_master)
+				LoRaControls.Clear();
 
+			base.Draw(groupBoxIndex);
+		}
 	}
 }

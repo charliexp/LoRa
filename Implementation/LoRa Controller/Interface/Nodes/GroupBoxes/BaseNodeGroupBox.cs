@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using static LoRa_Controller.Device.BaseDevice;
 using static LoRa_Controller.DirectConnection.BaseConnectionHandler;
 
 namespace LoRa_Controller.Interface.Node.GroupBoxes
@@ -89,7 +88,7 @@ namespace LoRa_Controller.Interface.Node.GroupBoxes
 			int controlIndex = 0;
 			
 			SuspendLayout();
-			
+
 			foreach (BaseControl control in statusControls)
 			{
 				control.Draw(controlIndex++);

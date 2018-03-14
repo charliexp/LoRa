@@ -236,14 +236,16 @@ namespace LoRa_Controller
 							if (!directDeviceInitialized)
 							{
 								directDevice.Address = target;
-								((Button)mainWindow.directNodeGroupBox.CheckBeacons.field).Click += new EventHandler(SendDevicesPresent);
 								((TextBox)mainWindow.directNodeGroupBox.AddressControl.field).TextChanged += new EventHandler(AddressFieldChanged);
 								((Button)mainWindow.directNodeGroupBox.SetAddress.field).Click += new EventHandler(SetAddress);
 								directDeviceInitialized = true;
 								mainWindow.SetDirectlyConnectedNodeType();
 
 								if (directDevice.Address == Address_master)
+								{
 									receivedDataString = "Connected to master";
+									((Button)mainWindow.directNodeGroupBox.CheckBeacons.field).Click += new EventHandler(SendDevicesPresent);
+								}
 								else if (directDevice.Address >= Address_beacon)
 									receivedDataString = "Connected to beacon " + directDevice.Address;
 								else if (directDevice.Address >= Address_general)
