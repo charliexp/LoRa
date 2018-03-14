@@ -68,6 +68,8 @@ namespace LoRa_Controller.DirectConnection
 		public const int Idx_targetAddress = 1;
 		public const int Idx_command = 2;
 		public const int Idx_commandParameter = 3;
+		public const int Idx_RSSI = ParametersMaxSize + 3;
+		public const int Idx_SNR = ParametersMaxSize + 4;
 
 		public const int ParametersMaxSize = 4;
 
@@ -95,7 +97,7 @@ namespace LoRa_Controller.DirectConnection
 		{
 			List<byte> receivedData = new List<byte>();
 			
-			while (Connected && receivedData.Count != ParametersMaxSize + 3)
+			while (Connected && receivedData.Count != ParametersMaxSize + 5)
 			{
 				try
 				{
@@ -110,23 +112,23 @@ namespace LoRa_Controller.DirectConnection
 			return receivedData.ToArray();
 		}
 
-		public async Task<string> ReceiveDataAsync()
+		public async Task<byte[]> ReceiveDataAsync()
 		{
-			string receivedData = "";
-			while (Connected && !receivedData.Contains("\r"))
+			List<byte> receivedData = new List<byte>();
+
+			while (Connected && receivedData.Count != ParametersMaxSize + 5)
 			{
 				try
 				{
-					receivedData += Convert.ToChar(await ReadByteAsync());
+					receivedData.Add(await ReadByteAsync());
 				}
 				catch
 				{
 					Close();
 				}
 			}
-			receivedData = receivedData.TrimEnd(new char[] { '\n', '\r' });
-			
-			return receivedData;
+
+			return receivedData.ToArray();
 		}
 
 		public void SendCommand(byte[] command)

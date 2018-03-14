@@ -3,9 +3,9 @@
 <title>Static Call Graph - [.\sx1272mb2das\NUCLEO_CUBE_LORA.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\sx1272mb2das\NUCLEO_CUBE_LORA.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060528: Last Updated: Wed Mar 14 03:30:25 2018
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060528: Last Updated: Wed Mar 14 17:45:35 2018
 <BR><P>
-<H3>Maximum Stack Usage =        280 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
+<H3>Maximum Stack Usage =        288 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
 main &rArr; processRadioSetupCommand &rArr; PC_send &rArr; vcom_Send &rArr; vsprintf
 <P>
@@ -112,7 +112,7 @@ Global Symbols
 <P><STRONG><a name="[27]"></a>__main</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry.o(.ARM.Collect$$$$00000000))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32l073xx.o(.text)
 </UL>
-<P><STRONG><a name="[10e]"></a>_main_stk</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry2.o(.ARM.Collect$$$$00000001))
+<P><STRONG><a name="[10f]"></a>_main_stk</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry2.o(.ARM.Collect$$$$00000001))
 
 <P><STRONG><a name="[55]"></a>_main_scatterload</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry5.o(.ARM.Collect$$$$00000004))
 <BR><BR>[Calls]<UL><LI><a href="#[56]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__scatterload
@@ -122,15 +122,15 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[56]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__scatterload
 </UL>
 
-<P><STRONG><a name="[10f]"></a>_main_clock</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry7b.o(.ARM.Collect$$$$00000008))
+<P><STRONG><a name="[110]"></a>_main_clock</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry7b.o(.ARM.Collect$$$$00000008))
 
-<P><STRONG><a name="[110]"></a>_main_cpp_init</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry8b.o(.ARM.Collect$$$$0000000A))
+<P><STRONG><a name="[111]"></a>_main_cpp_init</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry8b.o(.ARM.Collect$$$$0000000A))
 
-<P><STRONG><a name="[111]"></a>_main_init</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry9a.o(.ARM.Collect$$$$0000000B))
+<P><STRONG><a name="[112]"></a>_main_init</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry9a.o(.ARM.Collect$$$$0000000B))
 
-<P><STRONG><a name="[112]"></a>__rt_final_cpp</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry10a.o(.ARM.Collect$$$$0000000D))
+<P><STRONG><a name="[113]"></a>__rt_final_cpp</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry10a.o(.ARM.Collect$$$$0000000D))
 
-<P><STRONG><a name="[113]"></a>__rt_final_exit</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry11a.o(.ARM.Collect$$$$0000000F))
+<P><STRONG><a name="[114]"></a>__rt_final_exit</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry11a.o(.ARM.Collect$$$$0000000F))
 
 <P><STRONG><a name="[0]"></a>Reset_Handler</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, startup_stm32l073xx.o(.text))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32l073xx.o(RESET)
@@ -217,7 +217,7 @@ Global Symbols
 <P><STRONG><a name="[6]"></a>WWDG_IRQHandler</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, startup_stm32l073xx.o(.text))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32l073xx.o(RESET)
 </UL>
-<P><STRONG><a name="[114]"></a>__aeabi_uidiv</STRONG> (Thumb, 0 bytes, Stack size 12 bytes, uidiv.o(.text), UNUSED)
+<P><STRONG><a name="[115]"></a>__aeabi_uidiv</STRONG> (Thumb, 0 bytes, Stack size 12 bytes, uidiv.o(.text), UNUSED)
 
 <P><STRONG><a name="[87]"></a>__aeabi_uidivmod</STRONG> (Thumb, 44 bytes, Stack size 12 bytes, uidiv.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = __aeabi_uidivmod
@@ -244,24 +244,24 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[d1]"></a>__aeabi_memcpy</STRONG> (Thumb, 36 bytes, Stack size 0 bytes, memcpya.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[d4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vcom_Send
-<LI><a href="#[2a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OnRxDone
+<BR><BR>[Called By]<UL><LI><a href="#[2a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OnRxDone
+<LI><a href="#[d4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vcom_Send
 </UL>
 
 <P><STRONG><a name="[ca]"></a>__aeabi_memcpy4</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memcpya.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HW_RTC_StartWakeUpAlarm
 </UL>
 
-<P><STRONG><a name="[115]"></a>__aeabi_memcpy8</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memcpya.o(.text), UNUSED)
+<P><STRONG><a name="[116]"></a>__aeabi_memcpy8</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memcpya.o(.text), UNUSED)
 
 <P><STRONG><a name="[5b]"></a>__aeabi_memset</STRONG> (Thumb, 14 bytes, Stack size 0 bytes, memseta.o(.text), UNUSED)
 <BR><BR>[Called By]<UL><LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_memset$wrapper
 <LI><a href="#[5a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr
 </UL>
 
-<P><STRONG><a name="[116]"></a>__aeabi_memset4</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memseta.o(.text), UNUSED)
+<P><STRONG><a name="[117]"></a>__aeabi_memset4</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memseta.o(.text), UNUSED)
 
-<P><STRONG><a name="[117]"></a>__aeabi_memset8</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memseta.o(.text), UNUSED)
+<P><STRONG><a name="[118]"></a>__aeabi_memset8</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memseta.o(.text), UNUSED)
 
 <P><STRONG><a name="[5a]"></a>__aeabi_memclr</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, memseta.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[5b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memset
@@ -277,19 +277,19 @@ Global Symbols
 <LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vcom_IoInit
 </UL>
 
-<P><STRONG><a name="[118]"></a>__aeabi_memclr8</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memseta.o(.text), UNUSED)
+<P><STRONG><a name="[119]"></a>__aeabi_memclr8</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memseta.o(.text), UNUSED)
 
 <P><STRONG><a name="[5c]"></a>_memset$wrapper</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, memseta.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[5b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memset
 </UL>
 
-<P><STRONG><a name="[104]"></a>__aeabi_uread4</STRONG> (Thumb, 20 bytes, Stack size 0 bytes, uread4.o(.text))
+<P><STRONG><a name="[105]"></a>__aeabi_uread4</STRONG> (Thumb, 20 bytes, Stack size 0 bytes, uread4.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[f9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;processRadioSetupCommand
 </UL>
 
-<P><STRONG><a name="[119]"></a>__rt_uread4</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, uread4.o(.text), UNUSED)
+<P><STRONG><a name="[11a]"></a>__rt_uread4</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, uread4.o(.text), UNUSED)
 
-<P><STRONG><a name="[11a]"></a>_uread4</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, uread4.o(.text), UNUSED)
+<P><STRONG><a name="[11b]"></a>_uread4</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, uread4.o(.text), UNUSED)
 
 <P><STRONG><a name="[5d]"></a>__aeabi_dadd</STRONG> (Thumb, 328 bytes, Stack size 48 bytes, dadd.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 104<LI>Call Chain = __aeabi_dadd &rArr; _double_epilogue &rArr; __aeabi_llsr
@@ -353,7 +353,7 @@ Global Symbols
 <LI><a href="#[3b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SX1272GetTimeOnAir
 </UL>
 
-<P><STRONG><a name="[11b]"></a>scalbn</STRONG> (Thumb, 0 bytes, Stack size 16 bytes, dscalb.o(.text), UNUSED)
+<P><STRONG><a name="[11c]"></a>scalbn</STRONG> (Thumb, 0 bytes, Stack size 16 bytes, dscalb.o(.text), UNUSED)
 
 <P><STRONG><a name="[65]"></a>__aeabi_i2d</STRONG> (Thumb, 34 bytes, Stack size 16 bytes, dflti.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = __aeabi_i2d &rArr; _double_epilogue &rArr; __aeabi_llsr
@@ -401,7 +401,7 @@ Global Symbols
 <LI><a href="#[69]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_drnd
 </UL>
 
-<P><STRONG><a name="[11c]"></a>_ll_shift_l</STRONG> (Thumb, 0 bytes, Stack size 8 bytes, llshl.o(.text), UNUSED)
+<P><STRONG><a name="[11d]"></a>_ll_shift_l</STRONG> (Thumb, 0 bytes, Stack size 8 bytes, llshl.o(.text), UNUSED)
 
 <P><STRONG><a name="[58]"></a>__aeabi_llsr</STRONG> (Thumb, 34 bytes, Stack size 8 bytes, llushr.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = __aeabi_llsr
@@ -413,7 +413,7 @@ Global Symbols
 <LI><a href="#[69]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_drnd
 </UL>
 
-<P><STRONG><a name="[11d]"></a>_ll_ushift_r</STRONG> (Thumb, 0 bytes, Stack size 8 bytes, llushr.o(.text), UNUSED)
+<P><STRONG><a name="[11e]"></a>_ll_ushift_r</STRONG> (Thumb, 0 bytes, Stack size 8 bytes, llushr.o(.text), UNUSED)
 
 <P><STRONG><a name="[5e]"></a>__aeabi_lasr</STRONG> (Thumb, 38 bytes, Stack size 8 bytes, llsshr.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = __aeabi_lasr
@@ -421,9 +421,9 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[5d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dadd
 </UL>
 
-<P><STRONG><a name="[11e]"></a>_ll_sshift_r</STRONG> (Thumb, 0 bytes, Stack size 8 bytes, llsshr.o(.text), UNUSED)
+<P><STRONG><a name="[11f]"></a>_ll_sshift_r</STRONG> (Thumb, 0 bytes, Stack size 8 bytes, llsshr.o(.text), UNUSED)
 
-<P><STRONG><a name="[11f]"></a>__I$use$fp</STRONG> (Thumb, 0 bytes, Stack size 8 bytes, iusefp.o(.text), UNUSED)
+<P><STRONG><a name="[120]"></a>__I$use$fp</STRONG> (Thumb, 0 bytes, Stack size 8 bytes, iusefp.o(.text), UNUSED)
 
 <P><STRONG><a name="[60]"></a>_double_round</STRONG> (Thumb, 26 bytes, Stack size 8 bytes, depilogue.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = _double_round
@@ -465,9 +465,9 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[f2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_fp_digits
 </UL>
 
-<P><STRONG><a name="[120]"></a>__aeabi_cdcmpeq</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, cdcmple.o(.text), UNUSED)
+<P><STRONG><a name="[121]"></a>__aeabi_cdcmpeq</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, cdcmple.o(.text), UNUSED)
 
-<P><STRONG><a name="[10a]"></a>__aeabi_cdcmple</STRONG> (Thumb, 38 bytes, Stack size 0 bytes, cdcmple.o(.text))
+<P><STRONG><a name="[10b]"></a>__aeabi_cdcmple</STRONG> (Thumb, 38 bytes, Stack size 0 bytes, cdcmple.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;round
 </UL>
 
@@ -477,7 +477,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[55]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_main_scatterload
 </UL>
 
-<P><STRONG><a name="[121]"></a>__scatterload_rt2</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, init.o(.text), UNUSED)
+<P><STRONG><a name="[122]"></a>__scatterload_rt2</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, init.o(.text), UNUSED)
 
 <P><STRONG><a name="[6c]"></a>DBG_Init</STRONG> (Thumb, 62 bytes, Stack size 32 bytes, debug.o(i.DBG_Init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 56<LI>Call Chain = DBG_Init &rArr; HAL_GPIO_Init
@@ -578,11 +578,11 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FLASH_WaitForLastOperation
 </UL>
-<BR>[Called By]<UL><LI><a href="#[fe]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setAddress
+<BR>[Called By]<UL><LI><a href="#[ff]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setAddress
 </UL>
 
-<P><STRONG><a name="[10c]"></a>HAL_FLASHEx_DATAEEPROM_Lock</STRONG> (Thumb, 14 bytes, Stack size 0 bytes, stm32l0xx_hal_flash_ex.o(i.HAL_FLASHEx_DATAEEPROM_Lock))
-<BR><BR>[Called By]<UL><LI><a href="#[fe]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setAddress
+<P><STRONG><a name="[10d]"></a>HAL_FLASHEx_DATAEEPROM_Lock</STRONG> (Thumb, 14 bytes, Stack size 0 bytes, stm32l0xx_hal_flash_ex.o(i.HAL_FLASHEx_DATAEEPROM_Lock))
+<BR><BR>[Called By]<UL><LI><a href="#[ff]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setAddress
 </UL>
 
 <P><STRONG><a name="[7b]"></a>HAL_FLASHEx_DATAEEPROM_Program</STRONG> (Thumb, 76 bytes, Stack size 24 bytes, stm32l0xx_hal_flash_ex.o(i.HAL_FLASHEx_DATAEEPROM_Program))
@@ -590,11 +590,11 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FLASH_WaitForLastOperation
 </UL>
-<BR>[Called By]<UL><LI><a href="#[fe]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setAddress
+<BR>[Called By]<UL><LI><a href="#[ff]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setAddress
 </UL>
 
-<P><STRONG><a name="[10b]"></a>HAL_FLASHEx_DATAEEPROM_Unlock</STRONG> (Thumb, 24 bytes, Stack size 0 bytes, stm32l0xx_hal_flash_ex.o(i.HAL_FLASHEx_DATAEEPROM_Unlock))
-<BR><BR>[Called By]<UL><LI><a href="#[fe]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setAddress
+<P><STRONG><a name="[10c]"></a>HAL_FLASHEx_DATAEEPROM_Unlock</STRONG> (Thumb, 24 bytes, Stack size 0 bytes, stm32l0xx_hal_flash_ex.o(i.HAL_FLASHEx_DATAEEPROM_Unlock))
+<BR><BR>[Called By]<UL><LI><a href="#[ff]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setAddress
 </UL>
 
 <P><STRONG><a name="[7c]"></a>HAL_GPIO_EXTI_Callback</STRONG> (Thumb, 8 bytes, Stack size 8 bytes, stm32l0xx_hal_msp.o(i.HAL_GPIO_EXTI_Callback))
@@ -939,8 +939,8 @@ Global Symbols
 <P><STRONG><a name="[b2]"></a>HAL_UART_Transmit_IT</STRONG> (Thumb, 88 bytes, Stack size 12 bytes, stm32l0xx_hal_uart.o(i.HAL_UART_Transmit_IT))
 <BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = HAL_UART_Transmit_IT
 </UL>
-<BR>[Called By]<UL><LI><a href="#[d4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vcom_Send
-<LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_TxCpltCallback
+<BR>[Called By]<UL><LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_TxCpltCallback
+<LI><a href="#[d4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vcom_Send
 </UL>
 
 <P><STRONG><a name="[a9]"></a>HAL_UART_TxCpltCallback</STRONG> (Thumb, 58 bytes, Stack size 8 bytes, vcom.o(i.HAL_UART_TxCpltCallback))
@@ -1154,8 +1154,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[25]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[fc]"></a>LoRa_receive</STRONG> (Thumb, 36 bytes, Stack size 8 bytes, lora.o(i.LoRa_receive))
-<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = LoRa_receive
+<P><STRONG><a name="[fc]"></a>LoRa_receive</STRONG> (Thumb, 54 bytes, Stack size 16 bytes, lora.o(i.LoRa_receive))
+<BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = LoRa_receive
 </UL>
 <BR>[Called By]<UL><LI><a href="#[25]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -1163,66 +1163,49 @@ Global Symbols
 <P><STRONG><a name="[fb]"></a>LoRa_send</STRONG> (Thumb, 50 bytes, Stack size 16 bytes, lora.o(i.LoRa_send))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = LoRa_send
 </UL>
-<BR>[Called By]<UL><LI><a href="#[f8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;processCommunicationCommand
+<BR>[Called By]<UL><LI><a href="#[f9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;processRadioSetupCommand
+<LI><a href="#[f8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;processCommunicationCommand
 <LI><a href="#[25]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[ff]"></a>LoRa_setBandwidth</STRONG> (Thumb, 110 bytes, Stack size 64 bytes, lora.o(i.LoRa_setBandwidth))
-<BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = LoRa_setBandwidth
-</UL>
-<BR>[Called By]<UL><LI><a href="#[f9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;processRadioSetupCommand
-</UL>
-
-<P><STRONG><a name="[101]"></a>LoRa_setCodingRate</STRONG> (Thumb, 108 bytes, Stack size 64 bytes, lora.o(i.LoRa_setCodingRate))
-<BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = LoRa_setCodingRate
-</UL>
-<BR>[Called By]<UL><LI><a href="#[f9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;processRadioSetupCommand
-</UL>
-
-<P><STRONG><a name="[100]"></a>LoRa_setOutputPower</STRONG> (Thumb, 62 bytes, Stack size 48 bytes, lora.o(i.LoRa_setOutputPower))
-<BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = LoRa_setOutputPower
-</UL>
-<BR>[Called By]<UL><LI><a href="#[f9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;processRadioSetupCommand
-</UL>
-
-<P><STRONG><a name="[108]"></a>LoRa_setPayloadMaxSize</STRONG> (Thumb, 60 bytes, Stack size 56 bytes, lora.o(i.LoRa_setPayloadMaxSize))
-<BR><BR>[Stack]<UL><LI>Max Depth = 56<LI>Call Chain = LoRa_setPayloadMaxSize
-</UL>
-<BR>[Called By]<UL><LI><a href="#[f9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;processRadioSetupCommand
-</UL>
-
-<P><STRONG><a name="[109]"></a>LoRa_setPerformCRC</STRONG> (Thumb, 108 bytes, Stack size 64 bytes, lora.o(i.LoRa_setPerformCRC))
-<BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = LoRa_setPerformCRC
-</UL>
-<BR>[Called By]<UL><LI><a href="#[f9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;processRadioSetupCommand
-</UL>
-
-<P><STRONG><a name="[107]"></a>LoRa_setPreambleSize</STRONG> (Thumb, 106 bytes, Stack size 64 bytes, lora.o(i.LoRa_setPreambleSize))
-<BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = LoRa_setPreambleSize
-</UL>
-<BR>[Called By]<UL><LI><a href="#[f9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;processRadioSetupCommand
-</UL>
-
-<P><STRONG><a name="[105]"></a>LoRa_setRxMsTimeout</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, lora.o(i.LoRa_setRxMsTimeout))
+<P><STRONG><a name="[100]"></a>LoRa_setBandwidth</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, lora.o(i.LoRa_setBandwidth))
 <BR><BR>[Called By]<UL><LI><a href="#[f9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;processRadioSetupCommand
 </UL>
 
-<P><STRONG><a name="[103]"></a>LoRa_setRxSymTimeout</STRONG> (Thumb, 58 bytes, Stack size 56 bytes, lora.o(i.LoRa_setRxSymTimeout))
-<BR><BR>[Stack]<UL><LI>Max Depth = 56<LI>Call Chain = LoRa_setRxSymTimeout
-</UL>
-<BR>[Called By]<UL><LI><a href="#[f9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;processRadioSetupCommand
+<P><STRONG><a name="[102]"></a>LoRa_setCodingRate</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, lora.o(i.LoRa_setCodingRate))
+<BR><BR>[Called By]<UL><LI><a href="#[f9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;processRadioSetupCommand
 </UL>
 
-<P><STRONG><a name="[102]"></a>LoRa_setSpreadingFactor</STRONG> (Thumb, 108 bytes, Stack size 64 bytes, lora.o(i.LoRa_setSpreadingFactor))
-<BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = LoRa_setSpreadingFactor
-</UL>
-<BR>[Called By]<UL><LI><a href="#[f9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;processRadioSetupCommand
+<P><STRONG><a name="[101]"></a>LoRa_setOutputPower</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, lora.o(i.LoRa_setOutputPower))
+<BR><BR>[Called By]<UL><LI><a href="#[f9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;processRadioSetupCommand
 </UL>
 
-<P><STRONG><a name="[106]"></a>LoRa_setTxTimeout</STRONG> (Thumb, 62 bytes, Stack size 48 bytes, lora.o(i.LoRa_setTxTimeout))
-<BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = LoRa_setTxTimeout
+<P><STRONG><a name="[109]"></a>LoRa_setPayloadMaxSize</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, lora.o(i.LoRa_setPayloadMaxSize))
+<BR><BR>[Called By]<UL><LI><a href="#[f9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;processRadioSetupCommand
 </UL>
-<BR>[Called By]<UL><LI><a href="#[f9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;processRadioSetupCommand
+
+<P><STRONG><a name="[10a]"></a>LoRa_setPerformCRC</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, lora.o(i.LoRa_setPerformCRC))
+<BR><BR>[Called By]<UL><LI><a href="#[f9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;processRadioSetupCommand
+</UL>
+
+<P><STRONG><a name="[108]"></a>LoRa_setPreambleSize</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, lora.o(i.LoRa_setPreambleSize))
+<BR><BR>[Called By]<UL><LI><a href="#[f9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;processRadioSetupCommand
+</UL>
+
+<P><STRONG><a name="[106]"></a>LoRa_setRxMsTimeout</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, lora.o(i.LoRa_setRxMsTimeout))
+<BR><BR>[Called By]<UL><LI><a href="#[f9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;processRadioSetupCommand
+</UL>
+
+<P><STRONG><a name="[104]"></a>LoRa_setRxSymTimeout</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, lora.o(i.LoRa_setRxSymTimeout))
+<BR><BR>[Called By]<UL><LI><a href="#[f9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;processRadioSetupCommand
+</UL>
+
+<P><STRONG><a name="[103]"></a>LoRa_setSpreadingFactor</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, lora.o(i.LoRa_setSpreadingFactor))
+<BR><BR>[Called By]<UL><LI><a href="#[f9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;processRadioSetupCommand
+</UL>
+
+<P><STRONG><a name="[107]"></a>LoRa_setTxTimeout</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, lora.o(i.LoRa_setTxTimeout))
+<BR><BR>[Called By]<UL><LI><a href="#[f9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;processRadioSetupCommand
 </UL>
 
 <P><STRONG><a name="[f6]"></a>LoRa_startReceiving</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, lora.o(i.LoRa_startReceiving))
@@ -1231,7 +1214,14 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[25]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[fd]"></a>LoRa_whoTimedOut</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, lora.o(i.LoRa_whoTimedOut))
+<P><STRONG><a name="[fd]"></a>LoRa_updateParameters</STRONG> (Thumb, 108 bytes, Stack size 64 bytes, lora.o(i.LoRa_updateParameters))
+<BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = LoRa_updateParameters
+</UL>
+<BR>[Called By]<UL><LI><a href="#[f9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;processRadioSetupCommand
+<LI><a href="#[25]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+</UL>
+
+<P><STRONG><a name="[fe]"></a>LoRa_whoTimedOut</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, lora.o(i.LoRa_whoTimedOut))
 <BR><BR>[Called By]<UL><LI><a href="#[25]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
@@ -1922,13 +1912,13 @@ Global Symbols
 <LI><a href="#[f1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_printf_core
 </UL>
 
-<P><STRONG><a name="[122]"></a>__1vsprintf</STRONG> (Thumb, 0 bytes, Stack size 24 bytes, printfa.o(i.__0vsprintf), UNUSED)
+<P><STRONG><a name="[123]"></a>__1vsprintf</STRONG> (Thumb, 0 bytes, Stack size 24 bytes, printfa.o(i.__0vsprintf), UNUSED)
 
-<P><STRONG><a name="[123]"></a>__2vsprintf</STRONG> (Thumb, 0 bytes, Stack size 24 bytes, printfa.o(i.__0vsprintf), UNUSED)
+<P><STRONG><a name="[124]"></a>__2vsprintf</STRONG> (Thumb, 0 bytes, Stack size 24 bytes, printfa.o(i.__0vsprintf), UNUSED)
 
-<P><STRONG><a name="[124]"></a>__c89vsprintf</STRONG> (Thumb, 0 bytes, Stack size 24 bytes, printfa.o(i.__0vsprintf), UNUSED)
+<P><STRONG><a name="[125]"></a>__c89vsprintf</STRONG> (Thumb, 0 bytes, Stack size 24 bytes, printfa.o(i.__0vsprintf), UNUSED)
 
-<P><STRONG><a name="[10d]"></a>vsprintf</STRONG> (Thumb, 0 bytes, Stack size 24 bytes, printfa.o(i.__0vsprintf))
+<P><STRONG><a name="[10e]"></a>vsprintf</STRONG> (Thumb, 0 bytes, Stack size 24 bytes, printfa.o(i.__0vsprintf))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = vsprintf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[d4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vcom_Send
@@ -1952,11 +1942,11 @@ Global Symbols
 <LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_SetConfig
 </UL>
 
-<P><STRONG><a name="[125]"></a>__scatterload_copy</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_copy), UNUSED)
+<P><STRONG><a name="[126]"></a>__scatterload_copy</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_copy), UNUSED)
 
-<P><STRONG><a name="[126]"></a>__scatterload_null</STRONG> (Thumb, 2 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_null), UNUSED)
+<P><STRONG><a name="[127]"></a>__scatterload_null</STRONG> (Thumb, 2 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_null), UNUSED)
 
-<P><STRONG><a name="[127]"></a>__scatterload_zeroinit</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_zeroinit), UNUSED)
+<P><STRONG><a name="[128]"></a>__scatterload_zeroinit</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_zeroinit), UNUSED)
 
 <P><STRONG><a name="[d7]"></a>ceil</STRONG> (Thumb, 180 bytes, Stack size 24 bytes, ceil.o(i.ceil))
 <BR><BR>[Stack]<UL><LI>Max Depth = 136<LI>Call Chain = ceil &rArr; __aeabi_drsub &rArr; __aeabi_dadd &rArr; _double_epilogue &rArr; __aeabi_llsr
@@ -1978,16 +1968,16 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[3b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SX1272GetTimeOnAir
 </UL>
 
-<P><STRONG><a name="[25]"></a>main</STRONG> (Thumb, 362 bytes, Stack size 32 bytes, main.o(i.main))
-<BR><BR>[Stack]<UL><LI>Max Depth = 280<LI>Call Chain = main &rArr; processRadioSetupCommand &rArr; PC_send &rArr; vcom_Send &rArr; vsprintf
+<P><STRONG><a name="[25]"></a>main</STRONG> (Thumb, 454 bytes, Stack size 32 bytes, main.o(i.main))
+<BR><BR>[Stack]<UL><LI>Max Depth = 288<LI>Call Chain = main &rArr; processRadioSetupCommand &rArr; PC_send &rArr; vcom_Send &rArr; vsprintf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Init
-<LI><a href="#[d4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vcom_Send
 <LI><a href="#[e9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
 <LI><a href="#[d3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PC_send
 <LI><a href="#[f7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PC_receive
 <LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PC_init
-<LI><a href="#[fd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRa_whoTimedOut
+<LI><a href="#[fe]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRa_whoTimedOut
+<LI><a href="#[fd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRa_updateParameters
 <LI><a href="#[f6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRa_startReceiving
 <LI><a href="#[fb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRa_send
 <LI><a href="#[fc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRa_receive
@@ -2005,7 +1995,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[3c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SX1272Send
 </UL>
 
-<P><STRONG><a name="[f8]"></a>processCommunicationCommand</STRONG> (Thumb, 160 bytes, Stack size 32 bytes, main.o(i.processCommunicationCommand))
+<P><STRONG><a name="[f8]"></a>processCommunicationCommand</STRONG> (Thumb, 144 bytes, Stack size 32 bytes, main.o(i.processCommunicationCommand))
 <BR><BR>[Stack]<UL><LI>Max Depth = 240<LI>Call Chain = processCommunicationCommand &rArr; PC_send &rArr; vcom_Send &rArr; vsprintf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DelayMs
@@ -2015,31 +2005,33 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[25]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[fa]"></a>processPCCommand</STRONG> (Thumb, 66 bytes, Stack size 32 bytes, main.o(i.processPCCommand))
+<P><STRONG><a name="[fa]"></a>processPCCommand</STRONG> (Thumb, 70 bytes, Stack size 32 bytes, main.o(i.processPCCommand))
 <BR><BR>[Stack]<UL><LI>Max Depth = 240<LI>Call Chain = processPCCommand &rArr; PC_send &rArr; vcom_Send &rArr; vsprintf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[d3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PC_send
-<LI><a href="#[fe]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setAddress
+<LI><a href="#[ff]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setAddress
 </UL>
 <BR>[Called By]<UL><LI><a href="#[25]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[f9]"></a>processRadioSetupCommand</STRONG> (Thumb, 342 bytes, Stack size 40 bytes, main.o(i.processRadioSetupCommand))
-<BR><BR>[Stack]<UL><LI>Max Depth = 248<LI>Call Chain = processRadioSetupCommand &rArr; PC_send &rArr; vcom_Send &rArr; vsprintf
+<P><STRONG><a name="[f9]"></a>processRadioSetupCommand</STRONG> (Thumb, 294 bytes, Stack size 48 bytes, main.o(i.processRadioSetupCommand))
+<BR><BR>[Stack]<UL><LI>Max Depth = 256<LI>Call Chain = processRadioSetupCommand &rArr; PC_send &rArr; vcom_Send &rArr; vsprintf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[d3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PC_send
-<LI><a href="#[106]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRa_setTxTimeout
-<LI><a href="#[102]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRa_setSpreadingFactor
-<LI><a href="#[103]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRa_setRxSymTimeout
-<LI><a href="#[105]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRa_setRxMsTimeout
-<LI><a href="#[107]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRa_setPreambleSize
-<LI><a href="#[109]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRa_setPerformCRC
-<LI><a href="#[108]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRa_setPayloadMaxSize
-<LI><a href="#[100]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRa_setOutputPower
-<LI><a href="#[101]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRa_setCodingRate
-<LI><a href="#[ff]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRa_setBandwidth
+<LI><a href="#[fd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRa_updateParameters
+<LI><a href="#[107]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRa_setTxTimeout
+<LI><a href="#[103]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRa_setSpreadingFactor
+<LI><a href="#[104]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRa_setRxSymTimeout
+<LI><a href="#[106]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRa_setRxMsTimeout
+<LI><a href="#[108]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRa_setPreambleSize
+<LI><a href="#[10a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRa_setPerformCRC
+<LI><a href="#[109]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRa_setPayloadMaxSize
+<LI><a href="#[101]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRa_setOutputPower
+<LI><a href="#[102]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRa_setCodingRate
+<LI><a href="#[100]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRa_setBandwidth
+<LI><a href="#[fb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRa_send
 <LI><a href="#[ef]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__ARM_common_switch8
-<LI><a href="#[104]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uread4
+<LI><a href="#[105]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uread4
 </UL>
 <BR>[Called By]<UL><LI><a href="#[25]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -2051,17 +2043,17 @@ Global Symbols
 <LI><a href="#[d8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cdrcmple
 <LI><a href="#[69]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_drnd
 <LI><a href="#[61]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dsub
-<LI><a href="#[10a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cdcmple
+<LI><a href="#[10b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cdcmple
 </UL>
 <BR>[Called By]<UL><LI><a href="#[3b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SX1272GetTimeOnAir
 </UL>
 
-<P><STRONG><a name="[fe]"></a>setAddress</STRONG> (Thumb, 42 bytes, Stack size 16 bytes, main.o(i.setAddress))
+<P><STRONG><a name="[ff]"></a>setAddress</STRONG> (Thumb, 42 bytes, Stack size 16 bytes, main.o(i.setAddress))
 <BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = setAddress &rArr; HAL_FLASHEx_DATAEEPROM_Program &rArr; FLASH_WaitForLastOperation &rArr; FLASH_SetErrorCode
 </UL>
-<BR>[Calls]<UL><LI><a href="#[10b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_FLASHEx_DATAEEPROM_Unlock
+<BR>[Calls]<UL><LI><a href="#[10c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_FLASHEx_DATAEEPROM_Unlock
 <LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_FLASHEx_DATAEEPROM_Program
-<LI><a href="#[10c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_FLASHEx_DATAEEPROM_Lock
+<LI><a href="#[10d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_FLASHEx_DATAEEPROM_Lock
 <LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_FLASHEx_DATAEEPROM_Erase
 </UL>
 <BR>[Called By]<UL><LI><a href="#[fa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;processPCCommand
@@ -2091,11 +2083,10 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 192<LI>Call Chain = vcom_Send &rArr; vsprintf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Transmit_IT
-<LI><a href="#[10d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vsprintf
+<LI><a href="#[10e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vsprintf
 <LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
 </UL>
 <BR>[Called By]<UL><LI><a href="#[d3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PC_send
-<LI><a href="#[25]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 <P>
 <H3>

@@ -115,7 +115,7 @@ namespace LoRa_Controller
 
 		private static void BackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
 		{
-			int radioDeviceAddress = 0;
+			int radioDeviceAddress = Int32.MaxValue;
 			bool newRadioDevice;
 			byte[] receivedData = (byte[])e.UserState;
 			string receivedDataString = null;
@@ -123,11 +123,18 @@ namespace LoRa_Controller
 			int source = receivedData[Idx_sourceAddress];
 			int target = receivedData[Idx_targetAddress];
 			Response response = (Response)receivedData[Idx_commandParameter];
+			int rssi = 0;
+			int snr = 0;
 
 			switch (source)
 			{
 				case Address_master:
-					radioDeviceAddress = 1;
+					if (directDevice.Address == Address_master)
+						radioDeviceAddress = target;
+					else
+						radioDeviceAddress = 1;
+					rssi = receivedData[Idx_RSSI];
+					snr = receivedData[Idx_SNR];
 					switch (command)
 					{
 						case Command.IsPresent:
@@ -169,7 +176,7 @@ namespace LoRa_Controller
 							receivedDataString = "Payload max size set by master to " + receivedData[Idx_commandParameter + 3];
 							break;
 						case Command.VariablePayload:
-							receivedDataString = "Variable payload set by master to " + ((receivedData[Idx_commandParameter + 3] == 1)? "true" : "false");
+							receivedDataString = "Variable payload set by master to " + ((receivedData[Idx_commandParameter + 3] == 1) ? "true" : "false");
 							break;
 						case Command.PerformCRC:
 							receivedDataString = "Perform CRC set by master to " + ((receivedData[Idx_commandParameter + 3] == 1) ? "true" : "false");
@@ -181,10 +188,20 @@ namespace LoRa_Controller
 					break;
 				case Address_general:
 					if (directDevice.Address >= Address_beacon)
+					{
 						radioDeviceAddress = 1;
+						rssi = receivedData[Idx_RSSI];
+						snr = receivedData[Idx_SNR];
+					}
 
 					switch (command)
 					{
+						case Command.IsPresent:
+							if (target == Address_master)
+								receivedDataString = "No beacon responded";
+							else
+								receivedDataString = "Beacon " + target + " did not respond";
+							break;
 						default:
 							receivedDataString = "Unknown command " + command + " from " + source + " to " + target;
 							break;
@@ -278,87 +295,96 @@ namespace LoRa_Controller
 					break;
 				default: //beacon
 					radioDeviceAddress = source;
+					rssi = receivedData[Idx_RSSI];
+					snr = receivedData[Idx_SNR];
 
 					switch (command)
 					{
 						case Command.IsPresent:
 							if (response == Response.ACK)
 								receivedDataString = "Beacon " + source + " present";
-							else
-								receivedDataString = "Beacon " + source + " sent uknown command " + command;
 							break;
 						default:
-							receivedDataString = "Unknown command " + command + " from " + source + " to " + target;
+							if (response == Response.ACK)
+								receivedDataString = "Beacon " + source + " ACK";
+							if (response == Response.NACK)
+								receivedDataString = "Beacon " + source + " NACK";
 							break;
 					}
 					break;
 			}
-			if (response == Response.NACK)
+			
+			if (response == Response.ACK)
+			{
+				if (radioDeviceAddress != Int32.MaxValue)
+				{
+					newRadioDevice = true;
+					foreach (RadioDevice device in radioDevices)
+						if (device.Address == radioDeviceAddress)
+						{
+							newRadioDevice = false;
+							break;
+						}
+					if (radioDeviceAddress != 0 && newRadioDevice)
+					{
+						radioDevices.Add(new RadioDevice(radioDeviceAddress));
+						mainWindow.UpdateRadioConnectedNodes();
+						if (radioDeviceAddress == Address_master)
+						{
+							logger.Write("Radio device master");
+						}
+						else
+							logger.Write("Radio device beacon " + directDevice.Address);
+					}
+				}
+					
+				foreach (RadioDevice device in radioDevices)
+					if (device.Address == radioDeviceAddress)
+					{
+						if (rssi != 0 && snr != 0)
+						{
+							string logString;
+							device.Connected = true;
+							device.UpdateSignalQuality(rssi, snr);
+							mainWindow.radioNodeGroupBoxes[radioDevices.IndexOf(device)].UpdateConnectedStatus(true);
+							mainWindow.radioNodeGroupBoxes[radioDevices.IndexOf(device)].UpdateRSSI(device.RSSI);
+							mainWindow.radioNodeGroupBoxes[radioDevices.IndexOf(device)].UpdateSNR(device.SNR);
+							if (radioDeviceAddress == Address_master)
+								logString = "Master, ";
+							else
+								logString = "Beacon " + directDevice.Address + ", ";
+							logString += device.RSSI + ", " + device.SNR;
+							logger.Write(logString);
+						}
+					}
+			}
+			else
 			{
 				switch ((Error)receivedData[Idx_commandParameter + 1])
 				{
 					case Error.RADIO_RX_TIMEOUT:
-						if (target == Address_general)
+						if (source == Address_general)
 						{
-							radioDeviceAddress = 0;
-							receivedDataString = "No beacon responded";
-						}
-						else
-							receivedDataString = "Beacon " + target + " did not respond";
-						foreach (RadioDevice device in radioDevices)
-							if (device.Address == radioDeviceAddress)
+							foreach (RadioDevice device in radioDevices)
 							{
 								device.Connected = false;
 								mainWindow.radioNodeGroupBoxes[radioDevices.IndexOf(device)].UpdateConnectedStatus(false);
 							}
+						}
+						else
+						{
+							foreach (RadioDevice device in radioDevices)
+								if (device.Address == radioDeviceAddress)
+								{
+									device.Connected = false;
+									mainWindow.radioNodeGroupBoxes[radioDevices.IndexOf(device)].UpdateConnectedStatus(false);
+								}
+						}
 						break;
 					case Error.RADIO_TX_TIMEOUT:
 						receivedDataString = "Tx timeout too small to send messages";
 						break;
 				}
-			}
-			
-			if (radioDeviceAddress != 0)
-			{
-				newRadioDevice = true;
-				foreach (RadioDevice device in radioDevices)
-					if (device.Address == radioDeviceAddress)
-					{
-						newRadioDevice = false;
-						break;
-					}
-				if (radioDeviceAddress != 0 && newRadioDevice)
-				{
-					radioDevices.Add(new RadioDevice(radioDeviceAddress));
-					mainWindow.UpdateRadioConnectedNodes();
-					if (radioDeviceAddress == Address_master)
-					{
-						logger.Write("Radio device master");
-					}
-					else
-						logger.Write("Radio device beacon " + directDevice.Address);
-				}
-
-				foreach (RadioDevice device in radioDevices)
-					if (device.Address == radioDeviceAddress)
-					{/*
-					if (line.Contains("Rssi") && line.Contains(","))
-					{
-						string logString;
-						device.Connected = true;
-						device.UpdateSignalQuality(line);
-						mainWindow.radioNodeGroupBoxes[radioDevices.IndexOf(device)].UpdateConnectedStatus(true);
-						mainWindow.radioNodeGroupBoxes[radioDevices.IndexOf(device)].UpdateRSSI(device.RSSI);
-						mainWindow.radioNodeGroupBoxes[radioDevices.IndexOf(device)].UpdateSNR(device.SNR);
-						if (radioDeviceAddress == MasterDeviceAddress)
-							logString = "Master, ";
-						else
-							logString = "Beacon " + directDevice.Address;
-						logString += device.RSSI + ", " + device.SNR;
-						logger.Write(logString);
-					}
-					break;*/
-					}
 			}
 			if (receivedDataString != null)
 			{

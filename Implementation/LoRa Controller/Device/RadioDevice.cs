@@ -41,22 +41,10 @@ namespace LoRa_Controller.Device
 		#endregion
 
 		#region Public methods
-		public void UpdateSignalQuality(string line)
+		public void UpdateSignalQuality(int rssi, int snr)
 		{
-			String tempString = line.Remove(line.IndexOf(' '));
-
-			if (line.Contains("not responding"))
-				connected = false;
-			else
-			{
-				if (tempString.Length != 0)
-				{
-					tempString = tempString.Substring(line.IndexOf('=') + 1);
-					rssi = Int32.Parse(tempString);
-				}
-				tempString = line.Substring(line.LastIndexOf('=') + 1);
-				snr = Int32.Parse(tempString);
-			}
+			this.rssi = rssi;
+			this.snr = snr;
 		}
 		#endregion
 	}

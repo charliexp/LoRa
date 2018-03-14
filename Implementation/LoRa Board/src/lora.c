@@ -1,5 +1,6 @@
 #include "lora.h"
 #include "radio.h"
+#include "stdlib.h"
 
 #define RADIO_FREQUENCY       866500000
 
@@ -50,8 +51,6 @@ static void OnRxDone( uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr 
 	memcpy((uint8_t *) RadioRxBuffer, payload, BufferSize );
 	RSSI = rssi;
 	SNR = snr;
-  
-	//PRINTF("RSSI=%d dBm, SNR=%d\n\r", rssi, snr);
 }
 
 static void OnTxTimeout( void )
@@ -113,7 +112,7 @@ void LoRa_startReceiving(void)
 	RadioState = RADIO_LOWPOWER;
 }
 
-void LoRa_receive(uint8_t* source, uint8_t* command, uint8_t* parameters)
+void LoRa_receive(uint8_t* source, uint8_t* command, uint8_t* parameters, uint8_t* rssi, uint8_t* snr)
 {
 	uint8_t i;
 	*source = RadioRxBuffer[IDX_SOURCE_ADDRESS];
@@ -121,6 +120,8 @@ void LoRa_receive(uint8_t* source, uint8_t* command, uint8_t* parameters)
 	for (i = 0; i < PARAMETERS_MAX_SIZE; i++)
 		parameters[i] = RadioRxBuffer[IDX_COMMAND_PARAMETER + i];
 	RadioState = RADIO_LOWPOWER;
+	*rssi = abs(RSSI);
+	*snr = SNR;
 }
 
 uint8_t LoRa_whoTimedOut(void)
@@ -130,69 +131,42 @@ uint8_t LoRa_whoTimedOut(void)
 	return target;
 }
 
-void LoRa_setBandwidth(uint8_t bandwidth)
+void LoRa_updateParameters(void)
 {
-	LoRa_Bandwidth = bandwidth;
-	
-  Radio.SetTxConfig( MODEM_LORA, LoRa_OutputPower, 0, LoRa_Bandwidth,
-                                 LoRa_SpreadingFactor, LoRa_CodingRate,
+	Radio.SetTxConfig( MODEM_LORA, LoRa_OutputPower, 0, LoRa_Bandwidth,
+																 LoRa_SpreadingFactor, LoRa_CodingRate,
 																 LoRa_PreambleSize, !LoRa_VariablePayload,
 																 LoRa_PerformCRC, 0, 0, false, LoRa_TxTimeout );
-    
-  Radio.SetRxConfig( MODEM_LORA, LoRa_Bandwidth, LoRa_SpreadingFactor,
+		
+	Radio.SetRxConfig( MODEM_LORA, LoRa_Bandwidth, LoRa_SpreadingFactor,
 																 LoRa_CodingRate, 0, LoRa_PreambleSize,
 																 LoRa_RxSymTimeout, !LoRa_VariablePayload,
 																 LoRa_PayloadMaxSize, LoRa_PerformCRC, 0, 0, false, true );
+}
+
+void LoRa_setBandwidth(uint8_t bandwidth)
+{
+	LoRa_Bandwidth = bandwidth;
 }
 
 void LoRa_setOutputPower(uint8_t outputPower)
 {
 	LoRa_OutputPower = outputPower;
-	
-  Radio.SetTxConfig( MODEM_LORA, LoRa_OutputPower, 0, LoRa_Bandwidth,
-                                 LoRa_SpreadingFactor, LoRa_CodingRate,
-																 LoRa_PreambleSize, !LoRa_VariablePayload,
-																 LoRa_PerformCRC, 0, 0, false, LoRa_TxTimeout );
 }
 
 void LoRa_setCodingRate(uint8_t codingRate)
 {
 	LoRa_CodingRate = codingRate;
-	
-  Radio.SetTxConfig( MODEM_LORA, LoRa_OutputPower, 0, LoRa_Bandwidth,
-                                 LoRa_SpreadingFactor, LoRa_CodingRate,
-																 LoRa_PreambleSize, !LoRa_VariablePayload,
-																 LoRa_PerformCRC, 0, 0, false, LoRa_TxTimeout );
-    
-  Radio.SetRxConfig( MODEM_LORA, LoRa_Bandwidth, LoRa_SpreadingFactor,
-																 LoRa_CodingRate, 0, LoRa_PreambleSize,
-																 LoRa_RxSymTimeout, !LoRa_VariablePayload,
-																 LoRa_PayloadMaxSize, LoRa_PerformCRC, 0, 0, false, true );
 }
 
 void LoRa_setSpreadingFactor(uint8_t spreadingFactor)
 {
 	LoRa_SpreadingFactor = spreadingFactor;
-	
-  Radio.SetTxConfig( MODEM_LORA, LoRa_OutputPower, 0, LoRa_Bandwidth,
-                                 LoRa_SpreadingFactor, LoRa_CodingRate,
-																 LoRa_PreambleSize, !LoRa_VariablePayload,
-																 LoRa_PerformCRC, 0, 0, false, LoRa_TxTimeout );
-    
-  Radio.SetRxConfig( MODEM_LORA, LoRa_Bandwidth, LoRa_SpreadingFactor,
-																 LoRa_CodingRate, 0, LoRa_PreambleSize,
-																 LoRa_RxSymTimeout, !LoRa_VariablePayload,
-																 LoRa_PayloadMaxSize, LoRa_PerformCRC, 0, 0, false, true );
 }
 
 void LoRa_setRxSymTimeout(uint8_t rxSymTimeout)
 {
 	LoRa_RxSymTimeout = rxSymTimeout;
-	
-  Radio.SetRxConfig( MODEM_LORA, LoRa_Bandwidth, LoRa_SpreadingFactor,
-																 LoRa_CodingRate, 0, LoRa_PreambleSize,
-																 LoRa_RxSymTimeout, !LoRa_VariablePayload,
-																 LoRa_PayloadMaxSize, LoRa_PerformCRC, 0, 0, false, true );
 }
 
 void LoRa_setRxMsTimeout(uint32_t rxMsTimeout)
@@ -203,64 +177,24 @@ void LoRa_setRxMsTimeout(uint32_t rxMsTimeout)
 void LoRa_setTxTimeout(uint32_t txTimeout)
 {
 	LoRa_TxTimeout = txTimeout;
-	
-  Radio.SetTxConfig( MODEM_LORA, LoRa_OutputPower, 0, LoRa_Bandwidth,
-                                 LoRa_SpreadingFactor, LoRa_CodingRate,
-																 LoRa_PreambleSize, !LoRa_VariablePayload,
-																 LoRa_PerformCRC, 0, 0, false, LoRa_TxTimeout );
 }
 
 void LoRa_setPreambleSize(uint8_t preambleSize)
 {
 	LoRa_PreambleSize = preambleSize;
-	
-  Radio.SetTxConfig( MODEM_LORA, LoRa_OutputPower, 0, LoRa_Bandwidth,
-                                 LoRa_SpreadingFactor, LoRa_CodingRate,
-																 LoRa_PreambleSize, !LoRa_VariablePayload,
-																 LoRa_PerformCRC, 0, 0, false, LoRa_TxTimeout );
-    
-  Radio.SetRxConfig( MODEM_LORA, LoRa_Bandwidth, LoRa_SpreadingFactor,
-																 LoRa_CodingRate, 0, LoRa_PreambleSize,
-																 LoRa_RxSymTimeout, !LoRa_VariablePayload,
-																 LoRa_PayloadMaxSize, LoRa_PerformCRC, 0, 0, false, true );
 }
 
 void LoRa_setPayloadMaxSize(uint8_t payloadMaxSize)
 {
 	LoRa_PayloadMaxSize = payloadMaxSize;
-	
-  Radio.SetRxConfig( MODEM_LORA, LoRa_Bandwidth, LoRa_SpreadingFactor,
-																 LoRa_CodingRate, 0, LoRa_PreambleSize,
-																 LoRa_RxSymTimeout, !LoRa_VariablePayload,
-																 LoRa_PayloadMaxSize, LoRa_PerformCRC, 0, 0, false, true );
 }
 
 void LoRa_setVariablePayload(bool variablePayload)
 {
 	LoRa_VariablePayload = variablePayload;
-	
-  Radio.SetTxConfig( MODEM_LORA, LoRa_OutputPower, 0, LoRa_Bandwidth,
-                                 LoRa_SpreadingFactor, LoRa_CodingRate,
-																 LoRa_PreambleSize, !LoRa_VariablePayload,
-																 LoRa_PerformCRC, 0, 0, false, LoRa_TxTimeout );
-    
-  Radio.SetRxConfig( MODEM_LORA, LoRa_Bandwidth, LoRa_SpreadingFactor,
-																 LoRa_CodingRate, 0, LoRa_PreambleSize,
-																 LoRa_RxSymTimeout, !LoRa_VariablePayload,
-																 LoRa_PayloadMaxSize, LoRa_PerformCRC, 0, 0, false, true );
 }
 
 void LoRa_setPerformCRC(bool performCRC)
 {
 	LoRa_PerformCRC = performCRC;
-	
-  Radio.SetTxConfig( MODEM_LORA, LoRa_OutputPower, 0, LoRa_Bandwidth,
-                                 LoRa_SpreadingFactor, LoRa_CodingRate,
-																 LoRa_PreambleSize, !LoRa_VariablePayload,
-																 LoRa_PerformCRC, 0, 0, false, LoRa_TxTimeout );
-    
-  Radio.SetRxConfig( MODEM_LORA, LoRa_Bandwidth, LoRa_SpreadingFactor,
-																 LoRa_CodingRate, 0, LoRa_PreambleSize,
-																 LoRa_RxSymTimeout, !LoRa_VariablePayload,
-																 LoRa_PayloadMaxSize, LoRa_PerformCRC, 0, 0, false, true );
 }

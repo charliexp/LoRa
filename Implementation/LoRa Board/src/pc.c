@@ -7,7 +7,7 @@
 extern UART_HandleTypeDef UartHandle;
 
 volatile uint8_t UartRxBuffer[UART_BUFFER_SIZE];
-volatile uint8_t UartTxBuffer[UART_BUFFER_SIZE];
+volatile uint8_t UartTxBuffer[UART_BUFFER_SIZE + 2];
 
 UartStates_t UartState = UART_IDLE;
 

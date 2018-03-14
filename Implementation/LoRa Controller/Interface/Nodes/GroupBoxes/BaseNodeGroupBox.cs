@@ -111,8 +111,8 @@ namespace LoRa_Controller.Interface.Node.GroupBoxes
 				InterfaceConstants.InputWidth +
 				InterfaceConstants.ItemPadding;
 			Height = InterfaceConstants.GroupBoxFirstItemY +
-				Controls.Count * InterfaceConstants.InputHeight +
-				(Controls.Count - 1) * InterfaceConstants.ItemPadding +
+				(statusControls.Count + LoRaControls.Count) * InterfaceConstants.InputHeight +
+				(statusControls.Count + LoRaControls.Count - 1) * InterfaceConstants.ItemPadding +
 				InterfaceConstants.GroupBoxLastItemY;
 
 			Location = new Point(InterfaceConstants.GroupBoxLocationX +

@@ -10,7 +10,7 @@
 		public const int GroupBoxLocationX = 13;
 		public const int GroupBoxLocationY = 13;
 		public const int GroupBoxFirstItemY = 23;
-		public const int GroupBoxLastItemY = 12;
+		public const int GroupBoxLastItemY = 4;
 		public const int GroupBoxWidth = 264;
 
 		public const int LabelLocationX = 8;

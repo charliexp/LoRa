@@ -39,35 +39,31 @@
 			// logListBox
 			// 
 			this.logListBox.FormattingEnabled = true;
-			this.logListBox.ItemHeight = 16;
-			this.logListBox.Location = new System.Drawing.Point(8, 91);
-			this.logListBox.Margin = new System.Windows.Forms.Padding(4);
+			this.logListBox.Location = new System.Drawing.Point(6, 73);
 			this.logListBox.Name = "logListBox";
 			this.logListBox.SelectionMode = System.Windows.Forms.SelectionMode.None;
-			this.logListBox.Size = new System.Drawing.Size(239, 196);
+			this.logListBox.Size = new System.Drawing.Size(192, 147);
 			this.logListBox.TabIndex = 0;
 			// 
 			// logGroupBox
 			// 
+			this.logGroupBox.AutoSize = true;
 			this.logGroupBox.Controls.Add(this.changeLogFolderButton);
 			this.logGroupBox.Controls.Add(this.logFolderTextBox);
 			this.logGroupBox.Controls.Add(this.logListBox);
 			this.logGroupBox.Controls.Add(this.logFolderLabel);
-			this.logGroupBox.Location = new System.Drawing.Point(718, 374);
-			this.logGroupBox.Margin = new System.Windows.Forms.Padding(4);
+			this.logGroupBox.Location = new System.Drawing.Point(12, 12);
 			this.logGroupBox.Name = "logGroupBox";
-			this.logGroupBox.Padding = new System.Windows.Forms.Padding(4);
-			this.logGroupBox.Size = new System.Drawing.Size(259, 299);
+			this.logGroupBox.Size = new System.Drawing.Size(204, 239);
 			this.logGroupBox.TabIndex = 4;
 			this.logGroupBox.TabStop = false;
 			this.logGroupBox.Text = "Log";
 			// 
 			// changeLogFolderButton
 			// 
-			this.changeLogFolderButton.Location = new System.Drawing.Point(147, 19);
-			this.changeLogFolderButton.Margin = new System.Windows.Forms.Padding(4);
+			this.changeLogFolderButton.Location = new System.Drawing.Point(118, 15);
 			this.changeLogFolderButton.Name = "changeLogFolderButton";
-			this.changeLogFolderButton.Size = new System.Drawing.Size(100, 28);
+			this.changeLogFolderButton.Size = new System.Drawing.Size(80, 22);
 			this.changeLogFolderButton.TabIndex = 14;
 			this.changeLogFolderButton.Text = "Change";
 			this.changeLogFolderButton.UseVisualStyleBackColor = true;
@@ -75,38 +71,36 @@
 			// 
 			// logFolderTextBox
 			// 
-			this.logFolderTextBox.Location = new System.Drawing.Point(8, 59);
-			this.logFolderTextBox.Margin = new System.Windows.Forms.Padding(4);
+			this.logFolderTextBox.Location = new System.Drawing.Point(6, 47);
 			this.logFolderTextBox.Name = "logFolderTextBox";
-			this.logFolderTextBox.Size = new System.Drawing.Size(239, 22);
+			this.logFolderTextBox.Size = new System.Drawing.Size(192, 20);
 			this.logFolderTextBox.TabIndex = 13;
 			// 
 			// logFolderLabel
 			// 
 			this.logFolderLabel.AutoSize = true;
-			this.logFolderLabel.Location = new System.Drawing.Point(8, 30);
-			this.logFolderLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.logFolderLabel.Location = new System.Drawing.Point(6, 24);
 			this.logFolderLabel.Name = "logFolderLabel";
-			this.logFolderLabel.Size = new System.Drawing.Size(76, 17);
+			this.logFolderLabel.Size = new System.Drawing.Size(57, 13);
 			this.logFolderLabel.TabIndex = 12;
 			this.logFolderLabel.Text = "Log Folder";
 			// 
 			// MainWindow
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-			this.ClientSize = new System.Drawing.Size(1026, 744);
+			this.AutoScroll = true;
+			this.AutoSize = true;
+			this.ClientSize = new System.Drawing.Size(269, 288);
 			this.Controls.Add(this.logGroupBox);
 			this.Enabled = false;
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-			this.Margin = new System.Windows.Forms.Padding(4);
-			this.MaximizeBox = false;
 			this.Name = "MainWindow";
 			this.Text = "LoRa Controller";
 			this.Load += new System.EventHandler(this.Form1_Load);
 			this.logGroupBox.ResumeLayout(false);
 			this.logGroupBox.PerformLayout();
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 

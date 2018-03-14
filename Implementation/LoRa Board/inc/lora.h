@@ -21,10 +21,9 @@ extern RadioStates_t RadioState;
 void LoRa_init(void);
 void LoRa_send(uint8_t target, uint8_t command, uint8_t* data, uint8_t length);
 void LoRa_startReceiving(void);
-void LoRa_receive(uint8_t* source, uint8_t* command, uint8_t* parameters);
+void LoRa_receive(uint8_t* source, uint8_t* command, uint8_t* parameters, uint8_t* rssi, uint8_t* snr);
 uint8_t LoRa_whoTimedOut(void);
-int8_t LoRa_getRSSI(void);
-int8_t LoRa_getSNR(void);
+void LoRa_updateParameters(void);
 
 void LoRa_setBandwidth(uint8_t bandwidth);
 void LoRa_setOutputPower(uint8_t outputPower);

@@ -97,6 +97,9 @@ namespace LoRa_Controller.Interface
 					break;
 			}
 			directNodeGroupBox.Draw(0);
+			logGroupBox.Location = new Point(InterfaceConstants.GroupBoxLocationX +
+				(radioNodeGroupBoxes.Count + 1) * (directNodeGroupBox.Width + InterfaceConstants.GroupBoxLocationX),
+				InterfaceConstants.GroupBoxLocationY);
 		}
 
 		public void UpdateRadioConnectedNodes()
@@ -112,6 +115,9 @@ namespace LoRa_Controller.Interface
 				Controls.Add(radioNodeGroupBoxes[i]);
 				radioNodeGroupBoxes[i].Draw(radioNodeGroupBoxes.Count);
 			}
+			logGroupBox.Location = new Point(InterfaceConstants.GroupBoxLocationX +
+				(radioNodeGroupBoxes.Count + 1) * (directNodeGroupBox.Width + InterfaceConstants.GroupBoxLocationX),
+				InterfaceConstants.GroupBoxLocationY);
 		}
 	}
 }
