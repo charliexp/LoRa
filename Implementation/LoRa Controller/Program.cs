@@ -141,44 +141,66 @@ namespace LoRa_Controller
 							receivedDataString = "Master asked if present";
 							break;
 						case Command.Bandwidth:
+							if (directDevice.Address != Address_master)
+								mainWindow.directNodeGroupBox.Bandwidth.SetValue(receivedData[Idx_commandParameter + 3]);
 							receivedDataString = "Bandwidth set by master to " + receivedData[Idx_commandParameter + 3];
 							break;
 						case Command.OutputPower:
+							if (directDevice.Address != Address_master)
+								mainWindow.directNodeGroupBox.OutputPower.SetValue(receivedData[Idx_commandParameter + 3]);
 							receivedDataString = "Output power set by master to " + receivedData[Idx_commandParameter + 3];
 							break;
 						case Command.CodingRate:
+							if (directDevice.Address != Address_master)
+								mainWindow.directNodeGroupBox.CodingRate.SetValue(receivedData[Idx_commandParameter + 3]);
 							receivedDataString = "Coding rate set by master to " + receivedData[Idx_commandParameter + 3];
 							break;
 						case Command.SpreadingFactor:
+							if (directDevice.Address != Address_master)
+								mainWindow.directNodeGroupBox.SpreadingFactor.SetValue(receivedData[Idx_commandParameter + 3]);
 							receivedDataString = "Spreading factor set by master to " + receivedData[Idx_commandParameter + 3];
 							break;
 						case Command.RxSymTimeout:
+							if (directDevice.Address != Address_master)
+								mainWindow.directNodeGroupBox.RxSymTimeout.SetValue(receivedData[Idx_commandParameter + 3]);
 							receivedDataString = "Rx timeout (sym) set by master to " + receivedData[Idx_commandParameter + 3];
 							break;
 						case Command.RxMsTimeout:
 							int rxTimeout = receivedData[Idx_commandParameter + 0] << 24 |
-											receivedData[Idx_commandParameter + 1] << 16 |
-											receivedData[Idx_commandParameter + 2] << 8 |
-											receivedData[Idx_commandParameter + 3];
+										receivedData[Idx_commandParameter + 1] << 16 |
+										receivedData[Idx_commandParameter + 2] << 8 |
+										receivedData[Idx_commandParameter + 3];
+							if (directDevice.Address != Address_master)
+								mainWindow.directNodeGroupBox.RxMsTimeout.SetValue(rxTimeout);
 							receivedDataString = "Rx timeout (ms) set by master to " + rxTimeout.ToString();
 							break;
 						case Command.TxTimeout:
 							int txTimeout = receivedData[Idx_commandParameter + 0] << 24 |
-											receivedData[Idx_commandParameter + 1] << 16 |
-											receivedData[Idx_commandParameter + 2] << 8 |
-											receivedData[Idx_commandParameter + 3];
+										receivedData[Idx_commandParameter + 1] << 16 |
+										receivedData[Idx_commandParameter + 2] << 8 |
+										receivedData[Idx_commandParameter + 3];
+							if (directDevice.Address != Address_master)
+								mainWindow.directNodeGroupBox.TxTimeout.SetValue(txTimeout);
 							receivedDataString = "Tx timeout (ms) set by master to " + txTimeout.ToString();
 							break;
 						case Command.PreambleSize:
+							if (directDevice.Address != Address_master)
+								mainWindow.directNodeGroupBox.PreambleSize.SetValue(receivedData[Idx_commandParameter + 3]);
 							receivedDataString = "Preamble size set by master to " + receivedData[Idx_commandParameter + 3];
 							break;
 						case Command.PayloadMaxSize:
+							if (directDevice.Address != Address_master)
+								mainWindow.directNodeGroupBox.PayloadMaxSize.SetValue(receivedData[Idx_commandParameter + 3]);
 							receivedDataString = "Payload max size set by master to " + receivedData[Idx_commandParameter + 3];
 							break;
 						case Command.VariablePayload:
+							if (directDevice.Address != Address_master)
+								mainWindow.directNodeGroupBox.VariablePayload.SetValue(receivedData[Idx_commandParameter + 3] == 1);
 							receivedDataString = "Variable payload set by master to " + ((receivedData[Idx_commandParameter + 3] == 1) ? "true" : "false");
 							break;
 						case Command.PerformCRC:
+							if (directDevice.Address != Address_master)
+								mainWindow.directNodeGroupBox.PerformCRC.SetValue(receivedData[Idx_commandParameter + 3] == 1);
 							receivedDataString = "Perform CRC set by master to " + ((receivedData[Idx_commandParameter + 3] == 1) ? "true" : "false");
 							break;
 						default:
