@@ -294,11 +294,15 @@ namespace LoRa_Controller
 					break;
 			}
 			if (response == Response.NACK)
+			{
 				switch ((Error)receivedData[Idx_commandParameter + 1])
 				{
 					case Error.RADIO_RX_TIMEOUT:
 						if (target == Address_general)
+						{
+							radioDeviceAddress = 0;
 							receivedDataString = "No beacon responded";
+						}
 						else
 							receivedDataString = "Beacon " + target + " did not respond";
 						foreach (RadioDevice device in radioDevices)
@@ -312,6 +316,7 @@ namespace LoRa_Controller
 						receivedDataString = "Tx timeout too small to send messages";
 						break;
 				}
+			}
 			
 			if (radioDeviceAddress != 0)
 			{
