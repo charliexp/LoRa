@@ -7,13 +7,8 @@ using LoRa_Controller.Settings;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static LoRa_Controller.Device.BaseDevice;
-using static LoRa_Controller.Device.DirectDevice;
 using static LoRa_Controller.DirectConnection.BaseConnectionHandler;
-using LoRa_Controller.Interface.Controls;
 
 namespace LoRa_Controller
 {
@@ -219,10 +214,6 @@ namespace LoRa_Controller
 					switch (command)
 					{
 						case Command.IsPresent:
-							if (target == Address_master)
-								receivedDataString = "No beacon responded";
-							else
-								receivedDataString = "Beacon " + target + " did not respond";
 							break;
 						default:
 							receivedDataString = "Unknown command " + command + " from " + source + " to " + target;
@@ -260,7 +251,10 @@ namespace LoRa_Controller
 									directDevice.Address = target;
 									mainWindow.SetDirectlyConnectedNodeType();
 
-									receivedDataString = "Changed to master";
+									if (directDevice.Address == Address_master)
+										receivedDataString = "Changed to master";
+									else
+										receivedDataString = "Changed to beacon " + directDevice.Address;
 								}
 							}
 							else
@@ -389,6 +383,7 @@ namespace LoRa_Controller
 					case Error.RADIO_RX_TIMEOUT:
 						if (source == Address_general)
 						{
+							receivedDataString = "No beacon responded";
 							foreach (RadioDevice device in radioDevices)
 							{
 								device.Connected = false;
@@ -397,6 +392,7 @@ namespace LoRa_Controller
 						}
 						else
 						{
+							receivedDataString = "Beacon " + source + " did not respond";
 							foreach (RadioDevice device in radioDevices)
 								if (device.Address == radioDeviceAddress)
 								{

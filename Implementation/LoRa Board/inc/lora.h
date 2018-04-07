@@ -5,6 +5,7 @@
 #include "hw.h"
 
 #define RADIO_BUFFER_SIZE     64
+#define RADIO_MAX_NODES				2
 
 typedef enum RadioStates_t
 {
@@ -16,6 +17,13 @@ typedef enum RadioStates_t
 	RADIO_TX_TIMEOUT = 0xf5,
 }RadioStates_t;
 
+typedef struct RadioNodeStruct_t
+{
+	bool responsePending;
+	uint8_t address;
+}RadioNodeStruct_t;
+
+extern RadioNodeStruct_t RadioNodes[];
 extern RadioStates_t RadioState;
 
 void LoRa_init(void);

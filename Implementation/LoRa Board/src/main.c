@@ -23,6 +23,7 @@ void setAddress(uint8_t newAddress)
 
 void processCommunicationCommand(uint8_t source, uint8_t command, uint8_t* parameters, uint8_t rssi, uint8_t snr)
 {
+	uint8_t i;
 	uint8_t response[PARAMETERS_MAX_SIZE + 2];
 	switch (command)
 	{
@@ -43,7 +44,7 @@ void processCommunicationCommand(uint8_t source, uint8_t command, uint8_t* param
 			{
 				if (source == ADDRESS_MASTER)
 				{
-						DelayMs((myAddress - 2) * 1000);
+						DelayMs((myAddress - 2) * 2000);
 						parameters[3] = RESPONSE_ACK;
 						response[0] = RESPONSE_ACK;
 						response[4] = rssi;
@@ -58,6 +59,12 @@ void processCommunicationCommand(uint8_t source, uint8_t command, uint8_t* param
 			response[0] = RESPONSE_NACK;
 			if (source >= ADDRESS_BEACON)
 			{
+				for (i = 0; i < RADIO_MAX_NODES; i++)
+					if (RadioNodes[i].address > source)
+					{
+						RadioNodes[i].address = source;
+						break;
+					}
 				response[4] = rssi;
 				response[5] = snr;
 			}
@@ -246,14 +253,19 @@ int main(void)
 			case RADIO_RX:
 				LoRa_receive(&source, &command, parameters, &rssi, &snr);
 				
-				if ((command & COMMANDS_COMMUNICATION_MASK) != 0)
+				if (source == ADDRESS_MASTER || source == ADDRESS_GENERAL || myAddress == ADDRESS_MASTER)
 				{
-					processCommunicationCommand(source, command, parameters, rssi, snr);
+					if ((command & COMMANDS_COMMUNICATION_MASK) != 0)
+					{
+						processCommunicationCommand(source, command, parameters, rssi, snr);
+					}
+					else if ((command & COMMANDS_RADIO_SETUP_MASK) != 0)
+					{
+						processRadioSetupCommand(source, command, parameters, rssi, snr);
+					}
 				}
-				else if ((command & COMMANDS_RADIO_SETUP_MASK) != 0)
-				{
-					processRadioSetupCommand(source, command, parameters, rssi, snr);
-				}
+				else
+					LoRa_startReceiving();
 				break;
 			case RADIO_RX_TIMEOUT:
 				if (LoRa_setupPending)

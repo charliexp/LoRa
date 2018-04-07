@@ -29,6 +29,11 @@ volatile uint8_t RadioRxBuffer[RADIO_BUFFER_SIZE];
 volatile uint8_t RadioTxBuffer[RADIO_BUFFER_SIZE];
 uint16_t BufferSize = RADIO_BUFFER_SIZE;
 
+RadioNodeStruct_t RadioNodes[RADIO_MAX_NODES] = 
+{
+	{false, 2},
+	{false, 3},
+};
 RadioStates_t RadioState = RADIO_LOWPOWER;
 
 int8_t RSSI = 0;
@@ -71,6 +76,27 @@ static void OnRxError( void )
 	RadioState = RADIO_RX_ERROR;
 }
 
+bool expectingResponseFrom(uint8_t target)
+{
+	uint8_t i;
+	
+	if (target == ADDRESS_GENERAL)
+		for (i = 0; i < RADIO_MAX_NODES; i++)
+			RadioNodes[i].responsePending = true;
+	else
+		RadioNodes[target - ADDRESS_BEACON].responsePending = true;
+}
+
+bool notAllNodesResponded(uint8_t lastResponseSource)
+{
+	uint8_t i;
+	for (i = 0; i < RADIO_MAX_NODES; i++)
+		if (RadioNodes[i].address > lastResponseSource && RadioNodes[i].responsePending)
+			return true;
+		
+	return false;
+}
+
 void LoRa_init(void)
 {
   RadioEvents.TxDone = OnTxDone;
@@ -104,6 +130,8 @@ void LoRa_send(uint8_t target, uint8_t command, uint8_t* data, uint8_t length)
 		RadioTxBuffer[IDX_COMMAND_PARAMETER + i] = data[i];
 	Radio.Send((uint8_t *) RadioTxBuffer, LoRa_PayloadMaxSize );
 	RadioState = RADIO_LOWPOWER;
+	if (target != ADDRESS_MASTER)
+		expectingResponseFrom(target);
 }
 
 void LoRa_startReceiving(void)
@@ -122,11 +150,31 @@ void LoRa_receive(uint8_t* source, uint8_t* command, uint8_t* parameters, uint8_
 	RadioState = RADIO_LOWPOWER;
 	*rssi = abs(RSSI);
 	*snr = SNR;
+	if (*source != ADDRESS_MASTER)
+	{
+		for (i = 0; i < RADIO_MAX_NODES; i++)
+			if (RadioNodes[i].address == *source)
+			{
+				RadioNodes[i].responsePending = false;
+				break;
+			}
+		if (notAllNodesResponded(*source))
+			LoRa_startReceiving();
+	}
 }
 
 uint8_t LoRa_whoTimedOut(void)
 {
 	uint8_t target = RadioTxBuffer[IDX_TARGET_ADDRESS];
+	uint8_t i;
+	
+	for (i = 0; i < RADIO_MAX_NODES; i++)
+		if (RadioNodes[i].responsePending)
+		{
+			RadioNodes[i].responsePending = false;
+			target = RadioNodes[i].address;
+			break;
+		}
 	RadioState = RADIO_LOWPOWER;
 	return target;
 }
