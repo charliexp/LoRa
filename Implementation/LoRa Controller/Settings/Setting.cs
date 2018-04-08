@@ -1,40 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace LoRa_Controller.Settings
+﻿namespace LoRa_Controller.Settings
 {
-	class Setting
-	{
-		private string _name;
-		private object _value;
+	public class Setting
+    {
+        #region Private variables
+        private object value;
+        #endregion
 
-		public Setting(string name)
-		{
-			_name = name;
-		}
+        #region Properties
+        public string Name { get; private set; }
+        public object Value
+        {
+            get
+            {
+                return value;
+            }
+            set
+            {
+                this.value = value;
+                SettingHandler.Save(this);
+            }
+        }
+        #endregion
 
-		public string Name
+        #region Constructors
+        public Setting(string name)
 		{
-			get
-			{
-				return _name;
-			}
-		}
-
-		public object Value
-		{
-			get
-			{
-				return _value;
-			}
-			set
-			{
-				_value = value;
-				SettingHandler.Save(this);
-			}
-		}
-	}
+			Name = name;
+        }
+        #endregion
+    }
 }

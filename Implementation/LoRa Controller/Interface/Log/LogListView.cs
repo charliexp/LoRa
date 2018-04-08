@@ -3,8 +3,9 @@
 namespace LoRa_Controller.Interface.Log
 {
 	public class LogListView : ListView
-	{
-		public LogListView() : base()
+    {
+        #region Constructors
+        public LogListView() : base()
 		{
 			View = View.Details;
 			AllowColumnReorder = false;
@@ -38,6 +39,7 @@ namespace LoRa_Controller.Interface.Log
 
 			//Add the items to the ListView.
 			Items.AddRange(new ListViewItem[] { item1, item2, item3 });
-		}
-	}
+        }
+        #endregion
+    }
 }

@@ -8,26 +8,28 @@ using System.Windows.Forms;
 namespace LoRa_Controller.Interface.Controls
 {
 	public class CheckBoxControl : LabeledControl
-	{
-		protected ValueChanged checkChangedCallback;
-
-		public CheckBoxControl(string name, bool defaultState) : base(name)
+    {
+        #region Constructors
+        public CheckBoxControl(string name, bool defaultState) : base(name)
 		{
-			field = new CheckBox
+			Field = new CheckBox
 			{
-				Margin = field.Margin,
-				Name = field.Name,
-				Size = field.Size,
+				Margin = Field.Margin,
+				Name = Field.Name,
+				Size = Field.Size,
 			};
-			((CheckBox)field).CheckAlign = System.Drawing.ContentAlignment.TopRight;
-			((CheckBox)field).CheckState = defaultState?CheckState.Checked : CheckState.Unchecked;
-			((CheckBox)field).CheckStateChanged += new EventHandler(CheckChanged);
-		}
-		
-		private async void CheckChanged(object sender, EventArgs e)
+			((CheckBox)Field).CheckAlign = System.Drawing.ContentAlignment.TopRight;
+			((CheckBox)Field).CheckState = defaultState?CheckState.Checked : CheckState.Unchecked;
+			((CheckBox)Field).CheckStateChanged += new EventHandler(CheckChanged);
+        }
+        #endregion
+
+        #region Private methods
+        private async void CheckChanged(object sender, EventArgs e)
 		{
-			if (checkChangedCallback != null)
-				await checkChangedCallback(((((CheckBox)sender).CheckState == CheckState.Checked) ? 1 : 0));
-		}
-	}
+			if (valueChangedDelegate != null)
+				await valueChangedDelegate(((((CheckBox)sender).CheckState == CheckState.Checked) ? 1 : 0));
+        }
+        #endregion
+    }
 }

@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace LoRa_Controller.Device
+﻿namespace LoRa_Controller.Device
 {
 	public class RadioDevice : BaseDevice
     {
-        #region Public properties
+        #region Properties
         public int RSSI { get; private set; }
         public int SNR { get; private set; }
         public bool Connected { get; set; }
@@ -20,7 +14,6 @@ namespace LoRa_Controller.Device
 			Address = address;
 			Connected = false;
 		}
-
         #endregion
 
         #region Public methods

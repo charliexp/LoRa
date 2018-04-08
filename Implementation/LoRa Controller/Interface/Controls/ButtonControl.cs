@@ -1,13 +1,13 @@
-﻿using System;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
 namespace LoRa_Controller.Interface.Controls
 {
 	public class ButtonControl : BaseControl
-	{
-		public ButtonControl(string name) : base(name)
+    {
+        #region Constructors
+        public ButtonControl(string name) : base(name)
 		{
-			field = new Button
+			Field = new Button
 			{
 				Margin = new Padding(InterfaceConstants.ItemPadding),
 				Size = new System.Drawing.Size(InterfaceConstants.InputWidth, InterfaceConstants.InputHeight),
@@ -17,16 +17,19 @@ namespace LoRa_Controller.Interface.Controls
 						InterfaceConstants.ButtonWidth +
 						InterfaceConstants.ItemPadding,
 			};
-		}
+        }
+        #endregion
 
-		public override void Draw(int index)
+        #region Public methods
+        public override void Draw(int index)
 		{
-			field.Location = new System.Drawing.Point(InterfaceConstants.LabelLocationX,
+			Field.Location = new System.Drawing.Point(InterfaceConstants.LabelLocationX,
 
 													InterfaceConstants.GroupBoxFirstItemY +
 													index * (InterfaceConstants.InputHeight + InterfaceConstants.ItemPadding));
 
-			field.TabIndex = index;
-		}
-	}
+			Field.TabIndex = index;
+        }
+        #endregion
+    }
 }

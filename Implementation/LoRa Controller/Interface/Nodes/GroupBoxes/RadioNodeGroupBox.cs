@@ -7,11 +7,14 @@ using static LoRa_Controller.DirectConnection.BaseConnectionHandler;
 namespace LoRa_Controller.Interface.Node.GroupBoxes
 {
 	public class RadioNodeGroupBox : BaseNodeGroupBox
-	{
-		public TextBoxControl RSSI;
+    {
+        #region Properties
+        public TextBoxControl RSSI;
 		public TextBoxControl SNR;
+        #endregion
 
-		public RadioNodeGroupBox(string name) : base(name)
+        #region Constructors
+        public RadioNodeGroupBox(string name) : base(name)
 		{
 			RSSI = new TextBoxControl("RSSI", TextBoxControl.Type.Output);
 			SNR = new TextBoxControl("SNR", TextBoxControl.Type.Output);
@@ -20,27 +23,28 @@ namespace LoRa_Controller.Interface.Node.GroupBoxes
 			statusControls.Add(SNR);
 
 			RSSI.label.Width = RSSI.label.Width / 2 - 2 * InterfaceConstants.ItemPadding;
-			RSSI.field.Width = RSSI.field.Width / 2;
+			RSSI.Field.Width = RSSI.Field.Width / 2;
 			SNR.label.Width = SNR.label.Width / 2 - 2 * InterfaceConstants.ItemPadding;
-			SNR.field.Width = SNR.field.Width / 2;
-		}
-		
-		public void UpdateRSSI(int value)
-		{
-			((TextBox)RSSI.field).Text = value.ToString();
-		}
+			SNR.Field.Width = SNR.Field.Width / 2;
+        }
+        #endregion
 
-		public void UpdateSNR(int value)
-		{
-			((TextBox)SNR.field).Text = value.ToString();
-		}
-		
-		public new void Draw(int groupBoxIndex)
-		{
-			if (Address == (int) AddressType.Master)
-				LoRaControls.Clear();
+        #region Public methods
+        public new void Draw(int groupBoxIndex)
+        {
+            if (Address == (int)AddressType.Master)
+                LoRaControls.Clear();
 
-			base.Draw(groupBoxIndex);
+            base.Draw(groupBoxIndex);
+        }
+        public void UpdateRSSI(int value)
+		{
+			((TextBox)RSSI.Field).Text = value.ToString();
 		}
-	}
+        public void UpdateSNR(int value)
+		{
+			((TextBox)SNR.Field).Text = value.ToString();
+        }
+        #endregion
+    }
 }

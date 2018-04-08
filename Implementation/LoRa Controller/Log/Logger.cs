@@ -1,114 +1,111 @@
 ﻿using LoRa_Controller.Settings;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LoRa_Controller.Log
 {
     public class Logger
     {
-		private string _folder;
-		public string fileName;
+        #region Private constants
+        private const int LinesRequiredToSaveFile = 10;
+        #endregion
+
+        #region Private variables
+        private string fileName;
+        private string folder;
+        private int linesWritten;
         private StreamWriter streamWriter;
-        private bool _isOpen = false;
-		private uint _linesWritten;
-
-		private const uint LinesRequiredToSaveFile = 10;
-
-		public string Folder
+        #endregion
+        
+        #region Properties
+        public string Folder
 		{
-			get { return _folder; }
+			get { return folder; }
 			set
 			{
-				_folder = value;
-				SettingHandler.LogFolder.Value = _folder;
-                if (_isOpen)
+				folder = value;
+				SettingHandler.LogFolder.Value = folder;
+                if (IsOpen)
 				{
 					Finish();
 					Start();
 				}
             }
 		}
-
         public string Path
         {
-            get { return _folder + "\\" + fileName; }
+            get { return folder + "\\" + fileName; }
         }
+        public bool IsOpen { get; private set; }
+        #endregion
 
+        #region Constructors
         public Logger()
         {
-			_folder = (string) SettingHandler.LogFolder.Value;
+            IsOpen = false;
+			folder = (string) SettingHandler.LogFolder.Value;
             fileName = "log_" + DateTime.Now.ToString("dd.MM.yyyy") + ".txt";
         }
-
         public Logger(string fileNamePrefix) : this()
         {
             fileName = fileNamePrefix + DateTime.Now.ToString("dd.MM.yyyy")+ ".txt";
         }
-
         public Logger(string fileNamePrefix, string fileFormat) : this()
 		{
             fileName = fileNamePrefix + DateTime.Now.ToString("dd.MM.yyyy") + "." + fileFormat;
-		}
+        }
+        #endregion
 
-		public void Write(string data)
+        #region Public methods
+        public void Write(string data)
 		{
 			try
 			{
 				streamWriter.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + ", " + data + ",");
-				_linesWritten++;
+				linesWritten++;
 			}
 			catch (ObjectDisposedException)
 			{
 
 			}
-			if (_linesWritten == LinesRequiredToSaveFile)
+			if (linesWritten == LinesRequiredToSaveFile)
 			{
-				_linesWritten = 0;
+				linesWritten = 0;
 				streamWriter.Flush();
 			}
 		}
-
 		public async Task WriteAsync(string data)
         {
 			try
 			{
 				await streamWriter.WriteLineAsync(DateTime.Now.ToString("HH:mm:ss.fff") + ", " + data + ",");
-				_linesWritten++;
+				linesWritten++;
 			}
 			catch (ObjectDisposedException)
 			{
 
 			}
-			if (_linesWritten == LinesRequiredToSaveFile)
+			if (linesWritten == LinesRequiredToSaveFile)
 			{
-				_linesWritten = 0;
+				linesWritten = 0;
 				await streamWriter.FlushAsync();
 			}
         }
-
-        public bool IsOpen()
-        {
-            return _isOpen;
-        }
-
         public void Start() 
         {
-			streamWriter = File.AppendText(_folder + "\\" + fileName);
+			streamWriter = File.AppendText(folder + "\\" + fileName);
 			Write("Log started");
-            _isOpen = true;
-			_linesWritten = 0;
+            IsOpen = true;
+			linesWritten = 0;
 		}
-
         public void Finish()
 		{
 			Write("Log finished");
             if (streamWriter != null)
                 streamWriter.Close();
-            _isOpen = false;
+            IsOpen = false;
         }
-	}
+        #endregion
+    }
 }

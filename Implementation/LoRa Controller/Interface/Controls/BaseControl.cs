@@ -1,26 +1,28 @@
-﻿using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace LoRa_Controller.Interface.Controls
 {
-	public delegate Task ValueChanged(int index);
-
 	public abstract class BaseControl
-	{
-		public Control field;
+    {
+        #region Properties
+        public Control Field { get; protected set; }
+        #endregion
 
-		public BaseControl(string name)
+        #region Constructors
+        public BaseControl(string name)
 		{
-			field = new Control
+			Field = new Control
 			{
 				Margin = new Padding(InterfaceConstants.ItemPadding),
 				Name = name.Replace(" ", "") + "Field",
 				Size = new System.Drawing.Size(InterfaceConstants.InputWidth, InterfaceConstants.InputHeight)
 			};
-		}
+        }
+        #endregion
 
-		public abstract void Draw(int index);
-	}
+        #region Public methods
+        public abstract void Draw(int index);
+        #endregion
+    }
 }

@@ -8,31 +8,39 @@ using static LoRa_Controller.Device.Message;
 namespace LoRa_Controller.Interface.Node.ParameterControls
 {
 	public class ParameterComboBox : ComboBoxControl
-	{
-		private CommandType parameter;
+    {
+        #region Private variables
+        private CommandType parameter;
 		private bool remotelyChanged;
+        #endregion
 
-		public ParameterComboBox(CommandType parameter, List<string> values, int defaultIndex) : base(parameter.ToString(), values, defaultIndex)
+        #region Constructors
+        public ParameterComboBox(CommandType parameter, List<string> values, int defaultIndex) : base(parameter.ToString(), values, defaultIndex)
 		{
 			this.parameter = parameter;
-			indexChangedCallback = ParameterChangedCallback;
+			valueChangedDelegate = ParameterChangedCallback;
 			remotelyChanged = false;
-		}
-		
-		private async Task ParameterChangedCallback(int value)
+        }
+        #endregion
+
+        #region Private methods
+        private async Task ParameterChangedCallback(int value)
         {
-            Device.Message message = new Device.Message(((BaseNodeGroupBox)field.Parent).Address, parameter, value);
+            Device.Message message = new Device.Message(((BaseNodeGroupBox)Field.Parent).Address, parameter, value);
 
             if (!remotelyChanged)
                 await Program.connectionHandler.WriteAsync(message);
 			else
 				remotelyChanged = false;
-		}
+        }
+        #endregion
 
-		public void SetValue(int value)
+        #region Public methods
+        public void SetValue(int value)
 		{
 			remotelyChanged = true;
-			((ComboBox)field).SelectedIndex = value;
-		}
-	}
+			((ComboBox)Field).SelectedIndex = value;
+        }
+        #endregion
+    }
 }

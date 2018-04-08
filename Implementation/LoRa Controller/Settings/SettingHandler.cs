@@ -3,9 +3,9 @@ using System.IO;
 
 namespace LoRa_Controller.Settings
 {
-	static class SettingHandler
+	public static class SettingHandler
 	{
-		#region Public constants
+		#region Private constants
 		private const string FilePath = "settings.ini";
 		private const string DefaultIPAddress = "127.0.0.1";
 		private const int DefaultTCPPort = 13000;
@@ -64,7 +64,7 @@ namespace LoRa_Controller.Settings
 			}
 			finally
 			{
-				GetDefaultSettings();
+				GetDefaults();
 
 				Save(LogFolder);
 				Save(COMPort);
@@ -72,8 +72,7 @@ namespace LoRa_Controller.Settings
 				Save(TCPPort);
 			}
 		}
-
-		private static void GetDefaultSettings()
+		private static void GetDefaults()
 		{
 			if (LogFolder.Value == null)
 			{
@@ -92,7 +91,6 @@ namespace LoRa_Controller.Settings
 				TCPPort.Value = DefaultTCPPort;
 			}
 		}
-		
 		public static void Save(Setting setting)
 		{
 			StreamWriter settingsFileStreamWriter;

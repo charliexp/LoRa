@@ -1,14 +1,26 @@
 ﻿using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace LoRa_Controller.Interface.Controls
 {
 	public abstract class LabeledControl : BaseControl
-	{
-		public Label label;
+    {
+        #region Types
+        protected delegate Task ValueChangedDelegate(int index);
+        #endregion
 
-		public LabeledControl(string name) : base(name)
+        #region Protected variables
+        protected ValueChangedDelegate valueChangedDelegate;
+        #endregion
+
+        #region Properties
+        public Label label { get; protected set; }
+        #endregion
+
+        #region Constructors
+        public LabeledControl(string name) : base(name)
 		{
 			label = new Label
 			{
@@ -23,9 +35,11 @@ namespace LoRa_Controller.Interface.Controls
 											.Select(m => m.Value)
 											.ToArray();
 			label.Text = string.Join(" ", words);
-		}
+        }
+        #endregion
 
-		public override void Draw(int index)
+        #region Public methods
+        public override void Draw(int index)
 		{
 			label.Location = new System.Drawing.Point(InterfaceConstants.LabelLocationX,
 
@@ -33,14 +47,15 @@ namespace LoRa_Controller.Interface.Controls
 													index * (InterfaceConstants.InputHeight + InterfaceConstants.ItemPadding) +
 													InterfaceConstants.LabelToBoxOffset);
 
-			field.Location = new System.Drawing.Point(InterfaceConstants.LabelLocationX +
+			Field.Location = new System.Drawing.Point(InterfaceConstants.LabelLocationX +
 													InterfaceConstants.LabelWidth +
 													InterfaceConstants.ItemPadding,
 
 													InterfaceConstants.GroupBoxFirstItemY +
 													index * (InterfaceConstants.InputHeight + InterfaceConstants.ItemPadding));
 
-			field.TabIndex = index;
-		}
-	}
+			Field.TabIndex = index;
+        }
+        #endregion
+    }
 }

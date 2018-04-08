@@ -10,19 +10,20 @@ using static LoRa_Controller.DirectConnection.BaseConnectionHandler;
 namespace LoRa_Controller.Interface.Node.GroupBoxes
 {
 	public abstract class BaseNodeGroupBox : GroupBox
-	{
-		public int Address
+    {
+        #region Properties
+        public int Address
 		{
 			get
 			{
-				return Int32.Parse(((TextBox)AddressControl.field).Text);
+				return Int32.Parse(((TextBox)AddressControl.Field).Text);
 			}
 			set
 			{
-				((TextBox)AddressControl.field).Text = value.ToString();
+				((TextBox)AddressControl.Field).Text = value.ToString();
 			}
 		}
-
+        //TODO: set to properties with field value handled in get/set. Also in derived classes
 		public TextBoxControl Status;
 		public TextBoxControl AddressControl;
 		public ParameterComboBox Bandwidth;
@@ -39,8 +40,10 @@ namespace LoRa_Controller.Interface.Node.GroupBoxes
 
 		public List<BaseControl> statusControls;
 		public List<BaseControl> LoRaControls;
+        #endregion
 
-		public BaseNodeGroupBox(string name) : base()
+        #region Constructors
+        public BaseNodeGroupBox(string name) : base()
 		{
 			Status = new TextBoxControl("Status", TextBoxControl.Type.Output);
 			AddressControl = new TextBoxControl("Address", TextBoxControl.Type.Input);
@@ -83,9 +86,11 @@ namespace LoRa_Controller.Interface.Node.GroupBoxes
 			Margin = new Padding(InterfaceConstants.ItemPadding);
 			Padding = new Padding(InterfaceConstants.ItemPadding);
 			TabStop = false;
-		}
-		
-		public void Draw(int groupBoxIndex)
+        }
+        #endregion
+
+        #region Public methods
+        public void Draw(int groupBoxIndex)
 		{
 			int controlIndex = 0;
 			
@@ -96,7 +101,7 @@ namespace LoRa_Controller.Interface.Node.GroupBoxes
 				control.Draw(controlIndex++);
 				if (control is LabeledControl)
 					Controls.Add(((LabeledControl)control).label);
-				Controls.Add(control.field);
+				Controls.Add(control.Field);
 			}
 
 			foreach (BaseControl control in LoRaControls)
@@ -104,9 +109,9 @@ namespace LoRa_Controller.Interface.Node.GroupBoxes
 				control.Draw(controlIndex++);
 				if (control is LabeledControl)
 					Controls.Add(((LabeledControl)control).label);
-				Controls.Add(control.field);
+				Controls.Add(control.Field);
 			}
-
+            //TODO: use flow layout so draws are no longer needed
 			Location = new Point(InterfaceConstants.GroupBoxLocationX +
 				groupBoxIndex * (Width + InterfaceConstants.GroupBoxLocationX),
 				InterfaceConstants.GroupBoxLocationY);
@@ -118,14 +123,15 @@ namespace LoRa_Controller.Interface.Node.GroupBoxes
 		{
 			if (connected)
 			{
-				((TextBox)Status.field).Text = "Connected";
-				((TextBox)Status.field).BackColor = Color.LightGreen;
+				((TextBox)Status.Field).Text = "Connected";
+				((TextBox)Status.Field).BackColor = Color.LightGreen;
 			}
 			else
 			{
-				((TextBox)Status.field).Text = "Disconnected";
-				((TextBox)Status.field).BackColor = Color.PaleVioletRed;
+				((TextBox)Status.Field).Text = "Disconnected";
+				((TextBox)Status.Field).BackColor = Color.PaleVioletRed;
 			}
-		}
-	}
+        }
+        #endregion
+    }
 }

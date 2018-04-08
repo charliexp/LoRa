@@ -11,7 +11,7 @@ namespace LoRa_Controller.DirectConnection
         private SerialPort serialPort;
         #endregion
 
-        #region Public properties
+        #region Properties
         public override bool Connected
         {
             get { return serialPort.IsOpen; }
@@ -52,7 +52,6 @@ namespace LoRa_Controller.DirectConnection
 			{
 				serialPort.Open();
 				serialPort.DiscardInBuffer();
-				base.Open();
 			}
 			catch
 			{
@@ -67,17 +66,17 @@ namespace LoRa_Controller.DirectConnection
 		{
 			serialPort.BaseStream.Write(new byte[] { data }, 0, 1);
 		}
-		public override byte ReadByte()
-		{
-			byte[] receiveBuffer = new byte[1];
-			serialPort.BaseStream.Read(receiveBuffer, 0, 1);
-			return receiveBuffer[0];
-		}
 		public async override Task WriteByteAsync(byte data)
 		{
 			await serialPort.BaseStream.WriteAsync(new byte[] { data }, 0, 1);
-		}
-		public async override Task<byte> ReadByteAsync()
+        }
+        public override byte ReadByte()
+        {
+            byte[] receiveBuffer = new byte[1];
+            serialPort.BaseStream.Read(receiveBuffer, 0, 1);
+            return receiveBuffer[0];
+        }
+        public async override Task<byte> ReadByteAsync()
 		{
 			byte[] receiveBuffer = new byte[1];
 			await serialPort.BaseStream.ReadAsync(receiveBuffer, 0, 1);

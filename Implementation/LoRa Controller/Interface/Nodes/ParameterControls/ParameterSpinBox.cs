@@ -7,31 +7,39 @@ using static LoRa_Controller.Device.Message;
 namespace LoRa_Controller.Interface.Node.ParameterControls
 {
 	public class ParameterSpinBox : SpinBoxControl
-	{
-		private CommandType parameter;
+    {
+        #region Private variables
+        private CommandType parameter;
 		private bool remotelyChanged;
+        #endregion
 
-		public ParameterSpinBox(CommandType parameter, int minValue, int maxValue, int defaultValue) : base(parameter.ToString(), minValue, maxValue, defaultValue)
+        #region Constructors
+        public ParameterSpinBox(CommandType parameter, int minValue, int maxValue, int defaultValue) : base(parameter.ToString(), minValue, maxValue, defaultValue)
 		{
 			this.parameter = parameter;
-			valueChangedCallback = ParameterChangedCallback;
+			valueChangedDelegate = ParameterChangedCallback;
 			remotelyChanged = false;
-		}
+        }
+        #endregion
 
-		private async Task ParameterChangedCallback(int value)
+        #region Private methods
+        private async Task ParameterChangedCallback(int value)
         {
-            Device.Message message = new Device.Message(((BaseNodeGroupBox)field.Parent).Address, parameter, value);
+            Device.Message message = new Device.Message(((BaseNodeGroupBox)Field.Parent).Address, parameter, value);
 
             if (!remotelyChanged)
                 await Program.connectionHandler.WriteAsync(message);
             else
 				remotelyChanged = false;
-		}
+        }
+        #endregion
 
-		public void SetValue(int value)
+        #region Public methods
+        public void SetValue(int value)
 		{
 			remotelyChanged = true;
-			((NumericUpDown)field).Value = value;
-		}
-	}
+			((NumericUpDown)Field).Value = value;
+        }
+        #endregion
+    }
 }

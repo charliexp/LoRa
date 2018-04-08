@@ -3,36 +3,43 @@ using LoRa_Controller.Interface.Node.GroupBoxes;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static LoRa_Controller.Device.Message;
-using static LoRa_Controller.DirectConnection.BaseConnectionHandler;
 
 namespace LoRa_Controller.Interface.Node.ParameterControls
 {
 	public class ParameterCheckBox : CheckBoxControl
-	{
-		private CommandType parameter;
+    {
+        #region Private variables
+        private CommandType parameter;
 		private bool remotelyChanged;
+        #endregion
 
-		public ParameterCheckBox(CommandType parameter, bool defaultState) : base(parameter.ToString(), defaultState)
+        #region Constructors
+        public ParameterCheckBox(CommandType parameter, bool defaultState) : base(parameter.ToString(), defaultState)
 		{
 			this.parameter = parameter;
-			checkChangedCallback = ParameterChangedCallback;
+			valueChangedDelegate = ParameterChangedCallback;
 			remotelyChanged = false;
-		}
+        }
+        #endregion
 
-		private async Task ParameterChangedCallback(int value)
+        #region Private methods
+        private async Task ParameterChangedCallback(int value)
 		{
-            Device.Message message = new Device.Message(((BaseNodeGroupBox)field.Parent).Address, parameter, value);
+            Device.Message message = new Device.Message(((BaseNodeGroupBox)Field.Parent).Address, parameter, value);
 
             if (!remotelyChanged)
 				await Program.connectionHandler.WriteAsync(message);
 			else
 				remotelyChanged = false;
-		}
+        }
+        #endregion
 
-		public void SetValue(bool value)
+        #region Public methods
+        public void SetValue(bool value)
 		{
 			remotelyChanged = true;
-			((CheckBox)field).Checked = value;
-		}
-	}
+			((CheckBox)Field).Checked = value;
+        }
+        #endregion
+    }
 }

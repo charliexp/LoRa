@@ -28,22 +28,20 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.SuspendLayout();
-			// 
-			// MainWindow
-			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-			this.AutoScroll = true;
-			this.AutoSize = true;
-			this.ClientSize = new System.Drawing.Size(762, 508);
-			this.Enabled = false;
-			this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-			this.Name = "MainWindow";
-			this.Text = "LoRa Controller";
-			this.Load += new System.EventHandler(this.Form1_Load);
-			this.ResumeLayout(false);
-			this.PerformLayout();
+            this.SuspendLayout();
+            // 
+            // MainWindow
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.AutoScroll = true;
+            this.AutoSize = true;
+            this.ClientSize = new System.Drawing.Size(116, 0);
+            this.Enabled = false;
+            this.Name = "MainWindow";
+            this.Text = "LoRa Controller";
+            this.Load += new System.EventHandler(this.Form1_Load);
+            this.ResumeLayout(false);
 
 		}
 

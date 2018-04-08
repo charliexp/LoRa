@@ -5,29 +5,32 @@ using System.Windows.Forms;
 namespace LoRa_Controller.Interface.Controls
 {
 	public class ComboBoxControl : LabeledControl
-	{
-		protected ValueChanged indexChangedCallback;
-
-		public ComboBoxControl(string name, List<string> values, int defaultIndex) : base(name)
+    {
+        //TODO: intermediary class between labeledcontrol and those with value changed delegate
+        #region Constructors
+        public ComboBoxControl(string name, List<string> values, int defaultIndex) : base(name)
 		{
-			field = new ComboBox
+			Field = new ComboBox
 			{
-				Margin = field.Margin,
-				Name = field.Name,
-				Size = field.Size,
+				Margin = Field.Margin,
+				Name = Field.Name,
+				Size = Field.Size,
 				DropDownStyle = ComboBoxStyle.DropDownList,
 				FormattingEnabled = true,
 				Sorted = true
 			};
-			((ComboBox)field).Items.AddRange(values.ToArray());
-			((ComboBox)field).SelectedIndex = defaultIndex;
-			((ComboBox)field).SelectedIndexChanged += new EventHandler(SelectedIndexChanged);
-		}
-		
-		private async void SelectedIndexChanged(object sender, EventArgs e)
+			((ComboBox)Field).Items.AddRange(values.ToArray());
+			((ComboBox)Field).SelectedIndex = defaultIndex;
+			((ComboBox)Field).SelectedIndexChanged += new EventHandler(SelectedIndexChanged);
+        }
+        #endregion
+
+        #region Private methods
+        private async void SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (indexChangedCallback != null)
-				await indexChangedCallback(((ComboBox)sender).SelectedIndex);
-		}
-	}
+			if (valueChangedDelegate != null)
+				await valueChangedDelegate(((ComboBox)sender).SelectedIndex);
+        }
+        #endregion
+    }
 }

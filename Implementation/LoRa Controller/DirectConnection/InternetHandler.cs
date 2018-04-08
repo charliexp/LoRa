@@ -13,7 +13,7 @@ namespace LoRa_Controller.DirectConnection
         private NetworkStream baseStream;
         #endregion
 
-        #region Public properties
+        #region Properties
         public string IPAddress
         {
             get
@@ -63,7 +63,6 @@ namespace LoRa_Controller.DirectConnection
 			{
 				tcpClient.Connect(ipAddress, port);
 				baseStream = tcpClient.GetStream();
-				base.Open();
 			}
 			catch
 			{
@@ -78,17 +77,17 @@ namespace LoRa_Controller.DirectConnection
 		{
 			baseStream.Write(new byte[] { data }, 0, 1);
 		}
-		public override byte ReadByte()
-		{
-			byte[] receiveBuffer = new byte[1];
-			baseStream.Read(receiveBuffer, 0, 1);
-			return receiveBuffer[0];
-		}
 		public async override Task WriteByteAsync(byte data)
 		{
 			await baseStream.WriteAsync(new byte[] { data }, 0, 1);
-		}
-		public async override Task<byte> ReadByteAsync()
+        }
+        public override byte ReadByte()
+        {
+            byte[] receiveBuffer = new byte[1];
+            baseStream.Read(receiveBuffer, 0, 1);
+            return receiveBuffer[0];
+        }
+        public async override Task<byte> ReadByteAsync()
 		{
 			byte[] receiveBuffer = new byte[1];
 			await baseStream.ReadAsync(receiveBuffer, 0, 1);

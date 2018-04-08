@@ -3,29 +3,33 @@
 namespace LoRa_Controller.Interface.Controls
 {
 	public class TextBoxControl : LabeledControl
-	{
-		public enum Type
+    {
+        #region Types
+        public enum Type
 		{
 			Input,
 			Output
-		}
+        }
+        #endregion
 
-		public TextBoxControl(string name, Type type) : base(name)
+        #region Constructors
+        public TextBoxControl(string name, Type type) : base(name)
 		{
-			field = new TextBox
+			Field = new TextBox
 			{
-				Margin = field.Margin,
-				Name = field.Name,
-				Size = field.Size,
+				Margin = Field.Margin,
+				Name = Field.Name,
+				Size = Field.Size,
 			};
 
 			if (type == Type.Output)
 			{
-				((TextBox)field).ReadOnly = true;
-				field.TabStop = false;
+				((TextBox)Field).ReadOnly = true;
+				Field.TabStop = false;
 			}
 
-			((TextBox)field).BackColor = System.Drawing.Color.White;
-		}
-	}
+			((TextBox)Field).BackColor = System.Drawing.Color.White;
+        }
+        #endregion
+    }
 }

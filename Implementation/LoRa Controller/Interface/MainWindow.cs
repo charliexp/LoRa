@@ -10,92 +10,94 @@ using static LoRa_Controller.Device.BaseDevice;
 namespace LoRa_Controller.Interface
 {
     public partial class MainWindow : Form
-	{
-		private const string remoteConnection = "Remote";
-		public DirectNodeGroupBox directNodeGroupBox;
-		public List<RadioNodeGroupBox> radioNodeGroupBoxes;
-		public LogGroupBox logGroupBox;
+    {
+        #region Properties
+        public DirectNodeGroupBox DirectNodeGroupBox { get; private set; }
+		public List<RadioNodeGroupBox> RadioNodeGroupBoxes { get; private set; }
+        public LogGroupBox LogGroupBox { get; private set; }
+        #endregion
 
+        #region Constructors
         public MainWindow()
 		{
-			directNodeGroupBox = new DirectNodeGroupBox("Directly Connected Node");
-			radioNodeGroupBoxes = new List<RadioNodeGroupBox>();
-			logGroupBox = new LogGroupBox();
+			DirectNodeGroupBox = new DirectNodeGroupBox("Directly Connected Node");
+			RadioNodeGroupBoxes = new List<RadioNodeGroupBox>();
+			LogGroupBox = new LogGroupBox();
 
 			InitializeComponent();
         }
-		
+        #endregion
+
+        #region Private methods
         private void Form1_Load(object sender, EventArgs e)
 		{
-			Controls.Add(directNodeGroupBox);
-			Controls.Add(logGroupBox);
+			Controls.Add(DirectNodeGroupBox);
+			Controls.Add(LogGroupBox);
 
 			Application.ApplicationExit += new EventHandler(OnFormExit);
-			logGroupBox.FolderTextBox.Text = Program.logger.Folder;
-		}
-		
-        public void OnFormExit(object sender, EventArgs e)
+			LogGroupBox.FolderTextBox.Text = Program.logger.Folder;
+        }
+        private void OnFormExit(object sender, EventArgs e)
         {
             if (Program.logger != null)
-				Program.logger.Finish();
+                Program.logger.Finish();
         }
-        
-		public void BoardConnected()
-		{
-			directNodeGroupBox.UpdateConnectedStatus(true);
-		}
+        #endregion
 
-		public void BoardUnableToConnect()
-		{
-			//directNodeGroupBox.UpdateStatus(false);
-		}
+        #region Public methods
+        public void BoardConnected()
+        {
+            DirectNodeGroupBox.UpdateConnectedStatus(true);
+        }
+        public void BoardUnableToConnect()
+        {
+            //directNodeGroupBox.UpdateStatus(false);
+        }
+        public void BoardDisconnected()
+        {
+            DirectNodeGroupBox.UpdateConnectedStatus(false);
+        }
+        public void SetDirectlyConnectedNodeType()
+        {
+            DirectNodeGroupBox.Address = Program.directDevice.Address;
+            DirectNodeGroupBox.SetAddress.Field.Enabled = false;
+            switch (Program.directDevice.Type)
+            {
+                case NodeType.Master:
+                    DirectNodeGroupBox.NodeType.Field.Text = "Master";
+                    break;
+                case NodeType.Beacon:
+                    DirectNodeGroupBox.NodeType.Field.Text = "Beacon " + Program.directDevice.Address;
+                    break;
+                case NodeType.Unknown:
+                    DirectNodeGroupBox.NodeType.Field.Text = "Unknown/new";
+                    break;
+            }
+            DirectNodeGroupBox.Draw(0);
+            LogGroupBox.Draw(1);
+            LogGroupBox.Location = new Point(InterfaceConstants.GroupBoxLocationX +
+                (RadioNodeGroupBoxes.Count + 1) * (DirectNodeGroupBox.Width + InterfaceConstants.GroupBoxLocationX),
+                InterfaceConstants.GroupBoxLocationY);
+        }
+        public void UpdateRadioConnectedNodes()
+        {
+            for (int i = RadioNodeGroupBoxes.Count; i < Program.radioDevices.Count; i++)
+            {
+                RadioNodeGroupBoxes.Add(new RadioNodeGroupBox("Radio Node"));
+                RadioNodeGroupBoxes[i].Address = Program.radioDevices[i].Address;
+                if (Program.radioDevices[i].Type == NodeType.Master)
+                    RadioNodeGroupBoxes[i].Text = "Master";
+                else
+                    RadioNodeGroupBoxes[i].Text = "Beacon " + Program.radioDevices[i].Address;
+                Controls.Add(RadioNodeGroupBoxes[i]);
+                RadioNodeGroupBoxes[i].Draw(RadioNodeGroupBoxes.Count);
+            }
+            LogGroupBox.Draw(Program.radioDevices.Count);
 
-		public void BoardDisconnected()
-		{
-			directNodeGroupBox.UpdateConnectedStatus(false);
-		}
-		
-		public void SetDirectlyConnectedNodeType()
-		{
-			directNodeGroupBox.Address = Program.directDevice.Address;
-			directNodeGroupBox.SetAddress.field.Enabled = false;
-			switch(Program.directDevice.nodeType)
-			{
-				case NodeType.Master:
-					directNodeGroupBox.NodeType.field.Text = "Master";
-					break;
-				case NodeType.Beacon:
-					directNodeGroupBox.NodeType.field.Text = "Beacon " + Program.directDevice.Address;
-					break;
-				case NodeType.Unknown:
-					directNodeGroupBox.NodeType.field.Text = "Unknown/new";
-					break;
-			}
-			directNodeGroupBox.Draw(0);
-			logGroupBox.Draw(1);
-			logGroupBox.Location = new Point(InterfaceConstants.GroupBoxLocationX +
-				(radioNodeGroupBoxes.Count + 1) * (directNodeGroupBox.Width + InterfaceConstants.GroupBoxLocationX),
-				InterfaceConstants.GroupBoxLocationY);
-		}
-
-		public void UpdateRadioConnectedNodes()
-		{
-			for (int i = radioNodeGroupBoxes.Count; i < Program.radioDevices.Count; i++)
-			{
-				radioNodeGroupBoxes.Add(new RadioNodeGroupBox("Radio Node"));
-				radioNodeGroupBoxes[i].Address = Program.radioDevices[i].Address;
-				if (Program.radioDevices[i].nodeType == NodeType.Master)
-					radioNodeGroupBoxes[i].Text = "Master";
-				else
-					radioNodeGroupBoxes[i].Text = "Beacon " + Program.radioDevices[i].Address;
-				Controls.Add(radioNodeGroupBoxes[i]);
-				radioNodeGroupBoxes[i].Draw(radioNodeGroupBoxes.Count);
-			}
-			logGroupBox.Draw(Program.radioDevices.Count);
-
-			logGroupBox.Location = new Point(InterfaceConstants.GroupBoxLocationX +
-				(radioNodeGroupBoxes.Count + 1) * (directNodeGroupBox.Width + InterfaceConstants.GroupBoxLocationX),
-				InterfaceConstants.GroupBoxLocationY);
-		}
-	}
+            LogGroupBox.Location = new Point(InterfaceConstants.GroupBoxLocationX +
+                (RadioNodeGroupBoxes.Count + 1) * (DirectNodeGroupBox.Width + InterfaceConstants.GroupBoxLocationX),
+                InterfaceConstants.GroupBoxLocationY);
+        }
+        #endregion
+    }
 }

@@ -2,7 +2,8 @@
 {
 	class InterfaceConstants
 	{
-		public const int WindowMarginX = 12;
+        #region Public constants
+        public const int WindowMarginX = 12;
 		public const int WindowMarginY = 12;
 
 		public const int MessageLabelMaxWidth = 264;
@@ -24,7 +25,7 @@
 
 		public const int ButtonLocationX = 12;
 		public const int ButtonLocationY = 12;
-		public const int ButtonWidth = 100;
+		public const int ButtonWidth = 101;
 		public const int ButtonHeight = 24;
 
 		public const int InputLocationY = 12;
@@ -34,5 +35,6 @@
 		public const int ItemPadding = 4;
 
 		public const int LabelToBoxOffset = 3;
-	}
+        #endregion
+    }
 }

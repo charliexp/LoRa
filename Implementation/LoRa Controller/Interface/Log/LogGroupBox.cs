@@ -6,46 +6,51 @@ using System.Windows.Forms;
 namespace LoRa_Controller.Interface.Log
 {
 	public class LogGroupBox : GroupBox
-	{
-		public LogListView listView;
-		public ListBox listBox;
-		public Button changeFolderButton;
-		public TextBox FolderTextBox;
-		public Label FolderLabel;
+    {
+        #region Private constants
+        private const int maxEntries = 12;
+        #endregion
 
-		private const int logMaxEntries = 12;
+        #region Properties
+        public LogListView ListView { get; private set; }
+		public ListBox ListBox { get; private set; }
+        public Button ChangeFolderButton { get; private set; }
+        public TextBox FolderTextBox { get; private set; }
+        public Label FolderLabel { get; private set; }
+        #endregion
 
-		public LogGroupBox() : base()
+        #region Constructors
+        public LogGroupBox() : base()
 		{
-			listView = new LogListView();
-			listBox = new ListBox();
-			changeFolderButton = new Button();
+			ListView = new LogListView();
+			ListBox = new ListBox();
+			ChangeFolderButton = new Button();
 			FolderTextBox = new TextBox();
 			FolderLabel = new Label();
 
 			// 
 			// logListBox
 			// 
-			listBox.ItemHeight = 16;
-			listBox.Location = new Point(8, 91);
-			listBox.Margin = new Padding(4, 4, 4, 4);
-			listBox.Name = "logListBox";
-			listBox.SelectionMode = SelectionMode.None;
-			listBox.Size = new Size(300, listBox.ItemHeight * logMaxEntries);
-			listBox.TabIndex = 0;
+			ListBox.ItemHeight = 16;
+			ListBox.Location = new Point(8, 91);
+			ListBox.Margin = new Padding(4, 4, 4, 4);
+			ListBox.Name = "logListBox";
+			ListBox.SelectionMode = SelectionMode.None;
+			ListBox.Size = new Size(300, ListBox.ItemHeight * maxEntries);
+			ListBox.TabIndex = 0;
 
-			listView.Location = new Point(InterfaceConstants.LabelLocationX, 91 + listBox.Size.Height);
-			listView.Margin = new Padding(4, 4, 4, 4);
-			listView.Name = "logListView";
-			listView.Size = new Size(300, 16 * logMaxEntries);
+			ListView.Location = new Point(InterfaceConstants.LabelLocationX, 91 + ListBox.Size.Height);
+			ListView.Margin = new Padding(4, 4, 4, 4);
+			ListView.Name = "logListView";
+			ListView.Size = new Size(300, 16 * maxEntries);
 			// 
 			// logGroupBox
 			// 
-			Controls.Add(changeFolderButton);
+			Controls.Add(ChangeFolderButton);
 			Controls.Add(FolderTextBox);
-			Controls.Add(listBox);
+			Controls.Add(ListBox);
 			Controls.Add(FolderLabel);
-			Controls.Add(listView);
+			Controls.Add(ListView);
 
 			AutoSize = true;
 			Name = "logGroupBox";
@@ -56,14 +61,14 @@ namespace LoRa_Controller.Interface.Log
 			// 
 			// changeLogFolderButton
 			// 
-			changeFolderButton.Location = new Point(148, 19);
-			changeFolderButton.Margin = new Padding(4, 4, 4, 4);
-			changeFolderButton.Name = "changeLogFolderButton";
-			changeFolderButton.Size = new Size(100, 28);
-			changeFolderButton.TabIndex = 14;
-			changeFolderButton.Text = "Change";
-			changeFolderButton.UseVisualStyleBackColor = true;
-			changeFolderButton.Click += new System.EventHandler(ChangeLogFolderButton_Click);
+			ChangeFolderButton.Location = new Point(148, 19);
+			ChangeFolderButton.Margin = new Padding(4, 4, 4, 4);
+			ChangeFolderButton.Name = "changeLogFolderButton";
+			ChangeFolderButton.Size = new Size(100, 28);
+			ChangeFolderButton.TabIndex = 14;
+			ChangeFolderButton.Text = "Change";
+			ChangeFolderButton.UseVisualStyleBackColor = true;
+			ChangeFolderButton.Click += new System.EventHandler(ChangeLogFolderButton_Click);
 			// 
 			// logFolderTextBox
 			// 
@@ -82,9 +87,36 @@ namespace LoRa_Controller.Interface.Log
 			FolderLabel.Size = new Size(76, 17);
 			FolderLabel.TabIndex = 12;
 			FolderLabel.Text = "Log Folder";
-		}
+        }
+        #endregion
 
-		public void Draw(int groupBoxIndex)
+        #region Private methods
+        private void ChangeLogFolderButton_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog folderBrowserDialog;
+
+            folderBrowserDialog = new FolderBrowserDialog
+            {
+                Description = "Select the folder to store the logs.",
+                ShowNewFolderButton = true,
+            };
+
+            if (Directory.Exists(FolderTextBox.Text))
+                folderBrowserDialog.SelectedPath = FolderTextBox.Text;
+            else
+                folderBrowserDialog.RootFolder = Environment.SpecialFolder.MyComputer;
+
+            DialogResult result = folderBrowserDialog.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                Program.logger.Folder = folderBrowserDialog.SelectedPath;
+                FolderTextBox.Text = folderBrowserDialog.SelectedPath;
+            }
+        }
+        #endregion
+
+        #region Public methods
+        public void Draw(int groupBoxIndex)
 		{
 			SuspendLayout();
 			
@@ -94,40 +126,16 @@ namespace LoRa_Controller.Interface.Log
 
 			ResumeLayout(true);
 		}
-
 		public void UpdateLog(string data)
 		{
 			if (Enabled)
 			{
-				listBox.Items.Add(data);
-				if (listBox.Items.Count > logMaxEntries)
-					listBox.Items.RemoveAt(0);
-				listBox.TopIndex = listBox.Items.Count - 1;
+				ListBox.Items.Add(data);
+				if (ListBox.Items.Count > maxEntries)
+					ListBox.Items.RemoveAt(0);
+				ListBox.TopIndex = ListBox.Items.Count - 1;
 			}
 		}
-
-		private void ChangeLogFolderButton_Click(object sender, EventArgs e)
-		{
-			FolderBrowserDialog folderBrowserDialog;
-
-			folderBrowserDialog = new FolderBrowserDialog
-			{
-				Description = "Select the folder to store the logs.",
-				ShowNewFolderButton = true,
-			};
-
-			if (Directory.Exists(FolderTextBox.Text))
-				folderBrowserDialog.SelectedPath = FolderTextBox.Text;
-			else
-				folderBrowserDialog.RootFolder = Environment.SpecialFolder.MyComputer;
-
-			DialogResult result = folderBrowserDialog.ShowDialog();
-			if (result == DialogResult.OK)
-			{
-				Program.logger.Folder = folderBrowserDialog.SelectedPath;
-				FolderTextBox.Text = folderBrowserDialog.SelectedPath;
-			}
-		}
-
-	}
+        #endregion
+    }
 }
