@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using static LoRa_Controller.DirectConnection.BaseConnectionHandler;
 using System.IO;
 using static LoRa_Controller.Device.Message;
+using static LoRa_Controller.Device.BaseDevice;
 
 namespace LoRa_Controller
 {
@@ -98,24 +99,25 @@ namespace LoRa_Controller
 		#region Private methods
 		private static void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
 		{
-			byte[] receivedData;
+            Device.Message receivedSerialMessage;
 			BackgroundWorker worker = (BackgroundWorker)sender;
 
-			connectionHandler.SendGeneralCommand(CommandType.GetAddress);
+            Device.Message getAddressMessage = new Device.Message(CommandType.GetAddress);
+            
+            connectionHandler.Write(getAddressMessage);
 
-			while (connectionHandler.Connected)
+            while (connectionHandler.Connected)
 			{
-				receivedData = connectionHandler.ReceiveData();
+				receivedSerialMessage = connectionHandler.Read();
 				if (serverHandler != null)
 				{
-					byte[] command = serverHandler.Receive();
-					if (command[0] != (byte)CommandType.Invalid)
-						connectionHandler.SendCommand(command);
-					serverHandler.Send(receivedData.ToString());
+					Device.Message receivedClientMessage = serverHandler.Read();
+					if (receivedClientMessage.command != CommandType.Invalid)
+						connectionHandler.Write(receivedClientMessage);
+					serverHandler.Write(receivedSerialMessage.ToString());
 				}
-
-				if (receivedData.Length != 0)
-					worker.ReportProgress(0, receivedData);
+                
+				worker.ReportProgress(0, receivedSerialMessage);
 			}
 		}
 
@@ -123,146 +125,130 @@ namespace LoRa_Controller
 		{
 			int radioDeviceAddress = Int32.MaxValue;
 			bool newRadioDevice;
-			byte[] receivedData = (byte[])e.UserState;
+			Device.Message message = (Device.Message)e.UserState;
 			string receivedDataString = null;
-			CommandType command = (CommandType) receivedData[Idx_command];
-			int source = receivedData[Idx_sourceAddress];
-			int target = receivedData[Idx_targetAddress];
-			Response response = (Response)receivedData[Idx_commandParameter];
-			int rssi = 0;
-			int snr = 0;
 
-			switch (source)
+			switch (message.source)
 			{
-				case Address_master:
-					if (directDevice.Address == Address_master)
-						radioDeviceAddress = target;
+				case (int)AddressType.Master:
+					if (directDevice.Address == (int)AddressType.Master)
+						radioDeviceAddress = message.target;
 					else
 						radioDeviceAddress = 1;
-					rssi = receivedData[Idx_RSSI];
-					snr = receivedData[Idx_SNR];
-					switch (command)
+					switch (message.command)
 					{
 						case CommandType.IsPresent:
 							receivedDataString = "Master asked if present";
 							break;
 						case CommandType.Bandwidth:
-							if (directDevice.Address != Address_master)
-								mainWindow.directNodeGroupBox.Bandwidth.SetValue(receivedData[Idx_commandParameter + 3]);
-							receivedDataString = "Bandwidth set by master to " + receivedData[Idx_commandParameter + 3];
+							if (directDevice.Address != (int)AddressType.Master)
+								mainWindow.directNodeGroupBox.Bandwidth.SetValue(message.parameters[0]);
+							receivedDataString = "Bandwidth set by master to " + message.parameters[0];
 							break;
 						case CommandType.OutputPower:
-							if (directDevice.Address != Address_master)
-								mainWindow.directNodeGroupBox.OutputPower.SetValue(receivedData[Idx_commandParameter + 3]);
-							receivedDataString = "Output power set by master to " + receivedData[Idx_commandParameter + 3];
+							if (directDevice.Address != (int)AddressType.Master)
+								mainWindow.directNodeGroupBox.OutputPower.SetValue(message.parameters[0]);
+							receivedDataString = "Output power set by master to " + message.parameters[0];
 							break;
 						case CommandType.CodingRate:
-							if (directDevice.Address != Address_master)
-								mainWindow.directNodeGroupBox.CodingRate.SetValue(receivedData[Idx_commandParameter + 3]);
-							receivedDataString = "Coding rate set by master to " + receivedData[Idx_commandParameter + 3];
+							if (directDevice.Address != (int)AddressType.Master)
+								mainWindow.directNodeGroupBox.CodingRate.SetValue(message.parameters[0]);
+							receivedDataString = "Coding rate set by master to " + message.parameters[0];
 							break;
 						case CommandType.SpreadingFactor:
-							if (directDevice.Address != Address_master)
-								mainWindow.directNodeGroupBox.SpreadingFactor.SetValue(receivedData[Idx_commandParameter + 3]);
-							receivedDataString = "Spreading factor set by master to " + receivedData[Idx_commandParameter + 3];
+							if (directDevice.Address != (int)AddressType.Master)
+								mainWindow.directNodeGroupBox.SpreadingFactor.SetValue(message.parameters[0]);
+							receivedDataString = "Spreading factor set by master to " + message.parameters[0];
 							break;
 						case CommandType.RxSymTimeout:
-							if (directDevice.Address != Address_master)
-								mainWindow.directNodeGroupBox.RxSymTimeout.SetValue(receivedData[Idx_commandParameter + 3]);
-							receivedDataString = "Rx timeout (sym) set by master to " + receivedData[Idx_commandParameter + 3];
+							if (directDevice.Address != (int)AddressType.Master)
+								mainWindow.directNodeGroupBox.RxSymTimeout.SetValue(message.parameters[0]);
+							receivedDataString = "Rx timeout (sym) set by master to " + message.parameters[0];
 							break;
 						case CommandType.RxMsTimeout:
-							int rxTimeout = receivedData[Idx_commandParameter + 0] << 24 |
-										receivedData[Idx_commandParameter + 1] << 16 |
-										receivedData[Idx_commandParameter + 2] << 8 |
-										receivedData[Idx_commandParameter + 3];
-							if (directDevice.Address != Address_master)
+							int rxTimeout = message.parameters[0];
+							if (directDevice.Address != (int)AddressType.Master)
 								mainWindow.directNodeGroupBox.RxMsTimeout.SetValue(rxTimeout);
 							receivedDataString = "Rx timeout (ms) set by master to " + rxTimeout.ToString();
 							break;
 						case CommandType.TxTimeout:
-							int txTimeout = receivedData[Idx_commandParameter + 0] << 24 |
-										receivedData[Idx_commandParameter + 1] << 16 |
-										receivedData[Idx_commandParameter + 2] << 8 |
-										receivedData[Idx_commandParameter + 3];
-							if (directDevice.Address != Address_master)
+							int txTimeout = message.parameters[0];
+							if (directDevice.Address != (int) AddressType.Master)
 								mainWindow.directNodeGroupBox.TxTimeout.SetValue(txTimeout);
 							receivedDataString = "Tx timeout (ms) set by master to " + txTimeout.ToString();
 							break;
 						case CommandType.PreambleSize:
-							if (directDevice.Address != Address_master)
-								mainWindow.directNodeGroupBox.PreambleSize.SetValue(receivedData[Idx_commandParameter + 3]);
-							receivedDataString = "Preamble size set by master to " + receivedData[Idx_commandParameter + 3];
+							if (directDevice.Address != (int) AddressType.Master)
+								mainWindow.directNodeGroupBox.PreambleSize.SetValue(message.parameters[0]);
+							receivedDataString = "Preamble size set by master to " + message.parameters[0];
 							break;
 						case CommandType.PayloadMaxSize:
-							if (directDevice.Address != Address_master)
-								mainWindow.directNodeGroupBox.PayloadMaxSize.SetValue(receivedData[Idx_commandParameter + 3]);
-							receivedDataString = "Payload max size set by master to " + receivedData[Idx_commandParameter + 3];
+							if (directDevice.Address != (int) AddressType.Master)
+								mainWindow.directNodeGroupBox.PayloadMaxSize.SetValue(message.parameters[0]);
+							receivedDataString = "Payload max size set by master to " + message.parameters[0];
 							break;
 						case CommandType.VariablePayload:
-							if (directDevice.Address != Address_master)
-								mainWindow.directNodeGroupBox.VariablePayload.SetValue(receivedData[Idx_commandParameter + 3] == 1);
-							receivedDataString = "Variable payload set by master to " + ((receivedData[Idx_commandParameter + 3] == 1) ? "true" : "false");
+							if (directDevice.Address != (int) AddressType.Master)
+								mainWindow.directNodeGroupBox.VariablePayload.SetValue(message.parameters[0] == 1);
+							receivedDataString = "Variable payload set by master to " + ((message.parameters[0] == 1) ? "true" : "false");
 							break;
 						case CommandType.PerformCRC:
-							if (directDevice.Address != Address_master)
-								mainWindow.directNodeGroupBox.PerformCRC.SetValue(receivedData[Idx_commandParameter + 3] == 1);
-							receivedDataString = "Perform CRC set by master to " + ((receivedData[Idx_commandParameter + 3] == 1) ? "true" : "false");
+							if (directDevice.Address != (int) AddressType.Master)
+								mainWindow.directNodeGroupBox.PerformCRC.SetValue(message.parameters[0] == 1);
+							receivedDataString = "Perform CRC set by master to " + ((message.parameters[0] == 1) ? "true" : "false");
 							break;
 						default:
-							receivedDataString = "Unknown command " + command + " from " + source + " to " + target;
+							receivedDataString = "Unknown command " + message.command + " from " + message.source + " to " + message.target;
 							break;
 					}
 					break;
-				case Address_general:
-					if (directDevice.Address >= Address_beacon)
+				case (int)AddressType.General:
+					if (directDevice.Address >= (int)AddressType.Beacon)
 					{
 						radioDeviceAddress = 1;
-						rssi = receivedData[Idx_RSSI];
-						snr = receivedData[Idx_SNR];
 					}
 
-					switch (command)
+					switch (message.command)
 					{
 						case CommandType.IsPresent:
 							break;
 						default:
-							receivedDataString = "Unknown command " + command + " from " + source + " to " + target;
+							receivedDataString = "Unknown command " + message.command + " from " + message.source + " to " + message.target;
 							break;
 					}
 					break;
-				case Address_PC:
-					switch (command)
+				case (int)AddressType.PC:
+					switch (message.command)
 					{
 						case CommandType.GetAddress:
 							if (!directDeviceInitialized)
 							{
-								directDevice.Address = target;
+								directDevice.Address = message.target;
 								((TextBox)mainWindow.directNodeGroupBox.AddressControl.field).TextChanged += new EventHandler(AddressFieldChanged);
 								((Button)mainWindow.directNodeGroupBox.SetAddress.field).Click += new EventHandler(SetAddress);
 								directDeviceInitialized = true;
 								mainWindow.SetDirectlyConnectedNodeType();
 
-								if (directDevice.Address == Address_master)
+								if (directDevice.Address == (int) AddressType.Master)
 								{
 									receivedDataString = "Connected to master";
 									((Button)mainWindow.directNodeGroupBox.CheckBeacons.field).Click += new EventHandler(SendDevicesPresent);
 								}
-								else if (directDevice.Address >= Address_beacon)
+								else if (directDevice.Address >= (int)AddressType.Beacon)
 									receivedDataString = "Connected to beacon " + directDevice.Address;
-								else if (directDevice.Address >= Address_general)
+								else if (directDevice.Address >= (int)AddressType.General)
 									receivedDataString = "Connected to new/unknown device";
 							}
 							break;
 						case CommandType.SetAddress:
-							if (response == Response.ACK)
+							if (message.Response == ResponseType.ACK)
 							{
-								if (directDevice.Address != target)
+								if (directDevice.Address != message.target)
 								{
-									directDevice.Address = target;
+									directDevice.Address = message.target;
 									mainWindow.SetDirectlyConnectedNodeType();
 
-									if (directDevice.Address == Address_master)
+									if (directDevice.nodeType == BaseDevice.NodeType.Master)
 										receivedDataString = "Changed to master";
 									else
 										receivedDataString = "Changed to beacon " + directDevice.Address;
@@ -277,73 +263,65 @@ namespace LoRa_Controller
 							receivedDataString = "Checking for present devices";
 							break;
 						case CommandType.Bandwidth:
-							receivedDataString = "Bandwidth set to " + receivedData[Idx_commandParameter + 3];
+							receivedDataString = "Bandwidth set to " + message.parameters[0];
 							break;
 						case CommandType.OutputPower:
-							receivedDataString = "Output power set to " + receivedData[Idx_commandParameter + 3];
+							receivedDataString = "Output power set to " + message.parameters[0];
 							break;
 						case CommandType.CodingRate:
-							receivedDataString = "Coding rate set to " + receivedData[Idx_commandParameter + 3];
+							receivedDataString = "Coding rate set to " + message.parameters[0];
 							break;
 						case CommandType.SpreadingFactor:
-							receivedDataString = "Spreading factor set to " + receivedData[Idx_commandParameter + 3];
+							receivedDataString = "Spreading factor set to " + message.parameters[0];
 							break;
 						case CommandType.RxSymTimeout:
-							receivedDataString = "Rx timeout (sym) set to " + receivedData[Idx_commandParameter + 3];
+							receivedDataString = "Rx timeout (sym) set to " + message.parameters[0];
 							break;
 						case CommandType.RxMsTimeout:
-							int rxTimeout = receivedData[Idx_commandParameter + 0] << 24 |
-											receivedData[Idx_commandParameter + 1] << 16 |
-											receivedData[Idx_commandParameter + 2] << 8 |
-											receivedData[Idx_commandParameter + 3];
+							int rxTimeout = message.parameters[0];
 							receivedDataString = "Rx timeout (ms) set to " + rxTimeout.ToString();
 							break;
 						case CommandType.TxTimeout:
-							int txTimeout = receivedData[Idx_commandParameter + 0] << 24 |
-											receivedData[Idx_commandParameter + 1] << 16 |
-											receivedData[Idx_commandParameter + 2] << 8 |
-											receivedData[Idx_commandParameter + 3];
+							int txTimeout = message.parameters[0];
 							receivedDataString = "Tx timeout (ms) set to " + txTimeout.ToString();
 							break;
 						case CommandType.PreambleSize:
-							receivedDataString = "Preamble size set to " + receivedData[Idx_commandParameter + 3];
+							receivedDataString = "Preamble size set to " + message.parameters[0];
 							break;
 						case CommandType.PayloadMaxSize:
-							receivedDataString = "Payload max size set to " + receivedData[Idx_commandParameter + 3];
+							receivedDataString = "Payload max size set to " + message.parameters[0];
 							break;
 						case CommandType.VariablePayload:
-							receivedDataString = "Variable payload set to " + ((receivedData[Idx_commandParameter + 3] == 1) ? "true" : "false");
+							receivedDataString = "Variable payload set to " + ((message.parameters[0] == 1) ? "true" : "false");
 							break;
 						case CommandType.PerformCRC:
-							receivedDataString = "Perform CRC set to " + ((receivedData[Idx_commandParameter + 3] == 1) ? "true" : "false");
+							receivedDataString = "Perform CRC set to " + ((message.parameters[0] == 1) ? "true" : "false");
 							break;
 						default:
-							receivedDataString = "Unknown command " + command + " from " + source + " to " + target;
+							receivedDataString = "Unknown command " + message.command + " from " + message.source + " to " + message.target;
 							break;
 					}
 					break;
 				default: //beacon
-					radioDeviceAddress = source;
-					rssi = receivedData[Idx_RSSI];
-					snr = receivedData[Idx_SNR];
+					radioDeviceAddress = message.source;
 
-					switch (command)
+					switch (message.command)
 					{
 						case CommandType.IsPresent:
-							if (response == Response.ACK)
-								receivedDataString = "Beacon " + source + " present";
+							if (message.Response == ResponseType.ACK)
+								receivedDataString = "Beacon " + message.source + " present";
 							break;
 						default:
-							if (response == Response.ACK)
-								receivedDataString = "Beacon " + source + " ACK";
-							if (response == Response.NACK)
-								receivedDataString = "Beacon " + source + " NACK";
+							if (message.Response == ResponseType.ACK)
+								receivedDataString = "Beacon " + message.source + " ACK";
+							if (message.Response == ResponseType.NACK)
+								receivedDataString = "Beacon " + message.source + " NACK";
 							break;
 					}
 					break;
 			}
 			
-			if (response == Response.ACK)
+			if (message.Response == ResponseType.ACK)
 			{
 				if (radioDeviceAddress != Int32.MaxValue)
 				{
@@ -358,7 +336,7 @@ namespace LoRa_Controller
 					{
 						radioDevices.Add(new RadioDevice(radioDeviceAddress));
 						mainWindow.UpdateRadioConnectedNodes();
-						if (radioDeviceAddress == Address_master)
+						if (radioDeviceAddress == (int) AddressType.Master)
 						{
 							logger.Write("Radio device master");
 						}
@@ -370,15 +348,15 @@ namespace LoRa_Controller
 				foreach (RadioDevice device in radioDevices)
 					if (device.Address == radioDeviceAddress)
 					{
-						if (rssi != 0 && snr != 0)
+						if (message.rssi != 0 && message.snr != 0)
 						{
 							string logString;
 							device.Connected = true;
-							device.UpdateSignalQuality(rssi, snr);
+							device.UpdateSignalQuality(message.rssi, message.snr);
 							mainWindow.radioNodeGroupBoxes[radioDevices.IndexOf(device)].UpdateConnectedStatus(true);
 							mainWindow.radioNodeGroupBoxes[radioDevices.IndexOf(device)].UpdateRSSI(device.RSSI);
 							mainWindow.radioNodeGroupBoxes[radioDevices.IndexOf(device)].UpdateSNR(device.SNR);
-							if (radioDeviceAddress == Address_master)
+							if (radioDeviceAddress == (int) AddressType.Master)
 								logString = "Master, ";
 							else
 								logString = "Beacon " + directDevice.Address + ", ";
@@ -389,10 +367,10 @@ namespace LoRa_Controller
 			}
 			else
 			{
-				switch ((Error)receivedData[Idx_commandParameter + 1])
+				switch ((Error)message.parameters[0])
 				{
 					case Error.RADIO_RX_TIMEOUT:
-						if (source == Address_general)
+						if (message.source == (int)AddressType.General)
 						{
 							receivedDataString = "No beacon responded";
 							foreach (RadioDevice device in radioDevices)
@@ -403,7 +381,7 @@ namespace LoRa_Controller
 						}
 						else
 						{
-							receivedDataString = "Beacon " + source + " did not respond";
+							receivedDataString = "Beacon " + message.source + " did not respond";
 							foreach (RadioDevice device in radioDevices)
 								if (device.Address == radioDeviceAddress)
 								{
@@ -447,13 +425,17 @@ namespace LoRa_Controller
 		}
 
 		private static void SetAddress(object sender, EventArgs e)
-		{
-			connectionHandler.SendCommand(directDevice.Address, CommandType.SetAddress, mainWindow.directNodeGroupBox.Address);
+        {
+            Device.Message message = new Device.Message(directDevice.Address, CommandType.SetAddress, mainWindow.directNodeGroupBox.Address);
+
+            connectionHandler.Write(message);
 		}
 
 		private static void SendDevicesPresent(object sender, EventArgs e)
-		{
-			connectionHandler.SendGeneralCommand(CommandType.IsPresent);
+        {
+            Device.Message message = new Device.Message(CommandType.IsPresent);
+
+            connectionHandler.Write(message);
 		}
 		#endregion
 

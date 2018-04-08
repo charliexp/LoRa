@@ -30,3 +30,14 @@ C:\Users\flori\Documents\GitHub\LoRa\Implementation\LoRa Controller\obj\Debug\Lo
 C:\Users\flori\Documents\GitHub\LoRa\Implementation\LoRa Controller\obj\Debug\LoRa_Controller.Interface.ConnectionDialog.resources
 D:\Documents\GitHub\LoRa\Implementation\LoRa Controller\obj\Debug\LoRa_Controller.Interface.ConnectionDialog.resources
 D:\Documents\GitHub\LoRa\Implementation\LoRa Controller\obj\Debug\LoRa_Controller.Interface.MainWindow.resources
+C:\Users\uidk9490\Documents\GitHub\LoRa\Implementation\LoRa Controller\bin\Debug\LoRa Controller.exe.config
+C:\Users\uidk9490\Documents\GitHub\LoRa\Implementation\LoRa Controller\bin\Debug\LoRa Controller.exe
+C:\Users\uidk9490\Documents\GitHub\LoRa\Implementation\LoRa Controller\bin\Debug\LoRa Controller.pdb
+C:\Users\uidk9490\Documents\GitHub\LoRa\Implementation\LoRa Controller\obj\Debug\LoRa Controller.csprojResolveAssemblyReference.cache
+C:\Users\uidk9490\Documents\GitHub\LoRa\Implementation\LoRa Controller\obj\Debug\LoRa_Controller.Interface.ConnectionDialog.resources
+C:\Users\uidk9490\Documents\GitHub\LoRa\Implementation\LoRa Controller\obj\Debug\LoRa_Controller.Interface.MainWindow.resources
+C:\Users\uidk9490\Documents\GitHub\LoRa\Implementation\LoRa Controller\obj\Debug\LoRa_Controller.Properties.Resources.resources
+C:\Users\uidk9490\Documents\GitHub\LoRa\Implementation\LoRa Controller\obj\Debug\LoRa Controller.csproj.GenerateResource.cache
+C:\Users\uidk9490\Documents\GitHub\LoRa\Implementation\LoRa Controller\obj\Debug\LoRa Controller.csproj.CoreCompileInputs.cache
+C:\Users\uidk9490\Documents\GitHub\LoRa\Implementation\LoRa Controller\obj\Debug\LoRa Controller.exe
+C:\Users\uidk9490\Documents\GitHub\LoRa\Implementation\LoRa Controller\obj\Debug\LoRa Controller.pdb

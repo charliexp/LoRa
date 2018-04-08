@@ -1,4 +1,5 @@
 ﻿using LoRa_Controller.Interface.Controls;
+using static LoRa_Controller.Device.BaseDevice;
 using static LoRa_Controller.DirectConnection.BaseConnectionHandler;
 
 namespace LoRa_Controller.Interface.Node.GroupBoxes
@@ -22,7 +23,7 @@ namespace LoRa_Controller.Interface.Node.GroupBoxes
 
 		public new void Draw(int groupBoxIndex)
 		{
-			if (Address != Address_master)
+			if (Address != (int)AddressType.Master)
 				statusControls.Remove(CheckBeacons);
 
 			base.Draw(groupBoxIndex);

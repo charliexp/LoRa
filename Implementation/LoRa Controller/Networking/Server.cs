@@ -16,7 +16,7 @@ namespace LoRa_Controller.Networking
 		#region Constructors
 		public Server() : base(IPAddress.Parse(_IPAddress), _port)
 		{
-			_clients = new List<TcpClient>();
+			clients = new List<TcpClient>();
 		}
 		#endregion
 
@@ -26,13 +26,13 @@ namespace LoRa_Controller.Networking
 		#endregion
 
 		#region Private variables
-		private List<TcpClient> _clients;
+		private List<TcpClient> clients;
 		#endregion
 
 		#region Private methods
 		private void ClientConnected(IAsyncResult ar)
 		{
-			_clients.Add(EndAcceptTcpClient(ar));
+			clients.Add(EndAcceptTcpClient(ar));
 			BeginAcceptTcpClient(new AsyncCallback(ClientConnected), this);
 		}
 		#endregion
@@ -47,16 +47,16 @@ namespace LoRa_Controller.Networking
 			}
 			catch (SocketException)
 			{
-
+                //TODO: when does this fail?
 			}
 		}
 
-		public void Send(string data)
+		public void Write(string data)
 		{
 			data += "\n\r";
-			_clients.RemoveAll(client => client.Connected == false);
+			clients.RemoveAll(client => client.Connected == false);
 
-			foreach (TcpClient client in _clients)
+			foreach (TcpClient client in clients)
 			{
 				try
 				{
@@ -68,25 +68,24 @@ namespace LoRa_Controller.Networking
 			}
 		}
 
-		public byte[] Receive()
-		{
-			byte[] data = new byte[BaseConnectionHandler.CommandMaxLength];
-			data[0] = (byte)CommandType.Invalid;
-			_clients.RemoveAll(client => client.Connected == false);
+		public Message Read()
+        {
+            byte[] receivedData = new byte[MaxLength];
+            
+            clients.RemoveAll(client => client.Connected == false);
+            foreach (TcpClient client in clients)
+                if (client.Available == MaxLength)
+                    client.GetStream().Read(receivedData, 0, MaxLength);
 
-			foreach (TcpClient client in _clients)
-				if (client.Available == data.Length)
-					client.GetStream().Read(data, 0, data.Length);
-
-			return data;
+            return new Message(receivedData);
 		}
 
-		public async Task SendAsync(string data)
+		public async Task WriteAsync(string data)
 		{
 			data += "\n\r";
-			_clients.RemoveAll(client => client.Connected == false);
+			clients.RemoveAll(client => client.Connected == false);
 
-			foreach(TcpClient client in _clients)
+			foreach(TcpClient client in clients)
 			{
 				try
 				{
@@ -98,13 +97,13 @@ namespace LoRa_Controller.Networking
 			}
 		}
 
-		public async Task<byte[]> ReceiveAsync()
+		public async Task<byte[]> ReadAsync()
 		{
-			byte[] data = new byte[CommandMaxLength];
+			byte[] data = new byte[MaxLength];
 			data[0] = (byte) CommandType.Invalid;
-			_clients.RemoveAll(client => client.Connected == false);
+			clients.RemoveAll(client => client.Connected == false);
 
-			foreach (TcpClient client in _clients)
+			foreach (TcpClient client in clients)
 				if (client.Available == data.Length)
 					await client.GetStream().ReadAsync(data, 0, data.Length);
 
