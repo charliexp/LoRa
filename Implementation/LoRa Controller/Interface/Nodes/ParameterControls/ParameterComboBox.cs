@@ -3,16 +3,16 @@ using LoRa_Controller.Interface.Node.GroupBoxes;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static LoRa_Controller.DirectConnection.BaseConnectionHandler;
+using static LoRa_Controller.Device.Message;
 
 namespace LoRa_Controller.Interface.Node.ParameterControls
 {
 	public class ParameterComboBox : ComboBoxControl
 	{
-		private Command parameter;
+		private CommandType parameter;
 		private bool remotelyChanged;
 
-		public ParameterComboBox(Command parameter, List<string> values, int defaultIndex) : base(parameter.ToString(), values, defaultIndex)
+		public ParameterComboBox(CommandType parameter, List<string> values, int defaultIndex) : base(parameter.ToString(), values, defaultIndex)
 		{
 			this.parameter = parameter;
 			indexChangedCallback = ParameterChangedCallback;

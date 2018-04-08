@@ -1,35 +1,13 @@
-﻿using LoRa_Controller.Device;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using static LoRa_Controller.Device.Message;
 
 namespace LoRa_Controller.DirectConnection
 {
 	public abstract class BaseConnectionHandler
 	{
 		#region Public enums
-		public enum Command
-		{
-			IsPresent = 0x10,
-
-			GetAddress = 0x20,
-			SetAddress = 0x21,
-
-			Bandwidth = 0x40,
-			OutputPower = 0x41,
-			SpreadingFactor = 0x42,
-			CodingRate = 0x43,
-			RxSymTimeout = 0x44,
-			RxMsTimeout = 0x45,
-			TxTimeout = 0x46,
-			PreambleSize = 0x47,
-			PayloadMaxSize = 0x48,
-			VariablePayload = 0x49,
-			PerformCRC = 0x4a,
-
-			Invalid = 0
-		}
-
 		public enum Error
 		{
 			RADIO_RX_TIMEOUT = 0xf2,
@@ -44,7 +22,7 @@ namespace LoRa_Controller.DirectConnection
 			Internet
 		}
 
-		internal Task SendCommandAsync(object address, Command parameter, int value)
+		internal Task SendCommandAsync(object address, CommandType parameter, int value)
 		{
 			throw new NotImplementedException();
 		}
@@ -137,7 +115,7 @@ namespace LoRa_Controller.DirectConnection
 				WriteByte(command[i]);
 		}
 
-		public void SendGeneralCommand(Command command)
+		public void SendGeneralCommand(CommandType command)
 		{
 			byte[] commandBytes = new byte[7];
 			commandBytes[0] = Address_PC;
@@ -146,7 +124,7 @@ namespace LoRa_Controller.DirectConnection
 			SendCommand(commandBytes);
 		}
 
-		public void SendGeneralCommand(Command command, int value)
+		public void SendGeneralCommand(CommandType command, int value)
 		{
 			byte[] commandBytes = new byte[7];
 			commandBytes[0] = Address_PC;
@@ -159,7 +137,7 @@ namespace LoRa_Controller.DirectConnection
 			SendCommand(commandBytes);
 		}
 
-		public void SendCommand(int address, Command command)
+		public void SendCommand(int address, CommandType command)
 		{
 			byte[] commandBytes = new byte[7];
 			commandBytes[0] = Address_PC;
@@ -168,7 +146,7 @@ namespace LoRa_Controller.DirectConnection
 			SendCommand(commandBytes);
 		}
 
-		public void SendCommand(int address, Command command, int value)
+		public void SendCommand(int address, CommandType command, int value)
 		{
 			byte[] commandBytes = new byte[7];
 			commandBytes[0] = Address_PC;
@@ -187,7 +165,7 @@ namespace LoRa_Controller.DirectConnection
 				await (SendByteAsync(command[i]));
 		}
 
-		public async Task SendCommandAsync(int address, Command command)
+		public async Task SendCommandAsync(int address, CommandType command)
 		{
 			byte[] commandBytes = new byte[7];
 			commandBytes[0] = Address_PC;
@@ -196,7 +174,7 @@ namespace LoRa_Controller.DirectConnection
 			await SendCommandAsync(commandBytes);
 		}
 
-		public async Task SendCommandAsync(int address, Command command, int value)
+		public async Task SendCommandAsync(int address, CommandType command, int value)
 		{
 			byte[] commandBytes = new byte[7];
 			commandBytes[0] = Address_PC;

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using LoRa_Controller.Device;
 using static LoRa_Controller.DirectConnection.BaseConnectionHandler;
 using LoRa_Controller.DirectConnection;
+using static LoRa_Controller.Device.Message;
 
 namespace LoRa_Controller.Networking
 {
@@ -70,7 +71,7 @@ namespace LoRa_Controller.Networking
 		public byte[] Receive()
 		{
 			byte[] data = new byte[BaseConnectionHandler.CommandMaxLength];
-			data[0] = (byte)Command.Invalid;
+			data[0] = (byte)CommandType.Invalid;
 			_clients.RemoveAll(client => client.Connected == false);
 
 			foreach (TcpClient client in _clients)
@@ -100,7 +101,7 @@ namespace LoRa_Controller.Networking
 		public async Task<byte[]> ReceiveAsync()
 		{
 			byte[] data = new byte[CommandMaxLength];
-			data[0] = (byte) BaseConnectionHandler.Command.Invalid;
+			data[0] = (byte) CommandType.Invalid;
 			_clients.RemoveAll(client => client.Connected == false);
 
 			foreach (TcpClient client in _clients)

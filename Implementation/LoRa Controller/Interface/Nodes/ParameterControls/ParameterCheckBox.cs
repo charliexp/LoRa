@@ -2,16 +2,17 @@
 using LoRa_Controller.Interface.Node.GroupBoxes;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static LoRa_Controller.Device.Message;
 using static LoRa_Controller.DirectConnection.BaseConnectionHandler;
 
 namespace LoRa_Controller.Interface.Node.ParameterControls
 {
 	public class ParameterCheckBox : CheckBoxControl
 	{
-		private Command parameter;
+		private CommandType parameter;
 		private bool remotelyChanged;
 
-		public ParameterCheckBox(Command parameter, bool defaultState) : base(parameter.ToString(), defaultState)
+		public ParameterCheckBox(CommandType parameter, bool defaultState) : base(parameter.ToString(), defaultState)
 		{
 			this.parameter = parameter;
 			checkChangedCallback = ParameterChangedCallback;

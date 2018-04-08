@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Device\BaseDevice.cs" />
+    <Compile Include="DirectConnection\Message.cs" />
     <Compile Include="DirectConnection\BaseConnectionHandler.cs" />
     <Compile Include="Device\DirectDevice.cs" />
     <Compile Include="DirectConnection\InternetHandler.cs" />

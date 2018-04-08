@@ -10,6 +10,7 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using static LoRa_Controller.DirectConnection.BaseConnectionHandler;
 using System.IO;
+using static LoRa_Controller.Device.Message;
 
 namespace LoRa_Controller
 {
@@ -100,7 +101,7 @@ namespace LoRa_Controller
 			byte[] receivedData;
 			BackgroundWorker worker = (BackgroundWorker)sender;
 
-			connectionHandler.SendGeneralCommand(Command.GetAddress);
+			connectionHandler.SendGeneralCommand(CommandType.GetAddress);
 
 			while (connectionHandler.Connected)
 			{
@@ -108,7 +109,7 @@ namespace LoRa_Controller
 				if (serverHandler != null)
 				{
 					byte[] command = serverHandler.Receive();
-					if (command[0] != (byte)Command.Invalid)
+					if (command[0] != (byte)CommandType.Invalid)
 						connectionHandler.SendCommand(command);
 					serverHandler.Send(receivedData.ToString());
 				}
@@ -124,7 +125,7 @@ namespace LoRa_Controller
 			bool newRadioDevice;
 			byte[] receivedData = (byte[])e.UserState;
 			string receivedDataString = null;
-			Command command = (Command) receivedData[Idx_command];
+			CommandType command = (CommandType) receivedData[Idx_command];
 			int source = receivedData[Idx_sourceAddress];
 			int target = receivedData[Idx_targetAddress];
 			Response response = (Response)receivedData[Idx_commandParameter];
@@ -142,35 +143,35 @@ namespace LoRa_Controller
 					snr = receivedData[Idx_SNR];
 					switch (command)
 					{
-						case Command.IsPresent:
+						case CommandType.IsPresent:
 							receivedDataString = "Master asked if present";
 							break;
-						case Command.Bandwidth:
+						case CommandType.Bandwidth:
 							if (directDevice.Address != Address_master)
 								mainWindow.directNodeGroupBox.Bandwidth.SetValue(receivedData[Idx_commandParameter + 3]);
 							receivedDataString = "Bandwidth set by master to " + receivedData[Idx_commandParameter + 3];
 							break;
-						case Command.OutputPower:
+						case CommandType.OutputPower:
 							if (directDevice.Address != Address_master)
 								mainWindow.directNodeGroupBox.OutputPower.SetValue(receivedData[Idx_commandParameter + 3]);
 							receivedDataString = "Output power set by master to " + receivedData[Idx_commandParameter + 3];
 							break;
-						case Command.CodingRate:
+						case CommandType.CodingRate:
 							if (directDevice.Address != Address_master)
 								mainWindow.directNodeGroupBox.CodingRate.SetValue(receivedData[Idx_commandParameter + 3]);
 							receivedDataString = "Coding rate set by master to " + receivedData[Idx_commandParameter + 3];
 							break;
-						case Command.SpreadingFactor:
+						case CommandType.SpreadingFactor:
 							if (directDevice.Address != Address_master)
 								mainWindow.directNodeGroupBox.SpreadingFactor.SetValue(receivedData[Idx_commandParameter + 3]);
 							receivedDataString = "Spreading factor set by master to " + receivedData[Idx_commandParameter + 3];
 							break;
-						case Command.RxSymTimeout:
+						case CommandType.RxSymTimeout:
 							if (directDevice.Address != Address_master)
 								mainWindow.directNodeGroupBox.RxSymTimeout.SetValue(receivedData[Idx_commandParameter + 3]);
 							receivedDataString = "Rx timeout (sym) set by master to " + receivedData[Idx_commandParameter + 3];
 							break;
-						case Command.RxMsTimeout:
+						case CommandType.RxMsTimeout:
 							int rxTimeout = receivedData[Idx_commandParameter + 0] << 24 |
 										receivedData[Idx_commandParameter + 1] << 16 |
 										receivedData[Idx_commandParameter + 2] << 8 |
@@ -179,7 +180,7 @@ namespace LoRa_Controller
 								mainWindow.directNodeGroupBox.RxMsTimeout.SetValue(rxTimeout);
 							receivedDataString = "Rx timeout (ms) set by master to " + rxTimeout.ToString();
 							break;
-						case Command.TxTimeout:
+						case CommandType.TxTimeout:
 							int txTimeout = receivedData[Idx_commandParameter + 0] << 24 |
 										receivedData[Idx_commandParameter + 1] << 16 |
 										receivedData[Idx_commandParameter + 2] << 8 |
@@ -188,22 +189,22 @@ namespace LoRa_Controller
 								mainWindow.directNodeGroupBox.TxTimeout.SetValue(txTimeout);
 							receivedDataString = "Tx timeout (ms) set by master to " + txTimeout.ToString();
 							break;
-						case Command.PreambleSize:
+						case CommandType.PreambleSize:
 							if (directDevice.Address != Address_master)
 								mainWindow.directNodeGroupBox.PreambleSize.SetValue(receivedData[Idx_commandParameter + 3]);
 							receivedDataString = "Preamble size set by master to " + receivedData[Idx_commandParameter + 3];
 							break;
-						case Command.PayloadMaxSize:
+						case CommandType.PayloadMaxSize:
 							if (directDevice.Address != Address_master)
 								mainWindow.directNodeGroupBox.PayloadMaxSize.SetValue(receivedData[Idx_commandParameter + 3]);
 							receivedDataString = "Payload max size set by master to " + receivedData[Idx_commandParameter + 3];
 							break;
-						case Command.VariablePayload:
+						case CommandType.VariablePayload:
 							if (directDevice.Address != Address_master)
 								mainWindow.directNodeGroupBox.VariablePayload.SetValue(receivedData[Idx_commandParameter + 3] == 1);
 							receivedDataString = "Variable payload set by master to " + ((receivedData[Idx_commandParameter + 3] == 1) ? "true" : "false");
 							break;
-						case Command.PerformCRC:
+						case CommandType.PerformCRC:
 							if (directDevice.Address != Address_master)
 								mainWindow.directNodeGroupBox.PerformCRC.SetValue(receivedData[Idx_commandParameter + 3] == 1);
 							receivedDataString = "Perform CRC set by master to " + ((receivedData[Idx_commandParameter + 3] == 1) ? "true" : "false");
@@ -223,7 +224,7 @@ namespace LoRa_Controller
 
 					switch (command)
 					{
-						case Command.IsPresent:
+						case CommandType.IsPresent:
 							break;
 						default:
 							receivedDataString = "Unknown command " + command + " from " + source + " to " + target;
@@ -233,7 +234,7 @@ namespace LoRa_Controller
 				case Address_PC:
 					switch (command)
 					{
-						case Command.GetAddress:
+						case CommandType.GetAddress:
 							if (!directDeviceInitialized)
 							{
 								directDevice.Address = target;
@@ -253,7 +254,7 @@ namespace LoRa_Controller
 									receivedDataString = "Connected to new/unknown device";
 							}
 							break;
-						case Command.SetAddress:
+						case CommandType.SetAddress:
 							if (response == Response.ACK)
 							{
 								if (directDevice.Address != target)
@@ -272,48 +273,48 @@ namespace LoRa_Controller
 								receivedDataString = "Could not set address";
 							}
 							break;
-						case Command.IsPresent:
+						case CommandType.IsPresent:
 							receivedDataString = "Checking for present devices";
 							break;
-						case Command.Bandwidth:
+						case CommandType.Bandwidth:
 							receivedDataString = "Bandwidth set to " + receivedData[Idx_commandParameter + 3];
 							break;
-						case Command.OutputPower:
+						case CommandType.OutputPower:
 							receivedDataString = "Output power set to " + receivedData[Idx_commandParameter + 3];
 							break;
-						case Command.CodingRate:
+						case CommandType.CodingRate:
 							receivedDataString = "Coding rate set to " + receivedData[Idx_commandParameter + 3];
 							break;
-						case Command.SpreadingFactor:
+						case CommandType.SpreadingFactor:
 							receivedDataString = "Spreading factor set to " + receivedData[Idx_commandParameter + 3];
 							break;
-						case Command.RxSymTimeout:
+						case CommandType.RxSymTimeout:
 							receivedDataString = "Rx timeout (sym) set to " + receivedData[Idx_commandParameter + 3];
 							break;
-						case Command.RxMsTimeout:
+						case CommandType.RxMsTimeout:
 							int rxTimeout = receivedData[Idx_commandParameter + 0] << 24 |
 											receivedData[Idx_commandParameter + 1] << 16 |
 											receivedData[Idx_commandParameter + 2] << 8 |
 											receivedData[Idx_commandParameter + 3];
 							receivedDataString = "Rx timeout (ms) set to " + rxTimeout.ToString();
 							break;
-						case Command.TxTimeout:
+						case CommandType.TxTimeout:
 							int txTimeout = receivedData[Idx_commandParameter + 0] << 24 |
 											receivedData[Idx_commandParameter + 1] << 16 |
 											receivedData[Idx_commandParameter + 2] << 8 |
 											receivedData[Idx_commandParameter + 3];
 							receivedDataString = "Tx timeout (ms) set to " + txTimeout.ToString();
 							break;
-						case Command.PreambleSize:
+						case CommandType.PreambleSize:
 							receivedDataString = "Preamble size set to " + receivedData[Idx_commandParameter + 3];
 							break;
-						case Command.PayloadMaxSize:
+						case CommandType.PayloadMaxSize:
 							receivedDataString = "Payload max size set to " + receivedData[Idx_commandParameter + 3];
 							break;
-						case Command.VariablePayload:
+						case CommandType.VariablePayload:
 							receivedDataString = "Variable payload set to " + ((receivedData[Idx_commandParameter + 3] == 1) ? "true" : "false");
 							break;
-						case Command.PerformCRC:
+						case CommandType.PerformCRC:
 							receivedDataString = "Perform CRC set to " + ((receivedData[Idx_commandParameter + 3] == 1) ? "true" : "false");
 							break;
 						default:
@@ -328,7 +329,7 @@ namespace LoRa_Controller
 
 					switch (command)
 					{
-						case Command.IsPresent:
+						case CommandType.IsPresent:
 							if (response == Response.ACK)
 								receivedDataString = "Beacon " + source + " present";
 							break;
@@ -447,12 +448,12 @@ namespace LoRa_Controller
 
 		private static void SetAddress(object sender, EventArgs e)
 		{
-			connectionHandler.SendCommand(directDevice.Address, Command.SetAddress, mainWindow.directNodeGroupBox.Address);
+			connectionHandler.SendCommand(directDevice.Address, CommandType.SetAddress, mainWindow.directNodeGroupBox.Address);
 		}
 
 		private static void SendDevicesPresent(object sender, EventArgs e)
 		{
-			connectionHandler.SendGeneralCommand(Command.IsPresent);
+			connectionHandler.SendGeneralCommand(CommandType.IsPresent);
 		}
 		#endregion
 

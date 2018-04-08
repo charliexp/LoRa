@@ -2,16 +2,16 @@
 using LoRa_Controller.Interface.Node.GroupBoxes;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static LoRa_Controller.DirectConnection.BaseConnectionHandler;
+using static LoRa_Controller.Device.Message;
 
 namespace LoRa_Controller.Interface.Node.ParameterControls
 {
 	public class ParameterSpinBox : SpinBoxControl
 	{
-		private Command parameter;
+		private CommandType parameter;
 		private bool remotelyChanged;
 
-		public ParameterSpinBox(Command parameter, int minValue, int maxValue, int defaultValue) : base(parameter.ToString(), minValue, maxValue, defaultValue)
+		public ParameterSpinBox(CommandType parameter, int minValue, int maxValue, int defaultValue) : base(parameter.ToString(), minValue, maxValue, defaultValue)
 		{
 			this.parameter = parameter;
 			valueChangedCallback = ParameterChangedCallback;
