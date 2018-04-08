@@ -1,4 +1,5 @@
 ﻿using LoRa_Controller.Device;
+using LoRa_Controller.Interface.Log;
 using LoRa_Controller.Interface.Node.GroupBoxes;
 using System;
 using System.Collections.Generic;
@@ -10,15 +11,16 @@ namespace LoRa_Controller.Interface
 {
     public partial class MainWindow : Form
 	{
-		const int logMaxEntries = 12;
 		private const string remoteConnection = "Remote";
 		public DirectNodeGroupBox directNodeGroupBox;
 		public List<RadioNodeGroupBox> radioNodeGroupBoxes;
+		public LogGroupBox logGroupBox;
 
         public MainWindow()
 		{
 			directNodeGroupBox = new DirectNodeGroupBox("Directly Connected Node");
 			radioNodeGroupBoxes = new List<RadioNodeGroupBox>();
+			logGroupBox = new LogGroupBox();
 
 			InitializeComponent();
         }
@@ -26,28 +28,12 @@ namespace LoRa_Controller.Interface
         private void Form1_Load(object sender, EventArgs e)
 		{
 			Controls.Add(directNodeGroupBox);
+			Controls.Add(logGroupBox);
 
 			Application.ApplicationExit += new EventHandler(OnFormExit);
-			logFolderTextBox.Text = Program.logger.Folder;
+			logGroupBox.FolderTextBox.Text = Program.logger.Folder;
 		}
 		
-		private void ChangeLogFolderButton_Click(object sender, EventArgs e)
-		{
-			FolderBrowserDialog folderBrowserDialog;
-
-			folderBrowserDialog = new FolderBrowserDialog();
-			folderBrowserDialog.Description = "Select the folder to store the logs.";
-			folderBrowserDialog.ShowNewFolderButton = true;
-			folderBrowserDialog.RootFolder = Environment.SpecialFolder.MyComputer;
-
-			DialogResult result = folderBrowserDialog.ShowDialog();
-			if (result == DialogResult.OK)
-			{
-				Program.logger.Folder = folderBrowserDialog.SelectedPath;
-				logFolderTextBox.Text = folderBrowserDialog.SelectedPath;
-			}
-		}
-
         public void OnFormExit(object sender, EventArgs e)
         {
             if (Program.logger != null)
@@ -69,17 +55,6 @@ namespace LoRa_Controller.Interface
 			directNodeGroupBox.UpdateConnectedStatus(false);
 		}
 		
-		public void UpdateLog(string data)
-		{
-			if (logGroupBox.Enabled)
-			{
-				logListBox.Items.Add(data);
-				if (logListBox.Items.Count > logMaxEntries)
-					logListBox.Items.RemoveAt(0);
-				logListBox.TopIndex = logListBox.Items.Count - 1;
-			}
-		}
-
 		public void SetDirectlyConnectedNodeType()
 		{
 			directNodeGroupBox.Address = Program.directDevice.Address;
@@ -97,6 +72,7 @@ namespace LoRa_Controller.Interface
 					break;
 			}
 			directNodeGroupBox.Draw(0);
+			logGroupBox.Draw(1);
 			logGroupBox.Location = new Point(InterfaceConstants.GroupBoxLocationX +
 				(radioNodeGroupBoxes.Count + 1) * (directNodeGroupBox.Width + InterfaceConstants.GroupBoxLocationX),
 				InterfaceConstants.GroupBoxLocationY);
@@ -115,6 +91,8 @@ namespace LoRa_Controller.Interface
 				Controls.Add(radioNodeGroupBoxes[i]);
 				radioNodeGroupBoxes[i].Draw(radioNodeGroupBoxes.Count);
 			}
+			logGroupBox.Draw(Program.radioDevices.Count);
+
 			logGroupBox.Location = new Point(InterfaceConstants.GroupBoxLocationX +
 				(radioNodeGroupBoxes.Count + 1) * (directNodeGroupBox.Width + InterfaceConstants.GroupBoxLocationX),
 				InterfaceConstants.GroupBoxLocationY);

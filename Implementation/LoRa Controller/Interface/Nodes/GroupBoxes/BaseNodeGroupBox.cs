@@ -75,7 +75,8 @@ namespace LoRa_Controller.Interface.Node.GroupBoxes
 				VariablePayload,
 				PerformCRC
 			};
-			
+
+			AutoSize = true;
 			Name = name.Replace(" ", "") + "GroupBox";
 			Text = name;
 			Margin = new Padding(InterfaceConstants.ItemPadding);
@@ -104,15 +105,6 @@ namespace LoRa_Controller.Interface.Node.GroupBoxes
 					Controls.Add(((LabeledControl)control).label);
 				Controls.Add(control.field);
 			}
-
-			Width = 2 * InterfaceConstants.LabelLocationX +
-				InterfaceConstants.LabelWidth +
-				InterfaceConstants.InputWidth +
-				InterfaceConstants.ItemPadding;
-			Height = InterfaceConstants.GroupBoxFirstItemY +
-				(statusControls.Count + LoRaControls.Count) * InterfaceConstants.InputHeight +
-				(statusControls.Count + LoRaControls.Count - 1) * InterfaceConstants.ItemPadding +
-				InterfaceConstants.GroupBoxLastItemY;
 
 			Location = new Point(InterfaceConstants.GroupBoxLocationX +
 				groupBoxIndex * (Width + InterfaceConstants.GroupBoxLocationX),

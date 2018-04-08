@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using static LoRa_Controller.DirectConnection.BaseConnectionHandler;
+using System.IO;
 
 namespace LoRa_Controller
 {
@@ -72,10 +73,19 @@ namespace LoRa_Controller
 				mainWindow.BoardConnected();
 			else
 				mainWindow.BoardUnableToConnect();
+
+			if (!Directory.Exists((string) SettingHandler.LogFolder.Value))
+			{
+				logger.Folder = Directory.GetCurrentDirectory();
+				mainWindow.logGroupBox.FolderTextBox.Text = logger.Folder;
+				SettingHandler.Save(SettingHandler.LogFolder);
+			}
 			logger.Start();
 
-			BackgroundWorker BackgroundWorker = new BackgroundWorker();
-			BackgroundWorker.WorkerReportsProgress = true;
+			BackgroundWorker BackgroundWorker = new BackgroundWorker
+			{
+				WorkerReportsProgress = true
+			};
 			BackgroundWorker.DoWork += new DoWorkEventHandler(BackgroundWorker_DoWork);
 			BackgroundWorker.ProgressChanged += new ProgressChangedEventHandler(BackgroundWorker_ProgressChanged);
 			BackgroundWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(BackgroundWorker_RunWorkerCompleted);
@@ -409,7 +419,7 @@ namespace LoRa_Controller
 			if (receivedDataString != null)
 			{
 				logger.Write(receivedDataString);
-				mainWindow.UpdateLog(receivedDataString);
+				mainWindow.logGroupBox.UpdateLog(receivedDataString);
 			}
 		}
 

@@ -95,7 +95,7 @@ namespace LoRa_Controller.Log
             return _isOpen;
         }
 
-        public void Start()
+        public void Start() 
         {
 			streamWriter = File.AppendText(_folder + "\\" + fileName);
 			Write("Log started");
