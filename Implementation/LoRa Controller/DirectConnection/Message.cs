@@ -1,5 +1,6 @@
 ﻿
 
+using System;
 using System.Collections.Generic;
 using static LoRa_Controller.Device.BaseDevice;
 
@@ -52,6 +53,7 @@ namespace LoRa_Controller.Device
         #endregion
 
         #region Properties
+        public DateTime Timestamp { get; private set; }
         public byte Source { get; private set; }
         public byte Target { get; private set; }
         public CommandType Command { get; private set; }
@@ -66,7 +68,7 @@ namespace LoRa_Controller.Device
         {
             get
             {
-                byte[] array = new byte[MaxLength];
+                byte[] array = new byte[MaxLength - 2];
                 array[Idx_sourceAddress] = Source;
                 array[Idx_targetAddress] = Target;
                 array[Idx_command] = (byte)Command;
@@ -86,6 +88,7 @@ namespace LoRa_Controller.Device
         #region Constructors
         private Message()
         {
+            Timestamp = DateTime.Now;
             Source = 0;
             Target = 0;
             Command = CommandType.Invalid;

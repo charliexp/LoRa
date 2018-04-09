@@ -99,7 +99,7 @@ namespace LoRa_Controller
         #region Private methods
         private static void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
 		{
-            Device.Message receivedSerialMessage;
+            Device.Message receivedDirectlyMessage;
 			BackgroundWorker worker = (BackgroundWorker)sender;
 
             Device.Message getAddressMessage = new Device.Message(CommandType.GetAddress);
@@ -108,16 +108,16 @@ namespace LoRa_Controller
 
             while (connectionHandler.Connected)
 			{
-				receivedSerialMessage = connectionHandler.Read();
+				receivedDirectlyMessage = connectionHandler.Read();
 				if (serverHandler != null)
 				{
 					Device.Message receivedClientMessage = serverHandler.Read();
 					if (receivedClientMessage.Command != CommandType.Invalid)
 						connectionHandler.Write(receivedClientMessage);
-					serverHandler.Write(receivedSerialMessage.ToString());
+					serverHandler.Write(receivedDirectlyMessage.ToString());
 				}
                 
-				worker.ReportProgress(0, receivedSerialMessage);
+				worker.ReportProgress(0, receivedDirectlyMessage);
 			}
 		}
 		private static void BackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -353,7 +353,7 @@ namespace LoRa_Controller
 							device.Connected = true;
 							device.UpdateSignalQuality(message.RSSI, message.SNR);
 							mainWindow.RadioNodeGroupBoxes[radioDevices.IndexOf(device)].UpdateConnectedStatus(true);
-							mainWindow.RadioNodeGroupBoxes[radioDevices.IndexOf(device)].UpdateRSSI(device.RSSI);
+							mainWindow.RadioNodeGroupBoxes[radioDevices.IndexOf(device)].UpdateRSSI(-device.RSSI);
 							mainWindow.RadioNodeGroupBoxes[radioDevices.IndexOf(device)].UpdateSNR(device.SNR);
 							if (radioDeviceAddress == (int) AddressType.Master)
 								logString = "Master, ";
@@ -397,7 +397,7 @@ namespace LoRa_Controller
 			if (receivedDataString != null)
 			{
 				logger.Write(receivedDataString);
-				mainWindow.LogGroupBox.UpdateLog(receivedDataString);
+				mainWindow.LogGroupBox.Update(message);
 			}
 		}
 		private static void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)

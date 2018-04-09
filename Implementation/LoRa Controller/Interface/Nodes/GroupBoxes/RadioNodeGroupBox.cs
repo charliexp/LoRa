@@ -22,9 +22,9 @@ namespace LoRa_Controller.Interface.Node.GroupBoxes
 			statusControls.Add(RSSI);
 			statusControls.Add(SNR);
 
-			RSSI.label.Width = RSSI.label.Width / 2 - 2 * InterfaceConstants.ItemPadding;
+			RSSI.Label.Width = RSSI.Label.Width / 2 - 2 * InterfaceConstants.ItemPadding;
 			RSSI.Field.Width = RSSI.Field.Width / 2;
-			SNR.label.Width = SNR.label.Width / 2 - 2 * InterfaceConstants.ItemPadding;
+			SNR.Label.Width = SNR.Label.Width / 2 - 2 * InterfaceConstants.ItemPadding;
 			SNR.Field.Width = SNR.Field.Width / 2;
         }
         #endregion

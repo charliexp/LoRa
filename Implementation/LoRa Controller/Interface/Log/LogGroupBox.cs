@@ -7,13 +7,8 @@ namespace LoRa_Controller.Interface.Log
 {
 	public class LogGroupBox : GroupBox
     {
-        #region Private constants
-        private const int maxEntries = 12;
-        #endregion
-
         #region Properties
-        public LogListView ListView { get; private set; }
-		public ListBox ListBox { get; private set; }
+        public LogListView List { get; private set; }
         public Button ChangeFolderButton { get; private set; }
         public TextBox FolderTextBox { get; private set; }
         public Label FolderLabel { get; private set; }
@@ -22,35 +17,66 @@ namespace LoRa_Controller.Interface.Log
         #region Constructors
         public LogGroupBox() : base()
 		{
-			ListView = new LogListView();
-			ListBox = new ListBox();
-			ChangeFolderButton = new Button();
-			FolderTextBox = new TextBox();
-			FolderLabel = new Label();
+            FolderLabel = new Label
+            {
+                Location = new Point(   InterfaceConstants.LabelLocationX,
+                
+                                        InterfaceConstants.GroupBoxFirstItemY +
+                                        InterfaceConstants.LabelToBoxOffset),
+                Margin = new Padding(InterfaceConstants.ItemPadding, 0, InterfaceConstants.ItemPadding, 0),
+                Name = "logFolderLabel",
+                Size = new Size(InterfaceConstants.ShortLabelWidth, InterfaceConstants.LabelHeight),
+                Text = "Log Folder"
+            };
 
-			// 
-			// logListBox
-			// 
-			ListBox.ItemHeight = 16;
-			ListBox.Location = new Point(8, 91);
-			ListBox.Margin = new Padding(4, 4, 4, 4);
-			ListBox.Name = "logListBox";
-			ListBox.SelectionMode = SelectionMode.None;
-			ListBox.Size = new Size(300, ListBox.ItemHeight * maxEntries);
-			ListBox.TabIndex = 0;
+            List = new LogListView
+            {
+                Location = new Point(InterfaceConstants.LabelLocationX,
 
-			ListView.Location = new Point(InterfaceConstants.LabelLocationX, 91 + ListBox.Size.Height);
-			ListView.Margin = new Padding(4, 4, 4, 4);
-			ListView.Name = "logListView";
-			ListView.Size = new Size(300, 16 * maxEntries);
-			// 
-			// logGroupBox
-			// 
-			Controls.Add(ChangeFolderButton);
+                                        InterfaceConstants.GroupBoxFirstItemY +
+                                        InterfaceConstants.InputHeight +
+                                        InterfaceConstants.ItemPadding),
+                Margin = new Padding(InterfaceConstants.ItemPadding, 0, InterfaceConstants.ItemPadding, 0),
+                Name = "logListView",
+                Size = new Size(500,
+                                InterfaceConstants.ListHeaderHeight +
+                                InterfaceConstants.ListItemHeight * LogListView.maxEntries +
+                                InterfaceConstants.ItemPadding)
+                                
+            };
+
+            FolderTextBox = new TextBox
+            {
+                Location = new Point(   InterfaceConstants.LabelLocationX +
+                                        FolderLabel.Width +
+                                        InterfaceConstants.ItemPadding,
+                                                    
+                                        InterfaceConstants.GroupBoxFirstItemY),
+                Margin = new Padding(InterfaceConstants.ItemPadding, 0, InterfaceConstants.ItemPadding, 0),
+                Name = "logFolderTextBox",
+                Size = new Size(300, InterfaceConstants.InputHeight)
+            };
+
+            ChangeFolderButton = new Button
+            {
+                Location = new Point(   InterfaceConstants.LabelLocationX +
+                                        FolderLabel.Width +
+                                        FolderTextBox.Width +
+                                        2 * InterfaceConstants.ItemPadding,
+
+                                        InterfaceConstants.GroupBoxFirstItemY -
+                                        InterfaceConstants.LabelToBoxOffset),
+                Margin = new Padding(InterfaceConstants.ItemPadding, 0, InterfaceConstants.ItemPadding, 0),
+                Name = "changeLogFolderButton",
+                Size = new Size(InterfaceConstants.LabelWidth, InterfaceConstants.InputHeight),
+                Text = "Change",
+            };
+            ChangeFolderButton.Click += new System.EventHandler(ChangeLogFolderButton_Click);
+
+            Controls.Add(ChangeFolderButton);
 			Controls.Add(FolderTextBox);
-			Controls.Add(ListBox);
 			Controls.Add(FolderLabel);
-			Controls.Add(ListView);
+			Controls.Add(List);
 
 			AutoSize = true;
 			Name = "logGroupBox";
@@ -58,35 +84,6 @@ namespace LoRa_Controller.Interface.Log
 			Margin = new Padding(InterfaceConstants.ItemPadding);
 			Padding = new Padding(InterfaceConstants.ItemPadding);
 			Size = new Size(256, 299);
-			// 
-			// changeLogFolderButton
-			// 
-			ChangeFolderButton.Location = new Point(148, 19);
-			ChangeFolderButton.Margin = new Padding(4, 4, 4, 4);
-			ChangeFolderButton.Name = "changeLogFolderButton";
-			ChangeFolderButton.Size = new Size(100, 28);
-			ChangeFolderButton.TabIndex = 14;
-			ChangeFolderButton.Text = "Change";
-			ChangeFolderButton.UseVisualStyleBackColor = true;
-			ChangeFolderButton.Click += new System.EventHandler(ChangeLogFolderButton_Click);
-			// 
-			// logFolderTextBox
-			// 
-			FolderTextBox.Location = new Point(8, 59);
-			FolderTextBox.Margin = new Padding(4, 4, 4, 4);
-			FolderTextBox.Name = "logFolderTextBox";
-			FolderTextBox.Size = new Size(239, 22);
-			FolderTextBox.TabIndex = 13;
-			// 
-			// logFolderLabel
-			// 
-			FolderLabel.AutoSize = true;
-			FolderLabel.Location = new Point(8, 30);
-			FolderLabel.Margin = new Padding(4, 0, 4, 0);
-			FolderLabel.Name = "logFolderLabel";
-			FolderLabel.Size = new Size(76, 17);
-			FolderLabel.TabIndex = 12;
-			FolderLabel.Text = "Log Folder";
         }
         #endregion
 
@@ -126,15 +123,9 @@ namespace LoRa_Controller.Interface.Log
 
 			ResumeLayout(true);
 		}
-		public void UpdateLog(string data)
+		public void Update(Device.Message message)
 		{
-			if (Enabled)
-			{
-				ListBox.Items.Add(data);
-				if (ListBox.Items.Count > maxEntries)
-					ListBox.Items.RemoveAt(0);
-				ListBox.TopIndex = ListBox.Items.Count - 1;
-			}
+            List.Write(message);
 		}
         #endregion
     }

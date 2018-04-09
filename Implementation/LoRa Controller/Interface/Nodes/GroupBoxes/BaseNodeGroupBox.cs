@@ -100,7 +100,7 @@ namespace LoRa_Controller.Interface.Node.GroupBoxes
 			{
 				control.Draw(controlIndex++);
 				if (control is LabeledControl)
-					Controls.Add(((LabeledControl)control).label);
+					Controls.Add(((LabeledControl)control).Label);
 				Controls.Add(control.Field);
 			}
 
@@ -108,7 +108,7 @@ namespace LoRa_Controller.Interface.Node.GroupBoxes
 			{
 				control.Draw(controlIndex++);
 				if (control is LabeledControl)
-					Controls.Add(((LabeledControl)control).label);
+					Controls.Add(((LabeledControl)control).Label);
 				Controls.Add(control.Field);
 			}
             //TODO: use flow layout so draws are no longer needed

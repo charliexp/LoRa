@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Drawing;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace LoRa_Controller.Interface.Controls
@@ -16,7 +17,7 @@ namespace LoRa_Controller.Interface.Controls
 			{
 				Margin = new Padding(InterfaceConstants.ItemPadding),
 				Name = name.Replace(" ", "") + "Field",
-				Size = new System.Drawing.Size(InterfaceConstants.InputWidth, InterfaceConstants.InputHeight)
+				Size = new Size(InterfaceConstants.InputWidth, InterfaceConstants.InputHeight)
 			};
         }
         #endregion

@@ -39,7 +39,7 @@ namespace LoRa_Controller.DirectConnection
         public void Write(Message message)
         {
             byte[] array = message.ByteRepresentation;
-            for (int i = 0; i < array.Length - 2; i++)
+            for (int i = 0; i < array.Length; i++)
                 WriteByte(array[i]);
         }
         public async Task WriteAsync(Message message)
