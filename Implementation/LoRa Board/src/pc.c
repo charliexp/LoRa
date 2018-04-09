@@ -2,18 +2,19 @@
 #include "pc.h"
 #include "vcom.h"
 
-#define UART_BUFFER_SIZE			PARAMETERS_MAX_SIZE + 3
+#define UART_RXBUFFER_SIZE			(PARAMETERS_MAX_SIZE + 3)
+#define UART_TXBUFFER_SIZE			(PARAMETERS_MAX_SIZE + 3 + 2)
 
 extern UART_HandleTypeDef UartHandle;
 
-volatile uint8_t UartRxBuffer[UART_BUFFER_SIZE];
-volatile uint8_t UartTxBuffer[UART_BUFFER_SIZE + 2];
+volatile uint8_t UartRxBuffer[UART_RXBUFFER_SIZE];
+volatile uint8_t UartTxBuffer[UART_TXBUFFER_SIZE];
 
 UartStates_t UartState = UART_IDLE;
 
 void PC_init(void)
 {
-	HAL_UART_Receive_IT(&UartHandle, (uint8_t *) UartRxBuffer, UART_BUFFER_SIZE);
+	HAL_UART_Receive_IT(&UartHandle, (uint8_t *) UartRxBuffer, UART_RXBUFFER_SIZE);
 }
 
 void PC_receive(uint8_t* target, uint8_t* command, uint8_t* parameters)
@@ -29,17 +30,19 @@ void PC_receive(uint8_t* target, uint8_t* command, uint8_t* parameters)
 void PC_send(uint8_t source, uint8_t target, uint8_t command, uint8_t* data, uint8_t length)
 {
 	uint8_t i;
+	for (i = 0; i < UART_TXBUFFER_SIZE; i++)
+		UartTxBuffer[i] = 0;
 	UartTxBuffer[IDX_SOURCE_ADDRESS] = source;
 	UartTxBuffer[IDX_TARGET_ADDRESS] = target;
 	UartTxBuffer[IDX_COMMAND] = command;
 	for (i = 0; i < length; i++)
 		UartTxBuffer[IDX_COMMAND_PARAMETER + i] = data[i];
-	for (i = 0; i < length + 3; i++)
+	for (i = 0; i < UART_TXBUFFER_SIZE; i++)
 		PRINTF("%c", UartTxBuffer[i]);
 }
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
 	UartState = UART_RX;
-	HAL_UART_Receive_IT(&UartHandle, (uint8_t *) UartRxBuffer, UART_BUFFER_SIZE);
+	HAL_UART_Receive_IT(&UartHandle, (uint8_t *) UartRxBuffer, UART_RXBUFFER_SIZE);
 }
