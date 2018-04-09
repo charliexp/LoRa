@@ -1,5 +1,9 @@
 # Prerequisites
+*.crf
 *.d
+
+# Backup files
+*.bak
 
 # Object files
 *.o
