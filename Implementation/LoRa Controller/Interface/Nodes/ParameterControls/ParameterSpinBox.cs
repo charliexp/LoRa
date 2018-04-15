@@ -17,7 +17,7 @@ namespace LoRa_Controller.Interface.Node.ParameterControls
         public ParameterSpinBox(CommandType parameter, int minValue, int maxValue, int defaultValue) : base(parameter.ToString(), minValue, maxValue, defaultValue)
 		{
 			this.parameter = parameter;
-			valueChangedDelegate = ParameterChangedCallback;
+            ValueChanged = ParameterChangedCallback;
 			remotelyChanged = false;
         }
         #endregion

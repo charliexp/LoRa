@@ -17,7 +17,7 @@ namespace LoRa_Controller.Interface.Node.ParameterControls
         public ParameterCheckBox(CommandType parameter, bool defaultState) : base(parameter.ToString(), defaultState)
 		{
 			this.parameter = parameter;
-			valueChangedDelegate = ParameterChangedCallback;
+            ValueChanged = ParameterChangedCallback;
 			remotelyChanged = false;
         }
         #endregion

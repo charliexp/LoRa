@@ -39,6 +39,7 @@ C:\Users\uidk9490\Documents\GitHub\LoRa\Implementation\LoRa Controller\obj\Debug
 C:\Users\uidk9490\Documents\GitHub\LoRa\Implementation\LoRa Controller\obj\Debug\LoRa Controller.csproj.CoreCompileInputs.cache
 C:\Users\uidk9490\Documents\GitHub\LoRa\Implementation\LoRa Controller\obj\Debug\LoRa Controller.exe
 C:\Users\uidk9490\Documents\GitHub\LoRa\Implementation\LoRa Controller\obj\Debug\LoRa Controller.pdb
-C:\Users\uidk9490\Documents\GitHub\LoRa\Implementation\LoRa Controller\obj\Debug\LoRa_Controller.Interface.ConnectionDialog.ConnectionDialog.resources
 D:\Documents\GitHub\LoRa\Implementation\LoRa Controller\obj\Debug\LoRa_Controller.Interface.ConnectionDialog.ConnectionDialog.resources
 D:\Documents\GitHub\LoRa\Implementation\LoRa Controller\obj\Debug\LoRa_Controller.Interface.Node.GroupBoxes.BaseNodeGroupBox.resources
+C:\Users\uidk9490\Documents\GitHub\LoRa\Implementation\LoRa Controller\obj\Debug\LoRa_Controller.Interface.Node.GroupBoxes.BaseNodeGroupBox.resources
+C:\Users\uidk9490\Documents\GitHub\LoRa\Implementation\LoRa Controller\obj\Debug\LoRa_Controller.Interface.ConnectionDialog.resources

@@ -27,8 +27,8 @@ namespace LoRa_Controller.Interface.Controls
         #region Private methods
         private async void CheckChanged(object sender, EventArgs e)
 		{
-			if (valueChangedDelegate != null)
-				await valueChangedDelegate(((((CheckBox)sender).CheckState == CheckState.Checked) ? 1 : 0));
+			if (ValueChanged != null)
+				await ValueChanged(((((CheckBox)sender).CheckState == CheckState.Checked) ? 1 : 0));
         }
         #endregion
     }

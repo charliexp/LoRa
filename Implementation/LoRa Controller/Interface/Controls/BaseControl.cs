@@ -7,6 +7,17 @@ namespace LoRa_Controller.Interface.Controls
     {
         #region Properties
         public Control Field { get; protected set; }
+        public bool Visible
+        {
+            get
+            {
+                return Field.Visible;
+            }
+            set
+            {
+                Field.Visible = value;
+            }
+        }
         #endregion
 
         #region Constructors

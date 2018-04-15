@@ -12,7 +12,6 @@ using static LoRa_Controller.DirectConnection.BaseConnectionHandler;
 using System.IO;
 using static LoRa_Controller.Device.Message;
 using static LoRa_Controller.Device.BaseDevice;
-using LoRa_Controller.Interface.ConnectionDialog;
 
 namespace LoRa_Controller
 {
@@ -53,7 +52,7 @@ namespace LoRa_Controller
 			mainWindow = new MainWindow();
 
 			connectionDialog.Show();
-			Application.Run(mainWindow);
+            Application.Run(mainWindow);
         }
         public static void StartConnection(ConnectionType connectionType, List<string> parameters)
         {

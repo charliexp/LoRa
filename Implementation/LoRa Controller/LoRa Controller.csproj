@@ -68,10 +68,10 @@
     <Compile Include="DirectConnection\InternetHandler.cs" />
     <Compile Include="DirectConnection\SerialHandler.cs" />
     <Compile Include="Device\RadioDevice.cs" />
-    <Compile Include="Interface\ConnectionDialog\ConnectionDialog.cs">
+    <Compile Include="Interface\ConnectionDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Interface\ConnectionDialog\ConnectionDialog.Designer.cs">
+    <Compile Include="Interface\ConnectionDialog.Designer.cs">
       <DependentUpon>ConnectionDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Interface\Controls\LabeledControl.cs" />
@@ -81,9 +81,6 @@
     <Compile Include="Interface\Controls\TextBoxControl.cs" />
     <Compile Include="Interface\Controls\SpinBoxControl.cs" />
     <Compile Include="Interface\InterfaceConstants.cs" />
-    <Compile Include="Interface\ConnectionDialog\BaseConnection.cs" />
-    <Compile Include="Interface\ConnectionDialog\InternetConnection.cs" />
-    <Compile Include="Interface\ConnectionDialog\SerialConnection.cs" />
     <Compile Include="Interface\Controls\BaseControl.cs" />
     <Compile Include="Interface\Log\LogGroupBox.cs">
       <SubType>Component</SubType>
@@ -115,7 +112,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings\Setting.cs" />
     <Compile Include="Settings\SettingHandler.cs" />
-    <EmbeddedResource Include="Interface\ConnectionDialog\ConnectionDialog.resx">
+    <EmbeddedResource Include="Interface\ConnectionDialog.resx">
       <DependentUpon>ConnectionDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Interface\MainWindow.resx">

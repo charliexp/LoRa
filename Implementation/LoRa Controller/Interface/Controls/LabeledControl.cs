@@ -9,15 +9,24 @@ namespace LoRa_Controller.Interface.Controls
 	public abstract class LabeledControl : BaseControl
     {
         #region Types
-        protected delegate Task ValueChangedDelegate(int index);
+        public delegate Task ValueChangedDelegate(int index);
         #endregion
-
-        #region Protected variables
-        protected ValueChangedDelegate valueChangedDelegate;
-        #endregion
-
+        
         #region Properties
+        public ValueChangedDelegate ValueChanged { get; set; }
         public Label Label { get; protected set; }
+        public new bool Visible
+        {
+            get
+            {
+                return Field.Visible;
+            }
+            set
+            {
+                Label.Visible = value;
+                Field.Visible = value;
+            }
+        }
         #endregion
 
         #region Constructors

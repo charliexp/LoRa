@@ -18,7 +18,7 @@ namespace LoRa_Controller.Interface.Node.ParameterControls
         public ParameterComboBox(CommandType parameter, List<string> values, int defaultIndex) : base(parameter.ToString(), values, defaultIndex)
 		{
 			this.parameter = parameter;
-			valueChangedDelegate = ParameterChangedCallback;
+			ValueChanged = ParameterChangedCallback;
 			remotelyChanged = false;
         }
         #endregion

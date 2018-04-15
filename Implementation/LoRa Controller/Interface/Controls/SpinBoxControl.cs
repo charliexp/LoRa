@@ -26,8 +26,8 @@ namespace LoRa_Controller.Interface.Controls
         #region Public methods
         private async void IndexChanged(object sender, EventArgs e)
 		{
-			if (valueChangedDelegate != null)
-				await valueChangedDelegate(Decimal.ToInt32(((NumericUpDown)sender).Value));
+			if (ValueChanged != null)
+				await ValueChanged(Decimal.ToInt32(((NumericUpDown)sender).Value));
         }
         #endregion
     }
