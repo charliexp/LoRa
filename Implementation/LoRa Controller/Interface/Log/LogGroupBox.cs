@@ -7,6 +7,10 @@ namespace LoRa_Controller.Interface.Log
 {
 	public class LogGroupBox : GroupBox
     {
+        #region Private variables
+        public FlowLayoutPanel layout;
+        #endregion
+
         #region Properties
         public LogListView List { get; private set; }
         public Button ChangeFolderButton { get; private set; }
@@ -16,73 +20,61 @@ namespace LoRa_Controller.Interface.Log
 
         #region Constructors
         public LogGroupBox() : base()
-		{
-            FolderLabel = new Label
-            {
-                Location = new Point(   InterfaceConstants.LabelLocationX,
-                
-                                        InterfaceConstants.GroupBoxFirstItemY +
-                                        InterfaceConstants.LabelToBoxOffset),
-                Margin = new Padding(InterfaceConstants.ItemPadding, 0, InterfaceConstants.ItemPadding, 0),
-                Name = "logFolderLabel",
-                Size = new Size(InterfaceConstants.ShortLabelWidth, InterfaceConstants.LabelHeight),
-                Text = "Log Folder"
-            };
-
-            List = new LogListView
-            {
-                Location = new Point(InterfaceConstants.LabelLocationX,
-
-                                        InterfaceConstants.GroupBoxFirstItemY +
-                                        InterfaceConstants.InputHeight +
-                                        InterfaceConstants.ItemPadding),
-                Margin = new Padding(InterfaceConstants.ItemPadding, 0, InterfaceConstants.ItemPadding, 0),
-                Name = "logListView",
-                Size = new Size(500,
-                                InterfaceConstants.ListHeaderHeight +
-                                InterfaceConstants.ListItemHeight * LogListView.maxEntries +
-                                InterfaceConstants.ItemPadding)
-                                
-            };
-
-            FolderTextBox = new TextBox
-            {
-                Location = new Point(   InterfaceConstants.LabelLocationX +
-                                        FolderLabel.Width +
-                                        InterfaceConstants.ItemPadding,
-                                                    
-                                        InterfaceConstants.GroupBoxFirstItemY),
-                Margin = new Padding(InterfaceConstants.ItemPadding, 0, InterfaceConstants.ItemPadding, 0),
-                Name = "logFolderTextBox",
-                Size = new Size(300, InterfaceConstants.InputHeight)
-            };
-
-            ChangeFolderButton = new Button
-            {
-                Location = new Point(   InterfaceConstants.LabelLocationX +
-                                        FolderLabel.Width +
-                                        FolderTextBox.Width +
-                                        2 * InterfaceConstants.ItemPadding,
-
-                                        InterfaceConstants.GroupBoxFirstItemY -
-                                        InterfaceConstants.LabelToBoxOffset),
-                Margin = new Padding(InterfaceConstants.ItemPadding, 0, InterfaceConstants.ItemPadding, 0),
-                Name = "changeLogFolderButton",
-                Size = new Size(InterfaceConstants.LabelWidth, InterfaceConstants.InputHeight),
-                Text = "Change",
-            };
-            ChangeFolderButton.Click += new System.EventHandler(ChangeLogFolderButton_Click);
-
-            Controls.Add(ChangeFolderButton);
-			Controls.Add(FolderTextBox);
-			Controls.Add(FolderLabel);
-			Controls.Add(List);
-
+        {
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
             Name = "logGroupBox";
-			Text = "Log";
-			Size = new Size(256, 299);
+            Text = "Log";
+
+            layout = new FlowLayoutPanel
+            {
+                AutoSize = true,
+                Name = "layout",
+                FlowDirection = FlowDirection.LeftToRight,
+                Location = new Point(InterfaceConstants.ItemPadding, InterfaceConstants.GroupBoxFirstItemY),
+            };
+            FolderLabel = new Label
+            {
+                AutoSize = true,
+                Name = "logFolderLabel",
+                Text = "Log Folder",
+                Anchor = AnchorStyles.Left,
+            };
+            FolderTextBox = new TextBox
+            {
+                AutoSize = true,
+                Name = "logFolderTextBox",
+            };
+            ChangeFolderButton = new Button
+            {
+                Name = "changeLogFolderButton",
+                Text = "Change",
+                Anchor = AnchorStyles.Right,
+            };
+            List = new LogListView
+            {
+                Name = "logListView",
+            };
+            List.Size = new Size(   List.Columns[0].Width +
+                                    List.Columns[1].Width +
+                                    List.Columns[2].Width +
+                                    List.Columns[3].Width +
+                                    List.Columns[4].Width +
+                                    List.Columns[5].Width +
+                                    List.Columns[6].Width,
+
+                                    InterfaceConstants.ListHeaderHeight +
+                                    InterfaceConstants.ListItemHeight * LogListView.maxVisibleEntries +
+                                    InterfaceConstants.ItemPadding);
+
+            Controls.Add(layout);
+            layout.Controls.Add(FolderLabel);
+            layout.Controls.Add(FolderTextBox);
+            layout.Controls.Add(ChangeFolderButton);
+            layout.SetFlowBreak(ChangeFolderButton, true);
+            layout.Controls.Add(List);
+
+            ChangeFolderButton.Click += new EventHandler(ChangeLogFolderButton_Click);
         }
         #endregion
 

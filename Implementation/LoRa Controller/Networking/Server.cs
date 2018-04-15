@@ -38,15 +38,8 @@ namespace LoRa_Controller.Networking
 		#region Public methods
 		public new void Start()
 		{
-			try
-			{
-				base.Start();
-				BeginAcceptTcpClient(new AsyncCallback(ClientConnected), this);
-			}
-			catch (SocketException)
-			{
-                //TODO: when does this fail?
-			}
+			base.Start();
+			BeginAcceptTcpClient(new AsyncCallback(ClientConnected), this);
 		}
 		public void Write(string data)
 		{

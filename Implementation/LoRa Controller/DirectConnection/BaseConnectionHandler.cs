@@ -1,4 +1,5 @@
 ﻿using LoRa_Controller.Device;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using static LoRa_Controller.Device.Message;
@@ -60,7 +61,7 @@ namespace LoRa_Controller.DirectConnection
                 }
                 catch
                 {
-                    Close();
+                    //Close();
                 }
             }
 

@@ -7,24 +7,25 @@ namespace LoRa_Controller.Interface.Log
 	public class LogListView : ListView
     {
         #region Public constants
-        public const int maxEntries = 10;
+        public const int maxVisibleEntries = 10;
+        public const int maxEntries = 1000;
         #endregion
 
         #region Constructors
         public LogListView() : base()
-		{
+        {
 			View = View.Details;
 			AllowColumnReorder = false;
 			FullRowSelect = true;
 			Sorting = SortOrder.None;
 
-			Columns.Add("Timestamp", InterfaceConstants.ListLongColumnWidth);
-			Columns.Add("Source", InterfaceConstants.ListShortColumnWidth);
-			Columns.Add("Target", InterfaceConstants.ListShortColumnWidth);
-			Columns.Add("Command", InterfaceConstants.ListLongColumnWidth);
-            Columns.Add("Parameter", InterfaceConstants.ListColumnWidth);
-            Columns.Add("RSSI", InterfaceConstants.ListShortColumnWidth);
-            Columns.Add("SNR", InterfaceConstants.ListShortColumnWidth);
+			Columns.Add("Timestamp");
+			Columns.Add("Source");
+			Columns.Add("Target");
+			Columns.Add("Command");
+            Columns.Add("Parameter");
+            Columns.Add("RSSI");
+            Columns.Add("SNR");
         }
         #endregion
 
@@ -57,6 +58,9 @@ namespace LoRa_Controller.Interface.Log
                 if (Items.Count > maxEntries)
                     Items.RemoveAt(0);
                 TopItem = Items[Items.Count - 1];
+
+                AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+                AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
             }
         }
         #endregion

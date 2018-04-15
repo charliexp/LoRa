@@ -76,6 +76,7 @@ namespace LoRa_Controller.Interface
             parametersTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
 
             serialPortChooser = new ComboBoxControl("COMPort", new List<string>(SerialPort.GetPortNames()), 0);
+            ((ComboBox)serialPortChooser.Field).SelectedItem = SettingHandler.COMPort.Value;
 
             ipChooser = new TextBoxControl("IP", TextBoxControl.Type.Input);
             ipChooser.Field.Text = (string)SettingHandler.IPAddress.Value;

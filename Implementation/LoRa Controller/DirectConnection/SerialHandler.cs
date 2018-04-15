@@ -48,15 +48,8 @@ namespace LoRa_Controller.DirectConnection
 		#region Public methods
 		public override void Open()
 		{
-			try
-			{
-				serialPort.Open();
-				serialPort.DiscardInBuffer();
-			}
-			catch
-			{
-                //TODO: when does this fail?
-			}
+			serialPort.Open();
+			serialPort.DiscardInBuffer();
 		}
 		public override void Close()
 		{

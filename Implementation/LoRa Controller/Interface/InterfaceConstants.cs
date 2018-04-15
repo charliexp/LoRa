@@ -3,6 +3,7 @@
 	class InterfaceConstants
 	{
         #region Public constants
+        
         public const int WindowMarginX = 12;
 		public const int WindowMarginY = 12;
 

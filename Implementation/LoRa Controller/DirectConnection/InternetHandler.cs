@@ -59,12 +59,12 @@ namespace LoRa_Controller.DirectConnection
 		#region Public methods
 		public override void Open()
 		{
-			try
+			//try
 			{
 				tcpClient.Connect(ipAddress, port);
 				baseStream = tcpClient.GetStream();
 			}
-			catch
+			//catch
 			{
 
 			}

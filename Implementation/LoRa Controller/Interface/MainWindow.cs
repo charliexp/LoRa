@@ -1,5 +1,4 @@
-﻿using LoRa_Controller.Device;
-using LoRa_Controller.Interface.Log;
+﻿using LoRa_Controller.Interface.Log;
 using LoRa_Controller.Interface.Node.GroupBoxes;
 using System;
 using System.Collections.Generic;
