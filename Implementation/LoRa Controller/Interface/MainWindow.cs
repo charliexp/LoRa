@@ -1,5 +1,4 @@
-﻿using LoRa_Controller.Interface.Log;
-using LoRa_Controller.Interface.Node.GroupBoxes;
+﻿using LoRa_Controller.Interface.Node.GroupBoxes;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -13,7 +12,6 @@ namespace LoRa_Controller.Interface
         #region Properties
         public DirectNodeGroupBox DirectNodeInterface { get; private set; }
 		public List<RadioNodeGroupBox> RadioNodeInterfaces { get; private set; }
-        public LogGroupBox LogInterface { get; private set; }
         public FlowLayoutPanel FlowLayout { get; private set; }
         public TableLayoutPanel TableLayout { get; private set; }
         #endregion
@@ -23,7 +21,6 @@ namespace LoRa_Controller.Interface
 		{
 			DirectNodeInterface = new DirectNodeGroupBox("Directly Connected Node");
 			RadioNodeInterfaces = new List<RadioNodeGroupBox>();
-			LogInterface = new LogGroupBox();
 
             FlowLayout = new FlowLayoutPanel
             {
@@ -38,27 +35,20 @@ namespace LoRa_Controller.Interface
                 Location = new Point(0, 0),
                 Name = "TableLayout",
             };
-            
-            InitializeComponent();
-        }
-        #endregion
 
-        #region Private methods
-        private void Form1_Load(object sender, EventArgs e)
-		{
             Controls.Add(TableLayout);
             TableLayout.Controls.Add(FlowLayout);
-            TableLayout.Controls.Add(LogInterface);
-
-            TableLayout.SetRow(FlowLayout, 0);
-            TableLayout.SetRow(LogInterface, 1);
 
             FlowLayout.FlowDirection = FlowDirection.LeftToRight;
             FlowLayout.Controls.Add(DirectNodeInterface);
 
-			Application.ApplicationExit += new EventHandler(OnFormExit);
-			LogInterface.FolderTextBox.Text = Program.logger.Folder;
+            InitializeComponent();
+
+            Application.ApplicationExit += new EventHandler(OnFormExit);
         }
+        #endregion
+
+        #region Private methods
         private void OnFormExit(object sender, EventArgs e)
         {
             if (Program.logger != null)
@@ -67,6 +57,10 @@ namespace LoRa_Controller.Interface
         #endregion
 
         #region Public methods
+        public void AddControl(Control control)
+        {
+            TableLayout.Controls.Add(control);
+        }
         public void BoardConnected()
         {
             DirectNodeInterface.UpdateConnectedStatus(true);
@@ -110,10 +104,6 @@ namespace LoRa_Controller.Interface
                 FlowLayout.Controls.Add(RadioNodeInterfaces[i]);
                 RadioNodeInterfaces[i].Draw(RadioNodeInterfaces.Count);
             }
-
-            LogInterface.Location = new Point(InterfaceConstants.GroupBoxLocationX +
-                (RadioNodeInterfaces.Count + 1) * (DirectNodeInterface.Width + InterfaceConstants.GroupBoxLocationX),
-                InterfaceConstants.GroupBoxLocationY);
         }
         #endregion
     }

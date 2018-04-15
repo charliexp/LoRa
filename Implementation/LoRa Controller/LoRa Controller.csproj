@@ -82,10 +82,10 @@
     <Compile Include="Interface\Controls\SpinBoxControl.cs" />
     <Compile Include="Interface\InterfaceConstants.cs" />
     <Compile Include="Interface\Controls\BaseControl.cs" />
-    <Compile Include="Interface\Log\LogGroupBox.cs">
+    <Compile Include="Log\LogGroupBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Interface\Log\LogListView.cs">
+    <Compile Include="Log\LogListView.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Interface\Nodes\GroupBoxes\BaseNodeGroupBox.cs">

@@ -40,7 +40,6 @@
             this.Enabled = false;
             this.Name = "MainWindow";
             this.Text = "LoRa Controller";
-            this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
 
 		}

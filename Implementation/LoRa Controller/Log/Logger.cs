@@ -1,4 +1,5 @@
-﻿using LoRa_Controller.Settings;
+﻿using LoRa_Controller.Device;
+using LoRa_Controller.Settings;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -25,7 +26,8 @@ namespace LoRa_Controller.Log
 			set
 			{
 				folder = value;
-				SettingHandler.LogFolder.Value = folder;
+                Interface.FolderTextBox.Text = folder;
+                SettingHandler.LogFolder.Value = folder;
                 if (IsOpen)
 				{
 					Finish();
@@ -38,6 +40,7 @@ namespace LoRa_Controller.Log
             get { return folder + "\\" + fileName; }
         }
         public bool IsOpen { get; private set; }
+        public LogGroupBox Interface { get; private set; }
         #endregion
 
         #region Constructors
@@ -46,6 +49,8 @@ namespace LoRa_Controller.Log
             IsOpen = false;
 			folder = (string) SettingHandler.LogFolder.Value;
             fileName = "log_" + DateTime.Now.ToString("dd.MM.yyyy") + ".txt";
+            Interface = new LogGroupBox();
+            Interface.FolderTextBox.Text = folder;
         }
         public Logger(string fileNamePrefix) : this()
         {
@@ -58,22 +63,32 @@ namespace LoRa_Controller.Log
         #endregion
 
         #region Public methods
-        public void Write(string data)
-		{
-			try
-			{
-				streamWriter.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + ", " + data + ",");
-				linesWritten++;
-			}
-			catch (ObjectDisposedException)
-			{
+        public void Write(string message)
+        {
+            try
+            {
+                streamWriter.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + ", " + message + ",");
+                linesWritten++;
+            }
+            catch (ObjectDisposedException)
+            {
 
-			}
-			if (linesWritten == LinesRequiredToSaveFile)
-			{
-				linesWritten = 0;
-				streamWriter.Flush();
-			}
+            }
+            if (linesWritten == LinesRequiredToSaveFile)
+            {
+                linesWritten = 0;
+                streamWriter.Flush();
+            }
+        }
+        public void Write(Message message)
+        {
+            Interface.Update(message);
+            Write(  message.Source + ", " +
+                    message.Target + ", " +
+                    message.Command + ", " +
+                    message.Parameters[0] + ", " +
+                    message.RSSI + ", " +
+                    message.SNR);
 		}
 		public async Task WriteAsync(string data)
         {

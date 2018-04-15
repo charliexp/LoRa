@@ -51,6 +51,8 @@ namespace LoRa_Controller
 			connectionDialog = new ConnectionDialog();
 			mainWindow = new MainWindow();
 
+            mainWindow.AddControl(logger.Interface);
+
 			connectionDialog.Show();
             Application.Run(mainWindow);
         }
@@ -78,7 +80,6 @@ namespace LoRa_Controller
             if (!Directory.Exists((string)SettingHandler.LogFolder.Value))
             {
                 logger.Folder = Directory.GetCurrentDirectory();
-                mainWindow.LogInterface.FolderTextBox.Text = logger.Folder;
                 SettingHandler.Save(SettingHandler.LogFolder);
             }
             logger.Start();
@@ -393,11 +394,7 @@ namespace LoRa_Controller
 						break;
 				}
 			}
-			if (receivedDataString != null)
-			{
-				logger.Write(receivedDataString);
-				mainWindow.LogInterface.Update(message);
-			}
+			logger.Write(message);
 		}
 		private static void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
