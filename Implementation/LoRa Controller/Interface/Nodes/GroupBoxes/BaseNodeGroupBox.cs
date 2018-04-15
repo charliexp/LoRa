@@ -5,12 +5,15 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using static LoRa_Controller.Device.Message;
-using static LoRa_Controller.DirectConnection.BaseConnectionHandler;
 
 namespace LoRa_Controller.Interface.Node.GroupBoxes
 {
 	public abstract class BaseNodeGroupBox : GroupBox
     {
+        #region Private variables
+        private TableLayoutPanel layout;
+        #endregion
+
         #region Properties
         public int Address
 		{
@@ -39,13 +42,19 @@ namespace LoRa_Controller.Interface.Node.GroupBoxes
 		public ParameterCheckBox PerformCRC;
 
 		public List<BaseControl> statusControls;
-		public List<BaseControl> LoRaControls;
+        public List<BaseControl> LoRaControls;
         #endregion
 
         #region Constructors
         public BaseNodeGroupBox(string name) : base()
-		{
-			Status = new TextBoxControl("Status", TextBoxControl.Type.Output);
+        {
+            AutoSize = true;
+            AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            Name = name.Replace(" ", "") + "GroupBox";
+            Text = name;
+            TabStop = false;
+
+            Status = new TextBoxControl("Status", TextBoxControl.Type.Output);
 			AddressControl = new TextBoxControl("Address", TextBoxControl.Type.Input);
 			Bandwidth = new ParameterComboBox(CommandType.Bandwidth, new List<string> { "125 kHz", "250 kHz", "500 kHz" }, 0);
 			OutputPower = new ParameterSpinBox(CommandType.OutputPower, 1, 14, 14);
@@ -58,8 +67,19 @@ namespace LoRa_Controller.Interface.Node.GroupBoxes
 			PayloadMaxSize = new ParameterSpinBox(CommandType.PayloadMaxSize, 1, 64, 64);
 			VariablePayload = new ParameterCheckBox(CommandType.VariablePayload, true);
 			PerformCRC = new ParameterCheckBox(CommandType.PerformCRC, true);
+            layout = new TableLayoutPanel
+            {
+                AutoSize = true,
+                ColumnCount = 2,
+                Name = name + "Layout",
+                Location = new Point(InterfaceConstants.ItemPadding, InterfaceConstants.GroupBoxFirstItemY),
+            };
+            layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+            layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
 
-			statusControls = new List<BaseControl>
+            Controls.Add(layout);
+            
+            statusControls = new List<BaseControl>
 			{
 				Status,
 				AddressControl,
@@ -79,47 +99,42 @@ namespace LoRa_Controller.Interface.Node.GroupBoxes
 				VariablePayload,
 				PerformCRC
 			};
+        }
+        #endregion
 
-			AutoSize = true;
-			Name = name.Replace(" ", "") + "GroupBox";
-			Text = name;
-			Margin = new Padding(InterfaceConstants.ItemPadding);
-			Padding = new Padding(InterfaceConstants.ItemPadding);
-			TabStop = false;
+        #region Protected methods
+        protected void AddControlsToLayout()
+        {
+            foreach (BaseControl control in statusControls)
+            {
+                if (control is LabeledControl)
+                {
+                    layout.Controls.Add(((LabeledControl)control).Label);
+                    ((LabeledControl)control).Label.Dock = DockStyle.Top;
+                }
+                if (control is ButtonControl)
+                {
+                    layout.SetColumnSpan(control.Field, 2);
+                }
+                layout.Controls.Add(control.Field);
+                control.Field.Dock = DockStyle.Fill;
+            }
+
+            foreach (BaseControl control in LoRaControls)
+            {
+                if (control is LabeledControl)
+                {
+                    layout.Controls.Add(((LabeledControl)control).Label);
+                    ((LabeledControl)control).Label.Dock = DockStyle.Top;
+                }
+                layout.Controls.Add(control.Field);
+                control.Field.Dock = DockStyle.Fill;
+            }
         }
         #endregion
 
         #region Public methods
-        public void Draw(int groupBoxIndex)
-		{
-			int controlIndex = 0;
-			
-			SuspendLayout();
-
-			foreach (BaseControl control in statusControls)
-			{
-				control.Draw(controlIndex++);
-				if (control is LabeledControl)
-					Controls.Add(((LabeledControl)control).Label);
-				Controls.Add(control.Field);
-			}
-
-			foreach (BaseControl control in LoRaControls)
-			{
-				control.Draw(controlIndex++);
-				if (control is LabeledControl)
-					Controls.Add(((LabeledControl)control).Label);
-				Controls.Add(control.Field);
-			}
-            //TODO: use flow layout so draws are no longer needed
-			Location = new Point(InterfaceConstants.GroupBoxLocationX +
-				groupBoxIndex * (Width + InterfaceConstants.GroupBoxLocationX),
-				InterfaceConstants.GroupBoxLocationY);
-
-			ResumeLayout(true);
-		}
-
-		public void UpdateConnectedStatus(bool connected)
+        public void UpdateConnectedStatus(bool connected)
 		{
 			if (connected)
 			{

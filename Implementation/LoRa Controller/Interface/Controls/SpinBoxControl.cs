@@ -12,8 +12,8 @@ namespace LoRa_Controller.Interface.Controls
 			{
 				Margin = Field.Margin,
 				Name = Field.Name,
-				Size = Field.Size,
-		    };
+                Size = Field.Size,
+            };
 			((System.ComponentModel.ISupportInitialize)Field).BeginInit();
 			((NumericUpDown)Field).Maximum = new decimal(new int[] { maxValue, 0, 0, 0 });
 			((NumericUpDown)Field).Minimum = new decimal(new int[] { minValue, 0, 0, 0 });

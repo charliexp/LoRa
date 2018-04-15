@@ -12,30 +12,53 @@ namespace LoRa_Controller.Interface
     public partial class MainWindow : Form
     {
         #region Properties
-        public DirectNodeGroupBox DirectNodeGroupBox { get; private set; }
-		public List<RadioNodeGroupBox> RadioNodeGroupBoxes { get; private set; }
-        public LogGroupBox LogGroupBox { get; private set; }
+        public DirectNodeGroupBox DirectNodeInterface { get; private set; }
+		public List<RadioNodeGroupBox> RadioNodeInterfaces { get; private set; }
+        public LogGroupBox LogInterface { get; private set; }
+        public FlowLayoutPanel FlowLayout { get; private set; }
+        public TableLayoutPanel TableLayout { get; private set; }
         #endregion
 
         #region Constructors
         public MainWindow()
 		{
-			DirectNodeGroupBox = new DirectNodeGroupBox("Directly Connected Node");
-			RadioNodeGroupBoxes = new List<RadioNodeGroupBox>();
-			LogGroupBox = new LogGroupBox();
+			DirectNodeInterface = new DirectNodeGroupBox("Directly Connected Node");
+			RadioNodeInterfaces = new List<RadioNodeGroupBox>();
+			LogInterface = new LogGroupBox();
 
-			InitializeComponent();
+            FlowLayout = new FlowLayoutPanel
+            {
+                AutoSize = true,
+                Name = "FlowLayout"
+            };
+
+            TableLayout = new TableLayoutPanel
+            {
+                AutoSize = true,
+                RowCount = 2,
+                Location = new Point(0, 0),
+                Name = "TableLayout",
+            };
+            
+            InitializeComponent();
         }
         #endregion
 
         #region Private methods
         private void Form1_Load(object sender, EventArgs e)
 		{
-			Controls.Add(DirectNodeGroupBox);
-			Controls.Add(LogGroupBox);
+            Controls.Add(TableLayout);
+            TableLayout.Controls.Add(FlowLayout);
+            TableLayout.Controls.Add(LogInterface);
+
+            TableLayout.SetRow(FlowLayout, 0);
+            TableLayout.SetRow(LogInterface, 1);
+
+            FlowLayout.FlowDirection = FlowDirection.LeftToRight;
+            FlowLayout.Controls.Add(DirectNodeInterface);
 
 			Application.ApplicationExit += new EventHandler(OnFormExit);
-			LogGroupBox.FolderTextBox.Text = Program.logger.Folder;
+			LogInterface.FolderTextBox.Text = Program.logger.Folder;
         }
         private void OnFormExit(object sender, EventArgs e)
         {
@@ -47,7 +70,7 @@ namespace LoRa_Controller.Interface
         #region Public methods
         public void BoardConnected()
         {
-            DirectNodeGroupBox.UpdateConnectedStatus(true);
+            DirectNodeInterface.UpdateConnectedStatus(true);
         }
         public void BoardUnableToConnect()
         {
@@ -55,47 +78,42 @@ namespace LoRa_Controller.Interface
         }
         public void BoardDisconnected()
         {
-            DirectNodeGroupBox.UpdateConnectedStatus(false);
+            DirectNodeInterface.UpdateConnectedStatus(false);
         }
         public void SetDirectlyConnectedNodeType()
         {
-            DirectNodeGroupBox.Address = Program.directDevice.Address;
-            DirectNodeGroupBox.SetAddress.Field.Enabled = false;
+            DirectNodeInterface.Address = Program.directDevice.Address;
+            DirectNodeInterface.SetAddress.Field.Enabled = false;
             switch (Program.directDevice.Type)
             {
                 case NodeType.Master:
-                    DirectNodeGroupBox.NodeType.Field.Text = "Master";
+                    DirectNodeInterface.NodeType.Field.Text = "Master";
                     break;
                 case NodeType.Beacon:
-                    DirectNodeGroupBox.NodeType.Field.Text = "Beacon " + Program.directDevice.Address;
+                    DirectNodeInterface.NodeType.Field.Text = "Beacon " + Program.directDevice.Address;
                     break;
                 case NodeType.Unknown:
-                    DirectNodeGroupBox.NodeType.Field.Text = "Unknown/new";
+                    DirectNodeInterface.NodeType.Field.Text = "Unknown/new";
                     break;
             }
-            DirectNodeGroupBox.Draw(0);
-            LogGroupBox.Draw(1);
-            LogGroupBox.Location = new Point(InterfaceConstants.GroupBoxLocationX +
-                (RadioNodeGroupBoxes.Count + 1) * (DirectNodeGroupBox.Width + InterfaceConstants.GroupBoxLocationX),
-                InterfaceConstants.GroupBoxLocationY);
+            DirectNodeInterface.Draw(0);
         }
         public void UpdateRadioConnectedNodes()
         {
-            for (int i = RadioNodeGroupBoxes.Count; i < Program.radioDevices.Count; i++)
+            for (int i = RadioNodeInterfaces.Count; i < Program.radioDevices.Count; i++)
             {
-                RadioNodeGroupBoxes.Add(new RadioNodeGroupBox("Radio Node"));
-                RadioNodeGroupBoxes[i].Address = Program.radioDevices[i].Address;
+                RadioNodeInterfaces.Add(new RadioNodeGroupBox("Radio Node"));
+                RadioNodeInterfaces[i].Address = Program.radioDevices[i].Address;
                 if (Program.radioDevices[i].Type == NodeType.Master)
-                    RadioNodeGroupBoxes[i].Text = "Master";
+                    RadioNodeInterfaces[i].Text = "Master";
                 else
-                    RadioNodeGroupBoxes[i].Text = "Beacon " + Program.radioDevices[i].Address;
-                Controls.Add(RadioNodeGroupBoxes[i]);
-                RadioNodeGroupBoxes[i].Draw(RadioNodeGroupBoxes.Count);
+                    RadioNodeInterfaces[i].Text = "Beacon " + Program.radioDevices[i].Address;
+                FlowLayout.Controls.Add(RadioNodeInterfaces[i]);
+                RadioNodeInterfaces[i].Draw(RadioNodeInterfaces.Count);
             }
-            LogGroupBox.Draw(Program.radioDevices.Count);
 
-            LogGroupBox.Location = new Point(InterfaceConstants.GroupBoxLocationX +
-                (RadioNodeGroupBoxes.Count + 1) * (DirectNodeGroupBox.Width + InterfaceConstants.GroupBoxLocationX),
+            LogInterface.Location = new Point(InterfaceConstants.GroupBoxLocationX +
+                (RadioNodeInterfaces.Count + 1) * (DirectNodeInterface.Width + InterfaceConstants.GroupBoxLocationX),
                 InterfaceConstants.GroupBoxLocationY);
         }
         #endregion

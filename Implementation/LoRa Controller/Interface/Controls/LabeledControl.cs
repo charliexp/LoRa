@@ -23,11 +23,10 @@ namespace LoRa_Controller.Interface.Controls
         #region Constructors
         public LabeledControl(string name) : base(name)
 		{
-			Label = new Label
-			{
-				Margin = new Padding(InterfaceConstants.ItemPadding, 0, InterfaceConstants.ItemPadding, 0),
-				Name = name.Replace(" ", "") + "Label",
-				Size = new Size(InterfaceConstants.LabelWidth, InterfaceConstants.LabelHeight)
+            Label = new Label
+            {
+                Name = name.Replace(" ", "") + "Label",
+                TextAlign = ContentAlignment.MiddleLeft,
 			};
 
 			string[] words = Regex.Matches(name.ToString(), "(^[a-z]+|[A-Z]+(?![a-z])|[A-Z][a-z]+)")
@@ -35,26 +34,6 @@ namespace LoRa_Controller.Interface.Controls
 											.Select(m => m.Value)
 											.ToArray();
 			Label.Text = string.Join(" ", words);
-        }
-        #endregion
-
-        #region Public methods
-        public override void Draw(int index)
-		{
-			Label.Location = new Point( InterfaceConstants.LabelLocationX,
-
-										InterfaceConstants.GroupBoxFirstItemY +
-										index * (InterfaceConstants.InputHeight + InterfaceConstants.ItemPadding) +
-										InterfaceConstants.LabelToBoxOffset);
-
-			Field.Location = new Point( InterfaceConstants.LabelLocationX +
-										InterfaceConstants.LabelWidth +
-										InterfaceConstants.ItemPadding,
-
-										InterfaceConstants.GroupBoxFirstItemY +
-										index * (InterfaceConstants.InputHeight + InterfaceConstants.ItemPadding));
-
-			Field.TabIndex = index;
         }
         #endregion
     }

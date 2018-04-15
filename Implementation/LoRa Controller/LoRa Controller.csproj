@@ -121,6 +121,9 @@
     <EmbeddedResource Include="Interface\MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Interface\Nodes\GroupBoxes\BaseNodeGroupBox.resx">
+      <DependentUpon>BaseNodeGroupBox.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

@@ -78,11 +78,10 @@ namespace LoRa_Controller.Interface.Log
 			Controls.Add(FolderLabel);
 			Controls.Add(List);
 
-			AutoSize = true;
-			Name = "logGroupBox";
+            AutoSize = true;
+            AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            Name = "logGroupBox";
 			Text = "Log";
-			Margin = new Padding(InterfaceConstants.ItemPadding);
-			Padding = new Padding(InterfaceConstants.ItemPadding);
 			Size = new Size(256, 299);
         }
         #endregion
@@ -113,16 +112,6 @@ namespace LoRa_Controller.Interface.Log
         #endregion
 
         #region Public methods
-        public void Draw(int groupBoxIndex)
-		{
-			SuspendLayout();
-			
-			Location = new Point(InterfaceConstants.GroupBoxLocationX +
-				groupBoxIndex * (Width + InterfaceConstants.GroupBoxLocationX),
-				InterfaceConstants.GroupBoxLocationY);
-
-			ResumeLayout(true);
-		}
 		public void Update(Device.Message message)
 		{
             List.Write(message);

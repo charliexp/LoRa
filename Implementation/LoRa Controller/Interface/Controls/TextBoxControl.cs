@@ -19,8 +19,8 @@ namespace LoRa_Controller.Interface.Controls
 			{
 				Margin = Field.Margin,
 				Name = Field.Name,
-				Size = Field.Size,
-			};
+                Size = Field.Size,
+            };
 
 			if (type == Type.Output)
 			{

@@ -36,7 +36,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(116, 0);
+            this.ClientSize = new System.Drawing.Size(120, 0);
             this.Enabled = false;
             this.Name = "MainWindow";
             this.Text = "LoRa Controller";
@@ -45,8 +45,7 @@
 
 		}
 
-		#endregion
-
-	}
+        #endregion
+    }
 }
 

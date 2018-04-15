@@ -22,20 +22,15 @@ namespace LoRa_Controller.Interface.Node.GroupBoxes
 			statusControls.Add(RSSI);
 			statusControls.Add(SNR);
 
-			RSSI.Label.Width = RSSI.Label.Width / 2 - 2 * InterfaceConstants.ItemPadding;
-			RSSI.Field.Width = RSSI.Field.Width / 2;
-			SNR.Label.Width = SNR.Label.Width / 2 - 2 * InterfaceConstants.ItemPadding;
-			SNR.Field.Width = SNR.Field.Width / 2;
+            AddControlsToLayout();
         }
         #endregion
 
         #region Public methods
-        public new void Draw(int groupBoxIndex)
+        public void Draw(int groupBoxIndex)
         {
             if (Address == (int)AddressType.Master)
                 LoRaControls.Clear();
-
-            base.Draw(groupBoxIndex);
         }
         public void UpdateRSSI(int value)
 		{

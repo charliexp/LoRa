@@ -16,7 +16,7 @@ namespace LoRa_Controller.Interface.Controls
 			{
 				Margin = Field.Margin,
 				Name = Field.Name,
-				Size = Field.Size,
+                Size = Field.Size,
 			};
 			((CheckBox)Field).CheckAlign = System.Drawing.ContentAlignment.TopRight;
 			((CheckBox)Field).CheckState = defaultState?CheckState.Checked : CheckState.Unchecked;

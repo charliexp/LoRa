@@ -14,10 +14,10 @@ namespace LoRa_Controller.Interface.Controls
 			{
 				Margin = Field.Margin,
 				Name = Field.Name,
-				Size = Field.Size,
 				DropDownStyle = ComboBoxStyle.DropDownList,
 				FormattingEnabled = true,
-				Sorted = true
+                Size = Field.Size,
+                Sorted = true
 			};
 			((ComboBox)Field).Items.AddRange(values.ToArray());
 			((ComboBox)Field).SelectedIndex = defaultIndex;
