@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
 namespace LoRa_Controller.Interface.Controls
 {
@@ -9,8 +8,9 @@ namespace LoRa_Controller.Interface.Controls
         public ButtonControl(string name) : base(name)
 		{
 			Field = new Button
-			{
-				Name = name.Replace(" ", "") + "Field",
+            {
+                Dock = Field.Dock,
+                Name = name.Replace(" ", "") + "Field",
 				Text = name,
 			};
         }

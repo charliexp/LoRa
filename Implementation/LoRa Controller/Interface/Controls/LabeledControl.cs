@@ -35,6 +35,7 @@ namespace LoRa_Controller.Interface.Controls
             Label = new Label
             {
                 Name = name.Replace(" ", "") + "Label",
+                Dock = DockStyle.Top,
                 TextAlign = ContentAlignment.MiddleLeft,
 			};
 

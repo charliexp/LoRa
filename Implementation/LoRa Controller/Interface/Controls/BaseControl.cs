@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
 namespace LoRa_Controller.Interface.Controls
 {
@@ -24,9 +23,9 @@ namespace LoRa_Controller.Interface.Controls
         public BaseControl(string name)
 		{
 			Field = new Control
-			{
-				Name = name.Replace(" ", "") + "Field",
-                //Size = new Size(InterfaceConstants.InputHeight, InterfaceConstants.InputWidth),
+            {
+                Name = name.Replace(" ", "") + "Field",
+                Dock = DockStyle.Fill,
 			};
         }
         #endregion

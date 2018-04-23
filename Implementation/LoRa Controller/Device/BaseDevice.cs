@@ -6,8 +6,8 @@
         public enum NodeType
         {
             Unknown,
-            Master,
-            Beacon,
+            Gateway,
+            EndDevice,
         }
         public enum AddressType
         {
@@ -30,11 +30,11 @@
             {
                 address = value;
                 if (address == (int)AddressType.Master)
-                    Type = NodeType.Master;
+                    Type = NodeType.Gateway;
                 else if (address == (int)AddressType.General)
                     Type = NodeType.Unknown;
                 else
-                    Type = NodeType.Beacon;
+                    Type = NodeType.EndDevice;
             }
         }
         public NodeType Type { get; private set; }

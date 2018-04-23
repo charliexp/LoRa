@@ -14,7 +14,8 @@ namespace LoRa_Controller.Interface.Controls
 			{
 				Margin = Field.Margin,
 				Name = Field.Name,
-				DropDownStyle = ComboBoxStyle.DropDownList,
+                Dock = Field.Dock,
+                DropDownStyle = ComboBoxStyle.DropDownList,
 				FormattingEnabled = true,
                 Size = Field.Size,
                 Sorted = true

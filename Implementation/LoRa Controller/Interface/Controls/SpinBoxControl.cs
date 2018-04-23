@@ -9,8 +9,9 @@ namespace LoRa_Controller.Interface.Controls
         public SpinBoxControl(string name, int minValue, int maxValue, int defaultValue) : base(name)
 		{
 			Field = new NumericUpDown
-			{
-				Margin = Field.Margin,
+            {
+                Dock = Field.Dock,
+                Margin = Field.Margin,
 				Name = Field.Name,
                 Size = Field.Size,
             };

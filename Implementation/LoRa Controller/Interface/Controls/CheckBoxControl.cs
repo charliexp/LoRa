@@ -13,8 +13,9 @@ namespace LoRa_Controller.Interface.Controls
         public CheckBoxControl(string name, bool defaultState) : base(name)
 		{
 			Field = new CheckBox
-			{
-				Margin = Field.Margin,
+            {
+                Dock = Field.Dock,
+                Margin = Field.Margin,
 				Name = Field.Name,
                 Size = Field.Size,
 			};

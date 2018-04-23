@@ -74,6 +74,9 @@
     <Compile Include="Interface\ConnectionDialog.Designer.cs">
       <DependentUpon>ConnectionDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Interface\Controls\GraphControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Interface\Controls\LabeledControl.cs" />
     <Compile Include="Interface\Controls\CheckBoxControl.cs" />
     <Compile Include="Interface\Controls\ComboBoxControl.cs" />
@@ -88,18 +91,18 @@
     <Compile Include="Log\LogListView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Interface\Nodes\GroupBoxes\BaseNodeGroupBox.cs">
+    <Compile Include="Device\BaseNodeGroupBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Interface\Nodes\GroupBoxes\DirectNodeGroupBox.cs">
+    <Compile Include="Device\DirectNodeGroupBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Interface\Nodes\GroupBoxes\RadioNodeGroupBox.cs">
+    <Compile Include="Device\RadioNodeGroupBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Interface\Nodes\ParameterControls\ParameterCheckBox.cs" />
-    <Compile Include="Interface\Nodes\ParameterControls\ParameterComboBox.cs" />
-    <Compile Include="Interface\Nodes\ParameterControls\ParameterSpinBox.cs" />
+    <Compile Include="Interface\ParameterControls\ParameterCheckBox.cs" />
+    <Compile Include="Interface\ParameterControls\ParameterComboBox.cs" />
+    <Compile Include="Interface\ParameterControls\ParameterSpinBox.cs" />
     <Compile Include="Log\Logger.cs" />
     <Compile Include="Interface\MainWindow.cs">
       <SubType>Form</SubType>
@@ -118,7 +121,7 @@
     <EmbeddedResource Include="Interface\MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Interface\Nodes\GroupBoxes\BaseNodeGroupBox.resx">
+    <EmbeddedResource Include="Device\BaseNodeGroupBox.resx">
       <DependentUpon>BaseNodeGroupBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

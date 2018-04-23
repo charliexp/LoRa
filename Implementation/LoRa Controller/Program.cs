@@ -231,7 +231,6 @@ namespace LoRa_Controller
 								if (directDevice.Address == (int) AddressType.Master)
 								{
 									receivedDataString = "Connected to master";
-									((Button)mainWindow.DirectNodeInterface.CheckBeacons.Field).Click += new EventHandler(SendDevicesPresent);
 								}
 								else if (directDevice.Address >= (int)AddressType.Beacon)
 									receivedDataString = "Connected to beacon " + directDevice.Address;
@@ -247,7 +246,7 @@ namespace LoRa_Controller
 									directDevice.Address = message.Target;
 									mainWindow.SetDirectlyConnectedNodeType();
 
-									if (directDevice.Type == BaseDevice.NodeType.Master)
+									if (directDevice.Type == BaseDevice.NodeType.Gateway)
 										receivedDataString = "Changed to master";
 									else
 										receivedDataString = "Changed to beacon " + directDevice.Address;
@@ -352,7 +351,6 @@ namespace LoRa_Controller
 							string logString;
 							device.Connected = true;
 							device.UpdateSignalQuality(message.RSSI, message.SNR);
-							mainWindow.RadioNodeInterfaces[radioDevices.IndexOf(device)].UpdateConnectedStatus(true);
 							mainWindow.RadioNodeInterfaces[radioDevices.IndexOf(device)].UpdateRSSI(-device.RSSI);
 							mainWindow.RadioNodeInterfaces[radioDevices.IndexOf(device)].UpdateSNR(device.SNR);
 							if (radioDeviceAddress == (int) AddressType.Master)
@@ -375,7 +373,6 @@ namespace LoRa_Controller
 							foreach (RadioDevice device in radioDevices)
 							{
 								device.Connected = false;
-								mainWindow.RadioNodeInterfaces[radioDevices.IndexOf(device)].UpdateConnectedStatus(false);
 							}
 						}
 						else
@@ -385,7 +382,6 @@ namespace LoRa_Controller
 								if (device.Address == radioDeviceAddress)
 								{
 									device.Connected = false;
-									mainWindow.RadioNodeInterfaces[radioDevices.IndexOf(device)].UpdateConnectedStatus(false);
 								}
 						}
 						break;
@@ -419,12 +415,6 @@ namespace LoRa_Controller
 		private static void SetAddress(object sender, EventArgs e)
         {
             Device.Message message = new Device.Message(directDevice.Address, CommandType.SetAddress, mainWindow.DirectNodeInterface.Address);
-
-            connectionHandler.Write(message);
-		}
-		private static void SendDevicesPresent(object sender, EventArgs e)
-        {
-            Device.Message message = new Device.Message(CommandType.IsPresent);
 
             connectionHandler.Write(message);
 		}

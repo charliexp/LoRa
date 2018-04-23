@@ -1,4 +1,4 @@
-﻿using LoRa_Controller.Interface.Node.GroupBoxes;
+﻿using LoRa_Controller.Device;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -63,15 +63,12 @@ namespace LoRa_Controller.Interface
         }
         public void BoardConnected()
         {
-            DirectNodeInterface.UpdateConnectedStatus(true);
         }
         public void BoardUnableToConnect()
         {
-            //directNodeGroupBox.UpdateStatus(false);
         }
         public void BoardDisconnected()
         {
-            DirectNodeInterface.UpdateConnectedStatus(false);
         }
         public void SetDirectlyConnectedNodeType()
         {
@@ -79,17 +76,16 @@ namespace LoRa_Controller.Interface
             DirectNodeInterface.SetAddress.Field.Enabled = false;
             switch (Program.directDevice.Type)
             {
-                case NodeType.Master:
-                    DirectNodeInterface.NodeType.Field.Text = "Master";
+                case NodeType.Gateway:
+                    DirectNodeInterface.Text = "Gateway";
                     break;
-                case NodeType.Beacon:
-                    DirectNodeInterface.NodeType.Field.Text = "Beacon " + Program.directDevice.Address;
+                case NodeType.EndDevice:
+                    DirectNodeInterface.Text = "End device " + Program.directDevice.Address;
                     break;
                 case NodeType.Unknown:
-                    DirectNodeInterface.NodeType.Field.Text = "Unknown/new";
+                    DirectNodeInterface.Text = "Unknown/new";
                     break;
             }
-            DirectNodeInterface.Draw(0);
         }
         public void UpdateRadioConnectedNodes()
         {
@@ -97,7 +93,7 @@ namespace LoRa_Controller.Interface
             {
                 RadioNodeInterfaces.Add(new RadioNodeGroupBox("Radio Node"));
                 RadioNodeInterfaces[i].Address = Program.radioDevices[i].Address;
-                if (Program.radioDevices[i].Type == NodeType.Master)
+                if (Program.radioDevices[i].Type == NodeType.Gateway)
                     RadioNodeInterfaces[i].Text = "Master";
                 else
                     RadioNodeInterfaces[i].Text = "Beacon " + Program.radioDevices[i].Address;
