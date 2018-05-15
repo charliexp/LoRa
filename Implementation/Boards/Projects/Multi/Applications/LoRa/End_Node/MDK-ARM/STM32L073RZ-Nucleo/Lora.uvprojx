@@ -905,6 +905,11 @@
               <FilePath>..\..\src\bsp.c</FilePath>
             </File>
             <File>
+              <FileName>daq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\daq.c</FilePath>
+            </File>
+            <File>
               <FileName>debug.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\src\debug.c</FilePath>
@@ -925,6 +930,11 @@
               <FilePath>..\..\src\hw_spi.c</FilePath>
             </File>
             <File>
+              <FileName>hw_uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\hw_uart.c</FilePath>
+            </File>
+            <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\src\main.c</FilePath>
@@ -943,16 +953,6 @@
               <FileName>stm32l0xx_it.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\src\stm32l0xx_it.c</FilePath>
-            </File>
-            <File>
-              <FileName>daq.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\src\daq.c</FilePath>
-            </File>
-            <File>
-              <FileName>hw_uart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\src\hw_uart.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1992,6 +1992,11 @@
               <FilePath>..\..\src\bsp.c</FilePath>
             </File>
             <File>
+              <FileName>daq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\daq.c</FilePath>
+            </File>
+            <File>
               <FileName>debug.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\src\debug.c</FilePath>
@@ -2012,6 +2017,11 @@
               <FilePath>..\..\src\hw_spi.c</FilePath>
             </File>
             <File>
+              <FileName>hw_uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\hw_uart.c</FilePath>
+            </File>
+            <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\src\main.c</FilePath>
@@ -2030,16 +2040,6 @@
               <FileName>stm32l0xx_it.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\src\stm32l0xx_it.c</FilePath>
-            </File>
-            <File>
-              <FileName>daq.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\src\daq.c</FilePath>
-            </File>
-            <File>
-              <FileName>hw_uart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\src\hw_uart.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -3079,6 +3079,11 @@
               <FilePath>..\..\src\bsp.c</FilePath>
             </File>
             <File>
+              <FileName>daq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\daq.c</FilePath>
+            </File>
+            <File>
               <FileName>debug.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\src\debug.c</FilePath>
@@ -3099,6 +3104,11 @@
               <FilePath>..\..\src\hw_spi.c</FilePath>
             </File>
             <File>
+              <FileName>hw_uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\hw_uart.c</FilePath>
+            </File>
+            <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\src\main.c</FilePath>
@@ -3117,16 +3127,6 @@
               <FileName>stm32l0xx_it.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\src\stm32l0xx_it.c</FilePath>
-            </File>
-            <File>
-              <FileName>daq.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\src\daq.c</FilePath>
-            </File>
-            <File>
-              <FileName>hw_uart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\src\hw_uart.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -12,14 +12,14 @@
 /* Exported types ------------------------------------------------------------*/
 typedef enum UartRxState_t
 {
-    RX_PENDING,
-		RX_AVAILABLE
+	UART_RX_PENDING,
+	UART_RX_AVAILABLE
 }UartRxState_t;
 
 typedef enum UartTxState_t
 {
-		TX_AVAILABLE,
-    TX_BUSY,
+	UART_TX_AVAILABLE,
+	UART_TX_BUSY,
 }UartTxState_t;
 
 /* Exported constants --------------------------------------------------------*/
