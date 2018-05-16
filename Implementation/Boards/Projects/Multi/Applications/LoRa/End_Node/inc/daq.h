@@ -13,7 +13,7 @@
 /*!
  * Defines the application data aquisition duty cycle. 2s, value in [ms].
  */
-#define APP_DAQ_TIMEOUT                           2000
+#define APP_DAQ_TIMEOUT                           4000
 /* Exported types ------------------------------------------------------------*/
 typedef enum DAQState_t
 {

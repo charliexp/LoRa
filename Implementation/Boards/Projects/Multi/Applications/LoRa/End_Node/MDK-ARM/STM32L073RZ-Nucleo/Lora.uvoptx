@@ -323,17 +323,12 @@
         <Ww>
           <count>0</count>
           <WinNumber>1</WinNumber>
-          <ItemText>DAQState</ItemText>
+          <ItemText>request</ItemText>
         </Ww>
         <Ww>
           <count>1</count>
           <WinNumber>1</WinNumber>
-          <ItemText>DAQData</ItemText>
-        </Ww>
-        <Ww>
-          <count>2</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>returnValue</ItemText>
+          <ItemText>DAQState</ItemText>
         </Ww>
       </WatchWindow1>
       <Tracepoint>

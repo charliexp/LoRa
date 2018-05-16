@@ -17,9 +17,9 @@ static uint8_t TxLength;
 static UartTxState_t TxState;
 
 /* Receive buffer */
-static volatile uint8_t RxBuffer[BUFSIZE];
+static uint8_t RxBuffer[BUFSIZE];
 /* Receive buffer index */
-static volatile uint8_t RxLength;
+static uint8_t RxLength;
 /* UART Rx state */
 static UartRxState_t RxState;
 
@@ -27,12 +27,19 @@ static UartRxState_t RxState;
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
 	if (RxLength > 2 &&
-			RxBuffer[RxLength - 1] == '\r' &&
-			RxBuffer[RxLength] == '\n')
+			((RxBuffer[RxLength - 1] == '\r' &&
+			RxBuffer[RxLength] == '\n') ||
+			(RxBuffer[RxLength - 1] == 0x03)))
+	{
 		RxState = UART_RX_AVAILABLE;
+		HAL_UART_Receive_IT(&UartHandle, RxBuffer, 1);
+	}
+	else
+	{
+		HAL_UART_Receive_IT(&UartHandle, RxBuffer + RxLength + 1, 1);
+	}
 	
 	RxLength++;
-	HAL_UART_Receive_IT(&UartHandle, (uint8_t *) RxBuffer + RxLength, 1);
 }
 
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
@@ -65,7 +72,7 @@ void UART_Init(void)
 	
 	RxState = UART_RX_PENDING;
 	RxLength = 0;
-	HAL_UART_Receive_IT(&UartHandle, (uint8_t *) RxBuffer, 1);
+	HAL_UART_Receive_IT(&UartHandle, RxBuffer, 1);
 }
 
 UartRxState_t UART_Receive(uint8_t *buffer, uint8_t *length)
