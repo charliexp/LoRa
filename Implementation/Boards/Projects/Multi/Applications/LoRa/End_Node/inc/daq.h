@@ -27,6 +27,7 @@ typedef enum DAQState_t
 /* External variables --------------------------------------------------------*/
 /* Exported functions --------------------------------------------------------*/
 DAQState_t DAQ_Init(void);
+void DAQ_ReadData(uint16_t address, uint8_t locations, uint8_t *response, uint8_t *length);
 
 #ifdef __cplusplus
 }
