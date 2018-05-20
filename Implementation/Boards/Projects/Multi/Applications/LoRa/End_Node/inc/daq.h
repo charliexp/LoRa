@@ -15,18 +15,12 @@
  */
 #define APP_DAQ_TIMEOUT                           4000
 /* Exported types ------------------------------------------------------------*/
-typedef enum DAQState_t
-{
-	DAQ_IDLE,
-	DAQ_PENDING,
-	DAQ_TIMEOUT,
-	DAQ_ERROR
-}DAQState_t;
 
 /* Exported constants --------------------------------------------------------*/
 /* External variables --------------------------------------------------------*/
 /* Exported functions --------------------------------------------------------*/
-DAQState_t DAQ_Init(void);
+void DAQ_Init(void);
+void DAQ_GetData(void);
 void DAQ_ReadData(uint16_t address, uint8_t locations, uint8_t *response, uint8_t *length);
 
 #ifdef __cplusplus

@@ -416,6 +416,7 @@ static void LORA_RxData( lora_AppData_t *AppData )
 
 static void OnTxTimerEvent( void )
 {
+	DAQ_GetData();
   Send( );
   /*Wait for next tx slot*/
   TimerStart( &TxTimer);

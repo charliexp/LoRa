@@ -89,7 +89,7 @@ I (..\..\inc\hw_spi.h)(0x5AFEC7A9)
 I (..\..\inc\hw_rtc.h)(0x5AFEC7A9)
 I (..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Utilities\utilities.h)(0x5AFEC7A5)
 I (..\..\inc\hw_msp.h)(0x5AFEC7A9)
-I (..\..\inc\hw_uart.h)(0x5B0013F0)
+I (..\..\inc\hw_uart.h)(0x5B016A70)
 I (..\..\inc\debug.h)(0x5AFEC7A9)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599F137C)
 I (..\..\inc\vcom.h)(0x5AFEC7A9)
@@ -389,7 +389,7 @@ I (..\..\inc\hw_spi.h)(0x5AFEC7A9)
 I (..\..\inc\hw_rtc.h)(0x5AFEC7A9)
 I (..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Utilities\utilities.h)(0x5AFEC7A5)
 I (..\..\inc\hw_msp.h)(0x5AFEC7A9)
-I (..\..\inc\hw_uart.h)(0x5B0013F0)
+I (..\..\inc\hw_uart.h)(0x5B016A70)
 I (..\..\inc\debug.h)(0x5AFEC7A9)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599F137C)
 I (..\..\inc\vcom.h)(0x5AFEC7A9)
@@ -1154,14 +1154,14 @@ I (..\..\inc\hw_spi.h)(0x5AFEC7A9)
 I (..\..\inc\hw_rtc.h)(0x5AFEC7A9)
 I (..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Utilities\utilities.h)(0x5AFEC7A5)
 I (..\..\inc\hw_msp.h)(0x5AFEC7A9)
-I (..\..\inc\hw_uart.h)(0x5B0013F0)
+I (..\..\inc\hw_uart.h)(0x5B016A70)
 I (..\..\inc\debug.h)(0x5AFEC7A9)
 I (..\..\inc\vcom.h)(0x5AFEC7A9)
 I (..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Utilities\timeServer.h)(0x5AFEC7A5)
 I (..\..\inc\bsp.h)(0x5AFEC7A9)
-F (..\..\src\daq.c)(0x5B0156C2)(-c --cpu Cortex-M0+ -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ..\..\inc -I ..\..\..\..\..\..\..\Drivers\BSP\STM32L0xx_Nucleo -I ..\..\..\..\..\..\..\Drivers\STM32L0xx_HAL_Driver\Inc -I ..\..\..\..\..\..\..\Drivers\CMSIS\Device\ST\STM32L0xx\Include -I ..\..\..\..\..\..\..\Drivers\CMSIS\Include -I ..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Crypto -I ..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac -I ..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Phy -I ..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Utilities -I ..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Core -I ..\..\..\..\..\..\..\Drivers\BSP\Components\Common -I ..\..\..\..\..\..\..\Drivers\BSP\Components\hts221 -I ..\..\..\..\..\..\..\Drivers\BSP\Components\lps22hb -I ..\..\..\..\..\..\..\Drivers\BSP\Components\lps25hb -I ..\..\..\..\..\..\..\Drivers\BSP\Components\sx1272 -I ..\..\..\..\..\..\..\Drivers\BSP\X_NUCLEO_IKS01A1 -I ..\..\..\..\..\..\..\Drivers\BSP\X_NUCLEO_IKS01A2 -I ..\..\..\..\..\..\..\Drivers\BSP\sx1272mb2das --C99-I.\RTE\_sx1272mb2das-IC:\Keil_v5\ARM\PACK\Keil\STM32L0xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L0xx\Include-IC:\Keil_v5\ARM\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L0xx_DFP\2.0.0-D__UVISION_VERSION="525" -DSTM32L073xx -DSTM32L073xx -DUSE_STM32L0XX_NUCLEO -DUSE_HAL_DRIVER -DREGION_EU868-o .\sx1272mb2das\daq.o --omf_browse .\sx1272mb2das\daq.crf --depend .\sx1272mb2das\daq.d)
-I (..\..\inc\daq.h)(0x5B015681)
-I (..\..\inc\hw_uart.h)(0x5B0013F0)
+F (..\..\src\daq.c)(0x5B016A1B)(-c --cpu Cortex-M0+ -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ..\..\inc -I ..\..\..\..\..\..\..\Drivers\BSP\STM32L0xx_Nucleo -I ..\..\..\..\..\..\..\Drivers\STM32L0xx_HAL_Driver\Inc -I ..\..\..\..\..\..\..\Drivers\CMSIS\Device\ST\STM32L0xx\Include -I ..\..\..\..\..\..\..\Drivers\CMSIS\Include -I ..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Crypto -I ..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac -I ..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Phy -I ..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Utilities -I ..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Core -I ..\..\..\..\..\..\..\Drivers\BSP\Components\Common -I ..\..\..\..\..\..\..\Drivers\BSP\Components\hts221 -I ..\..\..\..\..\..\..\Drivers\BSP\Components\lps22hb -I ..\..\..\..\..\..\..\Drivers\BSP\Components\lps25hb -I ..\..\..\..\..\..\..\Drivers\BSP\Components\sx1272 -I ..\..\..\..\..\..\..\Drivers\BSP\X_NUCLEO_IKS01A1 -I ..\..\..\..\..\..\..\Drivers\BSP\X_NUCLEO_IKS01A2 -I ..\..\..\..\..\..\..\Drivers\BSP\sx1272mb2das --C99-I.\RTE\_sx1272mb2das-IC:\Keil_v5\ARM\PACK\Keil\STM32L0xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L0xx\Include-IC:\Keil_v5\ARM\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L0xx_DFP\2.0.0-D__UVISION_VERSION="525" -DSTM32L073xx -DSTM32L073xx -DUSE_STM32L0XX_NUCLEO -DUSE_HAL_DRIVER -DREGION_EU868-o .\sx1272mb2das\daq.o --omf_browse .\sx1272mb2das\daq.crf --depend .\sx1272mb2das\daq.d)
+I (..\..\inc\daq.h)(0x5B0169EC)
+I (..\..\inc\hw_uart.h)(0x5B016A70)
 I (..\..\inc\hw.h)(0x5B0156AA)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x599F137E)
 I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x599F137E)
@@ -1261,7 +1261,7 @@ I (..\..\inc\hw_spi.h)(0x5AFEC7A9)
 I (..\..\inc\hw_rtc.h)(0x5AFEC7A9)
 I (..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Utilities\utilities.h)(0x5AFEC7A5)
 I (..\..\inc\hw_msp.h)(0x5AFEC7A9)
-I (..\..\inc\hw_uart.h)(0x5B0013F0)
+I (..\..\inc\hw_uart.h)(0x5B016A70)
 I (..\..\inc\debug.h)(0x5AFEC7A9)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599F137C)
 I (..\..\inc\vcom.h)(0x5AFEC7A9)
@@ -1313,7 +1313,7 @@ I (..\..\inc\hw_spi.h)(0x5AFEC7A9)
 I (..\..\inc\hw_rtc.h)(0x5AFEC7A9)
 I (..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Utilities\utilities.h)(0x5AFEC7A5)
 I (..\..\inc\hw_msp.h)(0x5AFEC7A9)
-I (..\..\inc\hw_uart.h)(0x5B0013F0)
+I (..\..\inc\hw_uart.h)(0x5B016A70)
 I (..\..\inc\debug.h)(0x5AFEC7A9)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599F137C)
 I (..\..\inc\vcom.h)(0x5AFEC7A9)
@@ -1365,7 +1365,7 @@ I (..\..\inc\hw_spi.h)(0x5AFEC7A9)
 I (..\..\inc\hw_rtc.h)(0x5AFEC7A9)
 I (..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Utilities\utilities.h)(0x5AFEC7A5)
 I (..\..\inc\hw_msp.h)(0x5AFEC7A9)
-I (..\..\inc\hw_uart.h)(0x5B0013F0)
+I (..\..\inc\hw_uart.h)(0x5B016A70)
 I (..\..\inc\debug.h)(0x5AFEC7A9)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599F137C)
 I (..\..\inc\vcom.h)(0x5AFEC7A9)
@@ -1419,12 +1419,12 @@ I (..\..\inc\hw_spi.h)(0x5AFEC7A9)
 I (..\..\inc\hw_rtc.h)(0x5AFEC7A9)
 I (..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Utilities\utilities.h)(0x5AFEC7A5)
 I (..\..\inc\hw_msp.h)(0x5AFEC7A9)
-I (..\..\inc\hw_uart.h)(0x5B0013F0)
+I (..\..\inc\hw_uart.h)(0x5B016A70)
 I (..\..\inc\debug.h)(0x5AFEC7A9)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599F137C)
 I (..\..\inc\vcom.h)(0x5AFEC7A9)
-F (..\..\src\hw_uart.c)(0x5B0158D5)(-c --cpu Cortex-M0+ -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ..\..\inc -I ..\..\..\..\..\..\..\Drivers\BSP\STM32L0xx_Nucleo -I ..\..\..\..\..\..\..\Drivers\STM32L0xx_HAL_Driver\Inc -I ..\..\..\..\..\..\..\Drivers\CMSIS\Device\ST\STM32L0xx\Include -I ..\..\..\..\..\..\..\Drivers\CMSIS\Include -I ..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Crypto -I ..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac -I ..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Phy -I ..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Utilities -I ..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Core -I ..\..\..\..\..\..\..\Drivers\BSP\Components\Common -I ..\..\..\..\..\..\..\Drivers\BSP\Components\hts221 -I ..\..\..\..\..\..\..\Drivers\BSP\Components\lps22hb -I ..\..\..\..\..\..\..\Drivers\BSP\Components\lps25hb -I ..\..\..\..\..\..\..\Drivers\BSP\Components\sx1272 -I ..\..\..\..\..\..\..\Drivers\BSP\X_NUCLEO_IKS01A1 -I ..\..\..\..\..\..\..\Drivers\BSP\X_NUCLEO_IKS01A2 -I ..\..\..\..\..\..\..\Drivers\BSP\sx1272mb2das --C99-I.\RTE\_sx1272mb2das-IC:\Keil_v5\ARM\PACK\Keil\STM32L0xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L0xx\Include-IC:\Keil_v5\ARM\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L0xx_DFP\2.0.0-D__UVISION_VERSION="525" -DSTM32L073xx -DSTM32L073xx -DUSE_STM32L0XX_NUCLEO -DUSE_HAL_DRIVER -DREGION_EU868-o .\sx1272mb2das\hw_uart.o --omf_browse .\sx1272mb2das\hw_uart.crf --depend .\sx1272mb2das\hw_uart.d)
-I (..\..\inc\hw_uart.h)(0x5B0013F0)
+F (..\..\src\hw_uart.c)(0x5B016AB5)(-c --cpu Cortex-M0+ -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ..\..\inc -I ..\..\..\..\..\..\..\Drivers\BSP\STM32L0xx_Nucleo -I ..\..\..\..\..\..\..\Drivers\STM32L0xx_HAL_Driver\Inc -I ..\..\..\..\..\..\..\Drivers\CMSIS\Device\ST\STM32L0xx\Include -I ..\..\..\..\..\..\..\Drivers\CMSIS\Include -I ..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Crypto -I ..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac -I ..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Phy -I ..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Utilities -I ..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Core -I ..\..\..\..\..\..\..\Drivers\BSP\Components\Common -I ..\..\..\..\..\..\..\Drivers\BSP\Components\hts221 -I ..\..\..\..\..\..\..\Drivers\BSP\Components\lps22hb -I ..\..\..\..\..\..\..\Drivers\BSP\Components\lps25hb -I ..\..\..\..\..\..\..\Drivers\BSP\Components\sx1272 -I ..\..\..\..\..\..\..\Drivers\BSP\X_NUCLEO_IKS01A1 -I ..\..\..\..\..\..\..\Drivers\BSP\X_NUCLEO_IKS01A2 -I ..\..\..\..\..\..\..\Drivers\BSP\sx1272mb2das --C99-I.\RTE\_sx1272mb2das-IC:\Keil_v5\ARM\PACK\Keil\STM32L0xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L0xx\Include-IC:\Keil_v5\ARM\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L0xx_DFP\2.0.0-D__UVISION_VERSION="525" -DSTM32L073xx -DSTM32L073xx -DUSE_STM32L0XX_NUCLEO -DUSE_HAL_DRIVER -DREGION_EU868-o .\sx1272mb2das\hw_uart.o --omf_browse .\sx1272mb2das\hw_uart.crf --depend .\sx1272mb2das\hw_uart.d)
+I (..\..\inc\hw_uart.h)(0x5B016A70)
 I (..\..\inc\hw.h)(0x5B0156AA)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x599F137E)
 I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x599F137E)
@@ -1476,7 +1476,7 @@ I (..\..\inc\debug.h)(0x5AFEC7A9)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599F137C)
 I (..\..\inc\vcom.h)(0x5AFEC7A9)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599F137A)
-F (..\..\src\main.c)(0x5B015952)(-c --cpu Cortex-M0+ -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ..\..\inc -I ..\..\..\..\..\..\..\Drivers\BSP\STM32L0xx_Nucleo -I ..\..\..\..\..\..\..\Drivers\STM32L0xx_HAL_Driver\Inc -I ..\..\..\..\..\..\..\Drivers\CMSIS\Device\ST\STM32L0xx\Include -I ..\..\..\..\..\..\..\Drivers\CMSIS\Include -I ..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Crypto -I ..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac -I ..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Phy -I ..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Utilities -I ..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Core -I ..\..\..\..\..\..\..\Drivers\BSP\Components\Common -I ..\..\..\..\..\..\..\Drivers\BSP\Components\hts221 -I ..\..\..\..\..\..\..\Drivers\BSP\Components\lps22hb -I ..\..\..\..\..\..\..\Drivers\BSP\Components\lps25hb -I ..\..\..\..\..\..\..\Drivers\BSP\Components\sx1272 -I ..\..\..\..\..\..\..\Drivers\BSP\X_NUCLEO_IKS01A1 -I ..\..\..\..\..\..\..\Drivers\BSP\X_NUCLEO_IKS01A2 -I ..\..\..\..\..\..\..\Drivers\BSP\sx1272mb2das --C99-I.\RTE\_sx1272mb2das-IC:\Keil_v5\ARM\PACK\Keil\STM32L0xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L0xx\Include-IC:\Keil_v5\ARM\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L0xx_DFP\2.0.0-D__UVISION_VERSION="525" -DSTM32L073xx -DSTM32L073xx -DUSE_STM32L0XX_NUCLEO -DUSE_HAL_DRIVER -DREGION_EU868-o .\sx1272mb2das\main.o --omf_browse .\sx1272mb2das\main.crf --depend .\sx1272mb2das\main.d)
+F (..\..\src\main.c)(0x5B015D21)(-c --cpu Cortex-M0+ -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ..\..\inc -I ..\..\..\..\..\..\..\Drivers\BSP\STM32L0xx_Nucleo -I ..\..\..\..\..\..\..\Drivers\STM32L0xx_HAL_Driver\Inc -I ..\..\..\..\..\..\..\Drivers\CMSIS\Device\ST\STM32L0xx\Include -I ..\..\..\..\..\..\..\Drivers\CMSIS\Include -I ..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Crypto -I ..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac -I ..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Phy -I ..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Utilities -I ..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Core -I ..\..\..\..\..\..\..\Drivers\BSP\Components\Common -I ..\..\..\..\..\..\..\Drivers\BSP\Components\hts221 -I ..\..\..\..\..\..\..\Drivers\BSP\Components\lps22hb -I ..\..\..\..\..\..\..\Drivers\BSP\Components\lps25hb -I ..\..\..\..\..\..\..\Drivers\BSP\Components\sx1272 -I ..\..\..\..\..\..\..\Drivers\BSP\X_NUCLEO_IKS01A1 -I ..\..\..\..\..\..\..\Drivers\BSP\X_NUCLEO_IKS01A2 -I ..\..\..\..\..\..\..\Drivers\BSP\sx1272mb2das --C99-I.\RTE\_sx1272mb2das-IC:\Keil_v5\ARM\PACK\Keil\STM32L0xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L0xx\Include-IC:\Keil_v5\ARM\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L0xx_DFP\2.0.0-D__UVISION_VERSION="525" -DSTM32L073xx -DSTM32L073xx -DUSE_STM32L0XX_NUCLEO -DUSE_HAL_DRIVER -DREGION_EU868-o .\sx1272mb2das\main.o --omf_browse .\sx1272mb2das\main.crf --depend .\sx1272mb2das\main.d)
 I (..\..\inc\hw.h)(0x5B0156AA)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x599F137E)
 I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x599F137E)
@@ -1524,7 +1524,7 @@ I (..\..\inc\hw_spi.h)(0x5AFEC7A9)
 I (..\..\inc\hw_rtc.h)(0x5AFEC7A9)
 I (..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Utilities\utilities.h)(0x5AFEC7A5)
 I (..\..\inc\hw_msp.h)(0x5AFEC7A9)
-I (..\..\inc\hw_uart.h)(0x5B0013F0)
+I (..\..\inc\hw_uart.h)(0x5B016A70)
 I (..\..\inc\debug.h)(0x5AFEC7A9)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599F137C)
 I (..\..\inc\vcom.h)(0x5AFEC7A9)
@@ -1540,7 +1540,7 @@ I (..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac\region/Region.h)(0x5AFE
 I (..\..\inc\bsp.h)(0x5AFEC7A9)
 I (..\..\inc\version.h)(0x5AFEC7A9)
 I (..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Core\lora_mac_version.h)(0x5AFEC7A4)
-I (..\..\inc\daq.h)(0x5B015681)
+I (..\..\inc\daq.h)(0x5B0169EC)
 F (..\..\src\stm32l0xx_hal_msp.c)(0x5B01574A)(-c --cpu Cortex-M0+ -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ..\..\inc -I ..\..\..\..\..\..\..\Drivers\BSP\STM32L0xx_Nucleo -I ..\..\..\..\..\..\..\Drivers\STM32L0xx_HAL_Driver\Inc -I ..\..\..\..\..\..\..\Drivers\CMSIS\Device\ST\STM32L0xx\Include -I ..\..\..\..\..\..\..\Drivers\CMSIS\Include -I ..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Crypto -I ..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac -I ..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Phy -I ..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Utilities -I ..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Core -I ..\..\..\..\..\..\..\Drivers\BSP\Components\Common -I ..\..\..\..\..\..\..\Drivers\BSP\Components\hts221 -I ..\..\..\..\..\..\..\Drivers\BSP\Components\lps22hb -I ..\..\..\..\..\..\..\Drivers\BSP\Components\lps25hb -I ..\..\..\..\..\..\..\Drivers\BSP\Components\sx1272 -I ..\..\..\..\..\..\..\Drivers\BSP\X_NUCLEO_IKS01A1 -I ..\..\..\..\..\..\..\Drivers\BSP\X_NUCLEO_IKS01A2 -I ..\..\..\..\..\..\..\Drivers\BSP\sx1272mb2das --C99-I.\RTE\_sx1272mb2das-IC:\Keil_v5\ARM\PACK\Keil\STM32L0xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L0xx\Include-IC:\Keil_v5\ARM\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L0xx_DFP\2.0.0-D__UVISION_VERSION="525" -DSTM32L073xx -DSTM32L073xx -DUSE_STM32L0XX_NUCLEO -DUSE_HAL_DRIVER -DREGION_EU868-o .\sx1272mb2das\stm32l0xx_hal_msp.o --omf_browse .\sx1272mb2das\stm32l0xx_hal_msp.crf --depend .\sx1272mb2das\stm32l0xx_hal_msp.d)
 I (..\..\inc\hw.h)(0x5B0156AA)
 I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x599F137E)
@@ -1589,7 +1589,7 @@ I (..\..\inc\hw_spi.h)(0x5AFEC7A9)
 I (..\..\inc\hw_rtc.h)(0x5AFEC7A9)
 I (..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Utilities\utilities.h)(0x5AFEC7A5)
 I (..\..\inc\hw_msp.h)(0x5AFEC7A9)
-I (..\..\inc\hw_uart.h)(0x5B0013F0)
+I (..\..\inc\hw_uart.h)(0x5B016A70)
 I (..\..\inc\debug.h)(0x5AFEC7A9)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599F137C)
 I (..\..\inc\vcom.h)(0x5AFEC7A9)
@@ -1643,7 +1643,7 @@ I (..\..\inc\hw_spi.h)(0x5AFEC7A9)
 I (..\..\inc\hw_rtc.h)(0x5AFEC7A9)
 I (..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Utilities\utilities.h)(0x5AFEC7A5)
 I (..\..\inc\hw_msp.h)(0x5AFEC7A9)
-I (..\..\inc\hw_uart.h)(0x5B0013F0)
+I (..\..\inc\hw_uart.h)(0x5B016A70)
 I (..\..\inc\debug.h)(0x5AFEC7A9)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599F137C)
 I (..\..\inc\vcom.h)(0x5AFEC7A9)
@@ -1697,7 +1697,7 @@ I (..\..\inc\hw_spi.h)(0x5AFEC7A9)
 I (..\..\inc\hw_rtc.h)(0x5AFEC7A9)
 I (..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Utilities\utilities.h)(0x5AFEC7A5)
 I (..\..\inc\hw_msp.h)(0x5AFEC7A9)
-I (..\..\inc\hw_uart.h)(0x5B0013F0)
+I (..\..\inc\hw_uart.h)(0x5B016A70)
 I (..\..\inc\debug.h)(0x5AFEC7A9)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599F137C)
 I (..\..\inc\vcom.h)(0x5AFEC7A9)
@@ -1750,7 +1750,7 @@ I (..\..\inc\hw_spi.h)(0x5AFEC7A9)
 I (..\..\inc\hw_rtc.h)(0x5AFEC7A9)
 I (..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Utilities\utilities.h)(0x5AFEC7A5)
 I (..\..\inc\hw_msp.h)(0x5AFEC7A9)
-I (..\..\inc\hw_uart.h)(0x5B0013F0)
+I (..\..\inc\hw_uart.h)(0x5B016A70)
 I (..\..\inc\debug.h)(0x5AFEC7A9)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599F137C)
 I (..\..\inc\vcom.h)(0x5AFEC7A9)
@@ -1803,7 +1803,7 @@ I (..\..\inc\hw_spi.h)(0x5AFEC7A9)
 I (..\..\inc\hw_rtc.h)(0x5AFEC7A9)
 I (..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Utilities\utilities.h)(0x5AFEC7A5)
 I (..\..\inc\hw_msp.h)(0x5AFEC7A9)
-I (..\..\inc\hw_uart.h)(0x5B0013F0)
+I (..\..\inc\hw_uart.h)(0x5B016A70)
 I (..\..\inc\debug.h)(0x5AFEC7A9)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599F137C)
 I (..\..\inc\vcom.h)(0x5AFEC7A9)
@@ -1864,7 +1864,7 @@ I (..\..\inc\hw_spi.h)(0x5AFEC7A9)
 I (..\..\inc\hw_rtc.h)(0x5AFEC7A9)
 I (..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Utilities\utilities.h)(0x5AFEC7A5)
 I (..\..\inc\hw_msp.h)(0x5AFEC7A9)
-I (..\..\inc\hw_uart.h)(0x5B0013F0)
+I (..\..\inc\hw_uart.h)(0x5B016A70)
 I (..\..\inc\debug.h)(0x5AFEC7A9)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599F137C)
 I (..\..\inc\vcom.h)(0x5AFEC7A9)
@@ -2638,7 +2638,7 @@ I (..\..\inc\hw_spi.h)(0x5AFEC7A9)
 I (..\..\inc\hw_rtc.h)(0x5AFEC7A9)
 I (..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Utilities\utilities.h)(0x5AFEC7A5)
 I (..\..\inc\hw_msp.h)(0x5AFEC7A9)
-I (..\..\inc\hw_uart.h)(0x5B0013F0)
+I (..\..\inc\hw_uart.h)(0x5B016A70)
 I (..\..\inc\debug.h)(0x5AFEC7A9)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599F137C)
 I (..\..\inc\vcom.h)(0x5AFEC7A9)
@@ -2691,7 +2691,7 @@ I (..\..\inc\hw_spi.h)(0x5AFEC7A9)
 I (..\..\inc\hw_rtc.h)(0x5AFEC7A9)
 I (..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Utilities\utilities.h)(0x5AFEC7A5)
 I (..\..\inc\hw_msp.h)(0x5AFEC7A9)
-I (..\..\inc\hw_uart.h)(0x5B0013F0)
+I (..\..\inc\hw_uart.h)(0x5B016A70)
 I (..\..\inc\debug.h)(0x5AFEC7A9)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599F137C)
 I (..\..\inc\vcom.h)(0x5AFEC7A9)
@@ -2746,7 +2746,7 @@ I (..\..\inc\hw_spi.h)(0x5AFEC7A9)
 I (..\..\inc\hw_rtc.h)(0x5AFEC7A9)
 I (..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Utilities\utilities.h)(0x5AFEC7A5)
 I (..\..\inc\hw_msp.h)(0x5AFEC7A9)
-I (..\..\inc\hw_uart.h)(0x5B0013F0)
+I (..\..\inc\hw_uart.h)(0x5B016A70)
 I (..\..\inc\debug.h)(0x5AFEC7A9)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599F137C)
 I (..\..\inc\vcom.h)(0x5AFEC7A9)

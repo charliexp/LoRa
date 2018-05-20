@@ -9,12 +9,6 @@
 /* Private variables ---------------------------------------------------------*/
 /* Uart Handle */
 UART_HandleTypeDef UartHandle;
-/* Send buffer */
-static uint8_t TxBuffer[BUFSIZE];
-/* Send buffer max index */
-static uint8_t TxLength;
-/* UART Tx state */
-static UartTxState_t TxState;
 
 /* Receive buffer */
 static uint8_t RxBuffer[BUFSIZE];
@@ -42,11 +36,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	RxLength++;
 }
 
-void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
-{
-	TxState = UART_TX_AVAILABLE;
-}
-
 /* Functions Definition ------------------------------------------------------*/
 void UART_Init(void)
 {
@@ -67,47 +56,22 @@ void UART_Init(void)
   HAL_NVIC_SetPriority(DAQ_USARTX_IRQn, 0x1, 0);
   HAL_NVIC_EnableIRQ(DAQ_USARTX_IRQn);
 	
-	TxState = UART_TX_AVAILABLE;
-	TxLength = 0;
-	
 	RxState = UART_RX_PENDING;
 	RxLength = 0;
-	HAL_UART_Receive_IT(&UartHandle, RxBuffer, 1);
 }
 
 UartRxState_t UART_Receive(uint8_t *buffer, uint8_t *length)
 {
-	int i;
 	UartRxState_t returnValue = RxState;
 	
-	if (RxState == UART_RX_AVAILABLE)
-	{
-		for (i = 0; i < RxLength; i++)
-			buffer[i] = RxBuffer[i];
-		*length = RxLength;
-		RxLength = 0;
-		RxState = UART_RX_PENDING;
-	}
+	HAL_UART_Receive(&UartHandle, buffer, 256, 4000);
 	
 	return returnValue;
 }
 
-UartTxState_t UART_Send(uint8_t *buffer, uint8_t length)
+void UART_Send(uint8_t *buffer, uint8_t length)
 {
-	int i;
-	UartTxState_t returnValue = TxState;
-	
-	if (TxState == UART_TX_AVAILABLE)
-	{
-		for (i = 0; i < length; i++)
-			TxBuffer[i] = buffer[i];
-		TxLength = length;
-		TxState = UART_TX_BUSY;
-		
-		HAL_UART_Transmit_IT(&UartHandle, TxBuffer, TxLength);
-	}
-	
-	return returnValue;
+	HAL_UART_Transmit(&UartHandle, buffer, length, 4000);
 }
 
 void UART_DeInit(void)

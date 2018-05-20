@@ -26,7 +26,7 @@ typedef enum UartTxState_t
 /* External variables --------------------------------------------------------*/
 /* Exported functions --------------------------------------------------------*/
 void UART_Init(void);
-UartTxState_t UART_Send(uint8_t *buffer, uint8_t length);
+void UART_Send(uint8_t *buffer, uint8_t length);
 UartRxState_t UART_Receive(uint8_t *buffer, uint8_t *length);
 void UART_DeInit(void);
 
