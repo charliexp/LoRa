@@ -1,10 +1,23 @@
+/*
+ / _____)             _              | |
+( (____  _____ ____ _| |_ _____  ____| |__
+ \____ \| ___ |    (_   _) ___ |/ ___)  _ \
+ _____) ) ____| | | || |_| ____( (___| | | |
+(______/|_____)_|_|_| \__)_____)\____)_| |_|
+    (C)2013 Semtech
 
-/******************************************************************************
-  * @file    debug.c
+Description: virtual com port driver
+
+License: Revised BSD License, see LICENSE.TXT file include in the project
+
+Maintainer: Miguel Luis and Gregory Cristian
+*/
+ /******************************************************************************
+  * @file    vcom.h
   * @author  MCD Application Team
   * @version V1.1.5
   * @date    30-March-2018
-  * @brief   debug API
+  * @brief   Header for vcom.c module
   ******************************************************************************
   * @attention
   *
@@ -44,76 +57,86 @@
   *
   ******************************************************************************
   */
+/* Define to prevent recursive inclusion -------------------------------------*/
+#ifndef __VCOM_H__
+#define __VCOM_H__
 
+#ifdef __cplusplus
+ extern "C" {
+#endif
+   
 /* Includes ------------------------------------------------------------------*/
-#include "hw.h"
+/* Exported types ------------------------------------------------------------*/
+/* Exported constants --------------------------------------------------------*/
+/* External variables --------------------------------------------------------*/
 
-/**
-  * @brief Initializes the debug
-  * @param None
-  * @retval None
-  */
-void DBG_Init( void )
-{
-#ifdef DEBUG
-  GPIO_InitTypeDef  gpioinitstruct = {0};
+/* Exported functions ------------------------------------------------------- */ 
+
+/** 
+* @brief  Init the VCOM.
+* @param  None
+* @return None
+*/
+void vcom_Init(void);
+
+   /** 
+* @brief  DeInit the VCOM.
+* @param  None
+* @return None
+*/
+void vcom_DeInit(void);
+
+   /** 
+* @brief  Init the VCOM IOs.
+* @param  None
+* @return None
+*/
+void vcom_IoInit(void);
   
-  /* Enable the GPIO_B Clock */
-  __HAL_RCC_GPIOB_CLK_ENABLE();
-
-  /* Configure the GPIO pin */  
-  gpioinitstruct.Mode   = GPIO_MODE_OUTPUT_PP;
-  gpioinitstruct.Pull   = GPIO_PULLUP;
-  gpioinitstruct.Speed  = GPIO_SPEED_HIGH;
+   /** 
+* @brief  DeInit the VCOM IOs.
+* @param  None
+* @return None
+*/
+void vcom_IoDeInit(void);
   
-  gpioinitstruct.Pin    = (GPIO_PIN_12 | GPIO_PIN_13| GPIO_PIN_14 | GPIO_PIN_15);
-  HAL_GPIO_Init(GPIOB, &gpioinitstruct);
+/** 
+* @brief  Records string on circular Buffer and set SW interrupt
+* @note   Set NVIC to call vcom_Send
+* @param  string
+* @return None
+*/
+void vcom_Send( char *format, ... );
 
-  /* Reset debug Pins */
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_RESET);
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, GPIO_PIN_RESET);
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, GPIO_PIN_RESET);
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_15, GPIO_PIN_RESET);
-#if 0
-  HAL_RCC_MCOConfig(RCC_MCO1, RCC_MCO1SOURCE_SYSCLK, RCC_MCODIV_1);  
+/** 
+* @brief  Sends circular Buffer on com port in IT mode
+* @note   called from low Priority interrupt
+* @param  None
+* @return None
+*/
+void vcom_Print( void);
+
+/** 
+* @brief  Records string on circular Buffer
+* @note   To be called only from critical section from low power section
+*         Other wise use vcom_Send
+* @param  string
+* @return None
+*/
+void vcom_Send_Lp( char *format, ... );
+
+/* Exported macros -----------------------------------------------------------*/
+#if 1
+#define PRINTF(...)            vcom_Send(__VA_ARGS__)
+#else
+#define PRINTF(...)
 #endif
 
-  __HAL_RCC_DBGMCU_CLK_ENABLE( );
 
-  HAL_DBGMCU_EnableDBGSleepMode( );
-  HAL_DBGMCU_EnableDBGStopMode( );
-  HAL_DBGMCU_EnableDBGStandbyMode( );
-  
-#else /* DEBUG */
-  /* sw interface off*/
-  GPIO_InitTypeDef GPIO_InitStructure ={0};
-  
-  GPIO_InitStructure.Mode   = GPIO_MODE_ANALOG;
-  GPIO_InitStructure.Pull   = GPIO_NOPULL;
-  GPIO_InitStructure.Pin    = (GPIO_PIN_13 | GPIO_PIN_14);
-  __GPIOA_CLK_ENABLE() ;  
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStructure);
-  __GPIOA_CLK_DISABLE() ;
-  
-  __HAL_RCC_DBGMCU_CLK_ENABLE( );
-  HAL_DBGMCU_DisableDBGSleepMode( );
-  HAL_DBGMCU_DisableDBGStopMode( );
-  HAL_DBGMCU_DisableDBGStandbyMode( );
-  __HAL_RCC_DBGMCU_CLK_DISABLE( );
+#ifdef __cplusplus
+}
 #endif
-}
 
-/**
-  * @brief Error_Handler
-  * @param None
-  * @retval None
-  */
-void Error_Handler(void)
-{
-  DBG_PRINTF("Error_Handler\n\r");
-  while(1);
-}
+#endif /* __VCOM_H__*/
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-
-

@@ -50,7 +50,7 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 /* Functions Definition ------------------------------------------------------*/
 void UART_Init(void)
 {
-  UartHandle.Instance        = UART_PERIPHERAL;
+  UartHandle.Instance        = DAQ_USARTX;
   UartHandle.Init.BaudRate   = 115200;
   UartHandle.Init.WordLength = UART_WORDLENGTH_8B;
   UartHandle.Init.StopBits   = UART_STOPBITS_1;
@@ -64,8 +64,8 @@ void UART_Init(void)
     Error_Handler(); 
   }
   
-  HAL_NVIC_SetPriority(UART_IRQn, 0x1, 0);
-  HAL_NVIC_EnableIRQ(UART_IRQn);
+  HAL_NVIC_SetPriority(DAQ_USARTX_IRQn, 0x1, 0);
+  HAL_NVIC_EnableIRQ(DAQ_USARTX_IRQn);
 	
 	TxState = UART_TX_AVAILABLE;
 	TxLength = 0;
@@ -129,28 +129,31 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
   
   /*##-1- Enable peripherals and GPIO Clocks #################################*/
 
-  /* Enable USART1 clock */
-  UART_CLK_ENABLE(); 
+  /* Enable USART clock */
+  USARTX_CLK_ENABLE(); 
+  DAQ_USARTX_CLK_ENABLE(); 
   
   /*##-2- Configure peripheral GPIO ##########################################*/  
+  vcom_IoInit( );
+	
   GPIO_InitTypeDef  GPIO_InitStruct={0};
     /* Enable GPIO TX/RX clock */
-  UART_TX_GPIO_CLK_ENABLE();
-  UART_RX_GPIO_CLK_ENABLE();
+  DAQ_USARTX_TX_GPIO_CLK_ENABLE();
+  DAQ_USARTX_RX_GPIO_CLK_ENABLE();
     /* UART TX GPIO pin configuration  */
-  GPIO_InitStruct.Pin       = UART_TX_PIN;
+  GPIO_InitStruct.Pin       = DAQ_USARTX_TX_PIN;
   GPIO_InitStruct.Mode      = GPIO_MODE_AF_PP;
   GPIO_InitStruct.Pull      = GPIO_PULLUP;
   GPIO_InitStruct.Speed     = GPIO_SPEED_HIGH;
-  GPIO_InitStruct.Alternate = UART_TX_AF;
+  GPIO_InitStruct.Alternate = DAQ_USARTX_TX_AF;
 
-  HAL_GPIO_Init(UART_TX_GPIO_PORT, &GPIO_InitStruct);
+  HAL_GPIO_Init(DAQ_USARTX_TX_GPIO_PORT, &GPIO_InitStruct);
 
   /* UART RX GPIO pin configuration  */
-  GPIO_InitStruct.Pin = UART_RX_PIN;
-  GPIO_InitStruct.Alternate = UART_RX_AF;
+  GPIO_InitStruct.Pin = DAQ_USARTX_RX_PIN;
+  GPIO_InitStruct.Alternate = DAQ_USARTX_RX_AF;
 
-  HAL_GPIO_Init(UART_RX_GPIO_PORT, &GPIO_InitStruct);
+  HAL_GPIO_Init(DAQ_USARTX_RX_GPIO_PORT, &GPIO_InitStruct);
 }
 
 /**
@@ -160,17 +163,19 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
   */
 void HAL_UART_MspDeInit(UART_HandleTypeDef *huart)
 {
+  vcom_IoDeInit( );
+	
   GPIO_InitTypeDef GPIO_InitStructure={0};
   
-  UART_TX_GPIO_CLK_ENABLE();
-  UART_RX_GPIO_CLK_ENABLE();
+  DAQ_USARTX_TX_GPIO_CLK_ENABLE();
+  DAQ_USARTX_RX_GPIO_CLK_ENABLE();
 
   GPIO_InitStructure.Mode = GPIO_MODE_ANALOG;
   GPIO_InitStructure.Pull = GPIO_NOPULL;
   
-  GPIO_InitStructure.Pin =  UART_TX_PIN ;
-  HAL_GPIO_Init(  UART_TX_GPIO_PORT, &GPIO_InitStructure );
+  GPIO_InitStructure.Pin =  DAQ_USARTX_TX_PIN ;
+  HAL_GPIO_Init(  DAQ_USARTX_TX_GPIO_PORT, &GPIO_InitStructure );
   
-  GPIO_InitStructure.Pin =  UART_RX_PIN ;
-  HAL_GPIO_Init(  UART_RX_GPIO_PORT, &GPIO_InitStructure ); 
+  GPIO_InitStructure.Pin =  DAQ_USARTX_RX_PIN ;
+  HAL_GPIO_Init(  DAQ_USARTX_RX_GPIO_PORT, &GPIO_InitStructure ); 
 }

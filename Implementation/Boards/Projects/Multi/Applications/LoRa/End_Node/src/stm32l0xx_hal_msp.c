@@ -63,18 +63,6 @@
 /* Private functions ---------------------------------------------------------*/
 
 /**
-  * @brief This function configures the source of the time base.
-  * @brief  don't enable systick
-  * @param TickPriority: Tick interrupt priority.
-  * @retval HAL status
-  */
-HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
-{
-   /* Return function status */
-  return HAL_OK;
-}
-
-/**
   * @brief This function provides delay (in ms)
   * @param Delay: specifies the delay time length, in milliseconds.
   * @retval None

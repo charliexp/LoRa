@@ -59,6 +59,7 @@
 #include <string.h>
 #include <stdio.h>
 #include "hw_conf.h"
+#include "vcom.h"
 
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/

@@ -43,6 +43,7 @@
 ".\sx1272mb2das\stm32l0xx_hal_msp.o"
 ".\sx1272mb2das\stm32l0xx_hw.o"
 ".\sx1272mb2das\stm32l0xx_it.o"
+".\sx1272mb2das\vcom.o"
 ".\sx1272mb2das\lora.o"
 ".\sx1272mb2das\lora-test.o"
 ".\sx1272mb2das\loramac.o"

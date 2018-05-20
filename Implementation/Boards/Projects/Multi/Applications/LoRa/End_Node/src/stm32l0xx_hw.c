@@ -61,6 +61,7 @@ Maintainer: Miguel Luis and Gregory Cristian
 #include "radio.h"
 #include "debug.h"
 #include "bsp.h"
+#include "vcom.h"
 
 /*!
  *  \brief Unique Devices IDs register set ( STM32L0xxx )
@@ -134,8 +135,10 @@ void HW_Init( void )
     HW_SPI_Init( );
 
     HW_RTC_Init( );
+		
+		UART_Init( );
     
-    UART_Init( );
+    vcom_Init( );
     
     BSP_sensor_Init( );
 
@@ -154,7 +157,9 @@ void HW_DeInit( void )
   
   Radio.IoDeInit( );
   
-  UART_DeInit( );
+	UART_DeInit( );
+	
+  vcom_DeInit( );
    
   McuInitialized = false;
 }
@@ -169,6 +174,8 @@ static void HW_IoInit( void )
   HW_SPI_IoInit( );
   
   Radio.IoInit( );
+  
+  vcom_IoInit( );
 }
 
 /**
@@ -181,6 +188,8 @@ static void HW_IoDeInit( void )
   HW_SPI_IoDeInit( );
   
   Radio.IoDeInit( );
+  
+  vcom_IoDeInit( );
 }
 
 
@@ -289,7 +298,7 @@ uint16_t HW_GetTemperatureLevel( void )
     batteryLevelmV= (( (uint32_t) VDDA_VREFINT_CAL * (*VREFINT_CAL ) )/ measuredLevel);
   }
 #if 0  
-  DBG_PRINTF("VDDA= %d\n\r", batteryLevelmV);
+  PRINTF("VDDA= %d\n\r", batteryLevelmV);
 #endif
   
   measuredLevel = HW_AdcReadChannel( ADC_CHANNEL_TEMPSENSOR ); 
@@ -300,7 +309,7 @@ uint16_t HW_GetTemperatureLevel( void )
   {
     uint16_t temperatureDegreeC_Int= (temperatureDegreeC)>>8;
     uint16_t temperatureDegreeC_Frac= ((temperatureDegreeC-(temperatureDegreeC_Int<<8))*100)>>8;  
-    DBG_PRINTF("temp= %d, %d,%d\n\r", temperatureDegreeC, temperatureDegreeC_Int, temperatureDegreeC_Frac);
+    PRINTF("temp= %d, %d,%d\n\r", temperatureDegreeC, temperatureDegreeC_Int, temperatureDegreeC_Frac);
   }
 #endif
   

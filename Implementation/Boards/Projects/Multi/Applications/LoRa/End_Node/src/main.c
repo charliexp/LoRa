@@ -50,6 +50,7 @@
 #include "lora.h"
 #include "bsp.h"
 #include "timeServer.h"
+#include "vcom.h"
 #include "version.h"
 #include "daq.h"
 
@@ -66,7 +67,6 @@
 #define LPP_DATATYPE_TEMPERATURE    0x67
 #define LPP_DATATYPE_BAROMETER      0x73
 #define LPP_APP_PORT 99
-
 /*!
  * Defines the application data transmission duty cycle. 5s, value in [ms].
  */
@@ -75,7 +75,7 @@
  * LoRaWAN Adaptive Data Rate
  * @note Please note that when ADR is enabled the end-device should be static
  */
-#define LORAWAN_ADR_STATE LORAWAN_ADR_OFF
+#define LORAWAN_ADR_STATE LORAWAN_ADR_ON
 /*!
  * LoRaWAN Default data Rate Data Rate
  * @note Please note that LORAWAN_DEFAULT_DATA_RATE is used only when ADR is disabled 
@@ -194,8 +194,10 @@ int main( void )
   /* Configure the Lora Stack*/
   LORA_Init( &LoRaMainCallbacks, &LoRaParamInit);
   
+  PRINTF("VERSION: %X\n\r", VERSION);
+  
   LORA_Join();
-	
+  
   LoraStartTx( TX_ON_TIMER) ;
   
   while( 1 )
@@ -218,7 +220,7 @@ int main( void )
 static void LORA_HasJoined( void )
 {
 #if( OVER_THE_AIR_ACTIVATION != 0 )
-  UART_Send((uint8_t* )"JOINED\n\r", 8);
+  PRINTF("JOINED\n\r");
 #endif
   LORA_RequestClass( LORAWAN_DEFAULT_CLASS );
 }
@@ -239,7 +241,7 @@ static void Send( void )
     return;
   }
   
-  UART_Send((uint8_t* )"SEND REQUEST\n\r", 14);
+  DBG_PRINTF("SEND REQUEST\n\r");
 #ifndef CAYENNE_LPP
   int32_t latitude, longitude = 0;
   uint16_t altitudeGps = 0;
@@ -344,9 +346,7 @@ static void Send( void )
 static void LORA_RxData( lora_AppData_t *AppData )
 {
   /* USER CODE BEGIN 4 */
-  UART_Send((uint8_t* )"PACKET RECEIVED ON PORT ", 24);
-	UART_Send((uint8_t* )&AppData->Port, 1);
-	UART_Send((uint8_t* )"\r\n", 2);
+  DBG_PRINTF("PACKET RECEIVED ON PORT %d\n\r", AppData->Port);
 
   switch (AppData->Port)
   {
@@ -382,12 +382,12 @@ static void LORA_RxData( lora_AppData_t *AppData )
       AppLedStateOn = AppData->Buff[0] & 0x01;
       if ( AppLedStateOn == RESET )
       {
-        UART_Send((uint8_t* )"LED OFF\n\r", 9);
+        PRINTF("LED OFF\n\r");
         LED_Off( LED_BLUE ) ; 
       }
       else
       {
-        UART_Send((uint8_t* )"LED ON\n\r", 8);
+        PRINTF("LED ON\n\r");
         LED_On( LED_BLUE ) ; 
       }
     }
@@ -397,13 +397,13 @@ static void LORA_RxData( lora_AppData_t *AppData )
     AppLedStateOn= (AppData->Buff[2] == 100) ?  0x01 : 0x00;
     if ( AppLedStateOn == RESET )
     {
-      UART_Send((uint8_t* )"LED OFF\n\r", 9);
+      PRINTF("LED OFF\n\r");
       LED_Off( LED_BLUE ) ; 
       
     }
     else
     {
-      UART_Send((uint8_t* )"LED ON\n\r", 8);
+      PRINTF("LED ON\n\r");
       LED_On( LED_BLUE ) ; 
     }
     break;
@@ -445,11 +445,9 @@ static void LoraStartTx(TxEventType_t EventType)
 }
 
 static void LORA_ConfirmClass ( DeviceClass_t Class )
-{/*
-  UART_Send((uint8_t* )"switch to class ", 16);
-	UART_Send((uint8_t* )"ABC"[Class], 1);
-	UART_Send((uint8_t* )" done\n\r", 7);
-*/
+{
+  PRINTF("switch to class %c done\n\r","ABC"[Class] );
+
   /*Optionnal*/
   /*informs the server that switch has occurred ASAP*/
   AppData.BuffSize = 0;

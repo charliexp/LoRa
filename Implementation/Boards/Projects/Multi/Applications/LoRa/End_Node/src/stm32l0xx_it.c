@@ -75,6 +75,8 @@ Maintainer: Miguel Luis and Gregory Cristian
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
+extern UART_HandleTypeDef UartHandle;
+
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
@@ -202,11 +204,14 @@ void SysTick_Handler(void)
 {
 }*/
 
-extern UART_HandleTypeDef UartHandle;
+void USART4_5_IRQHandler( void )
+{
+   vcom_Print( );
+}
 
 void USART2_IRQHandler( void )
 {
-	HAL_UART_IRQHandler ( &UartHandle );
+   HAL_UART_IRQHandler(&UartHandle);
 }
 
 void RTC_IRQHandler( void )

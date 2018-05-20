@@ -280,10 +280,10 @@ void LORA_Init (LoRaMainCallback_t *callbacks, LoRaParam_t* LoRaParam )
   
 #if( OVER_THE_AIR_ACTIVATION != 0 )
 
-  DBG_PRINTF("OTAA\n\r"); 
-  DBG_PRINTF("DevEui= %02X", DevEui[0]) ;for(int i=1; i<8 ; i++) {DBG_PRINTF("-%02X", DevEui[i]); }; DBG_PRINTF("\n\r");
-  DBG_PRINTF("AppEui= %02X", AppEui[0]) ;for(int i=1; i<8 ; i++) {DBG_PRINTF("-%02X", AppEui[i]); }; DBG_PRINTF("\n\r");
-  DBG_PRINTF("AppKey= %02X", AppKey[0]) ;for(int i=1; i<16; i++) {DBG_PRINTF(" %02X", AppKey[i]); }; DBG_PRINTF("\n\n\r");
+  PRINTF("OTAA\n\r"); 
+  PRINTF("DevEui= %02X", DevEui[0]) ;for(int i=1; i<8 ; i++) {PRINTF("-%02X", DevEui[i]); }; PRINTF("\n\r");
+  PRINTF("AppEui= %02X", AppEui[0]) ;for(int i=1; i<8 ; i++) {PRINTF("-%02X", AppEui[i]); }; PRINTF("\n\r");
+  PRINTF("AppKey= %02X", AppKey[0]) ;for(int i=1; i<16; i++) {PRINTF(" %02X", AppKey[i]); }; PRINTF("\n\n\r");
 #else
 
 #if (STATIC_DEVICE_ADDRESS != 1)
@@ -292,11 +292,11 @@ void LORA_Init (LoRaMainCallback_t *callbacks, LoRaParam_t* LoRaParam )
   // Choose a random device address
   DevAddr = randr( 0, 0x01FFFFFF );
 #endif
-  DBG_PRINTF("ABP\n\r"); 
-  DBG_PRINTF("DevEui= %02X", DevEui[0]) ;for(int i=1; i<8 ; i++) {DBG_PRINTF("-%02X", DevEui[i]); }; DBG_PRINTF("\n\r");
-  DBG_PRINTF("DevAdd=  %08X\n\r", DevAddr) ;
-  DBG_PRINTF("NwkSKey= %02X", NwkSKey[0]) ;for(int i=1; i<16 ; i++) {DBG_PRINTF(" %02X", NwkSKey[i]); }; DBG_PRINTF("\n\r");
-  DBG_PRINTF("AppSKey= %02X", AppSKey[0]) ;for(int i=1; i<16 ; i++) {DBG_PRINTF(" %02X", AppSKey[i]); }; DBG_PRINTF("\n\r");
+  PRINTF("ABP\n\r"); 
+  PRINTF("DevEui= %02X", DevEui[0]) ;for(int i=1; i<8 ; i++) {PRINTF("-%02X", DevEui[i]); }; PRINTF("\n\r");
+  PRINTF("DevAdd=  %08X\n\r", DevAddr) ;
+  PRINTF("NwkSKey= %02X", NwkSKey[0]) ;for(int i=1; i<16 ; i++) {PRINTF(" %02X", NwkSKey[i]); }; PRINTF("\n\r");
+  PRINTF("AppSKey= %02X", AppSKey[0]) ;for(int i=1; i<16 ; i++) {PRINTF(" %02X", AppSKey[i]); }; PRINTF("\n\r");
 #endif
         LoRaMacPrimitives.MacMcpsConfirm = McpsConfirm;
         LoRaMacPrimitives.MacMcpsIndication = McpsIndication;
