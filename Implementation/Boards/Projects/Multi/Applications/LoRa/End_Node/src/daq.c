@@ -21,12 +21,12 @@ static uint8_t DataResp[] = {SOH, 'P', '0', STX,
 																ETX, 'q'};
 static uint8_t ReadReqStart[] = {SOH, 'R', '1', STX};
 
-static uint8_t DAQData[23];
-static uint8_t DAQDataLength;
+static uint8_t DAQData[UART_BUFFSIZE];
+static uint16_t DAQDataLength;
 
 /* Private function prototypes -----------------------------------------------*/
-static void DAQ_SendReq(uint8_t *request, uint8_t length);
-static void DAQ_WaitForResp(void);
+static void DAQ_SendReq(uint8_t *request, uint16_t length);
+static void DAQ_WaitForResp(uint16_t *length, uint8_t terminatorChar);
 static bool DAQ_RespOk(uint8_t *response);
 
 /* Functions Definition ------------------------------------------------------*/
@@ -39,8 +39,10 @@ void DAQ_Init(void)
 void DAQ_GetData(void)
 {
 	DAQ_SendReq(MeterIDReq, 5);
+	//DAQ_WaitForResp(&DAQDataLength, CR);
 	
 	DAQ_SendReq(DataReq, 6);
+	//DAQ_WaitForResp(&DAQDataLength, ETX);
 }
 
 void DAQ_ReadData(uint16_t address, uint8_t locations, uint8_t *response, uint8_t *length)
@@ -60,7 +62,7 @@ static uint8_t DAQ_CalculateBCC(uint8_t *message)
 	return sum;
 }
 
-static void DAQ_SendReq(uint8_t *request, uint8_t length)
+static void DAQ_SendReq(uint8_t *request, uint16_t length)
 {
 	//Add checksum
 	if (request[0] != '/' && request[0] != ACK)
@@ -69,8 +71,11 @@ static void DAQ_SendReq(uint8_t *request, uint8_t length)
 	UART_Send(request, length);
 }
 
-static void DAQ_WaitForResp(void)
+static void DAQ_WaitForResp(uint16_t *length, uint8_t terminatorChar)
 {
+	while (UART_Receive(DAQData, length, terminatorChar) != UART_RX_AVAILABLE)
+		;
+	//PRINTF("done");
 }
 
 static bool DAQ_RespOk(uint8_t *response)

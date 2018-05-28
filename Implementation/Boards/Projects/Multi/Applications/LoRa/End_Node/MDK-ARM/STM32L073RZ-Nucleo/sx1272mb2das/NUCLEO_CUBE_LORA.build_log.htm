@@ -28,10 +28,15 @@ Project File Date:  05/20/2018
 *** Using Compiler 'V5.06 update 6 (build 750)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'sx1272mb2das'
 compiling hw_uart.c...
+..\..\src\hw_uart.c(14): warning:  #550-D: variable "RxProcessedIndex"  was set but never used
+  static uint16_t RxProcessedIndex;
+..\..\src\hw_uart.c(16): warning:  #550-D: variable "RxCheckedIndex"  was set but never used
+  static uint16_t RxCheckedIndex;
+..\..\src\hw_uart.c: 2 warnings, 0 errors
 linking...
-Program Size: Code=41508 RO-data=1504 RW-data=420 ZI-data=4644  
+Program Size: Code=41396 RO-data=1504 RW-data=412 ZI-data=5588  
 FromELF: creating hex file...
-".\sx1272mb2das\NUCLEO_CUBE_LORA.axf" - 0 Error(s), 0 Warning(s).
+".\sx1272mb2das\NUCLEO_CUBE_LORA.axf" - 0 Error(s), 2 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -45,7 +50,7 @@ Package Vendor: Keil
   C:\Keil_v5\ARM\PACK\Keil\STM32L0xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L0xx\Include
 
 <h2>Collection of Component Files used:</h2>
-Build Time Elapsed:  00:00:01
+Build Time Elapsed:  00:00:02
 </pre>
 </body>
 </html>

@@ -23,11 +23,13 @@ typedef enum UartTxState_t
 }UartTxState_t;
 
 /* Exported constants --------------------------------------------------------*/
+#define UART_BUFFSIZE 1200
+
 /* External variables --------------------------------------------------------*/
 /* Exported functions --------------------------------------------------------*/
 void UART_Init(void);
 void UART_Send(uint8_t *buffer, uint8_t length);
-UartRxState_t UART_Receive(uint8_t *buffer, uint8_t *length);
+UartRxState_t UART_Receive(uint8_t *buffer, uint16_t *length, uint8_t terminatorChar);
 void UART_DeInit(void);
 
 #ifdef __cplusplus
