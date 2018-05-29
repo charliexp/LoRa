@@ -70,6 +70,10 @@
 /*!
  * Defines the application data transmission duty cycle. 5s, value in [ms].
  */
+#define APP_DAQ_DUTYCYCLE                           10000
+/*!
+ * Defines the application data transmission duty cycle. 5s, value in [ms].
+ */
 #define APP_TX_DUTYCYCLE                            10000
 /*!
  * LoRaWAN Adaptive Data Rate
@@ -213,6 +217,7 @@ int main( void )
     ENABLE_IRQ();
     
     /* USER CODE BEGIN 2 */
+		DAQ_GetData();
     /* USER CODE END 2 */
   }
 }
@@ -416,7 +421,6 @@ static void LORA_RxData( lora_AppData_t *AppData )
 
 static void OnTxTimerEvent( void )
 {
-	DAQ_GetData();
   Send( );
   /*Wait for next tx slot*/
   TimerStart( &TxTimer);

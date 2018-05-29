@@ -1,6 +1,5 @@
 /* Includes ------------------------------------------------------------------*/
 #include "daq.h"
-#include "timeServer.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -32,17 +31,23 @@ static bool DAQ_RespOk(uint8_t *response);
 /* Functions Definition ------------------------------------------------------*/
 void DAQ_Init(void)
 {
-	//TimerInit( &DAQTimer, OnDAQTimerEvent );
-	//TimerSetValue( &DAQTimer,  APP_DAQ_TIMEOUT);
 }
 
 void DAQ_GetData(void)
 {
+	uint16_t i;
+	
 	DAQ_SendReq(MeterIDReq, 5);
-	//DAQ_WaitForResp(&DAQDataLength, CR);
+	DAQ_WaitForResp(&DAQDataLength, CR);
+	
+	for (i = 0; i < DAQDataLength; i++)
+		PRINTF("%c", DAQData[i]);
 	
 	DAQ_SendReq(DataReq, 6);
-	//DAQ_WaitForResp(&DAQDataLength, ETX);
+	DAQ_WaitForResp(&DAQDataLength, ETX);
+	
+	for (i = 0; i < DAQDataLength; i++)
+		PRINTF("%c", DAQData[i]);
 }
 
 void DAQ_ReadData(uint16_t address, uint8_t locations, uint8_t *response, uint8_t *length)
@@ -73,9 +78,14 @@ static void DAQ_SendReq(uint8_t *request, uint16_t length)
 
 static void DAQ_WaitForResp(uint16_t *length, uint8_t terminatorChar)
 {
-	while (UART_Receive(DAQData, length, terminatorChar) != UART_RX_AVAILABLE)
-		;
-	//PRINTF("done");
+	UartRxState_t result;
+	do
+	{
+		result = UART_Receive(DAQData, length, terminatorChar);
+	}while (result == UART_RX_PENDING);
+	
+	if (result == UART_RX_TIMEOUT)
+		PRINTF("Timeout contor");
 }
 
 static bool DAQ_RespOk(uint8_t *response)

@@ -13,7 +13,8 @@
 typedef enum UartRxState_t
 {
 	UART_RX_PENDING,
-	UART_RX_AVAILABLE
+	UART_RX_AVAILABLE,
+	UART_RX_TIMEOUT
 }UartRxState_t;
 
 typedef enum UartTxState_t
@@ -24,6 +25,7 @@ typedef enum UartTxState_t
 
 /* Exported constants --------------------------------------------------------*/
 #define UART_BUFFSIZE 1200
+#define UART_TIMEOUT	5
 
 /* External variables --------------------------------------------------------*/
 /* Exported functions --------------------------------------------------------*/
