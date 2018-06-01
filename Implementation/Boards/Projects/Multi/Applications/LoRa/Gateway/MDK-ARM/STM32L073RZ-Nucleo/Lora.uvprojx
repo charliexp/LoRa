@@ -952,97 +952,12 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Middlewares/Lora/Core</GroupName>
-          <Files>
-            <File>
-              <FileName>lora.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Core\lora.c</FilePath>
-            </File>
-            <File>
-              <FileName>lora-test.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Core\lora-test.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>Middlewares/Lora/Mac</GroupName>
           <Files>
-            <File>
-              <FileName>LoRaMac.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac\LoRaMac.c</FilePath>
-            </File>
             <File>
               <FileName>LoRaMacCrypto.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac\LoRaMacCrypto.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Middlewares/Lora/Mac/region</GroupName>
-          <Files>
-            <File>
-              <FileName>Region.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac\region\Region.c</FilePath>
-            </File>
-            <File>
-              <FileName>RegionAS923.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac\region\RegionAS923.c</FilePath>
-            </File>
-            <File>
-              <FileName>RegionAU915.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac\region\RegionAU915.c</FilePath>
-            </File>
-            <File>
-              <FileName>RegionCN470.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac\region\RegionCN470.c</FilePath>
-            </File>
-            <File>
-              <FileName>RegionCN779.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac\region\RegionCN779.c</FilePath>
-            </File>
-            <File>
-              <FileName>RegionCommon.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac\region\RegionCommon.c</FilePath>
-            </File>
-            <File>
-              <FileName>RegionEU433.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac\region\RegionEU433.c</FilePath>
-            </File>
-            <File>
-              <FileName>RegionEU868.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac\region\RegionEU868.c</FilePath>
-            </File>
-            <File>
-              <FileName>RegionIN865.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac\region\RegionIN865.c</FilePath>
-            </File>
-            <File>
-              <FileName>RegionKR920.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac\region\RegionKR920.c</FilePath>
-            </File>
-            <File>
-              <FileName>RegionUS915.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac\region\RegionUS915.c</FilePath>
-            </File>
-            <File>
-              <FileName>RegionUS915-Hybrid.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac\region\RegionUS915-Hybrid.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1093,6 +1008,96 @@
               <FileName>daq.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\DAQ\src\daq.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Middlewares/Lora/Gateway</GroupName>
+          <Files>
+            <File>
+              <FileName>lora_gateway.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Gateway\lora_gateway.c</FilePath>
+            </File>
+            <File>
+              <FileName>lora_gateway_Mac.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Gateway\lora_gateway_Mac.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Middlewares/Lora/Core</GroupName>
+          <Files>
+            <File>
+              <FileName>lora-test.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Core\lora-test.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Middlewares/Lora/Gateway/region</GroupName>
+          <Files>
+            <File>
+              <FileName>Region.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Gateway\region\Region.c</FilePath>
+            </File>
+            <File>
+              <FileName>RegionAS923.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Gateway\region\RegionAS923.c</FilePath>
+            </File>
+            <File>
+              <FileName>RegionAU915.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Gateway\region\RegionAU915.c</FilePath>
+            </File>
+            <File>
+              <FileName>RegionCN470.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Gateway\region\RegionCN470.c</FilePath>
+            </File>
+            <File>
+              <FileName>RegionCN779.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Gateway\region\RegionCN779.c</FilePath>
+            </File>
+            <File>
+              <FileName>RegionCommon.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Gateway\region\RegionCommon.c</FilePath>
+            </File>
+            <File>
+              <FileName>RegionEU433.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Gateway\region\RegionEU433.c</FilePath>
+            </File>
+            <File>
+              <FileName>RegionEU868.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Gateway\region\RegionEU868.c</FilePath>
+            </File>
+            <File>
+              <FileName>RegionIN865.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Gateway\region\RegionIN865.c</FilePath>
+            </File>
+            <File>
+              <FileName>RegionKR920.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Gateway\region\RegionKR920.c</FilePath>
+            </File>
+            <File>
+              <FileName>RegionUS915.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Gateway\region\RegionUS915.c</FilePath>
+            </File>
+            <File>
+              <FileName>RegionUS915-Hybrid.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Gateway\region\RegionUS915-Hybrid.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1429,7 +1434,7 @@
               <MiscControls>--C99</MiscControls>
               <Define>STM32L073xx, USE_STM32L0XX_NUCLEO,USE_HAL_DRIVER, REGION_EU868</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\inc;..\..\..\..\..\..\..\Drivers\BSP\STM32L0xx_Nucleo;..\..\..\..\..\..\..\Drivers\STM32L0xx_HAL_Driver\Inc;..\..\..\..\..\..\..\Drivers\CMSIS\Device\ST\STM32L0xx\Include;..\..\..\..\..\..\..\Drivers\CMSIS\Include;..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Crypto;..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac;..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Phy;..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Utilities;..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Core;..\..\..\..\..\..\..\Drivers\BSP\Components\Common;..\..\..\..\..\..\..\Drivers\BSP\Components\hts221;..\..\..\..\..\..\..\Drivers\BSP\Components\lps22hb;..\..\..\..\..\..\..\Drivers\BSP\Components\lps25hb;..\..\..\..\..\..\..\Drivers\BSP\Components\sx1272;..\..\..\..\..\..\..\Drivers\BSP\X_NUCLEO_IKS01A1;..\..\..\..\..\..\..\Drivers\BSP\X_NUCLEO_IKS01A2;..\..\..\..\..\..\..\Drivers\BSP\sx1272mb2das;..\..\..\..\..\..\..\Middlewares\Third_Party\DAQ\inc</IncludePath>
+              <IncludePath>..\..\inc;..\..\..\..\..\..\..\Drivers\BSP\STM32L0xx_Nucleo;..\..\..\..\..\..\..\Drivers\STM32L0xx_HAL_Driver\Inc;..\..\..\..\..\..\..\Drivers\CMSIS\Device\ST\STM32L0xx\Include;..\..\..\..\..\..\..\Drivers\CMSIS\Include;..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Crypto;..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Phy;..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Utilities;..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Core;..\..\..\..\..\..\..\Drivers\BSP\Components\Common;..\..\..\..\..\..\..\Drivers\BSP\Components\hts221;..\..\..\..\..\..\..\Drivers\BSP\Components\lps22hb;..\..\..\..\..\..\..\Drivers\BSP\Components\lps25hb;..\..\..\..\..\..\..\Drivers\BSP\Components\sx1272;..\..\..\..\..\..\..\Drivers\BSP\X_NUCLEO_IKS01A1;..\..\..\..\..\..\..\Drivers\BSP\X_NUCLEO_IKS01A2;..\..\..\..\..\..\..\Drivers\BSP\sx1272mb2das;..\..\..\..\..\..\..\Middlewares\Third_Party\DAQ\inc;..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Gateway;..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Gateway\region;..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -2044,97 +2049,12 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Middlewares/Lora/Core</GroupName>
-          <Files>
-            <File>
-              <FileName>lora.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Core\lora.c</FilePath>
-            </File>
-            <File>
-              <FileName>lora-test.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Core\lora-test.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>Middlewares/Lora/Mac</GroupName>
           <Files>
-            <File>
-              <FileName>LoRaMac.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac\LoRaMac.c</FilePath>
-            </File>
             <File>
               <FileName>LoRaMacCrypto.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac\LoRaMacCrypto.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Middlewares/Lora/Mac/region</GroupName>
-          <Files>
-            <File>
-              <FileName>Region.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac\region\Region.c</FilePath>
-            </File>
-            <File>
-              <FileName>RegionAS923.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac\region\RegionAS923.c</FilePath>
-            </File>
-            <File>
-              <FileName>RegionAU915.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac\region\RegionAU915.c</FilePath>
-            </File>
-            <File>
-              <FileName>RegionCN470.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac\region\RegionCN470.c</FilePath>
-            </File>
-            <File>
-              <FileName>RegionCN779.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac\region\RegionCN779.c</FilePath>
-            </File>
-            <File>
-              <FileName>RegionCommon.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac\region\RegionCommon.c</FilePath>
-            </File>
-            <File>
-              <FileName>RegionEU433.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac\region\RegionEU433.c</FilePath>
-            </File>
-            <File>
-              <FileName>RegionEU868.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac\region\RegionEU868.c</FilePath>
-            </File>
-            <File>
-              <FileName>RegionIN865.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac\region\RegionIN865.c</FilePath>
-            </File>
-            <File>
-              <FileName>RegionKR920.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac\region\RegionKR920.c</FilePath>
-            </File>
-            <File>
-              <FileName>RegionUS915.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac\region\RegionUS915.c</FilePath>
-            </File>
-            <File>
-              <FileName>RegionUS915-Hybrid.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac\region\RegionUS915-Hybrid.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2185,6 +2105,96 @@
               <FileName>daq.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\DAQ\src\daq.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Middlewares/Lora/Gateway</GroupName>
+          <Files>
+            <File>
+              <FileName>lora_gateway.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Gateway\lora_gateway.c</FilePath>
+            </File>
+            <File>
+              <FileName>lora_gateway_Mac.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Gateway\lora_gateway_Mac.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Middlewares/Lora/Core</GroupName>
+          <Files>
+            <File>
+              <FileName>lora-test.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Core\lora-test.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Middlewares/Lora/Gateway/region</GroupName>
+          <Files>
+            <File>
+              <FileName>Region.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Gateway\region\Region.c</FilePath>
+            </File>
+            <File>
+              <FileName>RegionAS923.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Gateway\region\RegionAS923.c</FilePath>
+            </File>
+            <File>
+              <FileName>RegionAU915.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Gateway\region\RegionAU915.c</FilePath>
+            </File>
+            <File>
+              <FileName>RegionCN470.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Gateway\region\RegionCN470.c</FilePath>
+            </File>
+            <File>
+              <FileName>RegionCN779.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Gateway\region\RegionCN779.c</FilePath>
+            </File>
+            <File>
+              <FileName>RegionCommon.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Gateway\region\RegionCommon.c</FilePath>
+            </File>
+            <File>
+              <FileName>RegionEU433.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Gateway\region\RegionEU433.c</FilePath>
+            </File>
+            <File>
+              <FileName>RegionEU868.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Gateway\region\RegionEU868.c</FilePath>
+            </File>
+            <File>
+              <FileName>RegionIN865.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Gateway\region\RegionIN865.c</FilePath>
+            </File>
+            <File>
+              <FileName>RegionKR920.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Gateway\region\RegionKR920.c</FilePath>
+            </File>
+            <File>
+              <FileName>RegionUS915.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Gateway\region\RegionUS915.c</FilePath>
+            </File>
+            <File>
+              <FileName>RegionUS915-Hybrid.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Gateway\region\RegionUS915-Hybrid.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -3136,97 +3146,12 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Middlewares/Lora/Core</GroupName>
-          <Files>
-            <File>
-              <FileName>lora.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Core\lora.c</FilePath>
-            </File>
-            <File>
-              <FileName>lora-test.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Core\lora-test.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>Middlewares/Lora/Mac</GroupName>
           <Files>
-            <File>
-              <FileName>LoRaMac.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac\LoRaMac.c</FilePath>
-            </File>
             <File>
               <FileName>LoRaMacCrypto.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac\LoRaMacCrypto.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Middlewares/Lora/Mac/region</GroupName>
-          <Files>
-            <File>
-              <FileName>Region.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac\region\Region.c</FilePath>
-            </File>
-            <File>
-              <FileName>RegionAS923.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac\region\RegionAS923.c</FilePath>
-            </File>
-            <File>
-              <FileName>RegionAU915.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac\region\RegionAU915.c</FilePath>
-            </File>
-            <File>
-              <FileName>RegionCN470.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac\region\RegionCN470.c</FilePath>
-            </File>
-            <File>
-              <FileName>RegionCN779.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac\region\RegionCN779.c</FilePath>
-            </File>
-            <File>
-              <FileName>RegionCommon.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac\region\RegionCommon.c</FilePath>
-            </File>
-            <File>
-              <FileName>RegionEU433.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac\region\RegionEU433.c</FilePath>
-            </File>
-            <File>
-              <FileName>RegionEU868.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac\region\RegionEU868.c</FilePath>
-            </File>
-            <File>
-              <FileName>RegionIN865.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac\region\RegionIN865.c</FilePath>
-            </File>
-            <File>
-              <FileName>RegionKR920.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac\region\RegionKR920.c</FilePath>
-            </File>
-            <File>
-              <FileName>RegionUS915.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac\region\RegionUS915.c</FilePath>
-            </File>
-            <File>
-              <FileName>RegionUS915-Hybrid.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac\region\RegionUS915-Hybrid.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -3277,6 +3202,96 @@
               <FileName>daq.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\DAQ\src\daq.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Middlewares/Lora/Gateway</GroupName>
+          <Files>
+            <File>
+              <FileName>lora_gateway.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Gateway\lora_gateway.c</FilePath>
+            </File>
+            <File>
+              <FileName>lora_gateway_Mac.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Gateway\lora_gateway_Mac.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Middlewares/Lora/Core</GroupName>
+          <Files>
+            <File>
+              <FileName>lora-test.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Core\lora-test.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Middlewares/Lora/Gateway/region</GroupName>
+          <Files>
+            <File>
+              <FileName>Region.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Gateway\region\Region.c</FilePath>
+            </File>
+            <File>
+              <FileName>RegionAS923.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Gateway\region\RegionAS923.c</FilePath>
+            </File>
+            <File>
+              <FileName>RegionAU915.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Gateway\region\RegionAU915.c</FilePath>
+            </File>
+            <File>
+              <FileName>RegionCN470.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Gateway\region\RegionCN470.c</FilePath>
+            </File>
+            <File>
+              <FileName>RegionCN779.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Gateway\region\RegionCN779.c</FilePath>
+            </File>
+            <File>
+              <FileName>RegionCommon.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Gateway\region\RegionCommon.c</FilePath>
+            </File>
+            <File>
+              <FileName>RegionEU433.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Gateway\region\RegionEU433.c</FilePath>
+            </File>
+            <File>
+              <FileName>RegionEU868.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Gateway\region\RegionEU868.c</FilePath>
+            </File>
+            <File>
+              <FileName>RegionIN865.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Gateway\region\RegionIN865.c</FilePath>
+            </File>
+            <File>
+              <FileName>RegionKR920.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Gateway\region\RegionKR920.c</FilePath>
+            </File>
+            <File>
+              <FileName>RegionUS915.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Gateway\region\RegionUS915.c</FilePath>
+            </File>
+            <File>
+              <FileName>RegionUS915-Hybrid.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Gateway\region\RegionUS915-Hybrid.c</FilePath>
             </File>
           </Files>
         </Group>

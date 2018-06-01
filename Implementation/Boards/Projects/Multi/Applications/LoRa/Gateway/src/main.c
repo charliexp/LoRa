@@ -47,7 +47,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "hw.h"
 #include "low_power_manager.h"
-#include "lora.h"
+#include "lora_gateway.h"
 #include "timeServer.h"
 #include "vcom.h"
 #include "version.h"
@@ -181,12 +181,8 @@ int main( void )
   
   /* Configure the Lora Stack*/
   LORA_Init( &LoRaMainCallbacks, &LoRaParamInit);
-  
+	
   PRINTF("VERSION: %X\n\r", VERSION);
-  
-  //LORA_Join();
-  
-  LoraStartTx( TX_ON_TIMER) ;
   
   while( 1 )
   {
