@@ -179,7 +179,7 @@
 /*!
  * Second reception window channel frequency definition.
  */
-#define EU868_RX_WND_2_FREQ                         869525000
+#define EU868_RX_WND_2_FREQ                         868300000
 
 /*!
  * Second reception window channel datarate definition.
@@ -225,7 +225,7 @@
  * LoRaMac default channel 1
  * Channel = { Frequency [Hz], RX1 Frequency [Hz], { ( ( DrMax << 4 ) | DrMin ) }, Band }
  */
-#define EU868_LC1                                   { 868100000, 0, { ( ( DR_5 << 4 ) | DR_0 ) }, 1 }
+#define EU868_LC1                                   { 868300000, 0, { ( ( DR_5 << 4 ) | DR_0 ) }, 1 }
 
 /*!
  * LoRaMac default channel 2
@@ -237,7 +237,7 @@
  * LoRaMac default channel 3
  * Channel = { Frequency [Hz], RX1 Frequency [Hz], { ( ( DrMax << 4 ) | DrMin ) }, Band }
  */
-#define EU868_LC3                                   { 868500000, 0, { ( ( DR_5 << 4 ) | DR_0 ) }, 1 }
+#define EU868_LC3                                   { 868300000, 0, { ( ( DR_5 << 4 ) | DR_0 ) }, 1 }
 
 /*!
  * LoRaMac channels which are allowed for the join procedure
