@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\sx1272mb2das\NUCLEO_CUBE_LORA.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\sx1272mb2das\NUCLEO_CUBE_LORA.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Fri Jun 01 20:05:21 2018
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Fri Jun 01 20:12:11 2018
 <BR><P>
 <H3>Maximum Stack Usage =        608 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -243,15 +243,15 @@ Global Symbols
 <LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RCC_GetSysClockFreq
 <LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RCCEx_GetPeriphCLKFreq
 <LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_SetConfig
+<LI><a href="#[102]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HW_RTC_StartWakeUpAlarm
+<LI><a href="#[145]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ProcessMacCommands
 <LI><a href="#[c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HW_GetTemperatureLevel
 <LI><a href="#[b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HW_GetBatteryLevel
 <LI><a href="#[14a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Send
-<LI><a href="#[102]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HW_RTC_StartWakeUpAlarm
-<LI><a href="#[145]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ProcessMacCommands
 <LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;aes_set_key
-<LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_idivmod
 <LI><a href="#[1a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rand1
 <LI><a href="#[195]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_printf_core
+<LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_idivmod
 </UL>
 
 <P><STRONG><a name="[1ac]"></a>__aeabi_idiv</STRONG> (Thumb, 0 bytes, Stack size 16 bytes, idiv.o(.text), UNUSED)
@@ -308,13 +308,13 @@ Global Symbols
 <LI><a href="#[185]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SX1272Reset
 <LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SX1272IoInit
 <LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SX1272IoDeInit
-<LI><a href="#[18e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
 <LI><a href="#[e8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vcom_IoInit
 <LI><a href="#[120]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vcom_IoDeInit
 <LI><a href="#[e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_MspInit
 <LI><a href="#[10a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HW_SPI_IoInit
 <LI><a href="#[10b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HW_SPI_IoDeInit
 <LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DBG_Init
+<LI><a href="#[18e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
 </UL>
 
 <P><STRONG><a name="[1b0]"></a>__aeabi_memclr8</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memseta.o(.text), UNUSED)
@@ -369,11 +369,11 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SX1272GetTimeOnAir
 <LI><a href="#[15e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionCommonComputeRxWindowParameters
 <LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dsub
+<LI><a href="#[196]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_fp_digits
 <LI><a href="#[183]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;round
 <LI><a href="#[165]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;floor
 <LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_drsub
 <LI><a href="#[15f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ceil
-<LI><a href="#[196]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_fp_digits
 </UL>
 
 <P><STRONG><a name="[7b]"></a>__aeabi_dsub</STRONG> (Thumb, 12 bytes, Stack size 8 bytes, dadd.o(.text))
@@ -488,20 +488,20 @@ Global Symbols
 
 <P><STRONG><a name="[184]"></a>__aeabi_cdrcmple</STRONG> (Thumb, 38 bytes, Stack size 0 bytes, cdrcmple.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SX1272GetTimeOnAir
+<LI><a href="#[196]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_fp_digits
 <LI><a href="#[183]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;round
 <LI><a href="#[165]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;floor
 <LI><a href="#[15f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ceil
-<LI><a href="#[196]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_fp_digits
 </UL>
 
 <P><STRONG><a name="[6e]"></a>__aeabi_llsl</STRONG> (Thumb, 32 bytes, Stack size 8 bytes, llshl.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = __aeabi_llsl
 </UL>
 <BR>[Called By]<UL><LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dadd
-<LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uldivmod
-<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_drnd
 <LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_double_epilogue
 <LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2ulz
+<LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uldivmod
+<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_drnd
 </UL>
 
 <P><STRONG><a name="[1b4]"></a>_ll_shift_l</STRONG> (Thumb, 0 bytes, Stack size 8 bytes, llshl.o(.text), UNUSED)
@@ -511,10 +511,10 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2uiz
 <LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2iz
-<LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uldivmod
-<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_drnd
 <LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_double_epilogue
 <LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2ulz
+<LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uldivmod
+<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_drnd
 </UL>
 
 <P><STRONG><a name="[1b5]"></a>_ll_ushift_r</STRONG> (Thumb, 0 bytes, Stack size 8 bytes, llushr.o(.text), UNUSED)
@@ -545,8 +545,8 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_ddiv
 <LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dadd
-<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_drnd
 <LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_double_epilogue
+<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_drnd
 </UL>
 
 <P><STRONG><a name="[79]"></a>_double_epilogue</STRONG> (Thumb, 164 bytes, Stack size 48 bytes, depilogue.o(.text))
@@ -602,8 +602,8 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 128<LI>Call Chain = AES_CMAC_Final &rArr; aes_encrypt &rArr; mix_sub_columns
 </UL>
 <BR>[Calls]<UL><LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;memcpy1
-<LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;memset1
 <LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;aes_encrypt
+<LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;memset1
 </UL>
 <BR>[Called By]<UL><LI><a href="#[12c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRaMacJoinComputeMic
 <LI><a href="#[122]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRaMacComputeMic
@@ -644,11 +644,11 @@ Global Symbols
 <P><STRONG><a name="[9d]"></a>DAQ_UpdateData</STRONG> (Thumb, 136 bytes, Stack size 40 bytes, daq.o(i.DAQ_UpdateData))
 <BR><BR>[Stack]<UL><LI>Max Depth = 248<LI>Call Chain = DAQ_UpdateData &rArr; DAQ_WaitForResp &rArr; vcom_Send &rArr; vsprintf
 </UL>
-<BR>[Calls]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
-<LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DAQ_WaitForResp
+<BR>[Calls]<UL><LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DAQ_WaitForResp
 <LI><a href="#[9b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DAQ_SendReq
 <LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DAQ_ReadData
 <LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DAQ_GetTime
+<LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
 </UL>
 <BR>[Called By]<UL><LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -703,11 +703,11 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vcom_Send
 </UL>
-<BR>[Called By]<UL><LI><a href="#[18e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
-<LI><a href="#[f7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_Init
+<BR>[Called By]<UL><LI><a href="#[f7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_Init
 <LI><a href="#[f5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HW_SPI_Init
 <LI><a href="#[f8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vcom_Init
 <LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RTC_MspInit
+<LI><a href="#[18e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
 </UL>
 
 <P><STRONG><a name="[ac]"></a>HAL_ADCEx_Calibration_Start</STRONG> (Thumb, 170 bytes, Stack size 24 bytes, stm32l0xx_hal_adc_ex.o(i.HAL_ADCEx_Calibration_Start))
@@ -818,21 +818,21 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[8a]"></a>HAL_GetTick</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, stm32l0xx_hal.o(i.HAL_GetTick))
-<BR><BR>[Called By]<UL><LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DMA_Abort
-<LI><a href="#[d8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_WaitOnFlagUntilTimeout
+<BR><BR>[Called By]<UL><LI><a href="#[d8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_WaitOnFlagUntilTimeout
 <LI><a href="#[b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_ADC_PollForConversion
 <LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_ADCEx_Calibration_Start
-<LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RCCEx_PeriphCLKConfig
 <LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RCC_OscConfig
 <LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RCC_ClockConfig
 <LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADC_Enable
 <LI><a href="#[eb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_WaitOnFlagUntilTimeout
 <LI><a href="#[e7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_CheckIdleState
 <LI><a href="#[ea]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Transmit
+<LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DMA_Abort
 <LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_EnterInitMode
 <LI><a href="#[d3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RTC_WaitForSynchro
 <LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RTC_SetAlarm_IT
 <LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RTC_DeactivateAlarm
+<LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RCCEx_PeriphCLKConfig
 <LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_Send
 <LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_Receive
 </UL>
@@ -941,9 +941,9 @@ Global Symbols
 <P><STRONG><a name="[c3]"></a>HAL_RCC_ClockConfig</STRONG> (Thumb, 340 bytes, Stack size 24 bytes, stm32l0xx_hal_rcc.o(i.HAL_RCC_ClockConfig))
 <BR><BR>[Stack]<UL><LI>Max Depth = 44<LI>Call Chain = HAL_RCC_ClockConfig &rArr; HAL_InitTick &rArr; __aeabi_uidivmod
 </UL>
-<BR>[Calls]<UL><LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
-<LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_InitTick
+<BR>[Calls]<UL><LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_InitTick
 <LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RCC_GetSysClockFreq
+<LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
 </UL>
 <BR>[Called By]<UL><LI><a href="#[18e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
 </UL>
@@ -971,12 +971,12 @@ Global Symbols
 <P><STRONG><a name="[c4]"></a>HAL_RCC_OscConfig</STRONG> (Thumb, 1116 bytes, Stack size 24 bytes, stm32l0xx_hal_rcc.o(i.HAL_RCC_OscConfig))
 <BR><BR>[Stack]<UL><LI>Max Depth = 44<LI>Call Chain = HAL_RCC_OscConfig &rArr; HAL_InitTick &rArr; __aeabi_uidivmod
 </UL>
-<BR>[Calls]<UL><LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
-<LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_InitTick
+<BR>[Calls]<UL><LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_InitTick
 <LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_SetFlashLatencyFromMSIRange
+<LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
 </UL>
-<BR>[Called By]<UL><LI><a href="#[18e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
-<LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RTC_MspInit
+<BR>[Called By]<UL><LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RTC_MspInit
+<LI><a href="#[18e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
 </UL>
 
 <P><STRONG><a name="[103]"></a>HAL_RTCEx_EnableBypassShadow</STRONG> (Thumb, 60 bytes, Stack size 12 bytes, stm32l0xx_hal_rtc_ex.o(i.HAL_RTCEx_EnableBypassShadow))
@@ -1032,8 +1032,8 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_SetPriority
 <LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_EnableIRQ
-<LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RCCEx_PeriphCLKConfig
 <LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RCC_OscConfig
+<LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RCCEx_PeriphCLKConfig
 <LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
 </UL>
 <BR>[Called By]<UL><LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RTC_Init
@@ -1157,7 +1157,7 @@ Global Symbols
 <LI><a href="#[f8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vcom_Init
 </UL>
 
-<P><STRONG><a name="[e4]"></a>HAL_UART_MspInit</STRONG> (Thumb, 108 bytes, Stack size 40 bytes, hw_uart.o(i.HAL_UART_MspInit))
+<P><STRONG><a name="[e4]"></a>HAL_UART_MspInit</STRONG> (Thumb, 112 bytes, Stack size 40 bytes, hw_uart.o(i.HAL_UART_MspInit))
 <BR><BR>[Stack]<UL><LI>Max Depth = 104<LI>Call Chain = HAL_UART_MspInit &rArr; vcom_IoInit &rArr; HAL_GPIO_Init
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_Init
@@ -1186,8 +1186,8 @@ Global Symbols
 <P><STRONG><a name="[ea]"></a>HAL_UART_Transmit</STRONG> (Thumb, 200 bytes, Stack size 48 bytes, stm32l0xx_hal_uart.o(i.HAL_UART_Transmit))
 <BR><BR>[Stack]<UL><LI>Max Depth = 88<LI>Call Chain = HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
-<BR>[Calls]<UL><LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
-<LI><a href="#[eb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_WaitOnFlagUntilTimeout
+<BR>[Calls]<UL><LI><a href="#[eb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_WaitOnFlagUntilTimeout
+<LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
 </UL>
 <BR>[Called By]<UL><LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_Send
 <LI><a href="#[193]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vcom_Print
@@ -1467,9 +1467,9 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[110]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRaMacMibSetRequestConfirm
 </UL>
-<BR>[Called By]<UL><LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+<BR>[Called By]<UL><LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MlmeConfirm
+<LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 <LI><a href="#[14a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Send
-<LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MlmeConfirm
 </UL>
 
 <P><STRONG><a name="[113]"></a>LORA_JoinStatus</STRONG> (Thumb, 24 bytes, Stack size 16 bytes, lora.o(i.LORA_JoinStatus))
@@ -1497,9 +1497,9 @@ Global Symbols
 <LI><a href="#[116]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRaMacQueryTxPossible
 <LI><a href="#[117]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRaMacMcpsRequest
 </UL>
-<BR>[Called By]<UL><LI><a href="#[14a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Send
+<BR>[Called By]<UL><LI><a href="#[11]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LORA_ConfirmClass
+<LI><a href="#[14a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Send
 <LI><a href="#[12]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LORA_TxNeeded
-<LI><a href="#[11]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LORA_ConfirmClass
 </UL>
 
 <P><STRONG><a name="[118]"></a>LPM_EnterLowPower</STRONG> (Thumb, 46 bytes, Stack size 8 bytes, low_power_manager.o(i.LPM_EnterLowPower))
@@ -1574,14 +1574,14 @@ Global Symbols
 <P><STRONG><a name="[122]"></a>LoRaMacComputeMic</STRONG> (Thumb, 112 bytes, Stack size 24 bytes, loramaccrypto.o(i.LoRaMacComputeMic))
 <BR><BR>[Stack]<UL><LI>Max Depth = 160<LI>Call Chain = LoRaMacComputeMic &rArr; AES_CMAC_Update &rArr; aes_encrypt &rArr; mix_sub_columns
 </UL>
-<BR>[Calls]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AES_CMAC_Final
-<LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AES_CMAC_Update
+<BR>[Calls]<UL><LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AES_CMAC_Update
 <LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AES_CMAC_SetKey
 <LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AES_CMAC_Init
+<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AES_CMAC_Final
 <LI><a href="#[123]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uread4
 </UL>
-<BR>[Called By]<UL><LI><a href="#[14c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PrepareFrame
-<LI><a href="#[46]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OnRadioRxDone
+<BR>[Called By]<UL><LI><a href="#[46]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OnRadioRxDone
+<LI><a href="#[14c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PrepareFrame
 </UL>
 
 <P><STRONG><a name="[10f]"></a>LoRaMacInitialization</STRONG> (Thumb, 514 bytes, Stack size 24 bytes, loramac.o(i.LoRaMacInitialization))
@@ -1590,11 +1590,11 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[129]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TimerSetValue
 <LI><a href="#[128]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TimerInit
 <LI><a href="#[12a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TimerGetCurrentTime
+<LI><a href="#[127]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ResetMacParameters
 <LI><a href="#[12b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;srand1
 <LI><a href="#[124]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionIsActive
 <LI><a href="#[126]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionInitDefaults
 <LI><a href="#[125]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionGetPhyParam
-<LI><a href="#[127]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ResetMacParameters
 </UL>
 <BR>[Called By]<UL><LI><a href="#[10e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LORA_Init
 </UL>
@@ -1602,23 +1602,23 @@ Global Symbols
 <P><STRONG><a name="[12c]"></a>LoRaMacJoinComputeMic</STRONG> (Thumb, 62 bytes, Stack size 24 bytes, loramaccrypto.o(i.LoRaMacJoinComputeMic))
 <BR><BR>[Stack]<UL><LI>Max Depth = 160<LI>Call Chain = LoRaMacJoinComputeMic &rArr; AES_CMAC_Update &rArr; aes_encrypt &rArr; mix_sub_columns
 </UL>
-<BR>[Calls]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AES_CMAC_Final
-<LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AES_CMAC_Update
+<BR>[Calls]<UL><LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AES_CMAC_Update
 <LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AES_CMAC_SetKey
 <LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AES_CMAC_Init
+<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AES_CMAC_Final
 <LI><a href="#[123]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uread4
 </UL>
-<BR>[Called By]<UL><LI><a href="#[14c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PrepareFrame
-<LI><a href="#[46]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OnRadioRxDone
+<BR>[Called By]<UL><LI><a href="#[46]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OnRadioRxDone
+<LI><a href="#[14c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PrepareFrame
 </UL>
 
 <P><STRONG><a name="[12d]"></a>LoRaMacJoinComputeSKeys</STRONG> (Thumb, 130 bytes, Stack size 56 bytes, loramaccrypto.o(i.LoRaMacJoinComputeSKeys))
 <BR><BR>[Stack]<UL><LI>Max Depth = 128<LI>Call Chain = LoRaMacJoinComputeSKeys &rArr; aes_encrypt &rArr; mix_sub_columns
 </UL>
 <BR>[Calls]<UL><LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;memcpy1
-<LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;memset1
 <LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;aes_set_key
 <LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;aes_encrypt
+<LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;memset1
 </UL>
 <BR>[Called By]<UL><LI><a href="#[46]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OnRadioRxDone
 </UL>
@@ -1626,9 +1626,9 @@ Global Symbols
 <P><STRONG><a name="[12e]"></a>LoRaMacJoinDecrypt</STRONG> (Thumb, 60 bytes, Stack size 24 bytes, loramaccrypto.o(i.LoRaMacJoinDecrypt))
 <BR><BR>[Stack]<UL><LI>Max Depth = 96<LI>Call Chain = LoRaMacJoinDecrypt &rArr; aes_encrypt &rArr; mix_sub_columns
 </UL>
-<BR>[Calls]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;memset1
-<LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;aes_set_key
+<BR>[Calls]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;aes_set_key
 <LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;aes_encrypt
+<LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;memset1
 </UL>
 <BR>[Called By]<UL><LI><a href="#[46]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OnRadioRxDone
 </UL>
@@ -1641,8 +1641,8 @@ Global Symbols
 <LI><a href="#[125]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionGetPhyParam
 <LI><a href="#[130]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Send
 </UL>
-<BR>[Called By]<UL><LI><a href="#[10c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LORA_send
-<LI><a href="#[140]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;certif_tx
+<BR>[Called By]<UL><LI><a href="#[140]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;certif_tx
+<LI><a href="#[10c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LORA_send
 </UL>
 
 <P><STRONG><a name="[114]"></a>LoRaMacMibGetRequestConfirm</STRONG> (Thumb, 240 bytes, Stack size 24 bytes, loramac.o(i.LoRaMacMibGetRequestConfirm))
@@ -1651,9 +1651,9 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__ARM_common_switch8
 <LI><a href="#[125]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionGetPhyParam
 </UL>
-<BR>[Called By]<UL><LI><a href="#[10d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LORA_RequestClass
+<BR>[Called By]<UL><LI><a href="#[13d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;certif_rx
+<LI><a href="#[10d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LORA_RequestClass
 <LI><a href="#[113]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LORA_JoinStatus
-<LI><a href="#[13d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;certif_rx
 </UL>
 
 <P><STRONG><a name="[110]"></a>LoRaMacMibSetRequestConfirm</STRONG> (Thumb, 570 bytes, Stack size 56 bytes, loramac.o(i.LoRaMacMibSetRequestConfirm))
@@ -1661,27 +1661,27 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__ARM_common_switch8
 <LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;memcpy1
+<LI><a href="#[132]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OpenContinuousRx2Window
 <LI><a href="#[12f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionVerify
 <LI><a href="#[131]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionComputeRxWindowParameters
 <LI><a href="#[133]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionChanMaskSet
-<LI><a href="#[132]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OpenContinuousRx2Window
 </UL>
-<BR>[Called By]<UL><LI><a href="#[10d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LORA_RequestClass
+<BR>[Called By]<UL><LI><a href="#[13d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;certif_rx
+<LI><a href="#[10d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LORA_RequestClass
 <LI><a href="#[112]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LORA_Join
 <LI><a href="#[10e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LORA_Init
-<LI><a href="#[13d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;certif_rx
 </UL>
 
 <P><STRONG><a name="[134]"></a>LoRaMacMlmeRequest</STRONG> (Thumb, 238 bytes, Stack size 32 bytes, loramac.o(i.LoRaMacMlmeRequest))
 <BR><BR>[Stack]<UL><LI>Max Depth = 464<LI>Call Chain = LoRaMacMlmeRequest &rArr; Send &rArr; ScheduleTx &rArr; SendFrameOnChannel &rArr; TimerStart &rArr; TimerInsertNewHeadTimer &rArr; TimerSetTimeout &rArr; HW_RTC_SetAlarm &rArr; HW_RTC_StartWakeUpAlarm &rArr; vcom_Send &rArr; vsprintf
 </UL>
-<BR>[Calls]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;memset1
+<BR>[Calls]<UL><LI><a href="#[127]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ResetMacParameters
+<LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AddMacCommand
+<LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;memset1
 <LI><a href="#[135]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionAlternateDr
 <LI><a href="#[137]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetTxContinuousWave1
 <LI><a href="#[136]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetTxContinuousWave
 <LI><a href="#[130]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Send
-<LI><a href="#[127]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ResetMacParameters
-<LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AddMacCommand
 </UL>
 <BR>[Called By]<UL><LI><a href="#[13d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;certif_rx
 </UL>
@@ -1697,9 +1697,9 @@ Global Symbols
 <P><STRONG><a name="[139]"></a>LoRaMacPayloadEncrypt</STRONG> (Thumb, 182 bytes, Stack size 40 bytes, loramaccrypto.o(i.LoRaMacPayloadEncrypt))
 <BR><BR>[Stack]<UL><LI>Max Depth = 112<LI>Call Chain = LoRaMacPayloadEncrypt &rArr; aes_encrypt &rArr; mix_sub_columns
 </UL>
-<BR>[Calls]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;memset1
-<LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;aes_set_key
+<BR>[Calls]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;aes_set_key
 <LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;aes_encrypt
+<LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;memset1
 </UL>
 <BR>[Called By]<UL><LI><a href="#[138]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRaMacPayloadDecrypt
 <LI><a href="#[14c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PrepareFrame
@@ -1708,12 +1708,12 @@ Global Symbols
 <P><STRONG><a name="[116]"></a>LoRaMacQueryTxPossible</STRONG> (Thumb, 174 bytes, Stack size 56 bytes, loramac.o(i.LoRaMacQueryTxPossible))
 <BR><BR>[Stack]<UL><LI>Max Depth = 172<LI>Call Chain = LoRaMacQueryTxPossible &rArr; RegionAdrNext &rArr; RegionEU868AdrNext &rArr; RegionEU868GetPhyParam &rArr; randr &rArr; __aeabi_idivmod &rArr; __aeabi_uidivmod
 </UL>
-<BR>[Calls]<UL><LI><a href="#[125]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionGetPhyParam
+<BR>[Calls]<UL><LI><a href="#[13b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ValidatePayloadLength
+<LI><a href="#[125]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionGetPhyParam
 <LI><a href="#[13a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionAdrNext
-<LI><a href="#[13b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ValidatePayloadLength
 </UL>
-<BR>[Called By]<UL><LI><a href="#[10c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LORA_send
-<LI><a href="#[140]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;certif_tx
+<BR>[Called By]<UL><LI><a href="#[140]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;certif_tx
+<LI><a href="#[10c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LORA_send
 </UL>
 
 <P><STRONG><a name="[111]"></a>LoRaMacTestSetDutyCycleOn</STRONG> (Thumb, 28 bytes, Stack size 16 bytes, loramac.o(i.LoRaMacTestSetDutyCycleOn))
@@ -1721,8 +1721,8 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[12f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionVerify
 </UL>
-<BR>[Called By]<UL><LI><a href="#[10e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LORA_Init
-<LI><a href="#[13d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;certif_rx
+<BR>[Called By]<UL><LI><a href="#[13d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;certif_rx
+<LI><a href="#[10e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LORA_Init
 </UL>
 
 <P><STRONG><a name="[f2]"></a>MSP_GetIRQn</STRONG> (Thumb, 48 bytes, Stack size 0 bytes, stm32l0xx_hal_msp.o(i.MSP_GetIRQn))
@@ -1739,12 +1739,12 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 208<LI>Call Chain = PrepareFrame &rArr; LoRaMacJoinComputeMic &rArr; AES_CMAC_Update &rArr; aes_encrypt &rArr; mix_sub_columns
 </UL>
 <BR>[Calls]<UL><LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;memcpy1
+<LI><a href="#[14b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ParseMacCommandsToRepeat
 <LI><a href="#[14d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;memcpyr
 <LI><a href="#[13a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionAdrNext
 <LI><a href="#[139]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRaMacPayloadEncrypt
 <LI><a href="#[12c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRaMacJoinComputeMic
 <LI><a href="#[122]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRaMacComputeMic
-<LI><a href="#[14b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ParseMacCommandsToRepeat
 </UL>
 <BR>[Called By]<UL><LI><a href="#[130]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Send
 </UL>
@@ -1785,8 +1785,8 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[153]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionEU868AdrNext
 </UL>
-<BR>[Called By]<UL><LI><a href="#[14c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PrepareFrame
-<LI><a href="#[116]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRaMacQueryTxPossible
+<BR>[Called By]<UL><LI><a href="#[116]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRaMacQueryTxPossible
+<LI><a href="#[14c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PrepareFrame
 </UL>
 
 <P><STRONG><a name="[135]"></a>RegionAlternateDr</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, region.o(i.RegionAlternateDr))
@@ -2056,9 +2056,9 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__ARM_common_switch8
 <LI><a href="#[171]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;randr
 </UL>
-<BR>[Called By]<UL><LI><a href="#[125]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionGetPhyParam
-<LI><a href="#[173]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionEU868LinkAdrReq
+<BR>[Called By]<UL><LI><a href="#[173]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionEU868LinkAdrReq
 <LI><a href="#[153]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionEU868AdrNext
+<LI><a href="#[125]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionGetPhyParam
 </UL>
 
 <P><STRONG><a name="[172]"></a>RegionEU868InitDefaults</STRONG> (Thumb, 74 bytes, Stack size 16 bytes, regioneu868.o(i.RegionEU868InitDefaults))
@@ -2072,10 +2072,10 @@ Global Symbols
 <P><STRONG><a name="[173]"></a>RegionEU868LinkAdrReq</STRONG> (Thumb, 286 bytes, Stack size 96 bytes, regioneu868.o(i.RegionEU868LinkAdrReq))
 <BR><BR>[Stack]<UL><LI>Max Depth = 180<LI>Call Chain = RegionEU868LinkAdrReq &rArr; RegionCommonLinkAdrReqVerifyParams &rArr; RegionCommonChanVerifyDr
 </UL>
-<BR>[Calls]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;memset1
-<LI><a href="#[174]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionCommonParseLinkAdrReq
+<BR>[Calls]<UL><LI><a href="#[174]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionCommonParseLinkAdrReq
 <LI><a href="#[166]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionCommonLinkAdrReqVerifyParams
 <LI><a href="#[16a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionEU868GetPhyParam
+<LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;memset1
 </UL>
 <BR>[Called By]<UL><LI><a href="#[14e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionLinkAdrReq
 </UL>
@@ -2736,8 +2736,8 @@ Global Symbols
 <P><STRONG><a name="[130]"></a>Send</STRONG> (Thumb, 56 bytes, Stack size 32 bytes, loramac.o(i.Send))
 <BR><BR>[Stack]<UL><LI>Max Depth = 432<LI>Call Chain = Send &rArr; ScheduleTx &rArr; SendFrameOnChannel &rArr; TimerStart &rArr; TimerInsertNewHeadTimer &rArr; TimerSetTimeout &rArr; HW_RTC_SetAlarm &rArr; HW_RTC_StartWakeUpAlarm &rArr; vcom_Send &rArr; vsprintf
 </UL>
-<BR>[Calls]<UL><LI><a href="#[14c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PrepareFrame
-<LI><a href="#[141]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ScheduleTx
+<BR>[Calls]<UL><LI><a href="#[141]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ScheduleTx
+<LI><a href="#[14c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PrepareFrame
 </UL>
 <BR>[Called By]<UL><LI><a href="#[134]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRaMacMlmeRequest
 <LI><a href="#[117]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRaMacMcpsRequest
@@ -2822,9 +2822,9 @@ Global Symbols
 
 <P><STRONG><a name="[128]"></a>TimerInit</STRONG> (Thumb, 14 bytes, Stack size 0 bytes, timeserver.o(i.TimerInit))
 <BR><BR>[Called By]<UL><LI><a href="#[50]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SX1272Init
-<LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 <LI><a href="#[13d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;certif_rx
 <LI><a href="#[10f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRaMacInitialization
+<LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
 <P><STRONG><a name="[c7]"></a>TimerIrqHandler</STRONG> (Thumb, 116 bytes, Stack size 16 bytes, timeserver.o(i.TimerIrqHandler))
@@ -2848,10 +2848,6 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[5f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SX1272SetTxContinuousWave
 <LI><a href="#[18a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SX1272SetTx
 <LI><a href="#[5d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SX1272SetRx
-<LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
-<LI><a href="#[137]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetTxContinuousWave1
-<LI><a href="#[136]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetTxContinuousWave
-<LI><a href="#[18c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SendFrameOnChannel
 <LI><a href="#[141]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ScheduleTx
 <LI><a href="#[143]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PrepareRxDoneAbort
 <LI><a href="#[45]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OnRadioTxDone
@@ -2859,6 +2855,10 @@ Global Symbols
 <LI><a href="#[40]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OnMacStateCheckTimerEvent
 <LI><a href="#[13d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;certif_rx
 <LI><a href="#[10f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRaMacInitialization
+<LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+<LI><a href="#[137]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetTxContinuousWave1
+<LI><a href="#[136]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetTxContinuousWave
+<LI><a href="#[18c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SendFrameOnChannel
 </UL>
 
 <P><STRONG><a name="[142]"></a>TimerStart</STRONG> (Thumb, 108 bytes, Stack size 24 bytes, timeserver.o(i.TimerStart))
@@ -2873,16 +2873,16 @@ Global Symbols
 <LI><a href="#[5d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SX1272SetRx
 <LI><a href="#[4a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SX1272OnTimeoutIrq
 <LI><a href="#[0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SX1272OnDio0Irq
-<LI><a href="#[4d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OnTxTimerEvent
-<LI><a href="#[137]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetTxContinuousWave1
-<LI><a href="#[136]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetTxContinuousWave
-<LI><a href="#[18c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SendFrameOnChannel
 <LI><a href="#[141]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ScheduleTx
 <LI><a href="#[143]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PrepareRxDoneAbort
 <LI><a href="#[45]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OnRadioTxDone
 <LI><a href="#[46]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OnRadioRxDone
 <LI><a href="#[40]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OnMacStateCheckTimerEvent
 <LI><a href="#[140]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;certif_tx
+<LI><a href="#[4d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OnTxTimerEvent
+<LI><a href="#[137]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetTxContinuousWave1
+<LI><a href="#[136]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetTxContinuousWave
+<LI><a href="#[18c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SendFrameOnChannel
 </UL>
 
 <P><STRONG><a name="[13f]"></a>TimerStop</STRONG> (Thumb, 92 bytes, Stack size 16 bytes, timeserver.o(i.TimerStop))
@@ -2918,8 +2918,8 @@ Global Symbols
 <P><STRONG><a name="[e7]"></a>UART_CheckIdleState</STRONG> (Thumb, 90 bytes, Stack size 24 bytes, stm32l0xx_hal_uart.o(i.UART_CheckIdleState))
 <BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = UART_CheckIdleState &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
-<BR>[Calls]<UL><LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
-<LI><a href="#[eb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_WaitOnFlagUntilTimeout
+<BR>[Calls]<UL><LI><a href="#[eb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_WaitOnFlagUntilTimeout
+<LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
 </UL>
 <BR>[Called By]<UL><LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Init
 </UL>
@@ -2948,8 +2948,8 @@ Global Symbols
 <P><STRONG><a name="[9c]"></a>UART_Send</STRONG> (Thumb, 30 bytes, Stack size 16 bytes, hw_uart.o(i.UART_Send))
 <BR><BR>[Stack]<UL><LI>Max Depth = 104<LI>Call Chain = UART_Send &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
-<BR>[Calls]<UL><LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
-<LI><a href="#[ea]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Transmit
+<BR>[Calls]<UL><LI><a href="#[ea]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Transmit
+<LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
 </UL>
 <BR>[Called By]<UL><LI><a href="#[9b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DAQ_SendReq
 </UL>
@@ -3046,11 +3046,11 @@ Global Symbols
 <LI><a href="#[19a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mix_sub_columns
 <LI><a href="#[199]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;copy_and_key
 </UL>
-<BR>[Called By]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AES_CMAC_Final
+<BR>[Called By]<UL><LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AES_CMAC_Update
+<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AES_CMAC_Final
 <LI><a href="#[139]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRaMacPayloadEncrypt
 <LI><a href="#[12e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRaMacJoinDecrypt
 <LI><a href="#[12d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRaMacJoinComputeSKeys
-<LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AES_CMAC_Update
 </UL>
 
 <P><STRONG><a name="[91]"></a>aes_set_key</STRONG> (Thumb, 248 bytes, Stack size 56 bytes, aes.o(i.aes_set_key))
@@ -3058,10 +3058,10 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uidivmod
 </UL>
-<BR>[Called By]<UL><LI><a href="#[139]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRaMacPayloadEncrypt
+<BR>[Called By]<UL><LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AES_CMAC_SetKey
+<LI><a href="#[139]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRaMacPayloadEncrypt
 <LI><a href="#[12e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRaMacJoinDecrypt
 <LI><a href="#[12d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRaMacJoinComputeSKeys
-<LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AES_CMAC_SetKey
 </UL>
 
 <P><STRONG><a name="[15f]"></a>ceil</STRONG> (Thumb, 180 bytes, Stack size 24 bytes, ceil.o(i.ceil))
@@ -3084,9 +3084,9 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[115]"></a>certif_running</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, lora-test.o(i.certif_running))
-<BR><BR>[Called By]<UL><LI><a href="#[10c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LORA_send
-<LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MlmeConfirm
+<BR><BR>[Called By]<UL><LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MlmeConfirm
 <LI><a href="#[3d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;McpsIndication
+<LI><a href="#[10c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LORA_send
 </UL>
 
 <P><STRONG><a name="[13d]"></a>certif_rx</STRONG> (Thumb, 386 bytes, Stack size 64 bytes, lora-test.o(i.certif_rx))
@@ -3123,6 +3123,7 @@ Global Symbols
 <LI><a href="#[129]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TimerSetValue
 <LI><a href="#[128]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TimerInit
 <LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Init
+<LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DBG_Init
 <LI><a href="#[18e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
 <LI><a href="#[19e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LPM_SetOffMode
 <LI><a href="#[118]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LPM_EnterLowPower
@@ -3132,19 +3133,18 @@ Global Symbols
 <LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DAQ_UpdateData
 <LI><a href="#[19d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DAQ_Init
 <LI><a href="#[4d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OnTxTimerEvent
-<LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DBG_Init
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> entry9a.o(.ARM.Collect$$$$0000000B)
 </UL>
 <P><STRONG><a name="[8e]"></a>memcpy1</STRONG> (Thumb, 22 bytes, Stack size 0 bytes, utilities.o(i.memcpy1))
 <BR><BR>[Called By]<UL><LI><a href="#[5a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SX1272Send
-<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AES_CMAC_Final
-<LI><a href="#[12d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRaMacJoinComputeSKeys
-<LI><a href="#[14c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PrepareFrame
 <LI><a href="#[46]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OnRadioRxDone
 <LI><a href="#[110]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRaMacMibSetRequestConfirm
 <LI><a href="#[16b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionEU868ChannelAdd
 <LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AES_CMAC_Update
+<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AES_CMAC_Final
+<LI><a href="#[12d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRaMacJoinComputeSKeys
+<LI><a href="#[14c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PrepareFrame
 </UL>
 
 <P><STRONG><a name="[14d]"></a>memcpyr</STRONG> (Thumb, 26 bytes, Stack size 0 bytes, utilities.o(i.memcpyr))
@@ -3152,14 +3152,14 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[8c]"></a>memset1</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, utilities.o(i.memset1))
-<BR><BR>[Called By]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AES_CMAC_Final
-<LI><a href="#[139]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRaMacPayloadEncrypt
-<LI><a href="#[12e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRaMacJoinDecrypt
-<LI><a href="#[12d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRaMacJoinComputeSKeys
-<LI><a href="#[134]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRaMacMlmeRequest
+<BR><BR>[Called By]<UL><LI><a href="#[134]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRaMacMlmeRequest
 <LI><a href="#[117]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRaMacMcpsRequest
 <LI><a href="#[173]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionEU868LinkAdrReq
 <LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AES_CMAC_Init
+<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AES_CMAC_Final
+<LI><a href="#[139]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRaMacPayloadEncrypt
+<LI><a href="#[12e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRaMacJoinDecrypt
+<LI><a href="#[12d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRaMacJoinComputeSKeys
 </UL>
 
 <P><STRONG><a name="[1a0]"></a>rand1</STRONG> (Thumb, 26 bytes, Stack size 8 bytes, utilities.o(i.rand1))
@@ -3173,8 +3173,8 @@ Global Symbols
 <P><STRONG><a name="[171]"></a>randr</STRONG> (Thumb, 22 bytes, Stack size 16 bytes, utilities.o(i.randr))
 <BR><BR>[Stack]<UL><LI>Max Depth = 44<LI>Call Chain = randr &rArr; __aeabi_idivmod &rArr; __aeabi_uidivmod
 </UL>
-<BR>[Calls]<UL><LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_idivmod
-<LI><a href="#[1a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rand1
+<BR>[Calls]<UL><LI><a href="#[1a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rand1
+<LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_idivmod
 </UL>
 <BR>[Called By]<UL><LI><a href="#[176]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionEU868NextChannel
 <LI><a href="#[16a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionEU868GetPhyParam
@@ -3216,7 +3216,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[11b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LPM_EnterStopMode
 </UL>
 
-<P><STRONG><a name="[e8]"></a>vcom_IoInit</STRONG> (Thumb, 90 bytes, Stack size 40 bytes, vcom.o(i.vcom_IoInit))
+<P><STRONG><a name="[e8]"></a>vcom_IoInit</STRONG> (Thumb, 86 bytes, Stack size 40 bytes, vcom.o(i.vcom_IoInit))
 <BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = vcom_IoInit &rArr; HAL_GPIO_Init
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_Init
@@ -3239,21 +3239,21 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 192<LI>Call Chain = vcom_Send &rArr; vsprintf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[1a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_SetPendingIRQ
-<LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
 <LI><a href="#[1a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vsprintf
+<LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
 </UL>
 <BR>[Called By]<UL><LI><a href="#[1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SX1272OnDio1Irq
 <LI><a href="#[0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SX1272OnDio0Irq
+<LI><a href="#[11]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LORA_ConfirmClass
+<LI><a href="#[102]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HW_RTC_StartWakeUpAlarm
+<LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
 <LI><a href="#[10e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LORA_Init
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 <LI><a href="#[14a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Send
 <LI><a href="#[f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LORA_RxData
-<LI><a href="#[11]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LORA_ConfirmClass
-<LI><a href="#[102]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HW_RTC_StartWakeUpAlarm
-<LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
-<LI><a href="#[18c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SendFrameOnChannel
 <LI><a href="#[17d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionEU868TxConfig
 <LI><a href="#[178]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionEU868RxConfig
+<LI><a href="#[18c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SendFrameOnChannel
 <LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DAQ_WaitForResp
 </UL>
 <P>
@@ -3309,8 +3309,8 @@ Local Symbols
 <P><STRONG><a name="[89]"></a>ADC_Enable</STRONG> (Thumb, 96 bytes, Stack size 24 bytes, stm32l0xx_hal_adc.o(i.ADC_Enable))
 <BR><BR>[Stack]<UL><LI>Max Depth = 52<LI>Call Chain = ADC_Enable &rArr; ADC_DelayMicroSecond &rArr; __aeabi_uidivmod
 </UL>
-<BR>[Calls]<UL><LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
-<LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADC_DelayMicroSecond
+<BR>[Calls]<UL><LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADC_DelayMicroSecond
+<LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
 </UL>
 <BR>[Called By]<UL><LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_ADC_Start
 </UL>
@@ -3346,10 +3346,10 @@ Local Symbols
 <P><STRONG><a name="[fc]"></a>HW_RTC_SetConfig</STRONG> (Thumb, 82 bytes, Stack size 32 bytes, hw_rtc.o(i.HW_RTC_SetConfig))
 <BR><BR>[Stack]<UL><LI>Max Depth = 344<LI>Call Chain = HW_RTC_SetConfig &rArr; HAL_RTC_Init &rArr; HAL_RTC_MspInit &rArr; Error_Handler &rArr; vcom_Send &rArr; vsprintf
 </UL>
-<BR>[Calls]<UL><LI><a href="#[103]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RTCEx_EnableBypassShadow
-<LI><a href="#[d4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RTC_SetTime
+<BR>[Calls]<UL><LI><a href="#[d4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RTC_SetTime
 <LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RTC_SetDate
 <LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RTC_Init
+<LI><a href="#[103]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RTCEx_EnableBypassShadow
 </UL>
 <BR>[Called By]<UL><LI><a href="#[f6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HW_RTC_Init
 </UL>
@@ -3435,9 +3435,9 @@ Local Symbols
 <P><STRONG><a name="[3e]"></a>MlmeConfirm</STRONG> (Thumb, 58 bytes, Stack size 8 bytes, lora.o(i.MlmeConfirm))
 <BR><BR>[Stack]<UL><LI>Max Depth = 424<LI>Call Chain = MlmeConfirm &rArr; LORA_Join &rArr; LoRaMacMibSetRequestConfirm &rArr; OpenContinuousRx2Window &rArr; OnRxWindow2TimerEvent &rArr; TimerStop &rArr; TimerSetTimeout &rArr; HW_RTC_SetAlarm &rArr; HW_RTC_StartWakeUpAlarm &rArr; vcom_Send &rArr; vsprintf
 </UL>
-<BR>[Calls]<UL><LI><a href="#[112]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LORA_Join
-<LI><a href="#[115]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;certif_running
+<BR>[Calls]<UL><LI><a href="#[115]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;certif_running
 <LI><a href="#[13e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;certif_linkCheck
+<LI><a href="#[112]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LORA_Join
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> lora.o(i.LORA_Init)
 </UL>
@@ -3487,12 +3487,12 @@ Local Symbols
 <BR>[Calls]<UL><LI><a href="#[13f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TimerStop
 <LI><a href="#[142]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TimerStart
 <LI><a href="#[129]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TimerSetValue
-<LI><a href="#[126]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionInitDefaults
-<LI><a href="#[125]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionGetPhyParam
 <LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetMlmeScheduleUplinkIndication
 <LI><a href="#[141]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ScheduleTx
 <LI><a href="#[132]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OpenContinuousRx2Window
 <LI><a href="#[41]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OnTxDelayedTimerEvent
+<LI><a href="#[126]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionInitDefaults
+<LI><a href="#[125]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionGetPhyParam
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> loramac.o(i.LoRaMacInitialization)
 </UL>
@@ -3503,6 +3503,8 @@ Local Symbols
 <LI><a href="#[13f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TimerStop
 <LI><a href="#[142]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TimerStart
 <LI><a href="#[129]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TimerSetValue
+<LI><a href="#[145]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ProcessMacCommands
+<LI><a href="#[143]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PrepareRxDoneAbort
 <LI><a href="#[125]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionGetPhyParam
 <LI><a href="#[144]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionApplyCFList
 <LI><a href="#[138]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRaMacPayloadDecrypt
@@ -3510,8 +3512,6 @@ Local Symbols
 <LI><a href="#[12d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRaMacJoinComputeSKeys
 <LI><a href="#[12c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRaMacJoinComputeMic
 <LI><a href="#[122]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LoRaMacComputeMic
-<LI><a href="#[145]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ProcessMacCommands
-<LI><a href="#[143]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PrepareRxDoneAbort
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> loramac.o(i.LoRaMacInitialization)
 </UL>
@@ -3539,9 +3539,9 @@ Local Symbols
 <BR>[Calls]<UL><LI><a href="#[142]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TimerStart
 <LI><a href="#[129]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TimerSetValue
 <LI><a href="#[12a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TimerGetCurrentTime
+<LI><a href="#[132]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OpenContinuousRx2Window
 <LI><a href="#[147]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionSetBandTxDone
 <LI><a href="#[125]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionGetPhyParam
-<LI><a href="#[132]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OpenContinuousRx2Window
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> loramac.o(i.LoRaMacInitialization)
 </UL>
@@ -3556,8 +3556,8 @@ Local Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 304<LI>Call Chain = OnRxWindow1TimerEvent &rArr; TimerStop &rArr; TimerSetTimeout &rArr; HW_RTC_SetAlarm &rArr; HW_RTC_StartWakeUpAlarm &rArr; vcom_Send &rArr; vsprintf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[13f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TimerStop
-<LI><a href="#[148]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionRxConfig
 <LI><a href="#[149]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RxWindowSetup
+<LI><a href="#[148]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionRxConfig
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> loramac.o(i.LoRaMacInitialization)
 </UL>
@@ -3565,8 +3565,8 @@ Local Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 312<LI>Call Chain = OnRxWindow2TimerEvent &rArr; TimerStop &rArr; TimerSetTimeout &rArr; HW_RTC_SetAlarm &rArr; HW_RTC_StartWakeUpAlarm &rArr; vcom_Send &rArr; vsprintf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[13f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TimerStop
-<LI><a href="#[148]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionRxConfig
 <LI><a href="#[149]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RxWindowSetup
+<LI><a href="#[148]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionRxConfig
 </UL>
 <BR>[Called By]<UL><LI><a href="#[132]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OpenContinuousRx2Window
 </UL>
@@ -3618,12 +3618,12 @@ Local Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_ui2f
 <LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__ARM_common_switch8
+<LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AddMacCommand
 <LI><a href="#[151]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionTxParamSetupReq
 <LI><a href="#[14f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionRxParamSetupReq
 <LI><a href="#[150]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionNewChannelReq
 <LI><a href="#[14e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionLinkAdrReq
 <LI><a href="#[152]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionDlChannelReq
-<LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AddMacCommand
 <LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uidivmod
 </UL>
 <BR>[Called By]<UL><LI><a href="#[46]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OnRadioRxDone
@@ -3649,16 +3649,16 @@ Local Symbols
 <BR>[Calls]<UL><LI><a href="#[142]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TimerStart
 <LI><a href="#[129]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TimerSetValue
 <LI><a href="#[146]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TimerGetElapsedTime
+<LI><a href="#[13b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ValidatePayloadLength
 <LI><a href="#[17f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionNextChannel
 <LI><a href="#[131]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionComputeRxWindowParameters
 <LI><a href="#[158]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionCalcBackOff
 <LI><a href="#[156]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionApplyDrOffset
 <LI><a href="#[18c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SendFrameOnChannel
-<LI><a href="#[13b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ValidatePayloadLength
 </UL>
-<BR>[Called By]<UL><LI><a href="#[130]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Send
-<LI><a href="#[41]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OnTxDelayedTimerEvent
+<BR>[Called By]<UL><LI><a href="#[41]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OnTxDelayedTimerEvent
 <LI><a href="#[40]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OnMacStateCheckTimerEvent
+<LI><a href="#[130]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Send
 </UL>
 
 <P><STRONG><a name="[95]"></a>SetMlmeScheduleUplinkIndication</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, loramac.o(i.SetMlmeScheduleUplinkIndication))
@@ -3744,8 +3744,8 @@ Local Symbols
 <P><STRONG><a name="[98]"></a>DAQ_GetTime</STRONG> (Thumb, 136 bytes, Stack size 40 bytes, daq.o(i.DAQ_GetTime))
 <BR><BR>[Stack]<UL><LI>Max Depth = 76<LI>Call Chain = DAQ_GetTime &rArr; DAQ_ReadData
 </UL>
-<BR>[Calls]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
-<LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DAQ_ReadData
+<BR>[Calls]<UL><LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DAQ_ReadData
+<LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
 </UL>
 <BR>[Called By]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DAQ_UpdateData
 </UL>
@@ -3779,18 +3779,18 @@ Local Symbols
 <LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_ddiv
 <LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dadd
 <LI><a href="#[184]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cdrcmple
-<LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uldivmod
 <LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2ulz
+<LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uldivmod
 </UL>
 <BR>[Called By]<UL><LI><a href="#[195]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_printf_core
 </UL>
 
 <P><STRONG><a name="[195]"></a>_printf_core</STRONG> (Thumb, 1754 bytes, Stack size 128 bytes, printfa.o(i._printf_core), UNUSED)
-<BR><BR>[Calls]<UL><LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uldivmod
-<LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uidivmod
-<LI><a href="#[197]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_printf_pre_padding
+<BR><BR>[Calls]<UL><LI><a href="#[197]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_printf_pre_padding
 <LI><a href="#[198]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_printf_post_padding
 <LI><a href="#[196]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_fp_digits
+<LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uldivmod
+<LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uidivmod
 </UL>
 <BR>[Called By]<UL><LI><a href="#[194]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__0vsprintf
 </UL>

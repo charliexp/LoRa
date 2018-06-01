@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\sx1272mb2das\NUCLEO_CUBE_LORA.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\sx1272mb2das\NUCLEO_CUBE_LORA.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Fri Jun 01 20:05:21 2018
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Fri Jun 01 20:23:39 2018
 <BR><P>
 <H3>Maximum Stack Usage =        608 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -12,7 +12,6 @@ McpsIndication &rArr; certif_rx &rArr; certif_tx &rArr; LoRaMacMcpsRequest &rArr
 <H3>
 Mutually Recursive functions
 </H3> <LI><a href="#[25]">ADC1_COMP_IRQHandler</a>&nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp;<a href="#[25]">ADC1_COMP_IRQHandler</a><BR>
- <LI><a href="#[15]">HardFault_Handler</a>&nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp;<a href="#[15]">HardFault_Handler</a><BR>
 </UL>
 <P>
 <H3>
@@ -1444,10 +1443,10 @@ Global Symbols
 <LI><a href="#[11c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LPM_ExitStopMode
 </UL>
 
-<P><STRONG><a name="[15]"></a>HardFault_Handler</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, stm32l0xx_it.o(i.HardFault_Handler))
-<BR><BR>[Calls]<UL><LI><a href="#[15]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HardFault_Handler
+<P><STRONG><a name="[15]"></a>HardFault_Handler</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, stm32l0xx_it.o(i.HardFault_Handler))
+<BR><BR>[Stack]<UL><LI>Max Depth = 192<LI>Call Chain = HardFault_Handler &rArr; vcom_Send &rArr; vsprintf
 </UL>
-<BR>[Called By]<UL><LI><a href="#[15]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HardFault_Handler
+<BR>[Calls]<UL><LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vcom_Send
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32l073xx.o(RESET)
 </UL>
@@ -3252,6 +3251,7 @@ Global Symbols
 <LI><a href="#[102]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HW_RTC_StartWakeUpAlarm
 <LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
 <LI><a href="#[18c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SendFrameOnChannel
+<LI><a href="#[15]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HardFault_Handler
 <LI><a href="#[17d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionEU868TxConfig
 <LI><a href="#[178]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RegionEU868RxConfig
 <LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DAQ_WaitForResp
@@ -3750,7 +3750,7 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DAQ_UpdateData
 </UL>
 
-<P><STRONG><a name="[9a]"></a>DAQ_ReadData</STRONG> (Thumb, 106 bytes, Stack size 36 bytes, daq.o(i.DAQ_ReadData))
+<P><STRONG><a name="[9a]"></a>DAQ_ReadData</STRONG> (Thumb, 118 bytes, Stack size 36 bytes, daq.o(i.DAQ_ReadData))
 <BR><BR>[Stack]<UL><LI>Max Depth = 36<LI>Call Chain = DAQ_ReadData
 </UL>
 <BR>[Called By]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DAQ_UpdateData

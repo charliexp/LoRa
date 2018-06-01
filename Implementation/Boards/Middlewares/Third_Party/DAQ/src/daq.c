@@ -97,9 +97,9 @@ static void DAQ_ReadData(Register_t reg, char *result, uint8_t *resultLength)
 {
 	uint16_t i = 0, j = 0, k = 0;
 	
-	while (DAQData[i] != '!' || i != DAQDataLength - 1)
+	while (DAQData[i] != '!' && i < DAQDataLength - 1)
 	{
-		while ((DAQData[i] == reg.name[j]) && (j != reg.length - 1))
+		while ((DAQData[i] == reg.name[j]) && (j != reg.length - 1) && i < DAQDataLength - 1)
 		{
 			i++;
 			j++;
@@ -108,7 +108,7 @@ static void DAQ_ReadData(Register_t reg, char *result, uint8_t *resultLength)
 		{
 			//Found register
 			i += 2;
-			while (DAQData[i] != ')' && DAQData[i] != '*')
+			while (DAQData[i] != ')' && DAQData[i] != '*' && i < DAQDataLength - 1)
 			{
 				//Found value
 				result[k] = DAQData[i];
