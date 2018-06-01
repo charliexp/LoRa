@@ -353,10 +353,4 @@ static void LORA_TxNeeded ( void )
   LORA_send( &AppData, LORAWAN_UNCONFIRMED_MSG);
 }
 
-#ifdef USE_B_L072Z_LRWAN1
-static void OnTimerLedEvent( void )
-{
-  LED_Off( LED_RED1 ) ; 
-}
-#endif
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

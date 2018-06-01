@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\sx1272mb2das\NUCLEO_CUBE_LORA.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\sx1272mb2das\NUCLEO_CUBE_LORA.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Fri Jun 01 20:23:39 2018
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Fri Jun 01 20:35:11 2018
 <BR><P>
 <H3>Maximum Stack Usage =        608 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -640,7 +640,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[9d]"></a>DAQ_UpdateData</STRONG> (Thumb, 136 bytes, Stack size 40 bytes, daq.o(i.DAQ_UpdateData))
+<P><STRONG><a name="[9d]"></a>DAQ_UpdateData</STRONG> (Thumb, 126 bytes, Stack size 40 bytes, daq.o(i.DAQ_UpdateData))
 <BR><BR>[Stack]<UL><LI>Max Depth = 248<LI>Call Chain = DAQ_UpdateData &rArr; DAQ_WaitForResp &rArr; vcom_Send &rArr; vsprintf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
@@ -3741,7 +3741,7 @@ Local Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;aes_encrypt
 </UL>
 
-<P><STRONG><a name="[98]"></a>DAQ_GetTime</STRONG> (Thumb, 136 bytes, Stack size 40 bytes, daq.o(i.DAQ_GetTime))
+<P><STRONG><a name="[98]"></a>DAQ_GetTime</STRONG> (Thumb, 134 bytes, Stack size 40 bytes, daq.o(i.DAQ_GetTime))
 <BR><BR>[Stack]<UL><LI>Max Depth = 76<LI>Call Chain = DAQ_GetTime &rArr; DAQ_ReadData
 </UL>
 <BR>[Calls]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
@@ -3757,15 +3757,15 @@ Local Symbols
 <LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DAQ_GetTime
 </UL>
 
-<P><STRONG><a name="[9b]"></a>DAQ_SendReq</STRONG> (Thumb, 40 bytes, Stack size 8 bytes, daq.o(i.DAQ_SendReq))
-<BR><BR>[Stack]<UL><LI>Max Depth = 112<LI>Call Chain = DAQ_SendReq &rArr; UART_Send &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
+<P><STRONG><a name="[9b]"></a>DAQ_SendReq</STRONG> (Thumb, 50 bytes, Stack size 16 bytes, daq.o(i.DAQ_SendReq))
+<BR><BR>[Stack]<UL><LI>Max Depth = 120<LI>Call Chain = DAQ_SendReq &rArr; UART_Send &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_Send
 </UL>
 <BR>[Called By]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DAQ_UpdateData
 </UL>
 
-<P><STRONG><a name="[9e]"></a>DAQ_WaitForResp</STRONG> (Thumb, 34 bytes, Stack size 16 bytes, daq.o(i.DAQ_WaitForResp))
+<P><STRONG><a name="[9e]"></a>DAQ_WaitForResp</STRONG> (Thumb, 32 bytes, Stack size 16 bytes, daq.o(i.DAQ_WaitForResp))
 <BR><BR>[Stack]<UL><LI>Max Depth = 208<LI>Call Chain = DAQ_WaitForResp &rArr; vcom_Send &rArr; vsprintf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vcom_Send

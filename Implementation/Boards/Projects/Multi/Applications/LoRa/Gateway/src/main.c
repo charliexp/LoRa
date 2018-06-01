@@ -173,7 +173,7 @@ int main( void )
   HW_Init();
   
   /* USER CODE BEGIN 1 */
-	DAQ_Init();
+	//DAQ_Init();
   /* USER CODE END 1 */
   
   /*Disbale Stand-by mode*/
@@ -184,7 +184,7 @@ int main( void )
   
   PRINTF("VERSION: %X\n\r", VERSION);
   
-  LORA_Join();
+  //LORA_Join();
   
   LoraStartTx( TX_ON_TIMER) ;
   
@@ -201,7 +201,7 @@ int main( void )
     ENABLE_IRQ();
     
     /* USER CODE BEGIN 2 */
-		DAQ_UpdateData();
+		//DAQ_UpdateData();
     /* USER CODE END 2 */
   }
 }
@@ -353,10 +353,4 @@ static void LORA_TxNeeded ( void )
   LORA_send( &AppData, LORAWAN_UNCONFIRMED_MSG);
 }
 
-#ifdef USE_B_L072Z_LRWAN1
-static void OnTimerLedEvent( void )
-{
-  LED_Off( LED_RED1 ) ; 
-}
-#endif
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
