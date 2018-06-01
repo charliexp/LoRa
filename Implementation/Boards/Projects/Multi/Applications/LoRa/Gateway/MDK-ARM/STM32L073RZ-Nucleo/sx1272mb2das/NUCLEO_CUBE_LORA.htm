@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\sx1272mb2das\NUCLEO_CUBE_LORA.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\sx1272mb2das\NUCLEO_CUBE_LORA.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Fri Jun 01 20:12:11 2018
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Fri Jun 01 20:35:02 2018
 <BR><P>
 <H3>Maximum Stack Usage =        608 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -12,7 +12,6 @@ McpsIndication &rArr; certif_rx &rArr; certif_tx &rArr; LoRaMacMcpsRequest &rArr
 <H3>
 Mutually Recursive functions
 </H3> <LI><a href="#[25]">ADC1_COMP_IRQHandler</a>&nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp;<a href="#[25]">ADC1_COMP_IRQHandler</a><BR>
- <LI><a href="#[15]">HardFault_Handler</a>&nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp;<a href="#[15]">HardFault_Handler</a><BR>
 </UL>
 <P>
 <H3>
@@ -641,7 +640,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[9d]"></a>DAQ_UpdateData</STRONG> (Thumb, 136 bytes, Stack size 40 bytes, daq.o(i.DAQ_UpdateData))
+<P><STRONG><a name="[9d]"></a>DAQ_UpdateData</STRONG> (Thumb, 126 bytes, Stack size 40 bytes, daq.o(i.DAQ_UpdateData))
 <BR><BR>[Stack]<UL><LI>Max Depth = 248<LI>Call Chain = DAQ_UpdateData &rArr; DAQ_WaitForResp &rArr; vcom_Send &rArr; vsprintf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DAQ_WaitForResp
@@ -1142,7 +1141,7 @@ Global Symbols
 <LI><a href="#[de]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_EndRxTransfer
 <LI><a href="#[da]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_ErrorCallback
 </UL>
-<BR>[Called By]<UL><LI><a href="#[34]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART2_IRQHandler
+<BR>[Called By]<UL><LI><a href="#[27]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART4_5_IRQHandler
 </UL>
 
 <P><STRONG><a name="[e3]"></a>HAL_UART_Init</STRONG> (Thumb, 108 bytes, Stack size 16 bytes, stm32l0xx_hal_uart.o(i.HAL_UART_Init))
@@ -1444,10 +1443,10 @@ Global Symbols
 <LI><a href="#[11c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LPM_ExitStopMode
 </UL>
 
-<P><STRONG><a name="[15]"></a>HardFault_Handler</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, stm32l0xx_it.o(i.HardFault_Handler))
-<BR><BR>[Calls]<UL><LI><a href="#[15]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HardFault_Handler
+<P><STRONG><a name="[15]"></a>HardFault_Handler</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, stm32l0xx_it.o(i.HardFault_Handler))
+<BR><BR>[Stack]<UL><LI>Max Depth = 192<LI>Call Chain = HardFault_Handler &rArr; vcom_Send &rArr; vsprintf
 </UL>
-<BR>[Called By]<UL><LI><a href="#[15]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HardFault_Handler
+<BR>[Calls]<UL><LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vcom_Send
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32l073xx.o(RESET)
 </UL>
@@ -2977,17 +2976,17 @@ Global Symbols
 <LI><a href="#[ea]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Transmit
 </UL>
 
-<P><STRONG><a name="[34]"></a>USART2_IRQHandler</STRONG> (Thumb, 10 bytes, Stack size 8 bytes, stm32l0xx_it.o(i.USART2_IRQHandler))
-<BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = USART2_IRQHandler &rArr; HAL_UART_IRQHandler &rArr; HAL_UART_ErrorCallback &rArr; HAL_UART_AbortReceive &rArr; HAL_DMA_Abort
+<P><STRONG><a name="[34]"></a>USART2_IRQHandler</STRONG> (Thumb, 8 bytes, Stack size 8 bytes, stm32l0xx_it.o(i.USART2_IRQHandler))
+<BR><BR>[Stack]<UL><LI>Max Depth = 104<LI>Call Chain = USART2_IRQHandler &rArr; vcom_Print &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
-<BR>[Calls]<UL><LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_IRQHandler
+<BR>[Calls]<UL><LI><a href="#[193]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vcom_Print
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32l073xx.o(RESET)
 </UL>
-<P><STRONG><a name="[27]"></a>USART4_5_IRQHandler</STRONG> (Thumb, 8 bytes, Stack size 8 bytes, stm32l0xx_it.o(i.USART4_5_IRQHandler))
-<BR><BR>[Stack]<UL><LI>Max Depth = 104<LI>Call Chain = USART4_5_IRQHandler &rArr; vcom_Print &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
+<P><STRONG><a name="[27]"></a>USART4_5_IRQHandler</STRONG> (Thumb, 10 bytes, Stack size 8 bytes, stm32l0xx_it.o(i.USART4_5_IRQHandler))
+<BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = USART4_5_IRQHandler &rArr; HAL_UART_IRQHandler &rArr; HAL_UART_ErrorCallback &rArr; HAL_UART_AbortReceive &rArr; HAL_DMA_Abort
 </UL>
-<BR>[Calls]<UL><LI><a href="#[193]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vcom_Print
+<BR>[Calls]<UL><LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_IRQHandler
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32l073xx.o(RESET)
 </UL>
@@ -3232,7 +3231,7 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[ea]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Transmit
 <LI><a href="#[1a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_ClearPendingIRQ
 </UL>
-<BR>[Called By]<UL><LI><a href="#[27]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART4_5_IRQHandler
+<BR>[Called By]<UL><LI><a href="#[34]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART2_IRQHandler
 </UL>
 
 <P><STRONG><a name="[a0]"></a>vcom_Send</STRONG> (Thumb, 114 bytes, Stack size 168 bytes, vcom.o(i.vcom_Send))
@@ -3247,6 +3246,7 @@ Global Symbols
 <LI><a href="#[11]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LORA_ConfirmClass
 <LI><a href="#[102]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HW_RTC_StartWakeUpAlarm
 <LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Error_Handler
+<LI><a href="#[15]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HardFault_Handler
 <LI><a href="#[10e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LORA_Init
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 <LI><a href="#[14a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Send
@@ -3741,7 +3741,7 @@ Local Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;aes_encrypt
 </UL>
 
-<P><STRONG><a name="[98]"></a>DAQ_GetTime</STRONG> (Thumb, 136 bytes, Stack size 40 bytes, daq.o(i.DAQ_GetTime))
+<P><STRONG><a name="[98]"></a>DAQ_GetTime</STRONG> (Thumb, 134 bytes, Stack size 40 bytes, daq.o(i.DAQ_GetTime))
 <BR><BR>[Stack]<UL><LI>Max Depth = 76<LI>Call Chain = DAQ_GetTime &rArr; DAQ_ReadData
 </UL>
 <BR>[Calls]<UL><LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DAQ_ReadData
@@ -3750,22 +3750,22 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DAQ_UpdateData
 </UL>
 
-<P><STRONG><a name="[9a]"></a>DAQ_ReadData</STRONG> (Thumb, 106 bytes, Stack size 36 bytes, daq.o(i.DAQ_ReadData))
+<P><STRONG><a name="[9a]"></a>DAQ_ReadData</STRONG> (Thumb, 118 bytes, Stack size 36 bytes, daq.o(i.DAQ_ReadData))
 <BR><BR>[Stack]<UL><LI>Max Depth = 36<LI>Call Chain = DAQ_ReadData
 </UL>
 <BR>[Called By]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DAQ_UpdateData
 <LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DAQ_GetTime
 </UL>
 
-<P><STRONG><a name="[9b]"></a>DAQ_SendReq</STRONG> (Thumb, 40 bytes, Stack size 8 bytes, daq.o(i.DAQ_SendReq))
-<BR><BR>[Stack]<UL><LI>Max Depth = 112<LI>Call Chain = DAQ_SendReq &rArr; UART_Send &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
+<P><STRONG><a name="[9b]"></a>DAQ_SendReq</STRONG> (Thumb, 50 bytes, Stack size 16 bytes, daq.o(i.DAQ_SendReq))
+<BR><BR>[Stack]<UL><LI>Max Depth = 120<LI>Call Chain = DAQ_SendReq &rArr; UART_Send &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_Send
 </UL>
 <BR>[Called By]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DAQ_UpdateData
 </UL>
 
-<P><STRONG><a name="[9e]"></a>DAQ_WaitForResp</STRONG> (Thumb, 34 bytes, Stack size 16 bytes, daq.o(i.DAQ_WaitForResp))
+<P><STRONG><a name="[9e]"></a>DAQ_WaitForResp</STRONG> (Thumb, 32 bytes, Stack size 16 bytes, daq.o(i.DAQ_WaitForResp))
 <BR><BR>[Stack]<UL><LI>Max Depth = 208<LI>Call Chain = DAQ_WaitForResp &rArr; vcom_Send &rArr; vsprintf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vcom_Send
