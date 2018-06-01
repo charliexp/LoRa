@@ -60,7 +60,6 @@ Maintainer: Miguel Luis and Gregory Cristian
 #include "hw.h"
 #include "radio.h"
 #include "debug.h"
-#include "bsp.h"
 #include "vcom.h"
 
 /*!
@@ -139,8 +138,6 @@ void HW_Init( void )
 		UART_Init( );
     
     vcom_Init( );
-    
-    BSP_sensor_Init( );
 
     McuInitialized = true;
   }

@@ -48,7 +48,6 @@
 #include "hw.h"
 #include "low_power_manager.h"
 #include "lora.h"
-#include "bsp.h"
 #include "timeServer.h"
 #include "vcom.h"
 #include "version.h"
@@ -56,21 +55,6 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
-
-/*!
- * CAYENNE_LPP is myDevices Application server.
- */
-//#define CAYENNE_LPP
-#define LPP_DATATYPE_DIGITAL_INPUT  0x0
-#define LPP_DATATYPE_DIGITAL_OUTPUT 0x1
-#define LPP_DATATYPE_HUMIDITY       0x68
-#define LPP_DATATYPE_TEMPERATURE    0x67
-#define LPP_DATATYPE_BAROMETER      0x73
-#define LPP_APP_PORT 99
-/*!
- * Defines the application data transmission duty cycle. 5s, value in [ms].
- */
-#define APP_DAQ_DUTYCYCLE                           10000
 /*!
  * Defines the application data transmission duty cycle. 5s, value in [ms].
  */
@@ -79,7 +63,7 @@
  * LoRaWAN Adaptive Data Rate
  * @note Please note that when ADR is enabled the end-device should be static
  */
-#define LORAWAN_ADR_STATE LORAWAN_ADR_ON
+#define LORAWAN_ADR_STATE LORAWAN_ADR_OFF
 /*!
  * LoRaWAN Default data Rate Data Rate
  * @note Please note that LORAWAN_DEFAULT_DATA_RATE is used only when ADR is disabled 
@@ -93,7 +77,7 @@
 /*!
  * LoRaWAN default endNode class port
  */
-#define LORAWAN_DEFAULT_CLASS                       CLASS_A
+#define LORAWAN_DEFAULT_CLASS                       CLASS_C
 /*!
  * LoRaWAN default confirm state
  */
@@ -233,15 +217,11 @@ static void LORA_HasJoined( void )
 static void Send( void )
 {
   /* USER CODE BEGIN 3 */
-	DAQTime_t currentTime;
-	currentTime = DAQ_GetTime();
-	PRINTF("Ultima citire contor la %02d:%02d:%02d\r\n", currentTime.hour, currentTime.minute, currentTime.second);
+	uint32_t i = 0;
+	PRINTF("Ultima citire contor la %02d:%02d:%02d\r\n", DAQ_Data.time.hour, DAQ_Data.time.minute, DAQ_Data.time.second);
+	PRINTF("Baterie contor %d.%dV\r\n", DAQ_Data.batteryLevel / 100, DAQ_Data.batteryLevel % 100);
 	
-  uint16_t pressure = 0;
-  int16_t temperature = 0;
-  uint16_t humidity = 0;
   uint8_t batteryLevel;
-  sensor_t sensor_data;
   
   if ( LORA_JoinStatus () != LORA_SET)
   {
@@ -251,99 +231,15 @@ static void Send( void )
   }
   
   DBG_PRINTF("SEND REQUEST\n\r");
-#ifndef CAYENNE_LPP
-  int32_t latitude, longitude = 0;
-  uint16_t altitudeGps = 0;
-#endif
-  
-#ifdef USE_B_L072Z_LRWAN1
-  TimerInit( &TxLedTimer, OnTimerLedEvent );
-  
-  TimerSetValue(  &TxLedTimer, 200);
-  
-  LED_On( LED_RED1 ) ; 
-  
-  TimerStart( &TxLedTimer );  
-#endif
-
-  BSP_sensor_Read( &sensor_data );
-
-#ifdef CAYENNE_LPP
-  uint8_t cchannel=0;
-  temperature = ( int16_t )( sensor_data.temperature * 10 );     /* in °C * 10 */
-  pressure    = ( uint16_t )( sensor_data.pressure * 100 / 10 );  /* in hPa / 10 */
-  humidity    = ( uint16_t )( sensor_data.humidity * 2 );        /* in %*2     */
-  uint32_t i = 0;
-
-  batteryLevel = HW_GetBatteryLevel( );                     /* 1 (very low) to 254 (fully charged) */
-
-  AppData.Port = LPP_APP_PORT;
-
-  AppData.Buff[i++] = cchannel++;
-  AppData.Buff[i++] = LPP_DATATYPE_BAROMETER;
-  AppData.Buff[i++] = ( pressure >> 8 ) & 0xFF;
-  AppData.Buff[i++] = pressure & 0xFF;
-  AppData.Buff[i++] = cchannel++;
-  AppData.Buff[i++] = LPP_DATATYPE_TEMPERATURE; 
-  AppData.Buff[i++] = ( temperature >> 8 ) & 0xFF;
-  AppData.Buff[i++] = temperature & 0xFF;
-  AppData.Buff[i++] = cchannel++;
-  AppData.Buff[i++] = LPP_DATATYPE_HUMIDITY;
-  AppData.Buff[i++] = humidity & 0xFF;
-#if defined( REGION_US915 ) || defined( REGION_US915_HYBRID ) || defined ( REGION_AU915 )
-  /* The maximum payload size does not allow to send more data for lowest DRs */
-#else
-  AppData.Buff[i++] = cchannel++;
-  AppData.Buff[i++] = LPP_DATATYPE_DIGITAL_INPUT; 
-  AppData.Buff[i++] = batteryLevel*100/254;
-  AppData.Buff[i++] = cchannel++;
-  AppData.Buff[i++] = LPP_DATATYPE_DIGITAL_OUTPUT; 
-  AppData.Buff[i++] = AppLedStateOn;
-#endif  /* REGION_XX915 */
-#else  /* not CAYENNE_LPP */
-
-  temperature = ( int16_t )( sensor_data.temperature * 100 );     /* in °C * 100 */
-  pressure    = ( uint16_t )( sensor_data.pressure * 100 / 10 );  /* in hPa / 10 */
-  humidity    = ( uint16_t )( sensor_data.humidity * 10 );        /* in %*10     */
-  latitude = sensor_data.latitude;
-  longitude= sensor_data.longitude;
-  uint32_t i = 0;
-
+	
   batteryLevel = HW_GetBatteryLevel( );                     /* 1 (very low) to 254 (fully charged) */
 
   AppData.Port = LORAWAN_APP_PORT;
 
-#if defined( REGION_US915 ) || defined( REGION_US915_HYBRID ) || defined ( REGION_AU915 )
-  AppData.Buff[i++] = AppLedStateOn;
-  AppData.Buff[i++] = ( pressure >> 8 ) & 0xFF;
-  AppData.Buff[i++] = pressure & 0xFF;
-  AppData.Buff[i++] = ( temperature >> 8 ) & 0xFF;
-  AppData.Buff[i++] = temperature & 0xFF;
-  AppData.Buff[i++] = ( humidity >> 8 ) & 0xFF;
-  AppData.Buff[i++] = humidity & 0xFF;
   AppData.Buff[i++] = batteryLevel;
-  AppData.Buff[i++] = 0;
-  AppData.Buff[i++] = 0;
-  AppData.Buff[i++] = 0;
-#else  /* not REGION_XX915 */
-  AppData.Buff[i++] = AppLedStateOn;
-  AppData.Buff[i++] = ( pressure >> 8 ) & 0xFF;
-  AppData.Buff[i++] = pressure & 0xFF;
-  AppData.Buff[i++] = ( temperature >> 8 ) & 0xFF;
-  AppData.Buff[i++] = temperature & 0xFF;
-  AppData.Buff[i++] = ( humidity >> 8 ) & 0xFF;
-  AppData.Buff[i++] = humidity & 0xFF;
-  AppData.Buff[i++] = batteryLevel;
-  AppData.Buff[i++] = ( latitude >> 16 ) & 0xFF;
-  AppData.Buff[i++] = ( latitude >> 8 ) & 0xFF;
-  AppData.Buff[i++] = latitude & 0xFF;
-  AppData.Buff[i++] = ( longitude >> 16 ) & 0xFF;
-  AppData.Buff[i++] = ( longitude >> 8 ) & 0xFF;
-  AppData.Buff[i++] = longitude & 0xFF;
-  AppData.Buff[i++] = ( altitudeGps >> 8 ) & 0xFF;
-  AppData.Buff[i++] = altitudeGps & 0xFF;
-#endif  /* REGION_XX915 */
-#endif  /* CAYENNE_LPP */
+  AppData.Buff[i++] = DAQ_Data.time.hour;
+  AppData.Buff[i++] = DAQ_Data.time.minute;
+  AppData.Buff[i++] = DAQ_Data.time.second;
   AppData.BuffSize = i;
   
   LORA_send( &AppData, LORAWAN_DEFAULT_CONFIRM_MSG_STATE);
@@ -401,22 +297,6 @@ static void LORA_RxData( lora_AppData_t *AppData )
       }
     }
     break;
-  case LPP_APP_PORT:
-  {
-    AppLedStateOn= (AppData->Buff[2] == 100) ?  0x01 : 0x00;
-    if ( AppLedStateOn == RESET )
-    {
-      PRINTF("LED OFF\n\r");
-      LED_Off( LED_BLUE ) ; 
-      
-    }
-    else
-    {
-      PRINTF("LED ON\n\r");
-      LED_On( LED_BLUE ) ; 
-    }
-    break;
-  }
   default:
     break;
   }

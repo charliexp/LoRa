@@ -22,12 +22,19 @@ typedef struct DAQTime_t
 	uint8_t second;
 }DAQTime_t;
 
+typedef struct DAQ_Struct_t
+{
+	DAQTime_t time;
+	uint16_t batteryLevel;			//Resolution: 0.01, Unit: V
+}DAQ_Struct_t;
+
 /* Exported constants --------------------------------------------------------*/
 /* External variables --------------------------------------------------------*/
+extern DAQ_Struct_t DAQ_Data;
+
 /* Exported functions --------------------------------------------------------*/
 void DAQ_Init(void);
 void DAQ_UpdateData(void);
-DAQTime_t DAQ_GetTime(void);
 
 #ifdef __cplusplus
 }

@@ -900,11 +900,6 @@
           <GroupName>Projects/End_Node</GroupName>
           <Files>
             <File>
-              <FileName>bsp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\src\bsp.c</FilePath>
-            </File>
-            <File>
               <FileName>daq.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\src\daq.c</FilePath>
@@ -1992,11 +1987,6 @@
           <GroupName>Projects/End_Node</GroupName>
           <Files>
             <File>
-              <FileName>bsp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\src\bsp.c</FilePath>
-            </File>
-            <File>
               <FileName>daq.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\src\daq.c</FilePath>
@@ -3083,11 +3073,6 @@
         <Group>
           <GroupName>Projects/End_Node</GroupName>
           <Files>
-            <File>
-              <FileName>bsp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\src\bsp.c</FilePath>
-            </File>
             <File>
               <FileName>daq.c</FileName>
               <FileType>1</FileType>
