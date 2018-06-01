@@ -900,11 +900,6 @@
           <GroupName>Projects/End_Node</GroupName>
           <Files>
             <File>
-              <FileName>daq.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\src\daq.c</FilePath>
-            </File>
-            <File>
               <FileName>debug.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\src\debug.c</FilePath>
@@ -1088,6 +1083,16 @@
               <FileName>cmac.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Crypto\cmac.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Middlewares/DAQ</GroupName>
+          <Files>
+            <File>
+              <FileName>daq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\DAQ\src\daq.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1424,7 +1429,7 @@
               <MiscControls>--C99</MiscControls>
               <Define>STM32L073xx, USE_STM32L0XX_NUCLEO,USE_HAL_DRIVER, REGION_EU868</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\inc;..\..\..\..\..\..\..\Drivers\BSP\STM32L0xx_Nucleo;..\..\..\..\..\..\..\Drivers\STM32L0xx_HAL_Driver\Inc;..\..\..\..\..\..\..\Drivers\CMSIS\Device\ST\STM32L0xx\Include;..\..\..\..\..\..\..\Drivers\CMSIS\Include;..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Crypto;..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac;..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Phy;..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Utilities;..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Core;..\..\..\..\..\..\..\Drivers\BSP\Components\Common;..\..\..\..\..\..\..\Drivers\BSP\Components\hts221;..\..\..\..\..\..\..\Drivers\BSP\Components\lps22hb;..\..\..\..\..\..\..\Drivers\BSP\Components\lps25hb;..\..\..\..\..\..\..\Drivers\BSP\Components\sx1272;..\..\..\..\..\..\..\Drivers\BSP\X_NUCLEO_IKS01A1;..\..\..\..\..\..\..\Drivers\BSP\X_NUCLEO_IKS01A2;..\..\..\..\..\..\..\Drivers\BSP\sx1272mb2das</IncludePath>
+              <IncludePath>..\..\inc;..\..\..\..\..\..\..\Drivers\BSP\STM32L0xx_Nucleo;..\..\..\..\..\..\..\Drivers\STM32L0xx_HAL_Driver\Inc;..\..\..\..\..\..\..\Drivers\CMSIS\Device\ST\STM32L0xx\Include;..\..\..\..\..\..\..\Drivers\CMSIS\Include;..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Crypto;..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac;..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Phy;..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Utilities;..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Core;..\..\..\..\..\..\..\Drivers\BSP\Components\Common;..\..\..\..\..\..\..\Drivers\BSP\Components\hts221;..\..\..\..\..\..\..\Drivers\BSP\Components\lps22hb;..\..\..\..\..\..\..\Drivers\BSP\Components\lps25hb;..\..\..\..\..\..\..\Drivers\BSP\Components\sx1272;..\..\..\..\..\..\..\Drivers\BSP\X_NUCLEO_IKS01A1;..\..\..\..\..\..\..\Drivers\BSP\X_NUCLEO_IKS01A2;..\..\..\..\..\..\..\Drivers\BSP\sx1272mb2das;..\..\..\..\..\..\..\Middlewares\Third_Party\DAQ\inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1987,11 +1992,6 @@
           <GroupName>Projects/End_Node</GroupName>
           <Files>
             <File>
-              <FileName>daq.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\src\daq.c</FilePath>
-            </File>
-            <File>
               <FileName>debug.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\src\debug.c</FilePath>
@@ -2175,6 +2175,16 @@
               <FileName>cmac.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Crypto\cmac.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Middlewares/DAQ</GroupName>
+          <Files>
+            <File>
+              <FileName>daq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\DAQ\src\daq.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -3074,11 +3084,6 @@
           <GroupName>Projects/End_Node</GroupName>
           <Files>
             <File>
-              <FileName>daq.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\src\daq.c</FilePath>
-            </File>
-            <File>
               <FileName>debug.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\src\debug.c</FilePath>
@@ -3262,6 +3267,16 @@
               <FileName>cmac.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Crypto\cmac.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Middlewares/DAQ</GroupName>
+          <Files>
+            <File>
+              <FileName>daq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\DAQ\src\daq.c</FilePath>
             </File>
           </Files>
         </Group>
