@@ -2,6 +2,19 @@
 #include "daq.h"
 
 /* Private typedef -----------------------------------------------------------*/
+typedef struct Register_t
+{
+	char name[10];
+	uint8_t length;
+}Register_t;
+
+typedef enum DAQState_t
+{
+	DAQ_INITIALIZED,
+	DAQ_ACTIVE,
+	DAQ_TIMEOUT
+}DAQState_t;
+
 /* Private define ------------------------------------------------------------*/
 #define SOH 0x01
 #define STX	0x02
@@ -13,48 +26,40 @@
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 static uint8_t MeterIDReq[] = "/?!\r\n";
-static uint8_t MeterIDResp[] = "/AEM4TPN7205802041100\r\n";
 static uint8_t DataReq[] = {ACK, '0', '4', '0', CR, LF};
-static uint8_t DataResp[] = {SOH, 'P', '0', STX, 
-																'(', 'C', 'O', 'M', 'U', 'N', 'I', 'C', 'A', ')',
-																ETX, 'q'};
-static uint8_t ReadReqStart[] = {SOH, 'R', '1', STX};
 
-static uint8_t DAQData[UART_BUFFSIZE];
-static uint16_t DAQDataLength;
 static Register_t BatteryVoltage = { "C.6.3", 5 };
 static Register_t CurrentTime = { "0.9.1", 5 };
+
+static DAQState_t DAQState;
+static uint8_t DAQData[UART_BUFFSIZE];
+static uint16_t DAQDataLength;
+
+static DAQTime_t DAQ_LastValidTime = {0, 0, 0};
 
 /* Private function prototypes -----------------------------------------------*/
 static void DAQ_SendReq(uint8_t *request, uint16_t length);
 static UartRxState_t DAQ_WaitForResp(uint16_t *length, uint8_t terminatorChar);
+static uint8_t DAQ_CalculateBCC(uint8_t *message);
+static void DAQ_ReadData(Register_t reg, char *result, uint8_t *resultLength);
 
 /* Functions Definition ------------------------------------------------------*/
 void DAQ_Init(void)
 {
+	DAQState = DAQ_INITIALIZED;
+	DAQDataLength = 0;
 }
 
 void DAQ_UpdateData(void)
 {
-	DAQTime_t currentTime;
-	
 	DAQ_SendReq(MeterIDReq, 5);
 	DAQ_WaitForResp(&DAQDataLength, CR);
 	
 	DAQ_SendReq(DataReq, 6);
-	
 	if (DAQ_WaitForResp(&DAQDataLength, ETX) != UART_RX_TIMEOUT)
-	{
-		currentTime = DAQ_GetTime();
-		PRINTF("Citit contor la %02d:%02d:%02d\r\n", currentTime.hour, currentTime.minute, currentTime.second);
-	}
-	//DAQ_ReadData(BatteryVoltage, value, &valueLength);
-	//for (i = 0; i < valueLength; i++)
-	//	PRINTF("%c", value[i]);
-	//DAQ_ReadData(DAQTime.reg, value, &valueLength);
-	/*for (i = 0; i < valueLength; i++)
-		PRINTF("%c", value[i]);
-	PRINTF("\r\n");*/
+		DAQState = DAQ_ACTIVE;
+	else
+		DAQState = DAQ_TIMEOUT;
 }
 
 DAQTime_t DAQ_GetTime(void)
@@ -62,33 +67,71 @@ DAQTime_t DAQ_GetTime(void)
 	char value[10];
 	uint8_t valueLength;
 	uint8_t hour, minute, second;
-	DAQTime_t time = {0, 0, 0};
 	
-	DAQ_ReadData(CurrentTime, value, &valueLength);
-	
-	if (value[0] >= '0' && value[0] <= '9' &&
-			value[1] >= '0' && value[1] <= '9')
+	if (DAQState == DAQ_ACTIVE)
 	{
-		hour = (value[0] - '0') * 10 + (value[1] - '0');
-		if (value[3] >= '0' && value[3] <= '9' &&
-				value[4] >= '0' && value[4] <= '9')
+		DAQ_ReadData(CurrentTime, value, &valueLength);
+		
+		if (value[0] >= '0' && value[0] <= '9' &&
+				value[1] >= '0' && value[1] <= '9')
 		{
-			minute = (value[3] - '0') * 10 + (value[4] - '0');
-			if (value[6] >= '0' && value[6] <= '9' &&
-					value[7] >= '0' && value[7] <= '9')
+			hour = (value[0] - '0') * 10 + (value[1] - '0');
+			if (value[3] >= '0' && value[3] <= '9' &&
+					value[4] >= '0' && value[4] <= '9')
 			{
-				second = (value[6] - '0') * 10 + (value[7] - '0');
-				time.hour = hour;
-				time.minute = minute;
-				time.second = second;
+				minute = (value[3] - '0') * 10 + (value[4] - '0');
+				if (value[6] >= '0' && value[6] <= '9' &&
+						value[7] >= '0' && value[7] <= '9')
+				{
+					second = (value[6] - '0') * 10 + (value[7] - '0');
+					DAQ_LastValidTime.hour = hour;
+					DAQ_LastValidTime.minute = minute;
+					DAQ_LastValidTime.second = second;
+				}
 			}
 		}
 	}
 	
-	return time;
+	return DAQ_LastValidTime;
 }
 
-void DAQ_ReadData(Register_t reg, char *result, uint8_t *resultLength)
+static void DAQ_SendReq(uint8_t *request, uint16_t length)
+{
+	//Add checksum
+	if (request[0] != '/' && request[0] != ACK)
+		request[length++] = DAQ_CalculateBCC(request);
+			
+	UART_Send(request, length);
+}
+
+static UartRxState_t DAQ_WaitForResp(uint16_t *length, uint8_t terminatorChar)
+{
+	UartRxState_t result;
+	do
+	{
+		result = UART_Receive(DAQData, length, terminatorChar);
+	}while (result == UART_RX_PENDING);
+	
+	if (result == UART_RX_TIMEOUT)
+		PRINTF("Timeout contor\r\n");
+	
+	return result;
+}
+
+static uint8_t DAQ_CalculateBCC(uint8_t *message)
+{
+	uint8_t sum = 0;
+	//Skip SOH/STX
+	message += 1;
+	do
+	{
+		sum ^= *(message);
+	}while (*message++ != ETX);
+	
+	return sum;
+}
+
+static void DAQ_ReadData(Register_t reg, char *result, uint8_t *resultLength)
 {
 	uint16_t i = 0, j = 0, k = 0;
 	
@@ -119,40 +162,4 @@ void DAQ_ReadData(Register_t reg, char *result, uint8_t *resultLength)
 			j = 0;
 		}
 	}
-}
-
-static uint8_t DAQ_CalculateBCC(uint8_t *message)
-{
-	uint8_t sum = 0;
-	//Skip SOH/STX
-	message += 1;
-	do
-	{
-		sum ^= *(message);
-	}while (*message++ != ETX);
-	
-	return sum;
-}
-
-static void DAQ_SendReq(uint8_t *request, uint16_t length)
-{
-	//Add checksum
-	if (request[0] != '/' && request[0] != ACK)
-		request[length++] = DAQ_CalculateBCC(request);
-			
-	UART_Send(request, length);
-}
-
-static UartRxState_t DAQ_WaitForResp(uint16_t *length, uint8_t terminatorChar)
-{
-	UartRxState_t result;
-	do
-	{
-		result = UART_Receive(DAQData, length, terminatorChar);
-	}while (result == UART_RX_PENDING);
-	
-	if (result == UART_RX_TIMEOUT)
-		PRINTF("Timeout contor\r\n");
-	
-	return result;
 }

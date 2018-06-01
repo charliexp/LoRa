@@ -217,7 +217,7 @@ int main( void )
     ENABLE_IRQ();
     
     /* USER CODE BEGIN 2 */
-		DAQ_GetData();
+		DAQ_UpdateData();
     /* USER CODE END 2 */
   }
 }
@@ -233,6 +233,10 @@ static void LORA_HasJoined( void )
 static void Send( void )
 {
   /* USER CODE BEGIN 3 */
+	DAQTime_t currentTime;
+	currentTime = DAQ_GetTime();
+	PRINTF("Ultima citire contor la %02d:%02d:%02d\r\n", currentTime.hour, currentTime.minute, currentTime.second);
+	
   uint16_t pressure = 0;
   int16_t temperature = 0;
   uint16_t humidity = 0;

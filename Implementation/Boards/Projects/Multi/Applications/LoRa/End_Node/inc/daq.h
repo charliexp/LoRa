@@ -11,16 +11,10 @@
 
 /* Exported defines ----------------------------------------------------------*/
 /*!
- * Defines the application data aquisition duty cycle. 2s, value in [ms].
+ * Defines the data aquisition timeout. Value in [ms].
  */
 #define APP_DAQ_TIMEOUT                           5000
 /* Exported types ------------------------------------------------------------*/
-typedef struct Register_t
-{
-	char name[10];
-	uint8_t length;
-}Register_t;
-
 typedef struct DAQTime_t
 {
 	uint8_t hour;
@@ -33,7 +27,6 @@ typedef struct DAQTime_t
 /* Exported functions --------------------------------------------------------*/
 void DAQ_Init(void);
 void DAQ_UpdateData(void);
-void DAQ_ReadData(Register_t reg, char *result, uint8_t *resultLength);
 DAQTime_t DAQ_GetTime(void);
 
 #ifdef __cplusplus
