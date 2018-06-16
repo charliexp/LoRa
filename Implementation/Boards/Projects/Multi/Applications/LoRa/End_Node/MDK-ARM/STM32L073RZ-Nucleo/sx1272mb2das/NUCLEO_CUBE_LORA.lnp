@@ -34,6 +34,7 @@
 ".\sx1272mb2das\startup_stm32l073xx.o"
 ".\sx1272mb2das\debug.o"
 ".\sx1272mb2das\hw_gpio.o"
+".\sx1272mb2das\hw_i2c.o"
 ".\sx1272mb2das\hw_rtc.o"
 ".\sx1272mb2das\hw_spi.o"
 ".\sx1272mb2das\hw_uart.o"
@@ -64,6 +65,7 @@
 ".\sx1272mb2das\utilities.o"
 ".\sx1272mb2das\aes.o"
 ".\sx1272mb2das\cmac.o"
+".\sx1272mb2das\actuator.o"
 ".\sx1272mb2das\daq.o"
 --library_type=microlib --strict --scatter ".\sx1272mb2das\NUCLEO_CUBE_LORA.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols

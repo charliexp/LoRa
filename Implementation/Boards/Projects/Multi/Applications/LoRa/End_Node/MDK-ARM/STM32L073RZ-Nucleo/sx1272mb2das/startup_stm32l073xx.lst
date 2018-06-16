@@ -407,11 +407,11 @@ ARM Macro Assembler    Page 7
               00000000 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M0+ --apcs=inter
 work --depend=.\sx1272mb2das\startup_stm32l073xx.d -o.\sx1272mb2das\startup_stm
-32l073xx.o -I.\RTE\_sx1272mb2das -IC:\Keil_v5\ARM\PACK\Keil\STM32L0xx_DFP\2.0.0
-\Drivers\CMSIS\Device\ST\STM32L0xx\Include -IC:\Keil_v5\ARM\CMSIS\Include -IC:\
-Keil_v5\ARM\PACK\Keil\STM32L0xx_DFP\2.0.0 --predefine="__MICROLIB SETA 1" --pre
-define="__UVISION_VERSION SETA 525" --predefine="STM32L073xx SETA 1" --list=.\s
-x1272mb2das\startup_stm32l073xx.lst startup_stm32l073xx.s
+32l073xx.o -I.\RTE\_sx1272mb2das -IC:\Keil\ARM\PACK\Keil\STM32L0xx_DFP\1.6.1\De
+vice\Include -IC:\Keil\ARM\CMSIS\Include -IC:\Keil\ARM\PACK\Keil\STM32L0xx_DFP\
+1.6.1 --predefine="__EVAL SETA 1" --predefine="__MICROLIB SETA 1" --predefine="
+__UVISION_VERSION SETA 524" --predefine="STM32L073xx SETA 1" --list=.\sx1272mb2
+das\startup_stm32l073xx.lst startup_stm32l073xx.s
 
 
 
@@ -956,4 +956,4 @@ Symbol: __main
       At line 140 in file startup_stm32l073xx.s
 Comment: __main used once
 2 symbols
-389 symbols in table
+390 symbols in table

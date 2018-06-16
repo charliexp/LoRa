@@ -16,7 +16,7 @@
         <TargetCommonOption>
           <Device>STM32L073RZTx</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32L0xx_DFP.2.0.0</PackID>
+          <PackID>Keil.STM32L0xx_DFP.1.6.1</PackID>
           <PackURL>http://www.keil.com/pack/</PackURL>
           <Cpu>IROM(0x08000000,0x00030000) IRAM(0x20000000,0x00005000) CPUTYPE("Cortex-M0+") CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -324,7 +324,6 @@
             <uThumb>0</uThumb>
             <uSurpInc>0</uSurpInc>
             <uC99>0</uC99>
-            <uGnu>0</uGnu>
             <useXO>0</useXO>
             <v6Lang>1</v6Lang>
             <v6LangP>1</v6LangP>
@@ -458,7 +457,6 @@
                     <uThumb>2</uThumb>
                     <uSurpInc>2</uSurpInc>
                     <uC99>2</uC99>
-                    <uGnu>2</uGnu>
                     <useXO>2</useXO>
                     <v6Lang>0</v6Lang>
                     <v6LangP>0</v6LangP>
@@ -519,7 +517,6 @@
                 <uThumb>2</uThumb>
                 <uSurpInc>2</uSurpInc>
                 <uC99>2</uC99>
-                <uGnu>2</uGnu>
                 <useXO>2</useXO>
                 <v6Lang>0</v6Lang>
                 <v6LangP>0</v6LangP>
@@ -648,7 +645,6 @@
                 <uThumb>2</uThumb>
                 <uSurpInc>2</uSurpInc>
                 <uC99>2</uC99>
-                <uGnu>2</uGnu>
                 <useXO>2</useXO>
                 <v6Lang>0</v6Lang>
                 <v6LangP>0</v6LangP>
@@ -737,7 +733,6 @@
                 <uThumb>2</uThumb>
                 <uSurpInc>2</uSurpInc>
                 <uC99>2</uC99>
-                <uGnu>2</uGnu>
                 <useXO>2</useXO>
                 <v6Lang>0</v6Lang>
                 <v6LangP>0</v6LangP>
@@ -908,6 +903,11 @@
               <FileName>hw_gpio.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\src\hw_gpio.c</FilePath>
+            </File>
+            <File>
+              <FileName>hw_i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\hw_i2c.c</FilePath>
             </File>
             <File>
               <FileName>hw_rtc.c</FileName>
@@ -1087,12 +1087,17 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Middlewares/DAQ</GroupName>
+          <GroupName>Middlewares/PowerLoRa</GroupName>
           <Files>
+            <File>
+              <FileName>actuator.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Power LoRa\src\actuator.c</FilePath>
+            </File>
             <File>
               <FileName>daq.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\DAQ\src\daq.c</FilePath>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Power LoRa\src\daq.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1102,13 +1107,13 @@
       <TargetName>sx1272mb2das</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>5060750::V5.06 update 6 (build 750)::ARMCC</pCCUsed>
+      <pCCUsed>5060528::V5.06 update 5 (build 528)::ARMCC</pCCUsed>
       <uAC6>0</uAC6>
       <TargetOption>
         <TargetCommonOption>
           <Device>STM32L073RZTx</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32L0xx_DFP.2.0.0</PackID>
+          <PackID>Keil.STM32L0xx_DFP.1.6.1</PackID>
           <PackURL>http://www.keil.com/pack/</PackURL>
           <Cpu>IROM(0x08000000,0x00030000) IRAM(0x20000000,0x00005000) CPUTYPE("Cortex-M0+") CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -1416,7 +1421,6 @@
             <uThumb>0</uThumb>
             <uSurpInc>0</uSurpInc>
             <uC99>0</uC99>
-            <uGnu>0</uGnu>
             <useXO>0</useXO>
             <v6Lang>1</v6Lang>
             <v6LangP>1</v6LangP>
@@ -1429,7 +1433,7 @@
               <MiscControls>--C99</MiscControls>
               <Define>STM32L073xx, USE_STM32L0XX_NUCLEO,USE_HAL_DRIVER, REGION_EU868</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\inc;..\..\..\..\..\..\..\Drivers\BSP\STM32L0xx_Nucleo;..\..\..\..\..\..\..\Drivers\STM32L0xx_HAL_Driver\Inc;..\..\..\..\..\..\..\Drivers\CMSIS\Device\ST\STM32L0xx\Include;..\..\..\..\..\..\..\Drivers\CMSIS\Include;..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Crypto;..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac;..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Phy;..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Utilities;..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Core;..\..\..\..\..\..\..\Drivers\BSP\Components\Common;..\..\..\..\..\..\..\Drivers\BSP\Components\hts221;..\..\..\..\..\..\..\Drivers\BSP\Components\lps22hb;..\..\..\..\..\..\..\Drivers\BSP\Components\lps25hb;..\..\..\..\..\..\..\Drivers\BSP\Components\sx1272;..\..\..\..\..\..\..\Drivers\BSP\X_NUCLEO_IKS01A1;..\..\..\..\..\..\..\Drivers\BSP\X_NUCLEO_IKS01A2;..\..\..\..\..\..\..\Drivers\BSP\sx1272mb2das;..\..\..\..\..\..\..\Middlewares\Third_Party\DAQ\inc</IncludePath>
+              <IncludePath>..\..\inc;..\..\..\..\..\..\..\Drivers\BSP\STM32L0xx_Nucleo;..\..\..\..\..\..\..\Drivers\STM32L0xx_HAL_Driver\Inc;..\..\..\..\..\..\..\Drivers\CMSIS\Device\ST\STM32L0xx\Include;..\..\..\..\..\..\..\Drivers\CMSIS\Include;..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Crypto;..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac;..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Phy;..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Utilities;..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Core;..\..\..\..\..\..\..\Drivers\BSP\Components\Common;..\..\..\..\..\..\..\Drivers\BSP\Components\hts221;..\..\..\..\..\..\..\Drivers\BSP\Components\lps22hb;..\..\..\..\..\..\..\Drivers\BSP\Components\lps25hb;..\..\..\..\..\..\..\Drivers\BSP\Components\sx1272;..\..\..\..\..\..\..\Drivers\BSP\X_NUCLEO_IKS01A1;..\..\..\..\..\..\..\Drivers\BSP\X_NUCLEO_IKS01A2;..\..\..\..\..\..\..\Drivers\BSP\sx1272mb2das;..\..\..\..\..\..\..\Middlewares\Third_Party\Power LoRa\inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1555,7 +1559,6 @@
                     <uThumb>2</uThumb>
                     <uSurpInc>2</uSurpInc>
                     <uC99>2</uC99>
-                    <uGnu>2</uGnu>
                     <useXO>2</useXO>
                     <v6Lang>0</v6Lang>
                     <v6LangP>0</v6LangP>
@@ -1611,7 +1614,6 @@
                 <uThumb>2</uThumb>
                 <uSurpInc>2</uSurpInc>
                 <uC99>2</uC99>
-                <uGnu>2</uGnu>
                 <useXO>2</useXO>
                 <v6Lang>0</v6Lang>
                 <v6LangP>0</v6LangP>
@@ -1750,7 +1752,6 @@
                 <uThumb>2</uThumb>
                 <uSurpInc>2</uSurpInc>
                 <uC99>2</uC99>
-                <uGnu>2</uGnu>
                 <useXO>2</useXO>
                 <v6Lang>0</v6Lang>
                 <v6LangP>0</v6LangP>
@@ -1829,7 +1830,6 @@
                 <uThumb>2</uThumb>
                 <uSurpInc>2</uSurpInc>
                 <uC99>2</uC99>
-                <uGnu>2</uGnu>
                 <useXO>2</useXO>
                 <v6Lang>0</v6Lang>
                 <v6LangP>0</v6LangP>
@@ -2000,6 +2000,11 @@
               <FileName>hw_gpio.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\src\hw_gpio.c</FilePath>
+            </File>
+            <File>
+              <FileName>hw_i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\hw_i2c.c</FilePath>
             </File>
             <File>
               <FileName>hw_rtc.c</FileName>
@@ -2179,12 +2184,17 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Middlewares/DAQ</GroupName>
+          <GroupName>Middlewares/PowerLoRa</GroupName>
           <Files>
+            <File>
+              <FileName>actuator.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Power LoRa\src\actuator.c</FilePath>
+            </File>
             <File>
               <FileName>daq.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\DAQ\src\daq.c</FilePath>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Power LoRa\src\daq.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2200,7 +2210,7 @@
         <TargetCommonOption>
           <Device>STM32L073RZTx</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32L0xx_DFP.2.0.0</PackID>
+          <PackID>Keil.STM32L0xx_DFP.1.6.1</PackID>
           <PackURL>http://www.keil.com/pack/</PackURL>
           <Cpu>IROM(0x08000000,0x00030000) IRAM(0x20000000,0x00005000) CPUTYPE("Cortex-M0+") CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -2508,7 +2518,6 @@
             <uThumb>0</uThumb>
             <uSurpInc>0</uSurpInc>
             <uC99>0</uC99>
-            <uGnu>0</uGnu>
             <useXO>0</useXO>
             <v6Lang>1</v6Lang>
             <v6LangP>1</v6LangP>
@@ -2642,7 +2651,6 @@
                     <uThumb>2</uThumb>
                     <uSurpInc>2</uSurpInc>
                     <uC99>2</uC99>
-                    <uGnu>2</uGnu>
                     <useXO>2</useXO>
                     <v6Lang>0</v6Lang>
                     <v6LangP>0</v6LangP>
@@ -2703,7 +2711,6 @@
                 <uThumb>2</uThumb>
                 <uSurpInc>2</uSurpInc>
                 <uC99>2</uC99>
-                <uGnu>2</uGnu>
                 <useXO>2</useXO>
                 <v6Lang>0</v6Lang>
                 <v6LangP>0</v6LangP>
@@ -2832,7 +2839,6 @@
                 <uThumb>2</uThumb>
                 <uSurpInc>2</uSurpInc>
                 <uC99>2</uC99>
-                <uGnu>2</uGnu>
                 <useXO>2</useXO>
                 <v6Lang>0</v6Lang>
                 <v6LangP>0</v6LangP>
@@ -2911,7 +2917,6 @@
                 <uThumb>2</uThumb>
                 <uSurpInc>2</uSurpInc>
                 <uC99>2</uC99>
-                <uGnu>2</uGnu>
                 <useXO>2</useXO>
                 <v6Lang>0</v6Lang>
                 <v6LangP>0</v6LangP>
@@ -3094,6 +3099,11 @@
               <FilePath>..\..\src\hw_gpio.c</FilePath>
             </File>
             <File>
+              <FileName>hw_i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\hw_i2c.c</FilePath>
+            </File>
+            <File>
               <FileName>hw_rtc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\src\hw_rtc.c</FilePath>
@@ -3271,12 +3281,17 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Middlewares/DAQ</GroupName>
+          <GroupName>Middlewares/PowerLoRa</GroupName>
           <Files>
+            <File>
+              <FileName>actuator.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Power LoRa\src\actuator.c</FilePath>
+            </File>
             <File>
               <FileName>daq.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\DAQ\src\daq.c</FilePath>
+              <FilePath>..\..\..\..\..\..\..\Middlewares\Third_Party\Power LoRa\src\daq.c</FilePath>
             </File>
           </Files>
         </Group>

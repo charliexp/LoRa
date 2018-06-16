@@ -71,6 +71,7 @@ Maintainer: Miguel Luis and Gregory Cristian
 #include <stdint.h>
 #include "hw_conf.h"
 #include "hw_gpio.h"
+#include "hw_i2c.h"
 #include "hw_spi.h"
 #include "hw_rtc.h"
 #include "hw_msp.h"

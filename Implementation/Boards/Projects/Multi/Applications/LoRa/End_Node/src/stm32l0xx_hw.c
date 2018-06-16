@@ -136,6 +136,8 @@ void HW_Init( void )
     HW_RTC_Init( );
 		
 		UART_Init( );
+		
+		I2C_Init( );
     
     vcom_Init( );
 
@@ -155,6 +157,8 @@ void HW_DeInit( void )
   Radio.IoDeInit( );
   
 	UART_DeInit( );
+	
+	I2C_DeInit( );
 	
   vcom_DeInit( );
    

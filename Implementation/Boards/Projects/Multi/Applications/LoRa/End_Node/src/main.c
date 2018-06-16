@@ -51,6 +51,7 @@
 #include "timeServer.h"
 #include "vcom.h"
 #include "version.h"
+#include "actuator.h"
 #include "daq.h"
 
 /* Private typedef -----------------------------------------------------------*/
@@ -173,35 +174,36 @@ int main( void )
   HW_Init();
   
   /* USER CODE BEGIN 1 */
-	DAQ_Init();
+	//DAQ_Init();
+	ACT_Init();
   /* USER CODE END 1 */
   
   /*Disbale Stand-by mode*/
-  LPM_SetOffMode(LPM_APPLI_Id , LPM_Disable );
+  //LPM_SetOffMode(LPM_APPLI_Id , LPM_Disable );
   
   /* Configure the Lora Stack*/
-  LORA_Init( &LoRaMainCallbacks, &LoRaParamInit);
+  /*LORA_Init( &LoRaMainCallbacks, &LoRaParamInit);
   
   PRINTF("VERSION: %X\n\r", VERSION);
   
   LORA_Join();
   
   LoraStartTx( TX_ON_TIMER) ;
-  
+  */
   while( 1 )
   {
-    DISABLE_IRQ( );
+    //DISABLE_IRQ( );
     /* if an interrupt has occurred after DISABLE_IRQ, it is kept pending 
      * and cortex will not enter low power anyway  */
 
 #ifndef LOW_POWER_DISABLE
-    LPM_EnterLowPower( );
+    //LPM_EnterLowPower( );
 #endif
 
-    ENABLE_IRQ();
+    //ENABLE_IRQ();
     
     /* USER CODE BEGIN 2 */
-		DAQ_UpdateData();
+		//DAQ_UpdateData();
     /* USER CODE END 2 */
   }
 }

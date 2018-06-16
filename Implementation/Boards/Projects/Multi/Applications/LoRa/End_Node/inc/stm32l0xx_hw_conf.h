@@ -142,7 +142,7 @@ Maintainer: Miguel Luis and Gregory Cristian
 
 
 #define USARTX                           USART4
-#define USARTX_CLK_ENABLE()              __HAL_RCC_USART4_CLK_ENABLE();
+#define USARTX_CLK_ENABLE()              __HAL_RCC_USART4_CLK_ENABLE()
 #define USARTX_RX_GPIO_CLK_ENABLE()      __GPIOC_CLK_ENABLE()
 #define USARTX_TX_GPIO_CLK_ENABLE()      __GPIOC_CLK_ENABLE() 
 
@@ -161,7 +161,7 @@ Maintainer: Miguel Luis and Gregory Cristian
 
 
 #define DAQ_USARTX                           USART2
-#define DAQ_USARTX_CLK_ENABLE()              __USART2_CLK_ENABLE();
+#define DAQ_USARTX_CLK_ENABLE()              __USART2_CLK_ENABLE()
 #define DAQ_USARTX_RX_GPIO_CLK_ENABLE()      __GPIOA_CLK_ENABLE()
 #define DAQ_USARTX_TX_GPIO_CLK_ENABLE()      __GPIOA_CLK_ENABLE() 
 
@@ -182,6 +182,20 @@ Maintainer: Miguel Luis and Gregory Cristian
 #define LED_Toggle( x )
 #define LED_On( x )
 #define LED_Off( x )
+
+/* --------------------------- I2C HW definition -------------------------------*/
+#define ACT_I2C														I2C1
+#define ACT_I2C_CLK_ENABLE()							__HAL_RCC_I2C1_CLK_ENABLE()
+#define ACT_I2C_SDA_GPIO_CLK_ENABLE()			__GPIOB_CLK_ENABLE()
+#define ACT_I2C_SCL_GPIO_CLK_ENABLE()			__GPIOB_CLK_ENABLE()
+
+#define ACT_I2C_SCL_PIN                  	GPIO_PIN_8
+#define ACT_I2C_SCL_GPIO_PORT            	GPIOB 
+#define ACT_I2C_SCL_AF                   	GPIO_AF4_I2C1
+#define ACT_I2C_SDA_PIN                  	GPIO_PIN_9
+#define ACT_I2C_SDA_GPIO_PORT            	GPIOB
+#define ACT_I2C_SDA_AF                   	GPIO_AF4_I2C1
+
 
 #ifdef __cplusplus
 }
