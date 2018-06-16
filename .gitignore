@@ -1,6 +1,10 @@
-# Prerequisites
-*.crf
-*.d
+# Project temporary files
+*.uvguix.*
+*.uvoptx
+*.dep
+*.axf
+*.htm
+*.lst
 
 # Backup files
 *.bak
@@ -10,6 +14,8 @@
 *.ko
 *.obj
 *.elf
+*.crf
+*.d
 
 # Linker output
 *.ilk
