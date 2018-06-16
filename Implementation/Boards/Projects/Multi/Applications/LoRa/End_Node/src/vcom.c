@@ -77,7 +77,7 @@ void vcom_Init(void)
       - Parity = ODD parity
       - BaudRate = 921600 baud
       - Hardware flow control disabled (RTS and CTS signals) */
-  UartHandle.Instance        = USARTX;
+  UartHandle.Instance        = DBG_USARTX;
   
   UartHandle.Init.BaudRate   = 115200;
   UartHandle.Init.WordLength = UART_WORDLENGTH_8B;
@@ -92,8 +92,8 @@ void vcom_Init(void)
     Error_Handler(); 
   }
   
-  HAL_NVIC_SetPriority(USARTX_IRQn, 0x2, 0);
-  HAL_NVIC_EnableIRQ(USARTX_IRQn);
+  HAL_NVIC_SetPriority(DBG_USARTX_IRQn, 0x2, 0);
+  HAL_NVIC_EnableIRQ(DBG_USARTX_IRQn);
 }
 
 
@@ -133,7 +133,7 @@ void vcom_Send( char *format, ... )
   }
   RESTORE_PRIMASK();
   
-  HAL_NVIC_SetPendingIRQ(USARTX_IRQn);
+  HAL_NVIC_SetPendingIRQ(DBG_USARTX_IRQn);
     
   va_end(args);
 }
@@ -154,7 +154,7 @@ void vcom_Print( void)
     
     HAL_UART_Transmit(&UartHandle,(uint8_t *) CurChar, 1, 300);    
   }
-  HAL_NVIC_ClearPendingIRQ(USARTX_IRQn);
+  HAL_NVIC_ClearPendingIRQ(DBG_USARTX_IRQn);
 }
 
 void vcom_Send_Lp( char *format, ... )
@@ -193,39 +193,39 @@ void vcom_IoInit(void)
 {
   GPIO_InitTypeDef  GPIO_InitStruct={0};
     /* Enable GPIO TX/RX clock */
-  USARTX_TX_GPIO_CLK_ENABLE();
-  USARTX_RX_GPIO_CLK_ENABLE();
+  DBG_USARTX_TX_GPIO_CLK_ENABLE();
+  DBG_USARTX_RX_GPIO_CLK_ENABLE();
     /* UART TX GPIO pin configuration  */
-  GPIO_InitStruct.Pin       = USARTX_TX_PIN;
+  GPIO_InitStruct.Pin       = DBG_USARTX_TX_PIN;
   GPIO_InitStruct.Mode      = GPIO_MODE_AF_PP;
   GPIO_InitStruct.Pull      = GPIO_PULLUP;
   GPIO_InitStruct.Speed     = GPIO_SPEED_HIGH;
-  GPIO_InitStruct.Alternate = USARTX_TX_AF;
+  GPIO_InitStruct.Alternate = DBG_USARTX_TX_AF;
 
-  HAL_GPIO_Init(USARTX_TX_GPIO_PORT, &GPIO_InitStruct);
+  HAL_GPIO_Init(DBG_USARTX_TX_GPIO_PORT, &GPIO_InitStruct);
 
   /* UART RX GPIO pin configuration  */
-  GPIO_InitStruct.Pin = USARTX_RX_PIN;
-  GPIO_InitStruct.Alternate = USARTX_RX_AF;
+  GPIO_InitStruct.Pin = DBG_USARTX_RX_PIN;
+  GPIO_InitStruct.Alternate = DBG_USARTX_RX_AF;
 
-  HAL_GPIO_Init(USARTX_RX_GPIO_PORT, &GPIO_InitStruct);
+  HAL_GPIO_Init(DBG_USARTX_RX_GPIO_PORT, &GPIO_InitStruct);
 }
 
 void vcom_IoDeInit(void)
 {
   GPIO_InitTypeDef GPIO_InitStructure={0};
   
-  USARTX_TX_GPIO_CLK_ENABLE();
-  USARTX_RX_GPIO_CLK_ENABLE();
+  DBG_USARTX_TX_GPIO_CLK_ENABLE();
+  DBG_USARTX_RX_GPIO_CLK_ENABLE();
 
   GPIO_InitStructure.Mode = GPIO_MODE_ANALOG;
   GPIO_InitStructure.Pull = GPIO_NOPULL;
   
-  GPIO_InitStructure.Pin =  USARTX_TX_PIN ;
-  HAL_GPIO_Init(  USARTX_TX_GPIO_PORT, &GPIO_InitStructure );
+  GPIO_InitStructure.Pin =  DBG_USARTX_TX_PIN ;
+  HAL_GPIO_Init(  DBG_USARTX_TX_GPIO_PORT, &GPIO_InitStructure );
   
-  GPIO_InitStructure.Pin =  USARTX_RX_PIN ;
-  HAL_GPIO_Init(  USARTX_RX_GPIO_PORT, &GPIO_InitStructure ); 
+  GPIO_InitStructure.Pin =  DBG_USARTX_RX_PIN ;
+  HAL_GPIO_Init(  DBG_USARTX_RX_GPIO_PORT, &GPIO_InitStructure ); 
 }
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

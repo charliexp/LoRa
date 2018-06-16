@@ -1,6 +1,5 @@
 /* Includes ------------------------------------------------------------------*/
 #include "hw_uart.h"
-#include <stdarg.h>
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -8,6 +7,8 @@
 /* Private variables ---------------------------------------------------------*/
 /* Uart Handle */
 UART_HandleTypeDef UartHandle;
+/* Receive state */
+UartRxState_t RxState;
 /* Receive buffer */
 static uint8_t RxBuffer[UART_BUFFSIZE];
 /* Index of first byte not forwarded to upper layer */
@@ -16,14 +17,12 @@ static uint16_t RxProcessedIndex;
 static uint16_t RxCheckedIndex;
 /* Index of byte to be received */
 static uint16_t RxReceiveIndex;
-
-
-uint32_t lastSuccessfulRead;
-uint32_t lastSend;
-UartRxState_t UartRxState;
+/* Timestamp of last read byte */
+uint32_t lastSuccessfulReadTime;
+/* Timestamp of last sent byte */
+uint32_t lastSendTime;
 
 /* Private function prototypes -----------------------------------------------*/
-
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
 	if (RxReceiveIndex == UART_BUFFSIZE - 1)
@@ -37,7 +36,7 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
 {
 	HAL_UART_AbortReceive(huart);
 	HAL_UART_Receive_IT(&UartHandle, RxBuffer + RxReceiveIndex, 1);
-	UartRxState = UART_RX_TIMEOUT;
+	RxState = UART_RX_TIMEOUT;
 }
 
 /* Functions Definition ------------------------------------------------------*/
@@ -63,8 +62,8 @@ void UART_Init(void)
 	RxProcessedIndex = 0;
 	RxCheckedIndex = 0;
 	RxReceiveIndex = 0;
-	lastSuccessfulRead = 0;
-	lastSend = 0;
+	lastSuccessfulReadTime = 0;
+	lastSendTime = 0;
 	
 	HAL_UART_Receive_IT(&UartHandle, RxBuffer + RxReceiveIndex, 1);
 }
@@ -72,13 +71,13 @@ void UART_Init(void)
 UartRxState_t UART_Receive(uint8_t *buffer, uint16_t *length, uint8_t terminatorChar)
 {
 	*length = 0;
-	UartRxState_t returnValue = UartRxState;
+	UartRxState_t returnValue = RxState;
 	
-	while (RxCheckedIndex != RxReceiveIndex && UartRxState == UART_RX_PENDING)
+	while (RxCheckedIndex != RxReceiveIndex && RxState == UART_RX_PENDING)
 	{
 		if (RxBuffer[RxCheckedIndex - 1] == terminatorChar)
 		{
-			UartRxState = UART_RX_AVAILABLE;
+			RxState = UART_RX_AVAILABLE;
 		}
 		if (RxCheckedIndex == UART_BUFFSIZE - 1)
 			RxCheckedIndex = 0;
@@ -86,10 +85,10 @@ UartRxState_t UART_Receive(uint8_t *buffer, uint16_t *length, uint8_t terminator
 			RxCheckedIndex++;
 	}
 	
-	if (HAL_GetTick() - lastSend > 5 * 1000)
+	if (HAL_GetTick() - lastSendTime > 5 * 1000)
 		HAL_UART_ErrorCallback(&UartHandle);
 		
-	if (UartRxState != UART_RX_PENDING)
+	if (RxState != UART_RX_PENDING)
 	{
 		while (RxProcessedIndex != RxCheckedIndex)
 		{
@@ -101,11 +100,11 @@ UartRxState_t UART_Receive(uint8_t *buffer, uint16_t *length, uint8_t terminator
 				RxProcessedIndex++;
 		}
 		
-		returnValue = UartRxState;
-		UartRxState = UART_RX_PENDING;
+		returnValue = RxState;
+		RxState = UART_RX_PENDING;
 		
-		if (UartRxState == UART_RX_AVAILABLE)
-			lastSuccessfulRead = HAL_GetTick();
+		if (RxState == UART_RX_AVAILABLE)
+			lastSuccessfulReadTime = HAL_GetTick();
 	}
 	
 	return returnValue;
@@ -113,7 +112,7 @@ UartRxState_t UART_Receive(uint8_t *buffer, uint16_t *length, uint8_t terminator
 
 void UART_Send(uint8_t *buffer, uint8_t length)
 {
-	lastSend = HAL_GetTick();
+	lastSendTime = HAL_GetTick();
 	HAL_UART_Transmit(&UartHandle, buffer, length, 2000);
 }
 
@@ -133,11 +132,10 @@ void UART_DeInit(void)
   */
 void HAL_UART_MspInit(UART_HandleTypeDef *huart)
 {
-  
   /*##-1- Enable peripherals and GPIO Clocks #################################*/
 
   /* Enable USART clock */
-  USARTX_CLK_ENABLE(); 
+  DBG_USARTX_CLK_ENABLE(); 
   DAQ_USARTX_CLK_ENABLE(); 
   
   /*##-2- Configure peripheral GPIO ##########################################*/  
