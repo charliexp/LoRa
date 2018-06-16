@@ -15,8 +15,8 @@
 /* Exported functions --------------------------------------------------------*/
 void I2C_Init(void);
 void I2C_DeInit(void);
-uint8_t I2C_Read(uint8_t address);
-void I2C_Write(uint8_t address, uint8_t value);
+uint8_t I2C_Read(uint8_t deviceAddress, uint8_t registerAddress);
+void I2C_Write(uint8_t deviceAddress, uint8_t registerAddress, uint8_t value);
 
 #ifdef __cplusplus
 }

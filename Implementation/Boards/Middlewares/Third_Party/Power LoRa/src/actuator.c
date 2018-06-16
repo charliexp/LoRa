@@ -3,6 +3,8 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
+#define ACT_ADDRESS		0x40
+
 #define REG_INPUT				0
 #define REG_OUTPUT			1
 #define REG_POLARITY		2
@@ -23,20 +25,20 @@ uint8_t outputState;
 /* Functions Definition ------------------------------------------------------*/
 void ACT_Init(void)
 {
-	//inductors = OUTPUT_PIN(0);
-	//capacitors = 0;
+	inductors = (uint8_t) ~OUTPUTS_MASK;
+	capacitors = 0;
 	outputState = 0;
 	
 	//configure inputs and outputs
 	//all output pins 0
-	I2C_Write(REG_OUTPUT, OUTPUTS_MASK);
+	I2C_Write(ACT_ADDRESS, REG_OUTPUT, OUTPUTS_MASK);
 	//set pins as output
-	I2C_Write(REG_CONFIG, OUTPUTS_MASK);
+	I2C_Write(ACT_ADDRESS, REG_CONFIG, OUTPUTS_MASK);
 }
 
 void ACT_UpdateData(void)
 {
-	I2C_Read(REG_INPUT);
+	I2C_Read(ACT_ADDRESS, REG_INPUT);
 }
 
 void ACT_SetContact(uint8_t contactNumber, bool contactState)
@@ -45,5 +47,5 @@ void ACT_SetContact(uint8_t contactNumber, bool contactState)
 		outputState |= OUTPUTS_MASK | (1 << contactNumber);
 	else
 		outputState = (outputState & ~(1 << contactNumber)) | OUTPUTS_MASK;
-	I2C_Write(REG_OUTPUT, outputState);
+	I2C_Write(ACT_ADDRESS, REG_OUTPUT, outputState);
 }

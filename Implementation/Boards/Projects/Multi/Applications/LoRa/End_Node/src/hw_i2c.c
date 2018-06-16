@@ -3,8 +3,6 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
-#define ACT_ADDRESS		0x40
-
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /* I2C Handle */
@@ -13,7 +11,6 @@ I2C_HandleTypeDef  hi2c;
 /* Functions Definition ------------------------------------------------------*/
 void I2C_Init(void)
 {
-	HAL_StatusTypeDef available;
 	hi2c.Instance		= ACT_I2C;
 	hi2c.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
 	hi2c.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
@@ -21,8 +18,6 @@ void I2C_Init(void)
 	hi2c.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
 	hi2c.Init.Timing = 0x10420F13;
 	HAL_I2C_Init(&hi2c);
-	
-	available = HAL_I2C_IsDeviceReady(&hi2c, ACT_ADDRESS, 10, 1000);
 }
 
 void I2C_DeInit(void)
@@ -30,18 +25,18 @@ void I2C_DeInit(void)
   HAL_I2C_DeInit(&hi2c);
 }
 
-uint8_t I2C_Read(uint8_t address)
+uint8_t I2C_Read(uint8_t deviceAddress, uint8_t registerAddress)
 {
 	uint8_t data;
 	
-	HAL_I2C_Mem_Read(&hi2c, ACT_ADDRESS, address, I2C_MEMADD_SIZE_8BIT, &data, 1, 1000);
+	HAL_I2C_Mem_Read(&hi2c, deviceAddress, registerAddress, I2C_MEMADD_SIZE_8BIT, &data, 1, 1000);
 	
 	return data;
 }	
 
-void I2C_Write(uint8_t address, uint8_t value)
+void I2C_Write(uint8_t deviceAddress, uint8_t registerAddress, uint8_t value)
 {
-	HAL_I2C_Mem_Write(&hi2c, ACT_ADDRESS, address, I2C_MEMADD_SIZE_8BIT, &value, 1, 1000);
+	HAL_I2C_Mem_Write(&hi2c, deviceAddress, registerAddress, I2C_MEMADD_SIZE_8BIT, &value, 1, 1000);
 }
 
 /**
