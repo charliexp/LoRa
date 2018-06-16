@@ -175,7 +175,12 @@ int main( void )
   
   /* USER CODE BEGIN 1 */
 	DAQ_Init();
+	
 	ACT_Init();
+	ACT_ChangeActuator(0, ACT_INDUCTOR, true);
+	ACT_ChangeActuator(1, ACT_INDUCTOR, true);
+	ACT_ChangeActuator(2, ACT_INDUCTOR, true);
+	ACT_ChangeActuator(3, ACT_INDUCTOR, true);
   /* USER CODE END 1 */
   
   /*Disbale Stand-by mode*/
