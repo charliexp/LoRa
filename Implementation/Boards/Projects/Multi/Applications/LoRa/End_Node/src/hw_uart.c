@@ -103,7 +103,7 @@ UartRxState_t UART_Receive(uint8_t *buffer, uint16_t *length, uint8_t terminator
 		returnValue = RxState;
 		RxState = UART_RX_PENDING;
 		
-		if (RxState == UART_RX_AVAILABLE)
+		if (returnValue == UART_RX_AVAILABLE)
 			lastSuccessfulReadTime = HAL_GetTick();
 	}
 	
