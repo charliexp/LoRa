@@ -40,7 +40,8 @@ extern DAQ_Struct_t DAQ_Data;
 
 /* Exported functions --------------------------------------------------------*/
 void DAQ_Init(void);
-void DAQ_UpdateData(void);
+void DAQ_MainLoop(void);
+void DAQ_ReadData(void);
 
 #ifdef __cplusplus
 }
