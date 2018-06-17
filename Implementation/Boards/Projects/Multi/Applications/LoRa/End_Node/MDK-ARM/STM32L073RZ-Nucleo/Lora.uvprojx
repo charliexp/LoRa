@@ -10,13 +10,13 @@
       <TargetName>sx1276mb1mas</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>5060422::V5.06 update 4 (build 422)::ARMCC</pCCUsed>
+      <pCCUsed>5060750::V5.06 update 6 (build 750)::ARMCC</pCCUsed>
       <uAC6>0</uAC6>
       <TargetOption>
         <TargetCommonOption>
           <Device>STM32L073RZTx</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32L0xx_DFP.1.6.1</PackID>
+          <PackID>Keil.STM32L0xx_DFP.2.0.0</PackID>
           <PackURL>http://www.keil.com/pack/</PackURL>
           <Cpu>IROM(0x08000000,0x00030000) IRAM(0x20000000,0x00005000) CPUTYPE("Cortex-M0+") CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -134,10 +134,10 @@
             <RunIndependent>1</RunIndependent>
             <UpdateFlashBeforeDebugging>1</UpdateFlashBeforeDebugging>
             <Capability>1</Capability>
-            <DriverSelection>4103</DriverSelection>
+            <DriverSelection>4096</DriverSelection>
           </Flash1>
           <bUseTDR>1</bUseTDR>
-          <Flash2>STLink\ST-LINKIII-KEIL_SWO.dll</Flash2>
+          <Flash2>BIN\UL2CM3.DLL</Flash2>
           <Flash3>"C:\Program Files (x86)\STMicroelectronics\STM32 ST-LINK Utility\ST-LINK Utility\ST-LINK_CLI.exe" (-c SWD  UR LPM  -ME -P C:\Users\frq02113\Documents\Connectivity\LTN\Lora\demoLora\STM32L0xx_LORA\Projects\classA\MDK-ARM\STM32L053R8_NUCLEO\NUCLEO_CUBE_LORA.hex)</Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
@@ -324,6 +324,7 @@
             <uThumb>0</uThumb>
             <uSurpInc>0</uSurpInc>
             <uC99>0</uC99>
+            <uGnu>0</uGnu>
             <useXO>0</useXO>
             <v6Lang>1</v6Lang>
             <v6LangP>1</v6LangP>
@@ -336,7 +337,7 @@
               <MiscControls>--C99</MiscControls>
               <Define>STM32L073xx, USE_STM32L0XX_NUCLEO,USE_HAL_DRIVER, REGION_EU868</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\inc;..\..\..\..\..\..\..\Drivers\BSP\STM32L0xx_Nucleo;..\..\..\..\..\..\..\Drivers\STM32L0xx_HAL_Driver\Inc;..\..\..\..\..\..\..\Drivers\CMSIS\Device\ST\STM32L0xx\Include;..\..\..\..\..\..\..\Drivers\CMSIS\Include;..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Crypto;..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac;..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Phy;..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Utilities;..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Core;..\..\..\..\..\..\..\Drivers\BSP\X_NUCLEO_IKS01A1;..\..\..\..\..\..\..\Drivers\BSP\X_NUCLEO_IKS01A2;..\..\..\..\..\..\..\Drivers\BSP\Components\Common;..\..\..\..\..\..\..\Drivers\BSP\Components\hts221;..\..\..\..\..\..\..\Drivers\BSP\Components\lps22hb;..\..\..\..\..\..\..\Drivers\BSP\Components\lps25hb;..\..\..\..\..\..\..\Drivers\BSP\Components\sx1276;..\..\..\..\..\..\..\Drivers\BSP\sx1276mb1mas</IncludePath>
+              <IncludePath>..\..\inc;..\..\..\..\..\..\..\Drivers\BSP\STM32L0xx_Nucleo;..\..\..\..\..\..\..\Drivers\STM32L0xx_HAL_Driver\Inc;..\..\..\..\..\..\..\Drivers\CMSIS\Device\ST\STM32L0xx\Include;..\..\..\..\..\..\..\Drivers\CMSIS\Include;..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Crypto;..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Mac;..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Phy;..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Utilities;..\..\..\..\..\..\..\Middlewares\Third_Party\Lora\Core;..\..\..\..\..\..\..\Drivers\BSP\X_NUCLEO_IKS01A1;..\..\..\..\..\..\..\Drivers\BSP\X_NUCLEO_IKS01A2;..\..\..\..\..\..\..\Drivers\BSP\Components\Common;..\..\..\..\..\..\..\Drivers\BSP\Components\hts221;..\..\..\..\..\..\..\Drivers\BSP\Components\lps22hb;..\..\..\..\..\..\..\Drivers\BSP\Components\lps25hb;..\..\..\..\..\..\..\Drivers\BSP\Components\sx1276;..\..\..\..\..\..\..\Drivers\BSP\sx1276mb1mas;..\..\..\..\..\..\..\Middlewares\Third_Party\Power LoRa\inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -457,6 +458,7 @@
                     <uThumb>2</uThumb>
                     <uSurpInc>2</uSurpInc>
                     <uC99>2</uC99>
+                    <uGnu>2</uGnu>
                     <useXO>2</useXO>
                     <v6Lang>0</v6Lang>
                     <v6LangP>0</v6LangP>
@@ -517,6 +519,7 @@
                 <uThumb>2</uThumb>
                 <uSurpInc>2</uSurpInc>
                 <uC99>2</uC99>
+                <uGnu>2</uGnu>
                 <useXO>2</useXO>
                 <v6Lang>0</v6Lang>
                 <v6LangP>0</v6LangP>
@@ -645,6 +648,7 @@
                 <uThumb>2</uThumb>
                 <uSurpInc>2</uSurpInc>
                 <uC99>2</uC99>
+                <uGnu>2</uGnu>
                 <useXO>2</useXO>
                 <v6Lang>0</v6Lang>
                 <v6LangP>0</v6LangP>
@@ -733,6 +737,7 @@
                 <uThumb>2</uThumb>
                 <uSurpInc>2</uSurpInc>
                 <uC99>2</uC99>
+                <uGnu>2</uGnu>
                 <useXO>2</useXO>
                 <v6Lang>0</v6Lang>
                 <v6LangP>0</v6LangP>
@@ -1421,6 +1426,7 @@
             <uThumb>0</uThumb>
             <uSurpInc>0</uSurpInc>
             <uC99>0</uC99>
+            <uGnu>0</uGnu>
             <useXO>0</useXO>
             <v6Lang>1</v6Lang>
             <v6LangP>1</v6LangP>
@@ -1559,6 +1565,7 @@
                     <uThumb>2</uThumb>
                     <uSurpInc>2</uSurpInc>
                     <uC99>2</uC99>
+                    <uGnu>2</uGnu>
                     <useXO>2</useXO>
                     <v6Lang>0</v6Lang>
                     <v6LangP>0</v6LangP>
@@ -1614,6 +1621,7 @@
                 <uThumb>2</uThumb>
                 <uSurpInc>2</uSurpInc>
                 <uC99>2</uC99>
+                <uGnu>2</uGnu>
                 <useXO>2</useXO>
                 <v6Lang>0</v6Lang>
                 <v6LangP>0</v6LangP>
@@ -1752,6 +1760,7 @@
                 <uThumb>2</uThumb>
                 <uSurpInc>2</uSurpInc>
                 <uC99>2</uC99>
+                <uGnu>2</uGnu>
                 <useXO>2</useXO>
                 <v6Lang>0</v6Lang>
                 <v6LangP>0</v6LangP>
@@ -1830,6 +1839,7 @@
                 <uThumb>2</uThumb>
                 <uSurpInc>2</uSurpInc>
                 <uC99>2</uC99>
+                <uGnu>2</uGnu>
                 <useXO>2</useXO>
                 <v6Lang>0</v6Lang>
                 <v6LangP>0</v6LangP>
@@ -2518,6 +2528,7 @@
             <uThumb>0</uThumb>
             <uSurpInc>0</uSurpInc>
             <uC99>0</uC99>
+            <uGnu>0</uGnu>
             <useXO>0</useXO>
             <v6Lang>1</v6Lang>
             <v6LangP>1</v6LangP>
@@ -2651,6 +2662,7 @@
                     <uThumb>2</uThumb>
                     <uSurpInc>2</uSurpInc>
                     <uC99>2</uC99>
+                    <uGnu>2</uGnu>
                     <useXO>2</useXO>
                     <v6Lang>0</v6Lang>
                     <v6LangP>0</v6LangP>
@@ -2711,6 +2723,7 @@
                 <uThumb>2</uThumb>
                 <uSurpInc>2</uSurpInc>
                 <uC99>2</uC99>
+                <uGnu>2</uGnu>
                 <useXO>2</useXO>
                 <v6Lang>0</v6Lang>
                 <v6LangP>0</v6LangP>
@@ -2839,6 +2852,7 @@
                 <uThumb>2</uThumb>
                 <uSurpInc>2</uSurpInc>
                 <uC99>2</uC99>
+                <uGnu>2</uGnu>
                 <useXO>2</useXO>
                 <v6Lang>0</v6Lang>
                 <v6LangP>0</v6LangP>
@@ -2917,6 +2931,7 @@
                 <uThumb>2</uThumb>
                 <uSurpInc>2</uSurpInc>
                 <uC99>2</uC99>
+                <uGnu>2</uGnu>
                 <useXO>2</useXO>
                 <v6Lang>0</v6Lang>
                 <v6LangP>0</v6LangP>
