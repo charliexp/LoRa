@@ -210,12 +210,12 @@ void SysTick_Handler(void)
 
 void USART4_5_IRQHandler( void )
 {
-   vcom_Print( );
+   HAL_UART_IRQHandler(&UartHandle);
 }
 
 void USART2_IRQHandler( void )
 {
-   HAL_UART_IRQHandler(&UartHandle);
+   vcom_Print( );
 }
 
 void RTC_IRQHandler( void )

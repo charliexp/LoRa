@@ -43,10 +43,10 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
 void UART_Init(void)
 {
   UartHandle.Instance        = DAQ_USARTX;
-  UartHandle.Init.BaudRate   = 115200;
+  UartHandle.Init.BaudRate   = 9600;
   UartHandle.Init.WordLength = UART_WORDLENGTH_8B;
   UartHandle.Init.StopBits   = UART_STOPBITS_1;
-  UartHandle.Init.Parity     = UART_PARITY_NONE;
+  UartHandle.Init.Parity     = UART_PARITY_EVEN;
   UartHandle.Init.HwFlowCtl  = UART_HWCONTROL_NONE;
   UartHandle.Init.Mode       = UART_MODE_TX_RX;
   

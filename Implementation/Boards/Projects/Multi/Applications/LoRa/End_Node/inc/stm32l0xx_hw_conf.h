@@ -132,42 +132,42 @@ Maintainer: Miguel Luis and Gregory Cristian
 #define RTC_Alarm_IRQn													RTC_IRQn
 
 /* Debug USART definition */
-#define DBG_USARTX															USART4
-#define DBG_USARTX_CLK_ENABLE()									__HAL_RCC_USART4_CLK_ENABLE()
-#define DBG_USARTX_RX_GPIO_CLK_ENABLE()					__GPIOC_CLK_ENABLE()
-#define DBG_USARTX_TX_GPIO_CLK_ENABLE()					__GPIOC_CLK_ENABLE() 
+#define DBG_USARTX															USART2
+#define DBG_USARTX_CLK_ENABLE()									__USART2_CLK_ENABLE()
+#define DBG_USARTX_RX_GPIO_CLK_ENABLE()					__GPIOA_CLK_ENABLE()
+#define DBG_USARTX_TX_GPIO_CLK_ENABLE()					__GPIOA_CLK_ENABLE() 
 
-#define DBG_USARTX_FORCE_RESET()								__USART4_FORCE_RESET()
-#define DBG_USARTX_RELEASE_RESET()							__USART4_RELEASE_RESET()
+#define DBG_USARTX_FORCE_RESET()								__USART2_FORCE_RESET()
+#define DBG_USARTX_RELEASE_RESET()							__USART2_RELEASE_RESET()
 
-#define DBG_USARTX_TX_PIN												GPIO_PIN_10
-#define DBG_USARTX_TX_GPIO_PORT									GPIOC  
-#define DBG_USARTX_TX_AF												GPIO_AF6_USART4
-#define DBG_USARTX_RX_PIN												GPIO_PIN_11
-#define DBG_USARTX_RX_GPIO_PORT									GPIOC
-#define DBG_USARTX_RX_AF												GPIO_AF6_USART4
+#define DBG_USARTX_TX_PIN												GPIO_PIN_2
+#define DBG_USARTX_TX_GPIO_PORT									GPIOA  
+#define DBG_USARTX_TX_AF												GPIO_AF4_USART2
+#define DBG_USARTX_RX_PIN												GPIO_PIN_3
+#define DBG_USARTX_RX_GPIO_PORT									GPIOA
+#define DBG_USARTX_RX_AF												GPIO_AF4_USART2
 
-#define DBG_USARTX_IRQn                      		USART4_5_IRQn
-#define DBG_USARTX_IRQHandler                		USART4_5_IRQHandler
+#define DBG_USARTX_IRQn													USART2_IRQn
+#define DBG_USARTX_IRQHandler										USART2_IRQHandler
 
 /* Data acquisition USART definition */
-#define DAQ_USARTX															USART2
-#define DAQ_USARTX_CLK_ENABLE()									__USART2_CLK_ENABLE()
-#define DAQ_USARTX_RX_GPIO_CLK_ENABLE()					__GPIOA_CLK_ENABLE()
-#define DAQ_USARTX_TX_GPIO_CLK_ENABLE()					__GPIOA_CLK_ENABLE() 
+#define DAQ_USARTX															USART4
+#define DAQ_USARTX_CLK_ENABLE()									__HAL_RCC_USART4_CLK_ENABLE()
+#define DAQ_USARTX_RX_GPIO_CLK_ENABLE()					__GPIOC_CLK_ENABLE()
+#define DAQ_USARTX_TX_GPIO_CLK_ENABLE()					__GPIOC_CLK_ENABLE() 
 
-#define DAQ_USARTX_FORCE_RESET()								__USART2_FORCE_RESET()
-#define DAQ_USARTX_RELEASE_RESET()							__USART2_RELEASE_RESET()
+#define DAQ_USARTX_FORCE_RESET()								__USART4_FORCE_RESET()
+#define DAQ_USARTX_RELEASE_RESET()							__USART4_RELEASE_RESET()
 
-#define DAQ_USARTX_TX_PIN												GPIO_PIN_2
-#define DAQ_USARTX_TX_GPIO_PORT									GPIOA  
-#define DAQ_USARTX_TX_AF												GPIO_AF4_USART2
-#define DAQ_USARTX_RX_PIN												GPIO_PIN_3
-#define DAQ_USARTX_RX_GPIO_PORT									GPIOA
-#define DAQ_USARTX_RX_AF												GPIO_AF4_USART2
+#define DAQ_USARTX_TX_PIN												GPIO_PIN_10
+#define DAQ_USARTX_TX_GPIO_PORT									GPIOC  
+#define DAQ_USARTX_TX_AF												GPIO_AF6_USART4
+#define DAQ_USARTX_RX_PIN												GPIO_PIN_11
+#define DAQ_USARTX_RX_GPIO_PORT									GPIOC
+#define DAQ_USARTX_RX_AF												GPIO_AF6_USART4
 
-#define DAQ_USARTX_IRQn													USART2_IRQn
-#define DAQ_USARTX_IRQHandler										USART2_IRQHandler
+#define DAQ_USARTX_IRQn                      		USART4_5_IRQn
+#define DAQ_USARTX_IRQHandler                		USART4_5_IRQHandler
 
 /* LED definition */
 #define LED_Toggle( x )
