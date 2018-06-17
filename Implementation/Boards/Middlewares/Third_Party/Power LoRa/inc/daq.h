@@ -26,6 +26,12 @@ typedef struct DAQ_Struct_t
 {
 	DAQTime_t time;
 	uint16_t batteryLevel;			//Resolution: 0.01, Unit: V
+	uint32_t activePower;				//Resolution: 0.001, Unit: kWh
+	uint32_t inductivePower;		//Resolution: 0.001, Unit: kVArh
+	uint32_t capacitivePower;		//Resolution: 0.001, Unit: kVArh
+	int32_t reactivePower;			//Resolution: 0.001, Unit: kVArh
+	int32_t apparentPower;			//Resolution: 0.001, Unit: kWh
+	int8_t powerFactor;					//Resolution: 0.01
 }DAQ_Struct_t;
 
 /* Exported constants --------------------------------------------------------*/
