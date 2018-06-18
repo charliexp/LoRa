@@ -82,6 +82,8 @@ Maintainer: Miguel Luis and Gregory Cristian
  */
 void HW_RTC_Init( void );
 
+void HW_RTC_SetTime(uint8_t hours, uint8_t minutes, uint8_t seconds);
+
 /*!
  * @brief Stop the Alarm
  * @param none

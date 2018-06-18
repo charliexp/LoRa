@@ -194,6 +194,18 @@ void HW_RTC_Init( void )
   }
 }
 
+void HW_RTC_SetTime(uint8_t hours, uint8_t minutes, uint8_t seconds)
+{
+	RTC_TimeTypeDef timeStruct;
+	
+	HAL_RTC_GetTime(&RtcHandle, &timeStruct, RTC_FORMAT_BIN);
+	timeStruct.Hours = hours;
+	timeStruct.Minutes = minutes;
+	timeStruct.Seconds = seconds;
+	
+	HAL_RTC_SetTime(&RtcHandle, &timeStruct, RTC_FORMAT_BIN);
+}
+
 /*!
  * @brief Configures the RTC timer
  * @note The timer is based on the RTC

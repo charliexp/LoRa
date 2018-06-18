@@ -227,6 +227,7 @@ static void Send( void )
   /* USER CODE BEGIN 3 */
 	uint32_t i = 0;
 	DAQ_ReadData();
+	//HW_RTC_SetTime(DAQ_Data.time.hour, DAQ_Data.time.minute, DAQ_Data.time.second);
 	PRINTF("Ultima citire contor\t%02d:%02d:%02d\r\n", DAQ_Data.time.hour, DAQ_Data.time.minute, DAQ_Data.time.second);
 	PRINTF("Baterie contor\t\t%d.%02d\tV\r\n", DAQ_Data.batteryLevel / 100, DAQ_Data.batteryLevel % 100);
 	PRINTF("Putere activa\t\t%03d.%03d\tkWh\r\n", DAQ_Data.activePower / 1000, DAQ_Data.activePower % 1000);
