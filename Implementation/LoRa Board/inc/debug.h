@@ -93,24 +93,24 @@ void Error_Handler( void );
 
 #define DBG_PRINTF(...) 
 
-#define DBG_PRINTF_CRITICAL(...)  
+#define DBG_PRINTF_CRITICAL(...) 
 
 #endif /*TRACE*/
 
 
 #else /* DEBUG */
 
-#define DBG_GPIO_WRITE( gpio, n, x )  
+#define DBG_GPIO_WRITE( gpio, n, x )
 
-#define DBG_GPIO_SET( gpio, n )       
+#define DBG_GPIO_SET( gpio, n )
 
-#define DBG_GPIO_RST( gpio, n )      
+#define DBG_GPIO_RST( gpio, n )
 
 #define DBG( x ) do{  } while(0)
 
-#define DBG_PRINTF(...) 
+#define DBG_PRINTF(...)
 
-#define DBG_PRINTF_CRITICAL(...)  
+#define DBG_PRINTF_CRITICAL(...) 
                       
 #define DBG_RTC_OUTPUT RTC_OUTPUT_DISABLE;
 

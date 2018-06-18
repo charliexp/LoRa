@@ -144,7 +144,6 @@ void HW_GPIO_Write( GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin,  uint32_t value );
  */
 uint32_t HW_GPIO_Read( GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin );
 
-
 #ifdef __cplusplus
 }
 #endif
