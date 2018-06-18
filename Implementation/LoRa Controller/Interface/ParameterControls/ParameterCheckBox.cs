@@ -25,7 +25,7 @@ namespace LoRa_Controller.Interface.Node.ParameterControls
         #region Private methods
         private async Task ParameterChangedCallback(int value)
 		{
-            Device.Message message = new Device.Message(((BaseNodeGroupBox)Field.Parent).Address, parameter, value);
+            Device.Message message = new Device.Message(((BaseNodeGroupBox)Field.Parent.Parent.Parent.Parent).Address, parameter, value);
 
             if (!remotelyChanged)
 				await Program.connectionHandler.WriteAsync(message);

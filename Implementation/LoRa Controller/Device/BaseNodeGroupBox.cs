@@ -16,12 +16,21 @@ namespace LoRa_Controller.Device
         private Graph graph;
         private TableLayoutPanel secondLayout;
         private TableLayoutPanel powerReadingLayout;
-        private FlowLayoutPanel powerIOLayout;
+        private TableLayoutPanel powerIOLayout;
 
+        private TextBoxControl lastReadingTime;
+        private TextBoxControl activePower;
+        private TextBoxControl inductivePower;
+        private TextBoxControl capacitivePower;
         private TextBoxControl reactivePower;
-        private CheckBox hasMeter;
+        private TextBoxControl apparentPower;
+        private TextBoxControl powerFactor;
+
+        private ParameterCheckBox hasMeter;
         private List<CheckBox> outputs;
         private ButtonControl addPowerOutput;
+        
+		public TextBoxControl addressControl;
         #endregion
 
         #region Protected variables
@@ -33,14 +42,14 @@ namespace LoRa_Controller.Device
 		{
 			get
 			{
-				return Int32.Parse(((TextBox)AddressControl.Field).Text);
+				return Int32.Parse(((TextBox)addressControl.Field).Text);
 			}
 			set
 			{
-				((TextBox)AddressControl.Field).Text = value.ToString();
+				((TextBox)addressControl.Field).Text = value.ToString();
 			}
 		}
-		public TextBoxControl AddressControl;
+        /*
 		public ParameterComboBox Bandwidth;
 		public ParameterSpinBox OutputPower;
 		public ParameterSpinBox SpreadingFactor;
@@ -51,7 +60,7 @@ namespace LoRa_Controller.Device
 		public ParameterSpinBox PreambleSize;
 		public ParameterSpinBox PayloadMaxSize;
 		public ParameterCheckBox VariablePayload;
-		public ParameterCheckBox PerformCRC;
+		public ParameterCheckBox PerformCRC;*/
         #endregion
 
         #region Constructors
@@ -69,25 +78,53 @@ namespace LoRa_Controller.Device
                 AutoSize = false,
                 Width = 2,
                 BorderStyle = BorderStyle.Fixed3D,
+                Dock = DockStyle.Fill,
             };
 
             graph = new Graph("Graph");
-            reactivePower = new TextBoxControl("ReactivePower", "KVAR", TextBoxControl.Type.Output)
+            lastReadingTime = new TextBoxControl("LastReading", TextBoxControl.Type.Output)
+            {
+                Value = "00:00:00"
+            };
+            activePower = new TextBoxControl("ActivePower", "kWh", TextBoxControl.Type.Output)
             {
                 Value = "0"
             };
-            hasMeter = new CheckBox()
+            inductivePower = new TextBoxControl("InductivePower", "kVArh", TextBoxControl.Type.Output)
             {
-                Text = "Has meter",
+                Value = "0"
             };
-            outputs = new List<CheckBox>();
-            outputs.Add(new CheckBox()
+            capacitivePower = new TextBoxControl("CapacitivePower", "kVArh", TextBoxControl.Type.Output)
             {
-                Text = "1234 KVAR",
-            });
+                Value = "0"
+            };
+            reactivePower = new TextBoxControl("ReactivePower", "kVArh", TextBoxControl.Type.Output)
+            {
+                Value = "0"
+            };
+            apparentPower = new TextBoxControl("ApparentPower", "kWh", TextBoxControl.Type.Output)
+            {
+                Value = "0"
+            };
+            powerFactor = new TextBoxControl("PowerFactor", TextBoxControl.Type.Output)
+            {
+                Value = "1"
+            };
+            hasMeter = new ParameterCheckBox(CommandType.HasMeter, false);
+            outputs = new List<CheckBox>
+            {
+                new CheckBox()
+                {
+                    Text = "50 kVArh",
+                },
+                new CheckBox()
+                {
+                    Text = "50 kVArh",
+                }
+            };
             addPowerOutput = new ButtonControl("Add output");
-            AddressControl = new TextBoxControl("Address", TextBoxControl.Type.Input);
-            Bandwidth = new ParameterComboBox(CommandType.Bandwidth, new List<string> { "125 kHz", "250 kHz", "500 kHz" }, 0);
+            addressControl = new TextBoxControl("Address", TextBoxControl.Type.Input);
+            /*Bandwidth = new ParameterComboBox(CommandType.Bandwidth, new List<string> { "125 kHz", "250 kHz", "500 kHz" }, 0);
             OutputPower = new ParameterSpinBox(CommandType.OutputPower, 1, 14, 14);
             SpreadingFactor = new ParameterSpinBox(CommandType.SpreadingFactor, 7, 12, 12);
             CodingRate = new ParameterComboBox(CommandType.CodingRate, new List<string> { "4/5", "4/6", "4/7", "4/8" }, 3);
@@ -97,7 +134,7 @@ namespace LoRa_Controller.Device
             PreambleSize = new ParameterSpinBox(CommandType.PreambleSize, 2, 30, 8);
             PayloadMaxSize = new ParameterSpinBox(CommandType.PayloadMaxSize, 1, 64, 64);
             VariablePayload = new ParameterCheckBox(CommandType.VariablePayload, true);
-            PerformCRC = new ParameterCheckBox(CommandType.PerformCRC, true);
+            PerformCRC = new ParameterCheckBox(CommandType.PerformCRC, true);*/
             
             mainLayout = new TableLayoutPanel
             {
@@ -107,16 +144,15 @@ namespace LoRa_Controller.Device
                 Name = name + "MainLayout",
                 Location = new Point(InterfaceConstants.ItemPadding, InterfaceConstants.GroupBoxFirstItemY),
             };
-            mainLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-            mainLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
             secondLayout = new TableLayoutPanel
             {
                 AutoSize = true,
-                ColumnCount = 2,
+                ColumnCount = 3,
                 Name = name + "SecondLayout",
             };
-            secondLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-            secondLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+            secondLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 49));
+            secondLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 2));
+            secondLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 49));
             powerReadingLayout = new TableLayoutPanel
             {
                 AutoSize = true,
@@ -133,10 +169,10 @@ namespace LoRa_Controller.Device
             };
             radioLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
             radioLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-            powerIOLayout = new FlowLayoutPanel
+            powerIOLayout = new TableLayoutPanel
             {
                 AutoSize = true,
-                FlowDirection = FlowDirection.TopDown,
+                ColumnCount = 2,
                 Name = name + "PowerIOLayout",
             };
 
@@ -144,14 +180,28 @@ namespace LoRa_Controller.Device
             mainLayout.Controls.Add(graph);
             mainLayout.Controls.Add(secondLayout);
             secondLayout.Controls.Add(powerReadingLayout);
-            secondLayout.Controls.Add(powerIOLayout);
-            secondLayout.Controls.Add(horizontalSeparator);
+            secondLayout.Controls.Add(verticalSeparator);
             secondLayout.Controls.Add(radioLayout);
-            secondLayout.SetRowSpan(powerIOLayout, 3);
+            secondLayout.Controls.Add(horizontalSeparator);
+            secondLayout.Controls.Add(powerIOLayout);
+            secondLayout.SetRowSpan(verticalSeparator, 3);
+            secondLayout.SetRowSpan(radioLayout, 3);
+            powerReadingLayout.Controls.Add(lastReadingTime.Label);
+            powerReadingLayout.Controls.Add(lastReadingTime.Field);
+            powerReadingLayout.Controls.Add(activePower.Label);
+            powerReadingLayout.Controls.Add(activePower.Field);
+            powerReadingLayout.Controls.Add(inductivePower.Label);
+            powerReadingLayout.Controls.Add(inductivePower.Field);
+            powerReadingLayout.Controls.Add(capacitivePower.Label);
+            powerReadingLayout.Controls.Add(capacitivePower.Field);
             powerReadingLayout.Controls.Add(reactivePower.Label);
             powerReadingLayout.Controls.Add(reactivePower.Field);
-            radioLayout.Controls.Add(AddressControl.Label);
-            radioLayout.Controls.Add(AddressControl.Field);
+            powerReadingLayout.Controls.Add(apparentPower.Label);
+            powerReadingLayout.Controls.Add(apparentPower.Field);
+            powerReadingLayout.Controls.Add(powerFactor.Label);
+            powerReadingLayout.Controls.Add(powerFactor.Field);
+            radioLayout.Controls.Add(addressControl.Label);
+            radioLayout.Controls.Add(addressControl.Field);/*
             radioLayout.Controls.Add(Bandwidth.Label);
             radioLayout.Controls.Add(Bandwidth.Field);
             radioLayout.Controls.Add(OutputPower.Label);
@@ -173,8 +223,9 @@ namespace LoRa_Controller.Device
             radioLayout.Controls.Add(VariablePayload.Label);
             radioLayout.Controls.Add(VariablePayload.Field);
             radioLayout.Controls.Add(PerformCRC.Label);
-            radioLayout.Controls.Add(PerformCRC.Field);
-            powerIOLayout.Controls.Add(hasMeter);
+            radioLayout.Controls.Add(PerformCRC.Field);*/
+            powerIOLayout.Controls.Add(hasMeter.Label);
+            powerIOLayout.Controls.Add(hasMeter.Field);
             foreach (CheckBox output in outputs)
                 powerIOLayout.Controls.Add(output);
             powerIOLayout.Controls.Add(addPowerOutput.Field);

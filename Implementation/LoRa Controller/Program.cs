@@ -139,7 +139,7 @@ namespace LoRa_Controller
 						case CommandType.IsPresent:
 							receivedDataString = "Master asked if present";
 							break;
-						case CommandType.Bandwidth:
+						/*case CommandType.Bandwidth:
 							if (directDevice.Address != (int)AddressType.Master)
 								mainWindow.DirectNodeInterface.Bandwidth.SetValue(message.Parameters[0]);
 							receivedDataString = "Bandwidth set by master to " + message.Parameters[0];
@@ -195,7 +195,7 @@ namespace LoRa_Controller
 							if (directDevice.Address != (int) AddressType.Master)
 								mainWindow.DirectNodeInterface.PerformCRC.SetValue(message.Parameters[0] == 1);
 							receivedDataString = "Perform CRC set by master to " + ((message.Parameters[0] == 1) ? "true" : "false");
-							break;
+							break;*/
 						default:
 							receivedDataString = "Unknown command " + message.Command + " from " + message.Source + " to " + message.Target;
 							break;
@@ -223,7 +223,7 @@ namespace LoRa_Controller
 							if (!directDeviceInitialized)
 							{
 								directDevice.Address = message.Target;
-								((TextBox)mainWindow.DirectNodeInterface.AddressControl.Field).TextChanged += new EventHandler(AddressFieldChanged);
+								((TextBox)mainWindow.DirectNodeInterface.addressControl.Field).TextChanged += new EventHandler(AddressFieldChanged);
 								((Button)mainWindow.DirectNodeInterface.SetAddress.Field).Click += new EventHandler(SetAddress);
 								directDeviceInitialized = true;
 								mainWindow.SetDirectlyConnectedNodeType();
@@ -260,7 +260,7 @@ namespace LoRa_Controller
 						case CommandType.IsPresent:
 							receivedDataString = "Checking for present devices";
 							break;
-						case CommandType.Bandwidth:
+						/*case CommandType.Bandwidth:
 							receivedDataString = "Bandwidth set to " + message.Parameters[0];
 							break;
 						case CommandType.OutputPower:
@@ -294,7 +294,7 @@ namespace LoRa_Controller
 							break;
 						case CommandType.PerformCRC:
 							receivedDataString = "Perform CRC set to " + ((message.Parameters[0] == 1) ? "true" : "false");
-							break;
+							break;*/
 						default:
 							receivedDataString = "Unknown command " + message.Command + " from " + message.Source + " to " + message.Target;
 							break;
@@ -401,7 +401,7 @@ namespace LoRa_Controller
 			int newAddress;
 			try
 			{
-				newAddress = Int32.Parse(((TextBox)mainWindow.DirectNodeInterface.AddressControl.Field).Text);
+				newAddress = Int32.Parse(((TextBox)mainWindow.DirectNodeInterface.addressControl.Field).Text);
 				if (newAddress != directDevice.Address && newAddress > 0)
 					mainWindow.DirectNodeInterface.SetAddress.Field.Enabled = true;
 				else

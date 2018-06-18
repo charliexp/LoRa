@@ -41,7 +41,8 @@ namespace LoRa_Controller.Interface.Controls
 			if (type == Type.Output)
 			{
 				((TextBox)Field).ReadOnly = true;
-				Field.TabStop = false;
+                ((TextBox)Field).TextAlign = HorizontalAlignment.Right;
+                Field.TabStop = false;
 			}
 
 			((TextBox)Field).BackColor = System.Drawing.Color.White;

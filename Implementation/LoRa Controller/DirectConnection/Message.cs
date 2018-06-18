@@ -15,7 +15,18 @@ namespace LoRa_Controller.Device
 
 			GetAddress = 0x20,
 			SetAddress = 0x21,
+            HasMeter = 0x22,
+            SetInductor = 0x23,
+            SetCapacitor = 0x24,
 
+            LastReading = 0x30,
+            ActivePower = 0x31,
+            InductivePower = 0x32,
+            CapacitivePower = 0x33,
+            ReactivePower = 0x34,
+            ApparentPower = 0x35,
+            PowerFactor = 0x36,
+            /*
 			Bandwidth = 0x40,
 			OutputPower = 0x41,
 			SpreadingFactor = 0x42,
@@ -27,7 +38,7 @@ namespace LoRa_Controller.Device
 			PayloadMaxSize = 0x48,
 			VariablePayload = 0x49,
 			PerformCRC = 0x4a,
-
+            */
 			Invalid = 0
 		}
         public enum ResponseType
