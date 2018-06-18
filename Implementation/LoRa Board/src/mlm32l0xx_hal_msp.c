@@ -47,7 +47,6 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "hw.h"
-#include "low_power.h"
 #include "delay.h"
 #include "timeServer.h"
 /* when fast wake up is enabled, the mcu wakes up in ~20us  * and 
@@ -91,6 +90,8 @@ void HAL_Delay(__IO uint32_t Delay)
   */
 void HAL_MspInit(void)
 {
+  __HAL_RCC_PWR_CLK_ENABLE();
+  
   /* Disable the Power Voltage Detector */
   HAL_PWR_DisablePVD( ); 
 
@@ -111,6 +112,8 @@ void HAL_MspInit(void)
 #else  
   HAL_PWREx_DisableFastWakeUp( );
 #endif
+
+  HW_GpioInit( );
 }
 
 /**
@@ -191,7 +194,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 }
 
 /**
-  * @brief  Gets IRQ number as a finction of the GPIO_Pin.
+  * @brief  Gets IRQ number as a function of the GPIO_Pin.
   * @param  GPIO_Pin: Specifies the pins connected to the EXTI line.
   * @retval IRQ number
   */

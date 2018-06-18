@@ -51,8 +51,7 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
-#define BUFSIZE 256
-#define USARTX_IRQn USART2_IRQn
+#define BUFSIZE 512
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 
@@ -63,7 +62,7 @@ __IO uint16_t iw=0;
 /* buffer read index*/
 static uint16_t ir=0;
 /* Uart Handle */
-UART_HandleTypeDef UartHandle;
+UART_HandleTypeDef DBG_UartHandle;
 
 /* Private function prototypes -----------------------------------------------*/
 /* Functions Definition ------------------------------------------------------*/
@@ -78,30 +77,30 @@ void vcom_Init(void)
       - Parity = ODD parity
       - BaudRate = 921600 baud
       - Hardware flow control disabled (RTS and CTS signals) */
-  UartHandle.Instance        = USARTX;
+  DBG_UartHandle.Instance        = DBG_USARTX;
   
-  UartHandle.Init.BaudRate   = 115200;
-  UartHandle.Init.WordLength = UART_WORDLENGTH_8B;
-  UartHandle.Init.StopBits   = UART_STOPBITS_1;
-  UartHandle.Init.Parity     = UART_PARITY_NONE;
-  UartHandle.Init.HwFlowCtl  = UART_HWCONTROL_NONE;
-  UartHandle.Init.Mode       = UART_MODE_TX_RX;
+  DBG_UartHandle.Init.BaudRate   = 115200;
+  DBG_UartHandle.Init.WordLength = UART_WORDLENGTH_8B;
+  DBG_UartHandle.Init.StopBits   = UART_STOPBITS_1;
+  DBG_UartHandle.Init.Parity     = UART_PARITY_NONE;
+  DBG_UartHandle.Init.HwFlowCtl  = UART_HWCONTROL_NONE;
+  DBG_UartHandle.Init.Mode       = UART_MODE_TX_RX;
   
-  if(HAL_UART_Init(&UartHandle) != HAL_OK)
+  if(HAL_UART_Init(&DBG_UartHandle) != HAL_OK)
   {
     /* Initialization Error */
     Error_Handler(); 
   }
   
-  HAL_NVIC_SetPriority(USARTX_IRQn, 0x1, 0);
-  HAL_NVIC_EnableIRQ(USARTX_IRQn);
+  HAL_NVIC_SetPriority(DBG_USARTX_IRQn, 0x2, 0);
+  HAL_NVIC_EnableIRQ(DBG_USARTX_IRQn);
 }
 
 
 void vcom_DeInit(void)
 {
 #if 1
-  HAL_UART_DeInit(&UartHandle);
+  HAL_UART_DeInit(&DBG_UartHandle);
 #endif
 }
 
@@ -134,27 +133,28 @@ void vcom_Send( char *format, ... )
   }
   RESTORE_PRIMASK();
   
-	if (UartHandle.gState != HAL_UART_STATE_BUSY_TX)
-	{
-		HAL_UART_Transmit_IT(&UartHandle, (uint8_t *) buff + ir, len);
-		ir = (ir + len) % BUFSIZE;
-	}
+  HAL_NVIC_SetPendingIRQ(DBG_USARTX_IRQn);
     
   va_end(args);
 }
 
-void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
+/* modifes only ir*/
+void vcom_Print( void)
 {
-	if (iw > ir)
-	{
-		HAL_UART_Transmit_IT(&UartHandle, (uint8_t *) buff + ir, iw - ir);
-		ir = iw;
-	}
-	else if (iw < ir)
-	{
-		HAL_UART_Transmit_IT(&UartHandle, (uint8_t *) buff + ir, BUFSIZE - ir);
-		ir = 0;
-	}
+  char* CurChar;
+  while( ( (iw+BUFSIZE-ir)%BUFSIZE) >0 )
+  {
+    BACKUP_PRIMASK();
+    DISABLE_IRQ();
+    
+    CurChar = &buff[ir];
+    ir= (ir+1) %BUFSIZE;
+    
+    RESTORE_PRIMASK();
+    
+    HAL_UART_Transmit(&DBG_UartHandle,(uint8_t *) CurChar, 1, 300);    
+  }
+  HAL_NVIC_ClearPendingIRQ(DBG_USARTX_IRQn);
 }
 
 void vcom_Send_Lp( char *format, ... )
@@ -188,74 +188,44 @@ void vcom_Send_Lp( char *format, ... )
   
   va_end(args);
 }
-/**
-  * @brief UART MSP Initialization 
-  *        This function configures the hardware resources used in this example: 
-  *           - Peripheral's clock enable
-  *           - Peripheral's GPIO Configuration  
-  *           - NVIC configuration for UART interrupt request enable
-  * @param huart: UART handle pointer
-  * @retval None
-  */
-void HAL_UART_MspInit(UART_HandleTypeDef *huart)
-{
-  
-  /*##-1- Enable peripherals and GPIO Clocks #################################*/
-
-  /* Enable USART1 clock */
-  USARTX_CLK_ENABLE(); 
-  
-  /*##-2- Configure peripheral GPIO ##########################################*/  
-  vcom_IoInit( );
-}
 
 void vcom_IoInit(void)
 {
   GPIO_InitTypeDef  GPIO_InitStruct={0};
     /* Enable GPIO TX/RX clock */
-  USARTX_TX_GPIO_CLK_ENABLE();
-  USARTX_RX_GPIO_CLK_ENABLE();
+  DBG_USARTX_TX_GPIO_CLK_ENABLE();
+  DBG_USARTX_RX_GPIO_CLK_ENABLE();
     /* UART TX GPIO pin configuration  */
-  GPIO_InitStruct.Pin       = USARTX_TX_PIN;
+  GPIO_InitStruct.Pin       = DBG_USARTX_TX_PIN;
   GPIO_InitStruct.Mode      = GPIO_MODE_AF_PP;
   GPIO_InitStruct.Pull      = GPIO_PULLUP;
   GPIO_InitStruct.Speed     = GPIO_SPEED_HIGH;
-  GPIO_InitStruct.Alternate = USARTX_TX_AF;
+  GPIO_InitStruct.Alternate = DBG_USARTX_TX_AF;
 
-  HAL_GPIO_Init(USARTX_TX_GPIO_PORT, &GPIO_InitStruct);
+  HAL_GPIO_Init(DBG_USARTX_TX_GPIO_PORT, &GPIO_InitStruct);
 
   /* UART RX GPIO pin configuration  */
-  GPIO_InitStruct.Pin = USARTX_RX_PIN;
-  GPIO_InitStruct.Alternate = USARTX_RX_AF;
+  GPIO_InitStruct.Pin = DBG_USARTX_RX_PIN;
+  GPIO_InitStruct.Alternate = DBG_USARTX_RX_AF;
 
-  HAL_GPIO_Init(USARTX_RX_GPIO_PORT, &GPIO_InitStruct);
+  HAL_GPIO_Init(DBG_USARTX_RX_GPIO_PORT, &GPIO_InitStruct);
 }
 
 void vcom_IoDeInit(void)
 {
   GPIO_InitTypeDef GPIO_InitStructure={0};
   
-  USARTX_TX_GPIO_CLK_ENABLE();
-  USARTX_RX_GPIO_CLK_ENABLE();
+  DBG_USARTX_TX_GPIO_CLK_ENABLE();
+  DBG_USARTX_RX_GPIO_CLK_ENABLE();
 
   GPIO_InitStructure.Mode = GPIO_MODE_ANALOG;
   GPIO_InitStructure.Pull = GPIO_NOPULL;
   
-  GPIO_InitStructure.Pin =  USARTX_TX_PIN ;
-  HAL_GPIO_Init(  USARTX_TX_GPIO_PORT, &GPIO_InitStructure );
+  GPIO_InitStructure.Pin =  DBG_USARTX_TX_PIN ;
+  HAL_GPIO_Init(  DBG_USARTX_TX_GPIO_PORT, &GPIO_InitStructure );
   
-  GPIO_InitStructure.Pin =  USARTX_RX_PIN ;
-  HAL_GPIO_Init(  USARTX_RX_GPIO_PORT, &GPIO_InitStructure ); 
-}
-
-/**
-  * @brief UART MSP DeInit
-  * @param huart: uart handle
-  * @retval None
-  */
-void HAL_UART_MspDeInit(UART_HandleTypeDef *huart)
-{
-  vcom_IoDeInit( );
+  GPIO_InitStructure.Pin =  DBG_USARTX_RX_PIN ;
+  HAL_GPIO_Init(  DBG_USARTX_RX_GPIO_PORT, &GPIO_InitStructure ); 
 }
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

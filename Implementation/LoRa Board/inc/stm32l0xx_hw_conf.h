@@ -68,103 +68,125 @@ Maintainer: Miguel Luis and Gregory Cristian
 
 /* Includes ------------------------------------------------------------------*/
 /* Exported types ------------------------------------------------------------*/
-/* Exported constants --------------------------------------------------------*/
+/* Exported defines ----------------------------------------------------------*/
+/* LORA definition */
 
 //#define RADIO_DIO_4
 //#define RADIO_DIO_5
 
-/* LORA I/O definition */
+#define RADIO_RESET_PORT                        GPIOA
+#define RADIO_RESET_PIN                         GPIO_PIN_0
 
+#define RADIO_MOSI_PORT                         GPIOA
+#define RADIO_MOSI_PIN                          GPIO_PIN_7
 
-#define RADIO_RESET_PORT                          GPIOA
-#define RADIO_RESET_PIN                           GPIO_PIN_0
+#define RADIO_MISO_PORT                         GPIOA
+#define RADIO_MISO_PIN                          GPIO_PIN_6
 
-#define RADIO_MOSI_PORT                           GPIOA
-#define RADIO_MOSI_PIN                            GPIO_PIN_7
+#define RADIO_SCLK_PORT                         GPIOA
+#define RADIO_SCLK_PIN                          GPIO_PIN_5
 
-#define RADIO_MISO_PORT                           GPIOA
-#define RADIO_MISO_PIN                            GPIO_PIN_6
+#define RADIO_NSS_PORT                          GPIOB
+#define RADIO_NSS_PIN                           GPIO_PIN_6
 
-#define RADIO_SCLK_PORT                           GPIOA
-#define RADIO_SCLK_PIN                            GPIO_PIN_5
+#define RADIO_DIO_0_PORT                        GPIOA
+#define RADIO_DIO_0_PIN                         GPIO_PIN_10
 
-#define RADIO_NSS_PORT                            GPIOB
-#define RADIO_NSS_PIN                             GPIO_PIN_6
+#define RADIO_DIO_1_PORT                        GPIOB
+#define RADIO_DIO_1_PIN                         GPIO_PIN_3
 
-#define RADIO_DIO_0_PORT                          GPIOA
-#define RADIO_DIO_0_PIN                           GPIO_PIN_10
+#define RADIO_DIO_2_PORT                        GPIOB
+#define RADIO_DIO_2_PIN                         GPIO_PIN_5
 
-#define RADIO_DIO_1_PORT                          GPIOB
-#define RADIO_DIO_1_PIN                           GPIO_PIN_3
-
-#define RADIO_DIO_2_PORT                          GPIOB
-#define RADIO_DIO_2_PIN                           GPIO_PIN_5
-
-#define RADIO_DIO_3_PORT                          GPIOB
-#define RADIO_DIO_3_PIN                           GPIO_PIN_4
+#define RADIO_DIO_3_PORT                        GPIOB
+#define RADIO_DIO_3_PIN                         GPIO_PIN_4
 
 #ifdef RADIO_DIO_4 
-#define RADIO_DIO_4_PORT                          GPIOA
-#define RADIO_DIO_4_PIN                           GPIO_PIN_9
+#define RADIO_DIO_4_PORT                        GPIOA
+#define RADIO_DIO_4_PIN                         GPIO_PIN_9
 #endif
 
 #ifdef RADIO_DIO_5 
-#define RADIO_DIO_5_PORT                          GPIOC
-#define RADIO_DIO_5_PIN                           GPIO_PIN_7
+#define RADIO_DIO_5_PORT                        GPIOC
+#define RADIO_DIO_5_PIN                         GPIO_PIN_7
 #endif
 
-#define RADIO_ANT_SWITCH_PORT                     GPIOC
-#define RADIO_ANT_SWITCH_PIN                      GPIO_PIN_1
+#define RADIO_ANT_SWITCH_PORT                   GPIOC
+#define RADIO_ANT_SWITCH_PIN                    GPIO_PIN_1
 
-#define BAT_LEVEL_PORT                            GPIOA
-#define BAT_LEVEL_PIN                             GPIO_PIN_4
-/*  SPI MACRO redefinition */
+#define SPI_CLK_ENABLE()												__HAL_RCC_SPI1_CLK_ENABLE()
+#define SPI1_AF																	GPIO_AF0_SPI1  
 
-#define SPI_CLK_ENABLE()                __HAL_RCC_SPI1_CLK_ENABLE()
-
-#define SPI1_AF                          GPIO_AF0_SPI1  
-
-/* ADC MACRO redefinition */
+/* ADC definition */
+#define BAT_LEVEL_PORT                          GPIOA
+#define BAT_LEVEL_PIN                           GPIO_PIN_4
 
 #ifdef USE_STM32L0XX_NUCLEO
-#define ADC_READ_CHANNEL                 ADC_CHANNEL_4
-#define ADCCLK_ENABLE()                 __HAL_RCC_ADC1_CLK_ENABLE() ;
-#define ADCCLK_DISABLE()                __HAL_RCC_ADC1_CLK_DISABLE() ;
+#define ADC_READ_CHANNEL												ADC_CHANNEL_4
+#define ADCCLK_ENABLE()													__HAL_RCC_ADC1_CLK_ENABLE() ;
+#define ADCCLK_DISABLE()												__HAL_RCC_ADC1_CLK_DISABLE() ;
 #endif
 
+/* RTC definition */
+#define RTC_OUTPUT															DBG_RTC_OUTPUT
+#define RTC_Alarm_IRQn													RTC_IRQn
 
-/* --------------------------- RTC HW definition -------------------------------- */
+/* Debug USART definition */
+#define DBG_USARTX															USART2
+#define DBG_USARTX_CLK_ENABLE()									__USART2_CLK_ENABLE()
+#define DBG_USARTX_RX_GPIO_CLK_ENABLE()					__GPIOA_CLK_ENABLE()
+#define DBG_USARTX_TX_GPIO_CLK_ENABLE()					__GPIOA_CLK_ENABLE() 
 
-#define RTC_OUTPUT       DBG_RTC_OUTPUT
+#define DBG_USARTX_FORCE_RESET()								__USART2_FORCE_RESET()
+#define DBG_USARTX_RELEASE_RESET()							__USART2_RELEASE_RESET()
 
-#define RTC_Alarm_IRQn              RTC_IRQn
-/* --------------------------- USART HW definition -------------------------------*/
+#define DBG_USARTX_TX_PIN												GPIO_PIN_2
+#define DBG_USARTX_TX_GPIO_PORT									GPIOA  
+#define DBG_USARTX_TX_AF												GPIO_AF4_USART2
+#define DBG_USARTX_RX_PIN												GPIO_PIN_3
+#define DBG_USARTX_RX_GPIO_PORT									GPIOA
+#define DBG_USARTX_RX_AF												GPIO_AF4_USART2
 
+#define DBG_USARTX_IRQn													USART2_IRQn
+#define DBG_USARTX_IRQHandler										USART2_IRQHandler
 
-#define USARTX                           USART2
-#define USARTX_CLK_ENABLE()              __USART2_CLK_ENABLE();
-#define USARTX_RX_GPIO_CLK_ENABLE()      __GPIOA_CLK_ENABLE()
-#define USARTX_TX_GPIO_CLK_ENABLE()      __GPIOA_CLK_ENABLE() 
+/* Data acquisition USART definition */
+#define DAQ_USARTX															USART4
+#define DAQ_USARTX_CLK_ENABLE()									__HAL_RCC_USART4_CLK_ENABLE()
+#define DAQ_USARTX_RX_GPIO_CLK_ENABLE()					__GPIOC_CLK_ENABLE()
+#define DAQ_USARTX_TX_GPIO_CLK_ENABLE()					__GPIOC_CLK_ENABLE() 
 
-#define USARTX_FORCE_RESET()             __USART2_FORCE_RESET()
-#define USARTX_RELEASE_RESET()           __USART2_RELEASE_RESET()
+#define DAQ_USARTX_FORCE_RESET()								__USART4_FORCE_RESET()
+#define DAQ_USARTX_RELEASE_RESET()							__USART4_RELEASE_RESET()
 
+#define DAQ_USARTX_TX_PIN												GPIO_PIN_10
+#define DAQ_USARTX_TX_GPIO_PORT									GPIOC  
+#define DAQ_USARTX_TX_AF												GPIO_AF6_USART4
+#define DAQ_USARTX_RX_PIN												GPIO_PIN_11
+#define DAQ_USARTX_RX_GPIO_PORT									GPIOC
+#define DAQ_USARTX_RX_AF												GPIO_AF6_USART4
 
-#define USARTX_TX_PIN                  GPIO_PIN_2
-#define USARTX_TX_GPIO_PORT            GPIOA  
-#define USARTX_TX_AF                   GPIO_AF4_USART2
-#define USARTX_RX_PIN                  GPIO_PIN_3
-#define USARTX_RX_GPIO_PORT            GPIOA 
-#define USARTX_RX_AF                   GPIO_AF4_USART2
+#define DAQ_USARTX_IRQn                      		USART4_5_IRQn
+#define DAQ_USARTX_IRQHandler                		USART4_5_IRQHandler
 
-/* Definition for USARTx's NVIC */
-#define USARTX_IRQn                      USART2_IRQn
-#define USARTX_IRQHandler                USART2_IRQHandler
-
-
+/* LED definition */
 #define LED_Toggle( x )
 #define LED_On( x )
 #define LED_Off( x )
+
+/* Actuator I2C definition */
+#define ACT_I2C																	I2C1
+#define ACT_I2C_CLK_ENABLE()										__HAL_RCC_I2C1_CLK_ENABLE()
+#define ACT_I2C_SDA_GPIO_CLK_ENABLE()						__GPIOB_CLK_ENABLE()
+#define ACT_I2C_SCL_GPIO_CLK_ENABLE()						__GPIOB_CLK_ENABLE()
+
+#define ACT_I2C_SCL_PIN													GPIO_PIN_8
+#define ACT_I2C_SCL_GPIO_PORT										GPIOB 
+#define ACT_I2C_SCL_AF													GPIO_AF4_I2C1
+#define ACT_I2C_SDA_PIN													GPIO_PIN_9
+#define ACT_I2C_SDA_GPIO_PORT										GPIOB
+#define ACT_I2C_SDA_AF													GPIO_AF4_I2C1
+
 
 #ifdef __cplusplus
 }

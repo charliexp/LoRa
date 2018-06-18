@@ -86,11 +86,14 @@ void DBG_Init( void )
   
 #else /* DEBUG */
   /* sw interface off*/
-  GPIO_InitTypeDef GPIO_InitStructure; 
+  GPIO_InitTypeDef GPIO_InitStructure ={0};
+  
   GPIO_InitStructure.Mode   = GPIO_MODE_ANALOG;
   GPIO_InitStructure.Pull   = GPIO_NOPULL;
   GPIO_InitStructure.Pin    = (GPIO_PIN_13 | GPIO_PIN_14);
+  __GPIOA_CLK_ENABLE() ;  
   HAL_GPIO_Init(GPIOA, &GPIO_InitStructure);
+  __GPIOA_CLK_DISABLE() ;
   
   __HAL_RCC_DBGMCU_CLK_ENABLE( );
   HAL_DBGMCU_DisableDBGSleepMode( );
@@ -107,7 +110,7 @@ void DBG_Init( void )
   */
 void Error_Handler(void)
 {
-  DBG_PRINTF("Error_Handler\n");
+  DBG_PRINTF("Error_Handler\r\n");
   while(1);
 }
 

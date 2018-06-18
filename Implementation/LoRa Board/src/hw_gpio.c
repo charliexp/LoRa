@@ -119,6 +119,10 @@ void HW_GPIO_SetIrq( GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint32_t prio,  Gpi
     
     HAL_NVIC_EnableIRQ( IRQnb );
   }
+  else
+  {
+    GpioIrq[ BitPos ] = NULL;
+  }
 }
 
 /*!
@@ -187,6 +191,5 @@ static uint8_t HW_GPIO_GetBitPos(uint16_t GPIO_Pin)
   
   return PinPos;
 }
-
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

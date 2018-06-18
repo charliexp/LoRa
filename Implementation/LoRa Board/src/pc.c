@@ -5,7 +5,7 @@
 #define UART_RXBUFFER_SIZE			(PARAMETERS_MAX_SIZE + 3)
 #define UART_TXBUFFER_SIZE			(PARAMETERS_MAX_SIZE + 3 + 2)
 
-extern UART_HandleTypeDef UartHandle;
+extern UART_HandleTypeDef DBG_UartHandle;
 
 volatile uint8_t UartRxBuffer[UART_RXBUFFER_SIZE];
 volatile uint8_t UartTxBuffer[UART_TXBUFFER_SIZE];
@@ -14,7 +14,7 @@ UartStates_t UartState = UART_IDLE;
 
 void PC_init(void)
 {
-	HAL_UART_Receive_IT(&UartHandle, (uint8_t *) UartRxBuffer, UART_RXBUFFER_SIZE);
+	HAL_UART_Receive_IT(&DBG_UartHandle, (uint8_t *) UartRxBuffer, UART_RXBUFFER_SIZE);
 }
 
 void PC_receive(uint8_t* target, uint8_t* command, uint8_t* parameters)
@@ -41,8 +41,8 @@ void PC_send(uint8_t source, uint8_t target, uint8_t command, uint8_t* data, uin
 		PRINTF("%c", UartTxBuffer[i]);
 }
 
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+void HAL_UART_RxCplt()
 {
 	UartState = UART_RX;
-	HAL_UART_Receive_IT(&UartHandle, (uint8_t *) UartRxBuffer, UART_RXBUFFER_SIZE);
+	HAL_UART_Receive_IT(&DBG_UartHandle, (uint8_t *) UartRxBuffer, UART_RXBUFFER_SIZE);
 }

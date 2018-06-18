@@ -76,7 +76,7 @@ static void OnRxError( void )
 	RadioState = RADIO_RX_ERROR;
 }
 
-bool expectingResponseFrom(uint8_t target)
+void expectingResponseFrom(uint8_t target)
 {
 	uint8_t i;
 	

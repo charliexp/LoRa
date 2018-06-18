@@ -109,6 +109,10 @@ void HW_Init( void )
     HW_SPI_Init( );
 
     HW_RTC_Init( );
+		
+		UART_Init( );
+		
+		I2C_Init( );
     
     vcom_Init( );
 
@@ -127,9 +131,47 @@ void HW_DeInit( void )
   
   Radio.IoDeInit( );
   
+	UART_DeInit( );
+	
+	I2C_DeInit( );
+	
   vcom_DeInit( );
- 
+   
   McuInitialized = false;
+}
+
+/**
+  * @brief This function Initializes the hardware Ios
+  * @param None
+  * @retval None
+  */
+static void HW_IoInit( void )
+{
+  HW_SPI_IoInit( );
+  
+  Radio.IoInit( );
+  
+  vcom_IoInit( );
+}
+
+/**
+  * @brief This function Deinitializes the hardware Ios
+  * @param None
+  * @retval None
+  */
+static void HW_IoDeInit( void )
+{
+  HW_SPI_IoDeInit( );
+  
+  Radio.IoDeInit( );
+  
+  vcom_IoDeInit( );
+}
+
+
+void HW_GpioInit(void)
+{
+  /* STM32L0 Gpios are all already configured in analog input at nReset*/
 }
 
 /**
@@ -358,13 +400,13 @@ uint16_t HW_AdcReadChannel( uint32_t Channel )
   * @param none
   * @retval none
   */
-void HW_EnterStopMode( void)
+void LPM_EnterStopMode( void)
 {
   BACKUP_PRIMASK();
 
   DISABLE_IRQ( );
 
-  HW_DeInit( );
+  HW_IoDeInit( );
   
   /*clear wake up flag*/
   SET_BIT(PWR->CR, PWR_CR_CWUF);
@@ -380,7 +422,7 @@ void HW_EnterStopMode( void)
   * @param none
   * @retval none
   */
-void HW_ExitStopMode( void)
+void LPM_ExitStopMode( void)
 {
   /* Disable IRQ while the MCU is not running on HSI */
 
@@ -407,7 +449,7 @@ void HW_ExitStopMode( void)
   while( __HAL_RCC_GET_SYSCLK_SOURCE( ) != RCC_SYSCLKSOURCE_STATUS_PLLCLK ) {}
     
   /*initilizes the peripherals*/
-  HW_Init( );
+  HW_IoInit( );
 
   RESTORE_PRIMASK( );
 }
@@ -418,7 +460,7 @@ void HW_ExitStopMode( void)
   * @param none
   * @retval none
   */
-void HW_EnterSleepMode( void)
+void LPM_EnterSleepMode( void)
 {
     HAL_PWR_EnterSLEEPMode(PWR_MAINREGULATOR_ON, PWR_SLEEPENTRY_WFI);
 }

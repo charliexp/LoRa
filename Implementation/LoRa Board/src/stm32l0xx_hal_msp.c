@@ -47,7 +47,6 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "hw.h"
-#include "low_power.h"
 #include "delay.h"
 #include "timeServer.h"
 /* when fast wake up is enabled, the mcu wakes up in ~20us  * and 
@@ -62,18 +61,6 @@
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
-
-/**
-  * @brief This function configures the source of the time base.
-  * @brief  don't enable systick
-  * @param TickPriority: Tick interrupt priority.
-  * @retval HAL status
-  */
-HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
-{
-   /* Return function status */
-  return HAL_OK;
-}
 
 /**
   * @brief This function provides delay (in ms)
@@ -91,6 +78,8 @@ void HAL_Delay(__IO uint32_t Delay)
   */
 void HAL_MspInit(void)
 {
+  __HAL_RCC_PWR_CLK_ENABLE();
+  
   /* Disable the Power Voltage Detector */
   HAL_PWR_DisablePVD( ); 
 
@@ -191,7 +180,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 }
 
 /**
-  * @brief  Gets IRQ number as a finction of the GPIO_Pin.
+  * @brief  Gets IRQ number as a function of the GPIO_Pin.
   * @param  GPIO_Pin: Specifies the pins connected to the EXTI line.
   * @retval IRQ number
   */

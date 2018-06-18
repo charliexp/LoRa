@@ -3,11 +3,17 @@
 #include "lora.h"
 #include "pc.h"
 #include "delay.h"
+#include "daq.h"
+#include "actuator.h"
+#include "timeServer.h"
+#include <stdlib.h>
 
+#define APP_DUTYCYCLE							10
 #define DEVICE_ADDRESS_LOCATION		0x08080000
 
 uint8_t myAddress;
 bool LoRa_setupPending;
+TimerEvent_t appTimer;
 
 void setAddress(uint8_t newAddress)
 {
@@ -185,6 +191,20 @@ void processRadioSetupCommand(uint8_t source, uint8_t command, uint8_t* paramete
 	PC_send(source, myAddress, command, response, 6);
 }
 
+void OnTimerEvent(void)
+{
+	DAQ_ReadData();
+	PRINTF("Ultima citire contor\t%02d:%02d:%02d\r\n", DAQ_Data.time.hour, DAQ_Data.time.minute, DAQ_Data.time.second);
+	PRINTF("Baterie contor\t\t%d.%02d\tV\r\n", DAQ_Data.batteryLevel / 100, DAQ_Data.batteryLevel % 100);
+	PRINTF("Putere activa\t\t%03d.%03d\tkWh\r\n", DAQ_Data.activePower / 1000, DAQ_Data.activePower % 1000);
+	PRINTF("Putere inductiva\t%03d.%03d\tkVArh\r\n", DAQ_Data.inductivePower / 1000, DAQ_Data.inductivePower % 1000);
+	PRINTF("Putere capacitiva\t%03d.%03d\tkVArh\r\n", DAQ_Data.capacitivePower / 1000, DAQ_Data.capacitivePower % 1000);
+	PRINTF("Factor putere\t\t%c%d.%02d\r\n", DAQ_Data.powerFactor >= 0? '+': '-', abs(DAQ_Data.powerFactor) / 100, abs(DAQ_Data.powerFactor) % 100);
+	DAQ_Start();
+	
+  TimerStart(&appTimer);
+}
+
 int main(void)
 {
 	uint8_t response[4];
@@ -201,6 +221,11 @@ int main(void)
 	HW_Init();
 	LoRa_init();
 	PC_init();
+	DAQ_Init();
+	
+	TimerInit(&appTimer, OnTimerEvent);
+	TimerSetValue(&appTimer, APP_DUTYCYCLE * 1000); 
+  OnTimerEvent();
 	
 	LoRa_setupPending = false;
 	myAddress = *((uint8_t *) DEVICE_ADDRESS_LOCATION);
@@ -209,6 +234,7 @@ int main(void)
 	       
   while(1)
   {
+		DAQ_MainLoop();
 		if(UartState == UART_RX)
 		{
 			PC_receive(&target, &command, parameters);
