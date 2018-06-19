@@ -45,6 +45,7 @@ extern UartHandle_t DAQ_UartHandle;
 static uint8_t DAQ_Buffer[UART_BUFFSIZE];
 static uint8_t DAQ_ValidBuffer[DATA_LENGTH];
 static uint16_t DAQ_BufferLength;
+static uint32_t DAQ_TimestampOldValue;
 static uint32_t DAQ_ActiveOldValue;
 static uint32_t DAQ_InductiveOldValue;
 static uint32_t DAQ_CapacitiveOldValue;
@@ -208,6 +209,11 @@ static void DAQ_ReadRegister(const Register_t reg, char *result, uint8_t *result
 	}
 }
 
+static uint32_t DAQ_GetTimestamp(void)
+{
+	return DAQ_Data.time.hour * 3600 + DAQ_Data.time.minute * 60 + DAQ_Data.time.second;
+}
+
 static void DAQ_GetTime(void)
 {
 	char value[10];
@@ -259,6 +265,15 @@ static void DAQ_GetPowers(void)
 	uint8_t valueLength;
 	uint8_t i;
 	uint32_t newValue;
+	uint32_t timeDifference;
+	
+	newValue = DAQ_GetTimestamp();
+	/* Time difference */
+	if (newValue > DAQ_TimestampOldValue)
+		timeDifference = newValue + 24 * 3600 - DAQ_TimestampOldValue;
+	else
+		timeDifference = newValue - DAQ_TimestampOldValue;
+	DAQ_TimestampOldValue = DAQ_GetTimestamp();
 	
 	/* Active energy */
 	i = 0;
@@ -271,9 +286,9 @@ static void DAQ_GetPowers(void)
 			if (value[i] != '.')
 				newValue = newValue * 10 + (value[i] - '0');
 		}while (++i < valueLength);
-		DAQ_Data.activePower = newValue - DAQ_ActiveOldValue;
+		DAQ_Data.activeEnergy = newValue - DAQ_ActiveOldValue;
 		DAQ_ActiveOldValue = newValue;
-		//PRINTF("Active: %d\r\n", newValue);
+		PRINTF("Activ: %d\r\n", newValue);
 	}
 	
 	/* Inductive energy */
@@ -287,9 +302,9 @@ static void DAQ_GetPowers(void)
 			if (value[i] != '.')
 				newValue = newValue * 10 + (value[i] - '0');
 		}while (++i < valueLength);
-		DAQ_Data.inductivePower = newValue - DAQ_InductiveOldValue;
+		DAQ_Data.inductiveEnergy = newValue - DAQ_InductiveOldValue;
 		DAQ_InductiveOldValue = newValue;
-		//PRINTF("Inductive: %d\r\n", newValue);
+		PRINTF("Inductiv: %d\r\n", newValue);
 	}
 	
 	/* Capacitive energy */
@@ -303,12 +318,14 @@ static void DAQ_GetPowers(void)
 			if (value[i] != '.')
 				newValue = newValue * 10 + (value[i] - '0');
 		}while (++i < valueLength);
-		DAQ_Data.capacitivePower = newValue - DAQ_CapacitiveOldValue;
+		DAQ_Data.capacitiveEnergy = newValue - DAQ_CapacitiveOldValue;
 		DAQ_CapacitiveOldValue = newValue;
-		//PRINTF("Capacitive: %d\r\n", newValue);
+		PRINTF("Capacitiv: %d\r\n", newValue);
 	}
-	
-	DAQ_Data.reactivePower = DAQ_Data.inductivePower - DAQ_Data.capacitivePower;
+	//Diferenta intre timestamp citiri in loc de APP_DUTYCYCLE
+	DAQ_Data.reactiveEnergy = DAQ_Data.inductiveEnergy - DAQ_Data.capacitiveEnergy;
+	DAQ_Data.activePower = DAQ_Data.activeEnergy * timeDifference / 3600;
+	DAQ_Data.reactivePower = DAQ_Data.reactiveEnergy * timeDifference / 3600;
 	DAQ_Data.apparentPower = sqrt(DAQ_Data.activePower * DAQ_Data.activePower +
 																DAQ_Data.reactivePower * DAQ_Data.reactivePower);
 	if (DAQ_Data.apparentPower != 0)

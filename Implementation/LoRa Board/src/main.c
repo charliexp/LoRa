@@ -8,12 +8,12 @@
 #include "timeServer.h"
 #include <stdlib.h>
 
-#define APP_DUTYCYCLE							10
 #define DEVICE_ADDRESS_LOCATION		0x08080000
 
 uint8_t myAddress;
 bool LoRa_setupPending;
 TimerEvent_t appTimer;
+uint8_t step = 0;
 
 void setAddress(uint8_t newAddress)
 {
@@ -200,12 +200,17 @@ void OnTimerEvent(void)
 	response[1] = DAQ_Data.time.minute;
 	response[2] = DAQ_Data.time.second;
 	//PC_Send(myAddress, 0xff, COMMAND_LAST_READING, response, 3);
-	DBG_PRINTF("Ultima citire contor\t%02d:%02d:%02d\r\n", DAQ_Data.time.hour, DAQ_Data.time.minute, DAQ_Data.time.second);
-	DBG_PRINTF("Baterie contor\t\t%d.%02d\tV\r\n", DAQ_Data.batteryLevel / 100, DAQ_Data.batteryLevel % 100);
-	DBG_PRINTF("Putere activa\t\t%03d.%03d\tkWh\r\n", DAQ_Data.activePower / 1000, DAQ_Data.activePower % 1000);
-	DBG_PRINTF("Putere inductiva\t%03d.%03d\tkVArh\r\n", DAQ_Data.inductivePower / 1000, DAQ_Data.inductivePower % 1000);
-	DBG_PRINTF("Putere capacitiva\t%03d.%03d\tkVArh\r\n", DAQ_Data.capacitivePower / 1000, DAQ_Data.capacitivePower % 1000);
-	DBG_PRINTF("Factor putere\t\t%c%d.%02d\r\n", DAQ_Data.powerFactor >= 0? '+': '-', abs(DAQ_Data.powerFactor) / 100, abs(DAQ_Data.powerFactor) % 100);
+	PRINTF("Tura %d\r\n", step++);
+	PRINTF("Ultima citire contor\t%02d:%02d:%02d\r\n", DAQ_Data.time.hour, DAQ_Data.time.minute, DAQ_Data.time.second);
+	//DBG_PRINTF("Baterie contor\t\t%d.%02d\tV\r\n", DAQ_Data.batteryLevel / 100, DAQ_Data.batteryLevel % 100);
+	PRINTF("Energie activa\t\t%03d.%03d\tkWh\r\n", DAQ_Data.activeEnergy / 1000, DAQ_Data.activeEnergy % 1000);
+	PRINTF("Energie inductiva\t%03d.%03d\tkVArh\r\n", DAQ_Data.inductiveEnergy / 1000, DAQ_Data.inductiveEnergy % 1000);
+	PRINTF("Energie capacitiva\t%03d.%03d\tkVArh\r\n", DAQ_Data.capacitiveEnergy / 1000, DAQ_Data.capacitiveEnergy % 1000);
+	PRINTF("Energie reactiva\t%c%03d.%03d\tkVArh\r\n", DAQ_Data.reactiveEnergy >= 0? '+': '-', abs(DAQ_Data.reactiveEnergy) / 1000, abs(DAQ_Data.reactiveEnergy) % 1000);
+	//PRINTF("Putere activa\t\t%03d.%03d\tkW\r\n", DAQ_Data.activePower / 1000, DAQ_Data.activePower % 1000);
+	//PRINTF("Putere reactiva\t%03d.%03d\tkVAr\r\n", DAQ_Data.reactivePower >= 0? '+': '-', DAQ_Data.reactivePower / 1000, DAQ_Data.reactivePower % 1000);
+	//PRINTF("Putere aparenta\t\t%03d.%03d\tkW\r\n", DAQ_Data.apparentPower / 1000, DAQ_Data.apparentPower % 1000);
+	//PRINTF("Factor putere\t\t%c%d.%02d\r\n", DAQ_Data.powerFactor >= 0? '+': '-', abs(DAQ_Data.powerFactor) / 100, abs(DAQ_Data.powerFactor) % 100);
 	DAQ_Start();
 	
   TimerStart(&appTimer);
@@ -239,8 +244,8 @@ int main(void)
 	       
   while(1)
   {
-		PC_MainLoop();
-		//DAQ_MainLoop();
+		//PC_MainLoop();
+		DAQ_MainLoop();
 		/*if(UartState == UART_RX)
 		{
 			PC_Receive(&target, &command, parameters, &length);
