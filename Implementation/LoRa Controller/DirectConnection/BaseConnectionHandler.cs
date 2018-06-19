@@ -53,7 +53,21 @@ namespace LoRa_Controller.DirectConnection
         {
             List<byte> receivedData = new List<byte>();
 
-            while (Connected && receivedData.Count != MaxLength)
+            /* Get all up to length byte */
+            while (Connected && receivedData.Count < 4)
+            {
+                try
+                {
+                    receivedData.Add(ReadByte());
+                }
+                catch
+                {
+                    //Close();
+                }
+            }
+
+            /* Get parameter based on length byte */
+            while (Connected && receivedData.Count < receivedData[3] + 4)
             {
                 try
                 {

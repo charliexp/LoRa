@@ -1,6 +1,8 @@
 #ifndef COMMANDS_H
 #define COMMANDS_H
 
+#include "hw.h"
+
 #define ADDRESS_GENERAL								0
 #define ADDRESS_MASTER								1
 #define ADDRESS_BEACON								2
@@ -9,7 +11,8 @@
 #define IDX_SOURCE_ADDRESS						0
 #define IDX_TARGET_ADDRESS						1
 #define IDX_COMMAND										2
-#define IDX_COMMAND_PARAMETER					3
+#define IDX_PARAM_LENGTH										3
+#define IDX_PARAMETER									4
 
 #define PARAMETERS_MAX_SIZE						4
 
@@ -25,8 +28,8 @@ typedef enum Commands_t
 	COMMAND_GET_ADDRESS = 0x20,
 	COMMAND_SET_ADDRESS = 0x21,
 	COMMAND_HAS_METER = 0x22,
-	COMMAND_SET_INDUCTOR = 0x23,
-	COMMAND_SET_CAPACITOR = 0x24,
+	COMMAND_SET_CONTACT = 0x23,
+	COMMAND_CHANGE_ACTUATOR = 0x24,
 	
 	COMMAND_LAST_READING = 0x30,
 	COMMAND_ACTIVE_POWER = 0x31,
@@ -52,7 +55,17 @@ typedef enum Commands_t
 typedef enum Responses_t
 {
 	RESPONSE_ACK = 1,
-	RESPONSE_NACK = 0xff
+	RESPONSE_NACK = 2,
+	RESPONSE_TIMEOUT = 0xff
 }Responses_t;
+
+typedef struct Message_t
+{
+	uint8_t source;
+	uint8_t target;
+	Commands_t command;
+	uint8_t paramLength;
+	uint8_t rawParameter[PARAMETERS_MAX_SIZE];
+}Message_t;
 
 #endif /* COMMANDS_H */

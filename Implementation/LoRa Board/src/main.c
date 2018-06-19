@@ -43,7 +43,7 @@ void processCommunicationCommand(uint8_t source, uint8_t command, uint8_t* param
 					response[0] = parameters[3];
 					response[4] = rssi;
 					response[5] = snr;
-					PC_send(source, myAddress, command, response, 6);
+					//PC_Send(source, myAddress, command, response, 6);
 				}
 			}
 			else if (myAddress >= ADDRESS_BEACON)
@@ -55,7 +55,7 @@ void processCommunicationCommand(uint8_t source, uint8_t command, uint8_t* param
 						response[0] = RESPONSE_ACK;
 						response[4] = rssi;
 						response[5] = snr;
-						PC_send(source, myAddress, command, response, 6);
+						//PC_Send(source, myAddress, command, response, 6);
 						LoRa_send(source, command, parameters, PARAMETERS_MAX_SIZE);
 						break;
 				}
@@ -74,7 +74,7 @@ void processCommunicationCommand(uint8_t source, uint8_t command, uint8_t* param
 				response[4] = rssi;
 				response[5] = snr;
 			}
-			PC_send(source, myAddress, command, response, 6);
+			//PC_Send(source, myAddress, command, response, 6);
 			break;
 	}
 }
@@ -86,16 +86,16 @@ void processPCCommand(uint8_t source, uint8_t command, uint8_t* parameters)
 	{
 		case COMMAND_GET_ADDRESS:
 			response[0] = RESPONSE_ACK;
-			PC_send(source, myAddress, command, response, 6);
+			//PC_Send(source, myAddress, command, response, 6);
 			break;
 		case COMMAND_SET_ADDRESS:
 			setAddress(parameters[3]);
 			response[0] = RESPONSE_ACK;
-			PC_send(source, myAddress, command, response, 6);
+			//PC_Send(source, myAddress, command, response, 6);
 			break;
 		default:
 			response[0] = RESPONSE_NACK;
-			PC_send(source, myAddress, command, response, 6);
+			//PC_Send(source, myAddress, command, response, 6);
 			break;
 	}
 }
@@ -188,18 +188,24 @@ void processRadioSetupCommand(uint8_t source, uint8_t command, uint8_t* paramete
 	else
 		LoRa_setupPending = false;
 	
-	PC_send(source, myAddress, command, response, 6);
+	//PC_Send(source, myAddress, command, response, 6);
 }
 
 void OnTimerEvent(void)
 {
+	uint8_t response[6];
 	DAQ_ReadData();
-	PRINTF("Ultima citire contor\t%02d:%02d:%02d\r\n", DAQ_Data.time.hour, DAQ_Data.time.minute, DAQ_Data.time.second);
-	PRINTF("Baterie contor\t\t%d.%02d\tV\r\n", DAQ_Data.batteryLevel / 100, DAQ_Data.batteryLevel % 100);
-	PRINTF("Putere activa\t\t%03d.%03d\tkWh\r\n", DAQ_Data.activePower / 1000, DAQ_Data.activePower % 1000);
-	PRINTF("Putere inductiva\t%03d.%03d\tkVArh\r\n", DAQ_Data.inductivePower / 1000, DAQ_Data.inductivePower % 1000);
-	PRINTF("Putere capacitiva\t%03d.%03d\tkVArh\r\n", DAQ_Data.capacitivePower / 1000, DAQ_Data.capacitivePower % 1000);
-	PRINTF("Factor putere\t\t%c%d.%02d\r\n", DAQ_Data.powerFactor >= 0? '+': '-', abs(DAQ_Data.powerFactor) / 100, abs(DAQ_Data.powerFactor) % 100);
+	
+	response[0] = DAQ_Data.time.hour;
+	response[1] = DAQ_Data.time.minute;
+	response[2] = DAQ_Data.time.second;
+	//PC_Send(myAddress, 0xff, COMMAND_LAST_READING, response, 3);
+	DBG_PRINTF("Ultima citire contor\t%02d:%02d:%02d\r\n", DAQ_Data.time.hour, DAQ_Data.time.minute, DAQ_Data.time.second);
+	DBG_PRINTF("Baterie contor\t\t%d.%02d\tV\r\n", DAQ_Data.batteryLevel / 100, DAQ_Data.batteryLevel % 100);
+	DBG_PRINTF("Putere activa\t\t%03d.%03d\tkWh\r\n", DAQ_Data.activePower / 1000, DAQ_Data.activePower % 1000);
+	DBG_PRINTF("Putere inductiva\t%03d.%03d\tkVArh\r\n", DAQ_Data.inductivePower / 1000, DAQ_Data.inductivePower % 1000);
+	DBG_PRINTF("Putere capacitiva\t%03d.%03d\tkVArh\r\n", DAQ_Data.capacitivePower / 1000, DAQ_Data.capacitivePower % 1000);
+	DBG_PRINTF("Factor putere\t\t%c%d.%02d\r\n", DAQ_Data.powerFactor >= 0? '+': '-', abs(DAQ_Data.powerFactor) / 100, abs(DAQ_Data.powerFactor) % 100);
 	DAQ_Start();
 	
   TimerStart(&appTimer);
@@ -209,7 +215,6 @@ int main(void)
 {
 	uint8_t response[4];
 	uint8_t source;
-	uint8_t target;
 	uint8_t command;
 	uint8_t rssi;
 	uint8_t snr;
@@ -220,7 +225,7 @@ int main(void)
 	DBG_Init();
 	HW_Init();
 	LoRa_init();
-	PC_init();
+	PC_Init();
 	DAQ_Init();
 	
 	TimerInit(&appTimer, OnTimerEvent);
@@ -234,10 +239,11 @@ int main(void)
 	       
   while(1)
   {
-		DAQ_MainLoop();
-		if(UartState == UART_RX)
+		PC_MainLoop();
+		//DAQ_MainLoop();
+		/*if(UartState == UART_RX)
 		{
-			PC_receive(&target, &command, parameters);
+			PC_Receive(&target, &command, parameters, &length);
 		
 			if (target == myAddress)
 			{
@@ -262,18 +268,18 @@ int main(void)
 				}
 				else if (myAddress == ADDRESS_MASTER)
 				{
-					PC_send(ADDRESS_PC, target, command, parameters, 6);
+					PC_Send(ADDRESS_PC, target, command, parameters, 6);
 					LoRa_send(target, command, parameters, PARAMETERS_MAX_SIZE);
 				}
 			}
 			else if (myAddress == ADDRESS_MASTER)
 			{
-				PC_send(myAddress, target, command, parameters, 6);
+				PC_Send(myAddress, target, command, parameters, 6);
 				LoRa_send(target, command, parameters, PARAMETERS_MAX_SIZE);
 			}
 			UartState = UART_IDLE;
 		}
-		
+		*/
     switch(RadioState)
     {
 			case RADIO_RX:
@@ -303,7 +309,7 @@ int main(void)
 				{
 					response[0] = RESPONSE_NACK;
 					response[1] = RADIO_RX_TIMEOUT;
-					PC_send(LoRa_whoTimedOut(), myAddress, command, response, 6);
+					//PC_Send(LoRa_whoTimedOut(), myAddress, command, response, 6);
 				}
 				else if (myAddress >= ADDRESS_BEACON)
 					LoRa_startReceiving();
@@ -336,7 +342,7 @@ int main(void)
 			case RADIO_TX_TIMEOUT:
 				response[0] = RESPONSE_NACK;
 				response[1] = RADIO_TX_TIMEOUT;
-				PC_send(LoRa_whoTimedOut(), myAddress, command, response, 6);
+				//PC_Send(LoRa_whoTimedOut(), myAddress, command, response, 6);
 				if (myAddress >= ADDRESS_BEACON)
 					LoRa_startReceiving();
 					if (LoRa_setupPending)

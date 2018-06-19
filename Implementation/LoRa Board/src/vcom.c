@@ -62,7 +62,7 @@ __IO uint16_t iw=0;
 /* buffer read index*/
 static uint16_t ir=0;
 /* Uart Handle */
-UART_HandleTypeDef DBG_UartHandle;
+extern UartHandle_t DBG_UartHandle;
 
 /* Private function prototypes -----------------------------------------------*/
 /* Functions Definition ------------------------------------------------------*/
@@ -77,30 +77,32 @@ void vcom_Init(void)
       - Parity = ODD parity
       - BaudRate = 921600 baud
       - Hardware flow control disabled (RTS and CTS signals) */
-  DBG_UartHandle.Instance        = DBG_USARTX;
+  DBG_UartHandle.lowLevelHandle.Instance        = DBG_USARTX;
   
-  DBG_UartHandle.Init.BaudRate   = 115200;
-  DBG_UartHandle.Init.WordLength = UART_WORDLENGTH_8B;
-  DBG_UartHandle.Init.StopBits   = UART_STOPBITS_1;
-  DBG_UartHandle.Init.Parity     = UART_PARITY_NONE;
-  DBG_UartHandle.Init.HwFlowCtl  = UART_HWCONTROL_NONE;
-  DBG_UartHandle.Init.Mode       = UART_MODE_TX_RX;
+  DBG_UartHandle.lowLevelHandle.Init.BaudRate   = 115200;
+  DBG_UartHandle.lowLevelHandle.Init.WordLength = UART_WORDLENGTH_8B;
+  DBG_UartHandle.lowLevelHandle.Init.StopBits   = UART_STOPBITS_1;
+  DBG_UartHandle.lowLevelHandle.Init.Parity     = UART_PARITY_NONE;
+  DBG_UartHandle.lowLevelHandle.Init.HwFlowCtl  = UART_HWCONTROL_NONE;
+  DBG_UartHandle.lowLevelHandle.Init.Mode       = UART_MODE_TX_RX;
   
-  if(HAL_UART_Init(&DBG_UartHandle) != HAL_OK)
+  if(HAL_UART_Init(&DBG_UartHandle.lowLevelHandle) != HAL_OK)
   {
     /* Initialization Error */
     Error_Handler(); 
   }
   
-  HAL_NVIC_SetPriority(DBG_USARTX_IRQn, 0x2, 0);
+  HAL_NVIC_SetPriority(DBG_USARTX_IRQn, 0x1, 0);
   HAL_NVIC_EnableIRQ(DBG_USARTX_IRQn);
+	
+	HAL_UART_Receive_IT(&DBG_UartHandle.lowLevelHandle, DBG_UartHandle.RxBuffer + DBG_UartHandle.RxReceiveIndex, 1);
 }
 
 
 void vcom_DeInit(void)
 {
 #if 1
-  HAL_UART_DeInit(&DBG_UartHandle);
+  HAL_UART_DeInit(&DBG_UartHandle.lowLevelHandle);
 #endif
 }
 
@@ -152,7 +154,7 @@ void vcom_Print( void)
     
     RESTORE_PRIMASK();
     
-    HAL_UART_Transmit(&DBG_UartHandle,(uint8_t *) CurChar, 1, 300);    
+    HAL_UART_Transmit(&DBG_UartHandle.lowLevelHandle,(uint8_t *) CurChar, 1, 300);    
   }
   HAL_NVIC_ClearPendingIRQ(DBG_USARTX_IRQn);
 }

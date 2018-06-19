@@ -127,7 +127,7 @@ void LoRa_send(uint8_t target, uint8_t command, uint8_t* data, uint8_t length)
 	RadioTxBuffer[IDX_TARGET_ADDRESS] = target;
 	RadioTxBuffer[IDX_COMMAND] = command;
 	for (i = 0; i < length; i++)
-		RadioTxBuffer[IDX_COMMAND_PARAMETER + i] = data[i];
+		RadioTxBuffer[IDX_COMMAND + 1 + i] = data[i];
 	Radio.Send((uint8_t *) RadioTxBuffer, LoRa_PayloadMaxSize );
 	RadioState = RADIO_LOWPOWER;
 	if (target != ADDRESS_MASTER)
@@ -146,7 +146,7 @@ void LoRa_receive(uint8_t* source, uint8_t* command, uint8_t* parameters, uint8_
 	*source = RadioRxBuffer[IDX_SOURCE_ADDRESS];
 	*command = RadioRxBuffer[IDX_COMMAND];
 	for (i = 0; i < PARAMETERS_MAX_SIZE; i++)
-		parameters[i] = RadioRxBuffer[IDX_COMMAND_PARAMETER + i];
+		parameters[i] = RadioRxBuffer[IDX_COMMAND + 1 + i];
 	RadioState = RADIO_LOWPOWER;
 	*rssi = abs(RSSI);
 	*snr = SNR;

@@ -40,14 +40,18 @@ static const Register_t InductiveEnergyRegister = { "130.8.0", 7 };
 static const Register_t CapacitiveEnergyRegister = { "131.8.0", 7 };
 
 /* Private variables ---------------------------------------------------------*/
+extern UartHandle_t DAQ_UartHandle;
+
 static uint8_t DAQ_Buffer[UART_BUFFSIZE];
 static uint8_t DAQ_ValidBuffer[DATA_LENGTH];
 static uint16_t DAQ_BufferLength;
 static uint32_t DAQ_ActiveOldValue;
 static uint32_t DAQ_InductiveOldValue;
 static uint32_t DAQ_CapacitiveOldValue;
-
 static DAQ_State_t DAQ_State;
+
+/* Public variables ----------------------------------------------------------*/
+DAQ_Struct_t DAQ_Data;
 
 /* Private function prototypes -----------------------------------------------*/
 static void DAQ_SendReq(const uint8_t *request, uint16_t length);
@@ -57,9 +61,6 @@ static void DAQ_ReadRegister(const Register_t reg, char *result, uint8_t *result
 static void DAQ_GetTime(void);
 static void DAQ_GetBatteryLevel(void);
 static void DAQ_GetPowers(void);
-
-/* Public variables ----------------------------------------------------------*/
-DAQ_Struct_t DAQ_Data;
 
 /* Functions Definition ------------------------------------------------------*/
 void DAQ_Init(void)
@@ -90,12 +91,12 @@ void DAQ_MainLoop(void)
 				if (returnValue == UART_RX_AVAILABLE)
 				{
 					DAQ_State = REC_ID;
-					//DBG_PRINTF("DAQ Received ID\r\n");
+					//DBG_PRINTF("DAQ ID received\r\n");
 				}
 				else if (returnValue == UART_RX_TIMEOUT)
 				{
 					DAQ_State = READY;
-					//DBG_PRINTF("DAQ ID Timeout\r\n");
+					//DBG_PRINTF("DAQ ID timeout\r\n");
 				}
 			}
 			break;
@@ -109,18 +110,18 @@ void DAQ_MainLoop(void)
 			{
 				if (returnValue == UART_RX_AVAILABLE)
 				{
+					memcpy(DAQ_ValidBuffer, DAQ_Buffer, DATA_LENGTH);
 					DAQ_State = REC_DATA;
-					//DBG_PRINTF("DAQ Received data\r\n");
+					//DBG_PRINTF("DAQ data received\r\n");
 				}
 				else if (returnValue == UART_RX_TIMEOUT)
 				{
 					DAQ_State = READY;
-					//DBG_PRINTF("DAQ data Timeout\r\n");
+					//DBG_PRINTF("DAQ data timeout\r\n");
 				}
 			}
 			break;
 		case REC_DATA:
-			memcpy(DAQ_ValidBuffer, DAQ_Buffer, DATA_LENGTH);
 			DAQ_State = IDLE;
 			break;
 		case IDLE:
@@ -141,13 +142,13 @@ void DAQ_ReadData(void)
 static void DAQ_SendReq(const uint8_t *request, uint16_t length)
 {
 	uint8_t bcc;
-	UART_Send((uint8_t *)request, length);
+	UART_Send(&DAQ_UartHandle, (uint8_t *)request, length);
 	
 	//Add checksum
 	if (request[0] != '/' && request[0] != ACK)
 	{
 		bcc = DAQ_CalculateBCC(request);
-		UART_Send(&bcc, length);
+		UART_Send(&DAQ_UartHandle, &bcc, length);
 	}
 }
 
@@ -155,7 +156,7 @@ static UartRxState_t DAQ_CheckForResp(const uint8_t terminatorChar)
 {
 	UartRxState_t result;
 	
-	result = UART_Receive(DAQ_Buffer, &DAQ_BufferLength, terminatorChar);
+	result = UART_ReceiveUntilChar(&DAQ_UartHandle, DAQ_Buffer, &DAQ_BufferLength, terminatorChar);
 	
 	return result;
 }
@@ -272,7 +273,7 @@ static void DAQ_GetPowers(void)
 		}while (++i < valueLength);
 		DAQ_Data.activePower = newValue - DAQ_ActiveOldValue;
 		DAQ_ActiveOldValue = newValue;
-		//DBG_PRINTF("Active: %d\r\n", newValue);
+		//PRINTF("Active: %d\r\n", newValue);
 	}
 	
 	/* Inductive energy */
@@ -288,7 +289,7 @@ static void DAQ_GetPowers(void)
 		}while (++i < valueLength);
 		DAQ_Data.inductivePower = newValue - DAQ_InductiveOldValue;
 		DAQ_InductiveOldValue = newValue;
-		//DBG_PRINTF("Inductive: %d\r\n", newValue);
+		//PRINTF("Inductive: %d\r\n", newValue);
 	}
 	
 	/* Capacitive energy */
@@ -304,7 +305,7 @@ static void DAQ_GetPowers(void)
 		}while (++i < valueLength);
 		DAQ_Data.capacitivePower = newValue - DAQ_CapacitiveOldValue;
 		DAQ_CapacitiveOldValue = newValue;
-		//DBG_PRINTF("Capacitive: %d\r\n", newValue);
+		//PRINTF("Capacitive: %d\r\n", newValue);
 	}
 	
 	DAQ_Data.reactivePower = DAQ_Data.inductivePower - DAQ_Data.capacitivePower;

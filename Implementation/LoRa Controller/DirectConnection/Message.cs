@@ -16,8 +16,8 @@ namespace LoRa_Controller.Device
 			GetAddress = 0x20,
 			SetAddress = 0x21,
             HasMeter = 0x22,
-            SetInductor = 0x23,
-            SetCapacitor = 0x24,
+            SetContact = 0x23,
+            ChangeActuator = 0x24,
 
             LastReading = 0x30,
             ActivePower = 0x31,
@@ -52,15 +52,16 @@ namespace LoRa_Controller.Device
         private const int Idx_sourceAddress = 0;
         private const int Idx_targetAddress = 1;
         private const int Idx_command = 2;
-        private const int Idx_commandParameter = 3;
-        private const int Idx_RSSI = ParametersMaxSize + 3;
-        private const int Idx_SNR = ParametersMaxSize + 4;
-        private const int ParametersMaxSize = 4;
+        private const int Idx_paramLength = 3;
+        private const int Idx_parameter = 4;
+        private const int Idx_RSSI = ParameterMaxSize + 3;
+        private const int Idx_SNR = ParameterMaxSize + 4;
+        private const int ParameterMaxSize = 4;
         #endregion
 
         #region Public constants
         /* Source + target + command + parameters + signal quality*/
-        public const int MaxLength = 1 + 1 + 1 + ParametersMaxSize + 2;
+        public const int MaxLength = 1 + 1 + 1 + ParameterMaxSize + 2;
         #endregion
 
         #region Properties
@@ -68,6 +69,7 @@ namespace LoRa_Controller.Device
         public byte Source { get; private set; }
         public byte Target { get; private set; }
         public CommandType Command { get; private set; }
+        public byte Length { get; private set; }
         public List<int> Parameters { get; private set; }
         public byte RSSI { get; private set; }
         public byte SNR { get; private set; }
@@ -83,12 +85,13 @@ namespace LoRa_Controller.Device
                 array[Idx_sourceAddress] = Source;
                 array[Idx_targetAddress] = Target;
                 array[Idx_command] = (byte)Command;
+                array[Idx_paramLength] = Length;
                 if (Parameters.Count != 0)
                 {
-                    array[Idx_commandParameter + 0] = (byte)(Parameters[0] >> 24);
-                    array[Idx_commandParameter + 1] = (byte)(Parameters[0] >> 16);
-                    array[Idx_commandParameter + 2] = (byte)(Parameters[0] >> 8);
-                    array[Idx_commandParameter + 3] = (byte)(Parameters[0] >> 0);
+                    array[Idx_parameter + 0] = (byte)(Parameters[0] >> 24);
+                    array[Idx_parameter + 1] = (byte)(Parameters[0] >> 16);
+                    array[Idx_parameter + 2] = (byte)(Parameters[0] >> 8);
+                    array[Idx_parameter + 3] = (byte)(Parameters[0] >> 0);
                 }
 
                 return array;
@@ -102,6 +105,7 @@ namespace LoRa_Controller.Device
             Timestamp = DateTime.Now;
             Source = 0;
             Target = 0;
+            Length = 0;
             Command = CommandType.Invalid;
             Parameters = new List<int>();
             RSSI = 0;
@@ -109,47 +113,48 @@ namespace LoRa_Controller.Device
         }
         public Message(byte[] byteRepresentation) : this()
         {
+            int parameter = 0;
+            int i = 0;
+
             Source = byteRepresentation[Idx_sourceAddress];
             Target = byteRepresentation[Idx_targetAddress];
             Command = (CommandType)byteRepresentation[Idx_command];
-            Parameters.Add( byteRepresentation[Idx_commandParameter + 0] << 24  |
-                            byteRepresentation[Idx_commandParameter + 1] << 16  |
-                            byteRepresentation[Idx_commandParameter + 2] << 8   |
-                            byteRepresentation[Idx_commandParameter + 3]);
-            RSSI = byteRepresentation[Idx_RSSI];
-            SNR = byteRepresentation[Idx_SNR];
+            Length = byteRepresentation[Idx_paramLength];
+            
+            while (i < Length)
+                parameter = parameter << 8 + byteRepresentation[Idx_parameter + i++];
+            Parameters.Add(parameter);
+            if (Source != (byte) AddressType.PC && Target != (byte) AddressType.PC)
+            {
+                RSSI = byteRepresentation[Idx_RSSI];
+                SNR = byteRepresentation[Idx_SNR];
+            }
         }
-        public Message(List<byte> byteRepresentation) : this()
+        public Message(List<byte> byteRepresentation) : this(byteRepresentation.ToArray())
         {
-            Source = byteRepresentation[Idx_sourceAddress];
-            Target = byteRepresentation[Idx_targetAddress];
-            Command = (CommandType)byteRepresentation[Idx_command];
-            Parameters.Add(byteRepresentation[Idx_commandParameter + 0] << 24 |
-                            byteRepresentation[Idx_commandParameter + 1] << 16 |
-                            byteRepresentation[Idx_commandParameter + 2] << 8 |
-                            byteRepresentation[Idx_commandParameter + 3]);
-            RSSI = byteRepresentation[Idx_RSSI];
-            SNR = byteRepresentation[Idx_SNR];
         }
         public Message(int target, CommandType command, int parameter) : this()
         {
-            Source = (int)AddressType.PC;
-            this.Target = (byte)target;
-            this.Command = command;
+            Source = (byte)AddressType.PC;
+            Target = (byte)target;
+            Command = command;
+            Length = 4;
             Parameters.Add(parameter);
         }
         public Message(CommandType command, int parameter) : this()
         {
-            Source = (int)AddressType.PC;
-            Target = (int)AddressType.General;
-            this.Command = command;
+            Source = (byte)AddressType.PC;
+            Target = (byte)AddressType.General;
+            Command = command;
+            Length = 4;
             Parameters.Add(parameter);
         }
         public Message(CommandType command) : this()
         {
-            Source = (int)AddressType.PC;
-            Target = (int)AddressType.General;
-            this.Command = command;
+            Source = (byte)AddressType.PC;
+            Target = (byte)AddressType.General;
+            Length = 0;
+            Command = command;
         }
         #endregion
     }
