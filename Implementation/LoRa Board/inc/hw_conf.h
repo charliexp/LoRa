@@ -126,7 +126,7 @@ Maintainer: Miguel Luis and Gregory Cristian
 
 /* --------Preprocessor compile swicth------------ */
 //move somewhere else
-#define APP_DUTYCYCLE							10
+#define APP_DUTYCYCLE							30
 
 /* debug switches in debug.h */
 #define DEBUG

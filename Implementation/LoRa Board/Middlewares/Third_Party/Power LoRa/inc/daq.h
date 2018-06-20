@@ -25,13 +25,13 @@ typedef struct DAQ_Struct_t
 	DAQTime_t time;
 	uint16_t batteryLevel;			//Resolution: 0.01, Unit: V
 	uint32_t activeEnergy;			//Resolution: 0.001, Unit: kWh
-	uint32_t inductiveEnergy;		//Resolution: 0.001, Unit: kVArh
-	uint32_t capacitiveEnergy;	//Resolution: 0.001, Unit: kVArh
-	int32_t reactiveEnergy;			//Resolution: 0.001, Unit: kVArh
-	
+	uint32_t capacitiveEnergy;	//Resolution: 0.001, Unit: kVARh
+	uint32_t inductiveEnergy;		//Resolution: 0.001, Unit: kVARh
+	uint32_t reactiveEnergy;		//Resolution: 0.001, Unit: kVARh
+	bool inductive;
 	uint32_t activePower;				//Resolution: 0.001, Unit: kW
-	int32_t reactivePower;			//Resolution: 0.001, Unit: kVAr
-	int32_t apparentPower;			//Resolution: 0.001, Unit: kW
+	uint32_t reactivePower;			//Resolution: 0.001, Unit: kVAR
+	uint32_t apparentPower;			//Resolution: 0.001, Unit: kVA
 	int8_t powerFactor;					//Resolution: 0.01
 }DAQ_Struct_t;
 
