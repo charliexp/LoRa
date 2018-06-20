@@ -200,8 +200,9 @@ void OnTimerEvent(void)
 	response[1] = DAQ_Data.time.minute;
 	response[2] = DAQ_Data.time.second;
 	//PC_Send(myAddress, 0xff, COMMAND_LAST_READING, response, 3);
-	/*PRINTF("\r\nTura %d\r\n", step++);
+	PRINTF("\r\nTura %d\r\n", step++);
 	PRINTF("Ultima citire contor\t%02d:%02d:%02d\r\n", DAQ_Data.time.hour, DAQ_Data.time.minute, DAQ_Data.time.second);
+	//DBG_PRINTF("Baterie contor\t\t%d.%02d\tV\r\n", DAQ_Data.batteryLevel / 100, DAQ_Data.batteryLevel % 100);
 	PRINTF("Energie activa\t\t%03d.%03d\tkWh\r\n", DAQ_Data.activeEnergy / 1000, DAQ_Data.activeEnergy % 1000);
 	PRINTF("Energie inductiva\t\t%03d.%03d\tkVARh\r\n", DAQ_Data.inductiveEnergy / 1000, DAQ_Data.inductiveEnergy % 1000);
 	PRINTF("Energie capacitiva\t\t%03d.%03d\tkVARh\r\n", DAQ_Data.capacitiveEnergy / 1000, DAQ_Data.capacitiveEnergy % 1000);
@@ -210,7 +211,7 @@ void OnTimerEvent(void)
 	PRINTF("Putere reactiva\t%c%03d.%03d\tkVAR\r\n", DAQ_Data.inductive? '+': '-',  DAQ_Data.reactivePower / 1000,  DAQ_Data.reactivePower % 1000);
 	PRINTF("Putere aparenta\t\t%03d.%03d\tkVA\r\n", DAQ_Data.apparentPower / 1000, DAQ_Data.apparentPower % 1000);
 	PRINTF("Factor putere\t\t%c%d.%02d\r\n", DAQ_Data.inductive? '+': '-', abs(DAQ_Data.powerFactor) / 100, abs(DAQ_Data.powerFactor) % 100);
-	*/DAQ_Start();
+	DAQ_Start();
 	
   TimerStart(&appTimer);
 }
@@ -250,8 +251,8 @@ int main(void)
 		ACT_SetContact(0, false);
 		ACT_SetContact(1, true);
 	  HAL_Delay(10000);*/
-		PC_MainLoop();
-		//DAQ_MainLoop();
+		//PC_MainLoop();
+		DAQ_MainLoop();
 		/*if(UartState == UART_RX)
 		{
 			PC_Receive(&target, &command, parameters, &length);
