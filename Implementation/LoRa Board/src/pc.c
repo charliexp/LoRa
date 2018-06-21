@@ -122,6 +122,7 @@ void PC_ProcessMessage(void)
 			PC_Send(reply);
 			break;
 	}
+	PC_Handle.bufferLength = 0;
 }
 
 void PC_Send(Frame_t frame)
