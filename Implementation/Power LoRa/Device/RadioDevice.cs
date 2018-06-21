@@ -9,7 +9,7 @@
         #endregion
 
         #region Constructors
-        public RadioDevice(int address) : base()
+        public RadioDevice(byte address) : base()
 		{
 			Address = address;
 			Connected = false;

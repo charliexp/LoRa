@@ -65,6 +65,9 @@ namespace Power_LoRa.Connection.Messages
                         case CommandType.IsPresent:
                             PrintableArgument = ((ResponseType)value[Idx_ack]).ToString();
                             break;
+                        case CommandType.SetAddress:
+                            PrintableArgument = ((ResponseType)value[Idx_ack]).ToString();
+                            break;
                         case CommandType.Timestamp:
                             PrintableArgument = rawArgument[0].ToString("D2") + ":" +
                                 rawArgument[1].ToString("D2") + ":" +

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using static Power_LoRa.Connection.Messages.Frame;
 using static Power_LoRa.Connection.Messages.Message;
 
 namespace Power_LoRa.Device
@@ -31,8 +32,11 @@ namespace Power_LoRa.Device
         private List<CheckBox> outputs;
         private ButtonControl addPowerOutput;
 
-        public ButtonControl checkIfPresent;
-		public TextBoxControl addressControl;
+        private ButtonControl checkIfPresent;
+        private TextBoxControl addressControl;
+        private ButtonControl setAddress;
+
+        private byte address;
         #endregion
 
         #region Protected variables
@@ -40,15 +44,27 @@ namespace Power_LoRa.Device
         #endregion
 
         #region Properties
-        public int Address
+        public byte NewAddress { get; set; }
+        public byte Address
 		{
 			get
 			{
-				return Int32.Parse(((TextBox)addressControl.Field).Text);
+				return address;
 			}
 			set
 			{
-				((TextBox)addressControl.Field).Text = value.ToString();
+                address = value;
+
+                switch ((AddressType)address)
+                {
+                    case AddressType.Broadcast:
+                        Text = "Gateway";
+                        break;
+                    default:
+                        Text = "End device " + address.ToString();
+                        break;
+                }
+                ((TextBox)addressControl.Field).Text = address.ToString();
 			}
 		}
         /*
@@ -131,18 +147,8 @@ namespace Power_LoRa.Device
             addPowerOutput = new ButtonControl("Add output");
             checkIfPresent = new ButtonControl("Check if present");
             addressControl = new TextBoxControl("Address", TextBoxControl.Type.Input);
-            /*Bandwidth = new ParameterComboBox(CommandType.Bandwidth, new List<string> { "125 kHz", "250 kHz", "500 kHz" }, 0);
-            OutputPower = new ParameterSpinBox(CommandType.OutputPower, 1, 14, 14);
-            SpreadingFactor = new ParameterSpinBox(CommandType.SpreadingFactor, 7, 12, 12);
-            CodingRate = new ParameterComboBox(CommandType.CodingRate, new List<string> { "4/5", "4/6", "4/7", "4/8" }, 3);
-            RxSymTimeout = new ParameterSpinBox(CommandType.RxSymTimeout, 1, 30, 5);
-            RxMsTimeout = new ParameterSpinBox(CommandType.RxMsTimeout, 1, 10000, 5000);
-            TxTimeout = new ParameterSpinBox(CommandType.TxTimeout, 1, 10000, 5000);
-            PreambleSize = new ParameterSpinBox(CommandType.PreambleSize, 2, 30, 8);
-            PayloadMaxSize = new ParameterSpinBox(CommandType.PayloadMaxSize, 1, 64, 64);
-            VariablePayload = new ParameterCheckBox(CommandType.VariablePayload, true);
-            PerformCRC = new ParameterCheckBox(CommandType.PerformCRC, true);*/
-            
+            setAddress = new ButtonControl("Set Address");
+
             mainLayout = new TableLayoutPanel
             {
                 AutoSize = true,
@@ -211,7 +217,8 @@ namespace Power_LoRa.Device
             powerReadingLayout.Controls.Add(powerFactor.Field);
             radioLayout.Controls.Add(addressControl.Label);
             radioLayout.Controls.Add(addressControl.Field);
-            radioLayout.Controls.Add(checkIfPresent.Field);/*
+            radioLayout.Controls.Add(checkIfPresent.Field);
+            radioLayout.Controls.Add(setAddress.Field);/*
             radioLayout.Controls.Add(Bandwidth.Label);
             radioLayout.Controls.Add(Bandwidth.Field);
             radioLayout.Controls.Add(OutputPower.Label);
@@ -250,6 +257,30 @@ namespace Power_LoRa.Device
             Name = name.Replace(" ", "") + "GroupBox";
             Text = name;
             TabStop = false;
+
+            setAddress.Field.Click += new EventHandler(Program.SetNewAddress);
+            addressControl.Field.TextChanged += new EventHandler(AddressFieldChanged);
+        }
+        #endregion
+
+        #region Private methods
+        private void AddressFieldChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                NewAddress = Byte.Parse(((TextBox)addressControl.Field).Text);
+                if (NewAddress != Address &&
+                    NewAddress != (byte) AddressType.Broadcast &&
+                    NewAddress != (byte) AddressType.PC)
+                    setAddress.Field.Enabled = true;
+                else
+                    setAddress.Field.Enabled = false;
+            }
+            catch
+            {
+                //TODO: invalid address
+                setAddress.Field.Enabled = false;
+            }
         }
         #endregion
 

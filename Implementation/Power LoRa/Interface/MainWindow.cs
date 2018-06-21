@@ -70,23 +70,6 @@ namespace Power_LoRa.Interface
         public void BoardDisconnected()
         {
         }
-        public void SetDirectlyConnectedNodeType()
-        {
-            DirectNodeInterface.Address = Program.directDevice.Address;
-            DirectNodeInterface.SetAddress.Field.Enabled = false;
-            switch (Program.directDevice.Type)
-            {
-                case NodeType.Gateway:
-                    DirectNodeInterface.Text = "Gateway";
-                    break;
-                case NodeType.EndDevice:
-                    DirectNodeInterface.Text = "End device " + Program.directDevice.Address;
-                    break;
-                case NodeType.Unknown:
-                    DirectNodeInterface.Text = "Unknown/new";
-                    break;
-            }
-        }
         public void UpdateRadioConnectedNodes()
         {
             for (int i = RadioNodeInterfaces.Count; i < Program.radioDevices.Count; i++)

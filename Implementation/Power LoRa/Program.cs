@@ -134,10 +134,8 @@ namespace Power_LoRa
                         if (!directDeviceInitialized)
                         {
                             directDevice.Address = frame.EndDevice;
-                            ((TextBox)mainWindow.DirectNodeInterface.addressControl.Field).TextChanged += new EventHandler(AddressFieldChanged);
-                            ((Button)mainWindow.DirectNodeInterface.SetAddress.Field).Click += new EventHandler(SetAddress);
                             directDeviceInitialized = true;
-                            mainWindow.SetDirectlyConnectedNodeType();
+                            mainWindow.DirectNodeInterface.Address = frame.EndDevice;
                         }
                         break;
                     case CommandType.Timestamp:
@@ -414,26 +412,13 @@ namespace Power_LoRa
 		private static void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
 			mainWindow.BoardDisconnected();
-		}
-		private static void AddressFieldChanged(object sender, EventArgs e)
-		{
-			int newAddress;
-			try
-			{
-				newAddress = Int32.Parse(((TextBox)mainWindow.DirectNodeInterface.addressControl.Field).Text);
-				if (newAddress != directDevice.Address && newAddress > 0)
-					mainWindow.DirectNodeInterface.SetAddress.Field.Enabled = true;
-				else
-					mainWindow.DirectNodeInterface.SetAddress.Field.Enabled = false;
-			}
-			catch
-			{
-				mainWindow.DirectNodeInterface.SetAddress.Field.Enabled = false;
-			}
-		}
-		private static void SetAddress(object sender, EventArgs e)
+        }
+        public static void SetNewAddress(object sender, EventArgs e)
         {
-            connectionHandler.Write(new Connection.Messages.Message(CommandType.SetAddress, mainWindow.DirectNodeInterface.Address));
+            BaseNodeGroupBox parentGroupBox = (BaseNodeGroupBox)((Button)sender).Parent.Parent.Parent.Parent;
+            parentGroupBox.Address = parentGroupBox.NewAddress;
+            directDevice.Address = parentGroupBox.Address;
+            connectionHandler.Write(new Connection.Messages.Message(CommandType.SetAddress, parentGroupBox.Address));
 		}
 		#endregion
         

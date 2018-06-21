@@ -5,9 +5,9 @@
         #region Types
         public enum NodeType
         {
-            Unknown,
-            Gateway,
+            Gateway = 0,
             EndDevice,
+            Unknown,
         }
         public enum AddressType
         {
@@ -19,11 +19,11 @@
         #endregion
 
         #region Private variables
-        private int address;
+        private byte address;
         #endregion
 
         #region Properties
-        public int Address
+        public byte Address
         {
             get { return address; }
             set

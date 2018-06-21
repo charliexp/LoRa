@@ -30,6 +30,8 @@ static PC_Handle_t PC_Handle;
 static Frame_t receivedFrame;
 
 /* Private function prototypes -----------------------------------------------*/
+extern void setAddress(uint8_t newAddress);
+
 /* Functions Definition ------------------------------------------------------*/
 
 void PC_Init(void)
@@ -69,7 +71,7 @@ void PC_MainLoop(void)
 			argLength = Message_argLengthFromArray(PC_Handle.buffer + FRAME_HEADER_SIZE);
 			if (argLength != 0)
 				returnValue = UART_ReceiveFixedLength(&DBG_UartHandle,
-										PC_Handle.buffer + MESSAGE_HEADER_SIZE,
+										PC_Handle.buffer + PC_Handle.bufferLength,
 										argLength);
 			else
 				returnValue = UART_RX_AVAILABLE;
@@ -110,12 +112,14 @@ void PC_ProcessMessage(void)
 			reply.messages[0].rawArgument[0] = ACK;
 			PC_Send(reply);
 			PC_Handle.connected = true;
-			break;/*
+			break;
 		case COMMAND_SET_ADDRESS:
-			setAddress(parameters[3]);
-			response[0] = RESPONSE_ACK;
-			PC_Send(source, myAddress, command, response, 6);
-			break;*/
+			setAddress(receivedFrame.messages[0].rawArgument[0]);
+			reply.endDevice = myAddress;
+			reply.messages[0].argLength = 1;
+			reply.messages[0].rawArgument[0] = ACK;
+			PC_Send(reply);
+			break;
 		default:
 			reply.messages[0].argLength = 1;
 			reply.messages[0].rawArgument[0] = NAK;
