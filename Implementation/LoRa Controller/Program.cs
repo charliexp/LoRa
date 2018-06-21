@@ -117,7 +117,8 @@ namespace LoRa_Controller
 					serverHandler.Write(receivedDirectlyMessage.ToString());*/
 				}
                 
-				worker.ReportProgress(0, directConnectionFrame);
+                if (directConnectionFrame != null)
+				    worker.ReportProgress(0, directConnectionFrame);
 			}
 		}
 		private static void BackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -139,6 +140,8 @@ namespace LoRa_Controller
                             directDeviceInitialized = true;
                             mainWindow.SetDirectlyConnectedNodeType();
                         }
+                        break;
+                    case CommandType.Timestamp:
                         break;
                 }
             }

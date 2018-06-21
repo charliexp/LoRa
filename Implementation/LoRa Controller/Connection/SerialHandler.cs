@@ -67,7 +67,8 @@ namespace LoRa_Controller.Connection
         public override byte[] ReadBytes(int numberOfBytes)
         {
             byte[] receiveBuffer = new byte[numberOfBytes];
-            serialPort.BaseStream.Read(receiveBuffer, 0, numberOfBytes);
+            while (serialPort.BytesToRead < numberOfBytes) ;
+            serialPort.Read(receiveBuffer, 0, numberOfBytes);
             return receiveBuffer;
         }
         public async override Task<byte[]> ReadBytesAsync(int numberOfBytes)

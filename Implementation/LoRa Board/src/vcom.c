@@ -56,7 +56,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* buffer */
-static char buff[BUFSIZE];
+char buff[BUFSIZE];
 /* buffer write index*/
 __IO uint16_t iw=0;
 /* buffer read index*/

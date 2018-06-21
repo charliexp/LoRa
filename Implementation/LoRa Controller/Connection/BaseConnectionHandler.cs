@@ -80,7 +80,7 @@ namespace LoRa_Controller.Connection
             }
             catch
             {
-                //Close();
+                Close();
                 return null;
             }
             
@@ -92,7 +92,7 @@ namespace LoRa_Controller.Connection
             }
             catch
             {
-                //Close();
+                Close();
                 return null;
             }
             header.AddRange(argument);
@@ -114,7 +114,7 @@ namespace LoRa_Controller.Connection
                 }
                 catch
                 {
-                    //Close();
+                    Close();
                 }
             }
 
@@ -128,7 +128,7 @@ namespace LoRa_Controller.Connection
                 }
                 catch
                 {
-                    //Close();
+                    Close();
                 }
             }
             header.AddRange(argument);

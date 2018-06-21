@@ -122,13 +122,11 @@ void PC_ProcessMessage(void)
 
 void PC_Send(Frame_t frame)
 {
-	uint8_t i;
 	uint8_t array[FRAME_MAX_SIZE];
 	uint8_t arrayLength = 0;
 	
 	Message_frameToArray(frame, array, &arrayLength);
-	for (i = 0; i < arrayLength; i++)
-		PRINTF("%c", array[i]);
+	UART_Send(&DBG_UartHandle, array, arrayLength);
 }
 
 bool PC_Connected(void)
