@@ -77,14 +77,14 @@ static void OnRxError( void )
 }
 
 void expectingResponseFrom(uint8_t target)
-{
+{/*
 	uint8_t i;
 	
 	if (target == ADDRESS_GENERAL)
 		for (i = 0; i < RADIO_MAX_NODES; i++)
 			RadioNodes[i].responsePending = true;
 	else
-		RadioNodes[target - ADDRESS_BEACON].responsePending = true;
+		RadioNodes[target - ADDRESS_BEACON].responsePending = true;*/
 }
 
 bool notAllNodesResponded(uint8_t lastResponseSource)
@@ -121,7 +121,7 @@ void LoRa_init(void)
 }
 
 void LoRa_send(uint8_t target, uint8_t command, uint8_t* data, uint8_t length)
-{
+{/*
 	uint8_t i;
 	RadioTxBuffer[IDX_SOURCE_ADDRESS] = myAddress;
 	RadioTxBuffer[IDX_TARGET_ADDRESS] = target;
@@ -131,7 +131,7 @@ void LoRa_send(uint8_t target, uint8_t command, uint8_t* data, uint8_t length)
 	Radio.Send((uint8_t *) RadioTxBuffer, LoRa_PayloadMaxSize );
 	RadioState = RADIO_LOWPOWER;
 	if (target != ADDRESS_MASTER)
-		expectingResponseFrom(target);
+		expectingResponseFrom(target);*/
 }
 
 void LoRa_startReceiving(void)
@@ -141,7 +141,7 @@ void LoRa_startReceiving(void)
 }
 
 void LoRa_receive(uint8_t* source, uint8_t* command, uint8_t* parameters, uint8_t* rssi, uint8_t* snr)
-{
+{/*
 	uint8_t i;
 	*source = RadioRxBuffer[IDX_SOURCE_ADDRESS];
 	*command = RadioRxBuffer[IDX_COMMAND];
@@ -160,11 +160,11 @@ void LoRa_receive(uint8_t* source, uint8_t* command, uint8_t* parameters, uint8_
 			}
 		if (notAllNodesResponded(*source))
 			LoRa_startReceiving();
-	}
+	}*/
 }
 
 uint8_t LoRa_whoTimedOut(void)
-{
+{/*
 	uint8_t target = RadioTxBuffer[IDX_TARGET_ADDRESS];
 	uint8_t i;
 	
@@ -176,7 +176,8 @@ uint8_t LoRa_whoTimedOut(void)
 			break;
 		}
 	RadioState = RADIO_LOWPOWER;
-	return target;
+	return target;*/
+	return 0;
 }
 
 void LoRa_updateParameters(void)

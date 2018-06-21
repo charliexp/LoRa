@@ -87,19 +87,10 @@ void DAQ_MainLoop(void)
 			break;
 		case SENT_ID_REQ:
 			returnValue = DAQ_CheckForResp(CR);
-			if (returnValue != UART_RX_PENDING)
-			{
-				if (returnValue == UART_RX_AVAILABLE)
-				{
-					DAQ_State = REC_ID;
-					//DBG_PRINTF("DAQ ID received\r\n");
-				}
-				else if (returnValue == UART_RX_TIMEOUT)
-				{
-					DAQ_State = READY;
-					//DBG_PRINTF("DAQ ID timeout\r\n");
-				}
-			}
+			if (returnValue == UART_RX_AVAILABLE)
+				DAQ_State = REC_ID;
+			else if (returnValue == UART_RX_TIMEOUT)
+				DAQ_State = READY;
 			break;
 		case REC_ID:
 			DAQ_SendReq(DataReq, 6);
@@ -107,20 +98,13 @@ void DAQ_MainLoop(void)
 			break;
 		case SENT_DATA_REQ:
 			returnValue = DAQ_CheckForResp(ETX);
-			if (returnValue != UART_RX_PENDING)
+			if (returnValue == UART_RX_AVAILABLE)
 			{
-				if (returnValue == UART_RX_AVAILABLE)
-				{
-					memcpy(DAQ_ValidBuffer, DAQ_Buffer, DATA_LENGTH);
-					DAQ_State = REC_DATA;
-					//DBG_PRINTF("DAQ data received\r\n");
-				}
-				else if (returnValue == UART_RX_TIMEOUT)
-				{
-					DAQ_State = READY;
-					//DBG_PRINTF("DAQ data timeout\r\n");
-				}
+				memcpy(DAQ_ValidBuffer, DAQ_Buffer, DATA_LENGTH);
+				DAQ_State = REC_DATA;
 			}
+			else if (returnValue == UART_RX_TIMEOUT)
+				DAQ_State = READY;
 			break;
 		case REC_DATA:
 			DAQ_State = IDLE;
@@ -289,7 +273,6 @@ static void DAQ_GetPowers(void)
 		}while (++i < valueLength);
 		DAQ_Data.activeEnergy = newValue - DAQ_ActiveOldValue;
 		DAQ_ActiveOldValue = newValue;
-		PRINTF("Registru activ: %d\r\n", newValue);
 	}
 	
 	/* Capacitive energy */
@@ -306,7 +289,6 @@ static void DAQ_GetPowers(void)
 		DAQ_Data.capacitiveEnergy = newValue - DAQ_CapacitiveOldValue;
 		DAQ_Data.inductive = false;
 		DAQ_CapacitiveOldValue = newValue;
-		PRINTF("Registru capacitiv: %d\r\n", newValue);
 	}
 	
 	/* Inductive energy */
@@ -323,7 +305,6 @@ static void DAQ_GetPowers(void)
 		DAQ_Data.inductiveEnergy = newValue - DAQ_InductiveOldValue;
 		DAQ_Data.inductive = true;
 		DAQ_InductiveOldValue = newValue;
-		PRINTF("Registru inductiv: %d\r\n", newValue);
 	}
 	
 	//Diferenta intre timestamp citiri in loc de APP_DUTYCYCLE

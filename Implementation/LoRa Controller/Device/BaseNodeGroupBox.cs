@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using static LoRa_Controller.Device.Message;
+using static LoRa_Controller.Connection.Messages.Message;
 
 namespace LoRa_Controller.Device
 {

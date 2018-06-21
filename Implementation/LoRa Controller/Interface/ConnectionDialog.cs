@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO.Ports;
 using System.Windows.Forms;
-using static LoRa_Controller.DirectConnection.BaseConnectionHandler;
+using static LoRa_Controller.Connection.BaseConnectionHandler;
 
 namespace LoRa_Controller.Interface
 {

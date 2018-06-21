@@ -30,7 +30,7 @@ namespace LoRa_Controller.Interface.Controls
         private async void SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (ValueChanged != null)
-				await ValueChanged(((ComboBox)sender).SelectedIndex);
+				await ValueChanged((byte) ((ComboBox)sender).SelectedIndex);
         }
         #endregion
     }

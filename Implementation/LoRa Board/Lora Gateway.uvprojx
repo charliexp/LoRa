@@ -803,14 +803,34 @@
           <GroupName>src</GroupName>
           <Files>
             <File>
+              <FileName>actuator.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\actuator.c</FilePath>
+            </File>
+            <File>
+              <FileName>daq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\daq.c</FilePath>
+            </File>
+            <File>
               <FileName>debug.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\src\debug.c</FilePath>
             </File>
             <File>
+              <FileName>gateway_main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\gateway_main.c</FilePath>
+            </File>
+            <File>
               <FileName>hw_gpio.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\src\hw_gpio.c</FilePath>
+            </File>
+            <File>
+              <FileName>hw_i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\hw_i2c.c</FilePath>
             </File>
             <File>
               <FileName>hw_rtc.c</FileName>
@@ -821,6 +841,21 @@
               <FileName>hw_spi.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\src\hw_spi.c</FilePath>
+            </File>
+            <File>
+              <FileName>hw_uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\hw_uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>lora.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\lora.c</FilePath>
+            </File>
+            <File>
+              <FileName>pc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\pc.c</FilePath>
             </File>
             <File>
               <FileName>stm32l0xx_hal_msp.c</FileName>
@@ -838,44 +873,9 @@
               <FilePath>.\src\stm32l0xx_it.c</FilePath>
             </File>
             <File>
-              <FileName>pc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\pc.c</FilePath>
-            </File>
-            <File>
               <FileName>vcom.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\src\vcom.c</FilePath>
-            </File>
-            <File>
-              <FileName>lora.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\lora.c</FilePath>
-            </File>
-            <File>
-              <FileName>hw_i2c.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\hw_i2c.c</FilePath>
-            </File>
-            <File>
-              <FileName>hw_uart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\hw_uart.c</FilePath>
-            </File>
-            <File>
-              <FileName>gateway_main.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\gateway_main.c</FilePath>
-            </File>
-            <File>
-              <FileName>actuator.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\actuator.c</FilePath>
-            </File>
-            <File>
-              <FileName>daq.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\daq.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1679,14 +1679,34 @@
           <GroupName>src</GroupName>
           <Files>
             <File>
+              <FileName>actuator.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\actuator.c</FilePath>
+            </File>
+            <File>
+              <FileName>daq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\daq.c</FilePath>
+            </File>
+            <File>
               <FileName>debug.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\src\debug.c</FilePath>
             </File>
             <File>
+              <FileName>gateway_main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\gateway_main.c</FilePath>
+            </File>
+            <File>
               <FileName>hw_gpio.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\src\hw_gpio.c</FilePath>
+            </File>
+            <File>
+              <FileName>hw_i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\hw_i2c.c</FilePath>
             </File>
             <File>
               <FileName>hw_rtc.c</FileName>
@@ -1697,6 +1717,21 @@
               <FileName>hw_spi.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\src\hw_spi.c</FilePath>
+            </File>
+            <File>
+              <FileName>hw_uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\hw_uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>lora.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\lora.c</FilePath>
+            </File>
+            <File>
+              <FileName>pc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\pc.c</FilePath>
             </File>
             <File>
               <FileName>stm32l0xx_hal_msp.c</FileName>
@@ -1714,44 +1749,9 @@
               <FilePath>.\src\stm32l0xx_it.c</FilePath>
             </File>
             <File>
-              <FileName>pc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\pc.c</FilePath>
-            </File>
-            <File>
               <FileName>vcom.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\src\vcom.c</FilePath>
-            </File>
-            <File>
-              <FileName>lora.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\lora.c</FilePath>
-            </File>
-            <File>
-              <FileName>hw_i2c.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\hw_i2c.c</FilePath>
-            </File>
-            <File>
-              <FileName>hw_uart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\hw_uart.c</FilePath>
-            </File>
-            <File>
-              <FileName>gateway_main.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\gateway_main.c</FilePath>
-            </File>
-            <File>
-              <FileName>actuator.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\actuator.c</FilePath>
-            </File>
-            <File>
-              <FileName>daq.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\daq.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2554,14 +2554,34 @@
           <GroupName>src</GroupName>
           <Files>
             <File>
+              <FileName>actuator.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\actuator.c</FilePath>
+            </File>
+            <File>
+              <FileName>daq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\daq.c</FilePath>
+            </File>
+            <File>
               <FileName>debug.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\src\debug.c</FilePath>
             </File>
             <File>
+              <FileName>gateway_main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\gateway_main.c</FilePath>
+            </File>
+            <File>
               <FileName>hw_gpio.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\src\hw_gpio.c</FilePath>
+            </File>
+            <File>
+              <FileName>hw_i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\hw_i2c.c</FilePath>
             </File>
             <File>
               <FileName>hw_rtc.c</FileName>
@@ -2572,6 +2592,21 @@
               <FileName>hw_spi.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\src\hw_spi.c</FilePath>
+            </File>
+            <File>
+              <FileName>hw_uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\hw_uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>lora.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\lora.c</FilePath>
+            </File>
+            <File>
+              <FileName>pc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\pc.c</FilePath>
             </File>
             <File>
               <FileName>stm32l0xx_hal_msp.c</FileName>
@@ -2589,44 +2624,9 @@
               <FilePath>.\src\stm32l0xx_it.c</FilePath>
             </File>
             <File>
-              <FileName>pc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\pc.c</FilePath>
-            </File>
-            <File>
               <FileName>vcom.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\src\vcom.c</FilePath>
-            </File>
-            <File>
-              <FileName>lora.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\lora.c</FilePath>
-            </File>
-            <File>
-              <FileName>hw_i2c.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\hw_i2c.c</FilePath>
-            </File>
-            <File>
-              <FileName>hw_uart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\hw_uart.c</FilePath>
-            </File>
-            <File>
-              <FileName>gateway_main.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\gateway_main.c</FilePath>
-            </File>
-            <File>
-              <FileName>actuator.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\actuator.c</FilePath>
-            </File>
-            <File>
-              <FileName>daq.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\daq.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -3429,14 +3429,34 @@
           <GroupName>src</GroupName>
           <Files>
             <File>
+              <FileName>actuator.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\actuator.c</FilePath>
+            </File>
+            <File>
+              <FileName>daq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\daq.c</FilePath>
+            </File>
+            <File>
               <FileName>debug.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\src\debug.c</FilePath>
             </File>
             <File>
+              <FileName>gateway_main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\gateway_main.c</FilePath>
+            </File>
+            <File>
               <FileName>hw_gpio.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\src\hw_gpio.c</FilePath>
+            </File>
+            <File>
+              <FileName>hw_i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\hw_i2c.c</FilePath>
             </File>
             <File>
               <FileName>hw_rtc.c</FileName>
@@ -3447,6 +3467,21 @@
               <FileName>hw_spi.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\src\hw_spi.c</FilePath>
+            </File>
+            <File>
+              <FileName>hw_uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\hw_uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>lora.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\lora.c</FilePath>
+            </File>
+            <File>
+              <FileName>pc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\pc.c</FilePath>
             </File>
             <File>
               <FileName>stm32l0xx_hal_msp.c</FileName>
@@ -3464,44 +3499,9 @@
               <FilePath>.\src\stm32l0xx_it.c</FilePath>
             </File>
             <File>
-              <FileName>pc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\pc.c</FilePath>
-            </File>
-            <File>
               <FileName>vcom.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\src\vcom.c</FilePath>
-            </File>
-            <File>
-              <FileName>lora.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\lora.c</FilePath>
-            </File>
-            <File>
-              <FileName>hw_i2c.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\hw_i2c.c</FilePath>
-            </File>
-            <File>
-              <FileName>hw_uart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\hw_uart.c</FilePath>
-            </File>
-            <File>
-              <FileName>gateway_main.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\gateway_main.c</FilePath>
-            </File>
-            <File>
-              <FileName>actuator.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\actuator.c</FilePath>
-            </File>
-            <File>
-              <FileName>daq.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\daq.c</FilePath>
             </File>
           </Files>
         </Group>

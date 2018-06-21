@@ -10,7 +10,7 @@
 #include "hw.h"
 
 /* Exported defines ----------------------------------------------------------*/
-#define UART_BUFFSIZE 1200
+#define UART_BUFFSIZE 1100
 
 /* Exported types ------------------------------------------------------------*/
 typedef enum UartRxState_t

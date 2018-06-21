@@ -124,7 +124,7 @@ UartRxState_t UART_ReceiveFixedLength(UartHandle_t *uart, uint8_t *buffer, uint1
 	UartRxState_t returnValue = DAQ_UartHandle.RxState;
 	
 	if ((uart->RxCheckedIndex < uart->RxReceiveIndex) &&
-		(uart->RxReceiveIndex - uart->RxCheckedIndex > length))
+		(uart->RxReceiveIndex - uart->RxCheckedIndex >= length))
 	{
 		uart->RxState = UART_RX_AVAILABLE;
 		uart->RxCheckedIndex += length;

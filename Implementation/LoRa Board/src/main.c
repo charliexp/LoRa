@@ -1,5 +1,5 @@
 #include <string.h>
-#include "commands.h"
+#include "message.h"
 #include "lora.h"
 #include "pc.h"
 #include "delay.h"
@@ -28,7 +28,7 @@ void setAddress(uint8_t newAddress)
 }
 
 void processCommunicationCommand(uint8_t source, uint8_t command, uint8_t* parameters, uint8_t rssi, uint8_t snr)
-{
+{/*
 	uint8_t i;
 	uint8_t response[PARAMETERS_MAX_SIZE + 2];
 	switch (command)
@@ -76,11 +76,11 @@ void processCommunicationCommand(uint8_t source, uint8_t command, uint8_t* param
 			}
 			//PC_Send(source, myAddress, command, response, 6);
 			break;
-	}
+	}*/
 }
 
 void processPCCommand(uint8_t source, uint8_t command, uint8_t* parameters)
-{
+{/*
 	uint8_t response[1];
 	switch (command)
 	{
@@ -97,11 +97,11 @@ void processPCCommand(uint8_t source, uint8_t command, uint8_t* parameters)
 			response[0] = RESPONSE_NACK;
 			//PC_Send(source, myAddress, command, response, 6);
 			break;
-	}
+	}*/
 }
 
 void processRadioSetupCommand(uint8_t source, uint8_t command, uint8_t* parameters, uint8_t rssi, uint8_t snr)
-{
+{/*
 	uint32_t longParameter;
 	uint8_t response[PARAMETERS_MAX_SIZE + 2];
 	uint8_t i;
@@ -188,18 +188,26 @@ void processRadioSetupCommand(uint8_t source, uint8_t command, uint8_t* paramete
 	else
 		LoRa_setupPending = false;
 	
-	//PC_Send(source, myAddress, command, response, 6);
+	//PC_Send(source, myAddress, command, response, 6);*/
 }
 
 void OnTimerEvent(void)
 {
-	uint8_t response[6];
-	DAQ_ReadData();
+	Frame_t result;
 	
-	response[0] = DAQ_Data.time.hour;
-	response[1] = DAQ_Data.time.minute;
-	response[2] = DAQ_Data.time.second;
-	//PC_Send(myAddress, 0xff, COMMAND_LAST_READING, response, 3);
+	DAQ_ReadData();
+	result.endDevice = myAddress;
+	result.nrOfMessages = 1;
+	result.messages[0].command = COMMAND_TIMESTAMP;
+	result.messages[0].argLength = 3;
+	result.messages[0].rawArgument[0] = DAQ_Data.time.hour;
+	result.messages[0].rawArgument[1] = DAQ_Data.time.minute;
+	result.messages[0].rawArgument[2] = DAQ_Data.time.second;
+	
+	if (PC_Connected())
+	{
+		PC_Send(result);
+	}
 	/*PRINTF("\r\nTura %d\r\n", step++);
 	PRINTF("Ultima citire contor\t%02d:%02d:%02d\r\n", DAQ_Data.time.hour, DAQ_Data.time.minute, DAQ_Data.time.second);
 	PRINTF("Energie activa\t\t%03d.%03d\tkWh\r\n", DAQ_Data.activeEnergy / 1000, DAQ_Data.activeEnergy % 1000);
@@ -217,13 +225,6 @@ void OnTimerEvent(void)
 
 int main(void)
 {
-	uint8_t response[4];
-	uint8_t source;
-	uint8_t command;
-	uint8_t rssi;
-	uint8_t snr;
-	uint8_t parameters[PARAMETERS_MAX_SIZE];
-				
 	HAL_Init();
 	SystemClock_Config();
 	DBG_Init();
@@ -239,8 +240,7 @@ int main(void)
 	
 	LoRa_setupPending = false;
 	myAddress = *((uint8_t *) DEVICE_ADDRESS_LOCATION);
-	if (myAddress >= ADDRESS_BEACON)
-		LoRa_startReceiving();
+	LoRa_startReceiving();
 	
   while(1)
   {
@@ -251,7 +251,7 @@ int main(void)
 		ACT_SetContact(1, true);
 	  HAL_Delay(10000);*/
 		PC_MainLoop();
-		//DAQ_MainLoop();
+		DAQ_MainLoop();
 		/*if(UartState == UART_RX)
 		{
 			PC_Receive(&target, &command, parameters, &length);
@@ -290,7 +290,7 @@ int main(void)
 			}
 			UartState = UART_IDLE;
 		}
-		*/
+		*//*
     switch(RadioState)
     {
 			case RADIO_RX:
@@ -365,6 +365,6 @@ int main(void)
 			case RADIO_LOWPOWER:
 			default:
 				break;
-    }
+    }*/
   }
 }

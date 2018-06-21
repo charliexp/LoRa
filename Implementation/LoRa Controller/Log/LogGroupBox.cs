@@ -1,4 +1,5 @@
-﻿using LoRa_Controller.Interface;
+﻿using LoRa_Controller.Connection.Messages;
+using LoRa_Controller.Interface;
 using System;
 using System.Drawing;
 using System.IO;
@@ -61,8 +62,7 @@ namespace LoRa_Controller.Log
                                     List.Columns[2].Width +
                                     List.Columns[3].Width +
                                     List.Columns[4].Width +
-                                    List.Columns[5].Width +
-                                    List.Columns[6].Width,
+                                    List.Columns[5].Width,
 
                                     InterfaceConstants.ListHeaderHeight +
                                     InterfaceConstants.ListItemHeight * LogListView.maxVisibleEntries +
@@ -105,9 +105,9 @@ namespace LoRa_Controller.Log
         #endregion
 
         #region Public methods
-		public void Update(Device.Message message)
+		public void Update(Frame frame)
 		{
-            List.Write(message);
+            List.Write(frame);
 		}
         #endregion
     }

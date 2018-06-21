@@ -4,8 +4,8 @@ using System.Net;
 using System.Net.Sockets;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using LoRa_Controller.Device;
-using static LoRa_Controller.Device.Message;
+using LoRa_Controller.Connection.Messages;
+using static LoRa_Controller.Connection.Messages.Message;
 
 namespace LoRa_Controller.Networking
 {
@@ -73,29 +73,31 @@ namespace LoRa_Controller.Networking
 				}
 			}
         }
-        public Message Read()
-        {
-            byte[] receivedData = new byte[MaxLength];
+        //TODO: switch to frame
+        public Frame Read()
+        {/*
+            byte[] receivedData = new byte[MaxSize];
 
             clients.RemoveAll(client => client.Connected == false);
             foreach (TcpClient client in clients)
-                if (client.Available == MaxLength)
-                    client.GetStream().Read(receivedData, 0, MaxLength);
-
-            return new Message(receivedData);
+                if (client.Available == MaxSize)
+                    client.GetStream().Read(receivedData, 0, MaxSize);
+                    
+            return new Message(receivedData);*/
+            return null;
         }
         public async Task<byte[]> ReadAsync()
-		{
-			byte[] data = new byte[MaxLength];
-			data[0] = (byte) CommandType.Invalid;
+        {/*
+			byte[] data = new byte[MaxSize];
 			clients.RemoveAll(client => client.Connected == false);
 
 			foreach (TcpClient client in clients)
 				if (client.Available == data.Length)
 					await client.GetStream().ReadAsync(data, 0, data.Length);
-
-			return data;
-		}
+                    
+			return data;*/
+            return null;
+        }
 		#endregion
 	}
 }

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace LoRa_Controller.Interface.Controls
@@ -29,7 +25,7 @@ namespace LoRa_Controller.Interface.Controls
         private async void CheckChanged(object sender, EventArgs e)
 		{
 			if (ValueChanged != null)
-				await ValueChanged(((((CheckBox)sender).CheckState == CheckState.Checked) ? 1 : 0));
+				await ValueChanged((byte) ((((CheckBox)sender).CheckState == CheckState.Checked) ? 1 : 0));
         }
         #endregion
     }

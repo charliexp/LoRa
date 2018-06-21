@@ -1,7 +1,7 @@
 #ifndef LORA_H
 #define LORA_H
 
-#include "commands.h"
+#include "message.h"
 #include "hw.h"
 
 #define RADIO_BUFFER_SIZE     64

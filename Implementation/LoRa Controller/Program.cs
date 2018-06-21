@@ -1,4 +1,4 @@
-﻿using LoRa_Controller.DirectConnection;
+﻿using LoRa_Controller.Connection;
 using LoRa_Controller.Device;
 using LoRa_Controller.Interface;
 using LoRa_Controller.Log;
@@ -8,10 +8,11 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
-using static LoRa_Controller.DirectConnection.BaseConnectionHandler;
+using static LoRa_Controller.Connection.BaseConnectionHandler;
 using System.IO;
-using static LoRa_Controller.Device.Message;
 using static LoRa_Controller.Device.BaseDevice;
+using LoRa_Controller.Connection.Messages;
+using static LoRa_Controller.Connection.Messages.Message;
 
 namespace LoRa_Controller
 {
@@ -99,35 +100,51 @@ namespace LoRa_Controller
         #region Private methods
         private static void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
 		{
-            Device.Message receivedDirectlyMessage;
-			BackgroundWorker worker = (BackgroundWorker)sender;
+            Frame directConnectionFrame;
 
-            Device.Message getAddressMessage = new Device.Message(CommandType.GetAddress);
+			BackgroundWorker worker = (BackgroundWorker)sender;
             
-            connectionHandler.Write(getAddressMessage);
+            connectionHandler.Write(new Connection.Messages.Message(CommandType.IsPresent));
 
             while (connectionHandler.Connected)
 			{
-				receivedDirectlyMessage = connectionHandler.Read();
+                directConnectionFrame = connectionHandler.Read();
 				if (serverHandler != null)
-				{
-					Device.Message receivedClientMessage = serverHandler.Read();
+				{/*
+                    Frame remoteFrame = serverHandler.Read();
 					if (receivedClientMessage.Command != CommandType.Invalid)
 						connectionHandler.Write(receivedClientMessage);
-					serverHandler.Write(receivedDirectlyMessage.ToString());
+					serverHandler.Write(receivedDirectlyMessage.ToString());*/
 				}
                 
-				worker.ReportProgress(0, receivedDirectlyMessage);
+				worker.ReportProgress(0, directConnectionFrame);
 			}
 		}
 		private static void BackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
 		{
 			int radioDeviceAddress = Int32.MaxValue;
 			bool newRadioDevice;
-			Device.Message message = (Device.Message)e.UserState;
-			string receivedDataString = null;
+			Frame frame = (Frame)e.UserState;
 
-			switch (message.Source)
+            foreach(Connection.Messages.Message message in frame.Messages)
+            {
+                switch(message.Command)
+                {
+                    case CommandType.IsPresent:
+                        if (!directDeviceInitialized)
+                        {
+                            directDevice.Address = frame.EndDevice;
+                            ((TextBox)mainWindow.DirectNodeInterface.addressControl.Field).TextChanged += new EventHandler(AddressFieldChanged);
+                            ((Button)mainWindow.DirectNodeInterface.SetAddress.Field).Click += new EventHandler(SetAddress);
+                            directDeviceInitialized = true;
+                            mainWindow.SetDirectlyConnectedNodeType();
+                        }
+                        break;
+                }
+            }
+
+            logger.Write(frame);
+            /*switch (message.Source)
 			{
 				case (int)AddressType.Master:
 					if (directDevice.Address == (int)AddressType.Master)
@@ -139,7 +156,7 @@ namespace LoRa_Controller
 						case CommandType.IsPresent:
 							receivedDataString = "Master asked if present";
 							break;
-						/*case CommandType.Bandwidth:
+						case CommandType.Bandwidth:
 							if (directDevice.Address != (int)AddressType.Master)
 								mainWindow.DirectNodeInterface.Bandwidth.SetValue(message.Parameters[0]);
 							receivedDataString = "Bandwidth set by master to " + message.Parameters[0];
@@ -195,7 +212,7 @@ namespace LoRa_Controller
 							if (directDevice.Address != (int) AddressType.Master)
 								mainWindow.DirectNodeInterface.PerformCRC.SetValue(message.Parameters[0] == 1);
 							receivedDataString = "Perform CRC set by master to " + ((message.Parameters[0] == 1) ? "true" : "false");
-							break;*/
+							break;
 						default:
 							receivedDataString = "Unknown command " + message.Command + " from " + message.Source + " to " + message.Target;
 							break;
@@ -260,7 +277,7 @@ namespace LoRa_Controller
 						case CommandType.IsPresent:
 							receivedDataString = "Checking for present devices";
 							break;
-						/*case CommandType.Bandwidth:
+						case CommandType.Bandwidth:
 							receivedDataString = "Bandwidth set to " + message.Parameters[0];
 							break;
 						case CommandType.OutputPower:
@@ -294,7 +311,7 @@ namespace LoRa_Controller
 							break;
 						case CommandType.PerformCRC:
 							receivedDataString = "Perform CRC set to " + ((message.Parameters[0] == 1) ? "true" : "false");
-							break;*/
+							break;
 						default:
 							receivedDataString = "Unknown command " + message.Command + " from " + message.Source + " to " + message.Target;
 							break;
@@ -312,7 +329,7 @@ namespace LoRa_Controller
 						default:
 							if (message.Response == ResponseType.ACK)
 								receivedDataString = "Beacon " + message.Source + " ACK";
-							if (message.Response == ResponseType.NACK)
+							if (message.Response == ResponseType.NAK)
 								receivedDataString = "Beacon " + message.Source + " NACK";
 							break;
 					}
@@ -390,8 +407,8 @@ namespace LoRa_Controller
 						break;
 				}
 			}
-			logger.Write(message);
-		}
+			logger.Write(message);*/
+        }
 		private static void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
 			mainWindow.BoardDisconnected();
@@ -414,9 +431,7 @@ namespace LoRa_Controller
 		}
 		private static void SetAddress(object sender, EventArgs e)
         {
-            Device.Message message = new Device.Message(directDevice.Address, CommandType.SetAddress, mainWindow.DirectNodeInterface.Address);
-
-            connectionHandler.Write(message);
+            connectionHandler.Write(new Connection.Messages.Message(CommandType.SetAddress, mainWindow.DirectNodeInterface.Address));
 		}
 		#endregion
 

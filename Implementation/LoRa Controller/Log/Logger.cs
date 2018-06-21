@@ -1,8 +1,10 @@
-﻿using LoRa_Controller.Device;
+﻿using LoRa_Controller.Connection.Messages;
+using LoRa_Controller.Device;
 using LoRa_Controller.Settings;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using static LoRa_Controller.Connection.Messages.Frame;
 
 namespace LoRa_Controller.Log
 {
@@ -80,15 +82,19 @@ namespace LoRa_Controller.Log
                 streamWriter.Flush();
             }
         }
-        public void Write(Message message)
+        public void Write(Frame frame)
         {
-            Interface.Update(message);
-            Write(  message.Source + ", " +
-                    message.Target + ", " +
-                    message.Command + ", " +
-                    message.Parameters[0] + ", " +
-                    message.RSSI + ", " +
-                    message.SNR);
+            string printableFrame = frame.EndDevice + ", ";
+            
+            foreach(Message message in frame.Messages)
+            {
+                printableFrame += message.Command + ", " + message.RawArgument + ", ";
+            }
+            if (frame.EndDevice == (byte) AddressType.PC)
+                printableFrame += frame.RSSI + ", " + frame.SNR;
+
+            Interface.Update(frame);
+            Write(printableFrame);
 		}
 		public async Task WriteAsync(string data)
         {

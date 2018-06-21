@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LoRa_Controller.Connection.Messages;
+using System;
 using System.Windows.Forms;
 using static LoRa_Controller.Device.BaseDevice;
 
@@ -20,8 +21,7 @@ namespace LoRa_Controller.Log
 			Sorting = SortOrder.None;
 
 			Columns.Add("Timestamp");
-			Columns.Add("Source");
-			Columns.Add("Target");
+			Columns.Add("Address");
 			Columns.Add("Command");
             Columns.Add("Parameter");
             Columns.Add("RSSI");
@@ -30,30 +30,18 @@ namespace LoRa_Controller.Log
         #endregion
 
         #region Public methods
-        public void Write(Device.Message message)
+        public void Write(Frame frame)
         {
             if (Enabled)
             {
-                ListViewItem item = new ListViewItem(message.Timestamp.ToString("HH:mm:ss.fff"));
-                string source;
-                string target;
+                ListViewItem item = new ListViewItem(frame.Timestamp.ToString("HH:mm:ss.fff"));
 
-                if (message.Source < (byte)AddressType.Beacon || message.Source == (byte)AddressType.PC)
-                    source = Enum.GetName(typeof(AddressType), message.Source);
-                else
-                    source = "Beacon " + message.Source.ToString();
-                if (message.Target < (byte)AddressType.Beacon || message.Target == (byte)AddressType.PC)
-                    target = Enum.GetName(typeof(AddressType), message.Target);
-                else
-                    target = "Beacon " + message.Target.ToString();
-
-                item.SubItems.Add(source);
-                item.SubItems.Add(target);
-                item.SubItems.Add(message.Command.ToString());
-                item.SubItems.Add(message.Parameters[0].ToString());
-                item.SubItems.Add((-message.RSSI).ToString());
-                item.SubItems.Add(message.SNR.ToString());
-
+                item.SubItems.Add(frame.EndDevice.ToString());
+                item.SubItems.Add(frame.Messages[0].Command.ToString());
+                item.SubItems.Add(frame.Messages[0].PrintableArgument);
+                item.SubItems.Add((-frame.RSSI).ToString());
+                item.SubItems.Add(frame.SNR.ToString());
+                
                 Items.Add(item);
                 if (Items.Count > maxEntries)
                     Items.RemoveAt(0);

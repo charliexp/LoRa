@@ -6,10 +6,18 @@
 typedef enum PC_State_t
 {
 	READY,
-	REC_COMMAND,
-	REC_LENGTH,
-	REC_DATA,
+	REC_FRAME_HEADER,
+	REC_MESSAGE_HEADER,
+	REC_MESSAGE,
 }PC_State_t;
+
+typedef struct PC_Handle_t
+{
+	bool connected;
+	uint8_t buffer[FRAME_MAX_SIZE];
+	uint8_t bufferLength;
+	PC_State_t state;
+}PC_Handle_t;
 
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
@@ -18,126 +26,112 @@ typedef enum PC_State_t
 extern UartHandle_t DBG_UartHandle;
 extern uint8_t myAddress;
 
-static uint8_t PC_Buffer[UART_BUFFSIZE];
-static PC_State_t PC_State;
-static Message_t PC_Message;
+static PC_Handle_t PC_Handle;
+static Frame_t receivedFrame;
 
 /* Private function prototypes -----------------------------------------------*/
 /* Functions Definition ------------------------------------------------------*/
 
 void PC_Init(void)
 {
-	PC_State = READY;
+	PC_Handle.connected = false;
+	PC_Handle.state = READY;
 }
 
 void PC_MainLoop(void)
 {
 	UartRxState_t returnValue;
+	uint8_t argLength;
 	
-	switch(PC_State)
+	switch(PC_Handle.state)
 	{
 		case READY:
-			returnValue = UART_ReceiveFixedLength(&DBG_UartHandle, PC_Buffer, 3);
-			if (returnValue != UART_RX_PENDING)
+			PC_Handle.bufferLength = 0;
+			returnValue = UART_ReceiveFixedLength(&DBG_UartHandle, PC_Handle.buffer, FRAME_HEADER_SIZE);
+			if (returnValue == UART_RX_AVAILABLE)
 			{
-				if (returnValue == UART_RX_AVAILABLE)
-				{
-					PC_Message.source = PC_Buffer[IDX_SOURCE_ADDRESS];
-					PC_Message.target = PC_Buffer[IDX_TARGET_ADDRESS];
-					PC_Message.command = (Commands_t) PC_Buffer[IDX_COMMAND];
-					PC_State = REC_COMMAND;
-					//DBG_PRINTF("PC command received\r\n");
-				}
-				else if (returnValue == UART_RX_TIMEOUT)
-				{
-					PC_State = READY;
-					//DBG_PRINTF("PC command timeout\r\n");
-				}
+				PC_Handle.bufferLength += FRAME_HEADER_SIZE;
+				PC_Handle.state = REC_FRAME_HEADER;
 			}
+			else if (returnValue == UART_RX_TIMEOUT)
+				PC_Handle.state = READY;
 			break;
-		case REC_COMMAND:
-			returnValue = UART_ReceiveFixedLength(&DBG_UartHandle, PC_Buffer, 1);
-			if (returnValue != UART_RX_PENDING)
+		case REC_FRAME_HEADER:
+			returnValue = UART_ReceiveFixedLength(&DBG_UartHandle, PC_Handle.buffer + FRAME_HEADER_SIZE, MESSAGE_HEADER_SIZE);
+			if (returnValue == UART_RX_AVAILABLE)
 			{
-				if (returnValue == UART_RX_AVAILABLE)
-				{
-					PC_Message.paramLength = PC_Buffer[0];
-					PC_State = REC_LENGTH;
-					//DBG_PRINTF("PC length received\r\n");
-				}
-				else if (returnValue == UART_RX_TIMEOUT)
-				{
-					PC_State = READY;
-					//DBG_PRINTF("PC length timeout\r\n");
-				}
+				PC_Handle.bufferLength += FRAME_HEADER_SIZE;
+				PC_Handle.state = REC_MESSAGE_HEADER;
 			}
+			else if (returnValue == UART_RX_TIMEOUT)
+				PC_Handle.state = READY;
 			break;
-		case REC_LENGTH:
-			returnValue = UART_ReceiveFixedLength(&DBG_UartHandle, PC_Buffer, PC_Message.paramLength);
-			if (returnValue != UART_RX_PENDING)
+		case REC_MESSAGE_HEADER:
+			argLength = Message_argLengthFromArray(PC_Handle.buffer + FRAME_HEADER_SIZE);
+			if (argLength != 0)
+				returnValue = UART_ReceiveFixedLength(&DBG_UartHandle,
+										PC_Handle.buffer + MESSAGE_HEADER_SIZE,
+										argLength);
+			else
+				returnValue = UART_RX_AVAILABLE;
+			if (returnValue == UART_RX_AVAILABLE)
 			{
-				if (returnValue == UART_RX_AVAILABLE)
-				{
-					memcpy(PC_Message.rawParameter, PC_Buffer, PC_Message.paramLength);
-					PC_State = REC_DATA;
-					//DBG_PRINTF("PC length received\r\n");
-				}
-				else if (returnValue == UART_RX_TIMEOUT)
-				{
-					PC_State = READY;
-					//DBG_PRINTF("PC length timeout\r\n");
-				}
+				PC_Handle.bufferLength += argLength;
+				Message_arrayToFrame(PC_Handle.buffer, PC_Handle.bufferLength, &receivedFrame);
+				PC_ProcessMessage();
+				PC_Handle.state = READY;
 			}
-			break;
-		case REC_DATA:
-			PC_ProcessMessage();
+			else if (returnValue == UART_RX_TIMEOUT)
+				PC_Handle.state = READY;
 			break;
 		default:
-			PC_State = READY;
+			PC_Handle.state = READY;
 			break;
 	}
 }
 
 void PC_ProcessMessage(void)
 {
-	Message_t reply;
-	reply.source = myAddress;
-	reply.target = ADDRESS_PC;
-	reply.command = PC_Message.command;
+	Frame_t reply;
 	
-	switch (PC_Message.command)
+	reply.endDevice = myAddress;
+	reply.nrOfMessages = 1;
+	
+	reply.messages[0].command = receivedFrame.messages[0].command;
+	
+	switch (receivedFrame.messages[0].command)
 	{
-		case COMMAND_GET_ADDRESS:
-			reply.paramLength = 1;
-			reply.rawParameter[0] = RESPONSE_ACK;
+		case COMMAND_IS_PRESENT:
+			reply.messages[0].argLength = 1;
+			reply.messages[0].rawArgument[0] = ACK;
+			PC_Handle.connected = true;
 			PC_Send(reply);
-			break;
-		/*case COMMAND_SET_ADDRESS:
+			break;/*
+		case COMMAND_SET_ADDRESS:
 			setAddress(parameters[3]);
 			response[0] = RESPONSE_ACK;
 			PC_Send(source, myAddress, command, response, 6);
 			break;*/
 		default:
-			reply.paramLength = 1;
-			reply.rawParameter[0] = RESPONSE_NACK;
+			reply.messages[0].argLength = 1;
+			reply.messages[0].rawArgument[0] = NAK;
 			PC_Send(reply);
 			break;
 	}
-	
-	PC_State = READY;
 }
 
-void PC_Send(Message_t message)
+void PC_Send(Frame_t frame)
 {
-	uint8_t length = IDX_PARAMETER;
-	uint8_t array[IDX_PARAMETER + message.paramLength];
+	uint8_t i;
+	uint8_t array[FRAME_MAX_SIZE];
+	uint8_t arrayLength = 0;
 	
-	array[IDX_SOURCE_ADDRESS] = message.source;
-	array[IDX_TARGET_ADDRESS] = message.target;
-	array[IDX_COMMAND] = message.command;
-	array[IDX_PARAM_LENGTH] = message.paramLength;
-	memcpy(array + IDX_PARAMETER, message.rawParameter, message.paramLength);
-	length += message.paramLength;
-	
-	UART_Send(&DBG_UartHandle, array, length);
+	Message_frameToArray(frame, array, &arrayLength);
+	for (i = 0; i < arrayLength; i++)
+		PRINTF("%c", array[i]);
+}
+
+bool PC_Connected(void)
+{
+	return PC_Handle.connected;
 }

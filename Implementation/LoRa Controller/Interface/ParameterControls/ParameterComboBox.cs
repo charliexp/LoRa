@@ -1,9 +1,10 @@
-﻿using LoRa_Controller.Device;
+﻿using LoRa_Controller.Connection.Messages;
+using LoRa_Controller.Device;
 using LoRa_Controller.Interface.Controls;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static LoRa_Controller.Device.Message;
+using static LoRa_Controller.Connection.Messages.Message;
 
 namespace LoRa_Controller.Interface.Node.ParameterControls
 {
@@ -24,13 +25,13 @@ namespace LoRa_Controller.Interface.Node.ParameterControls
         #endregion
 
         #region Private methods
-        private async Task ParameterChangedCallback(int value)
+        private async Task ParameterChangedCallback(byte value)
         {
-            Device.Message message = new Device.Message(((BaseNodeGroupBox)Field.Parent).Address, parameter, value);
+            Connection.Messages.Message message = new Connection.Messages.Message(parameter, value);
 
             if (!remotelyChanged)
-                await Program.connectionHandler.WriteAsync(message);
-			else
+                await Program.connectionHandler.WriteAsync(new Frame(((BaseNodeGroupBox)Field.Parent.Parent.Parent.Parent).Address, message));
+            else
 				remotelyChanged = false;
         }
         #endregion

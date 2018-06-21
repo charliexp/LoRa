@@ -62,11 +62,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Device\BaseDevice.cs" />
-    <Compile Include="DirectConnection\Message.cs" />
-    <Compile Include="DirectConnection\BaseConnectionHandler.cs" />
+    <Compile Include="Connection\Messages\Frame.cs" />
+    <Compile Include="Connection\Messages\Message.cs" />
+    <Compile Include="Connection\BaseConnectionHandler.cs" />
     <Compile Include="Device\DirectDevice.cs" />
-    <Compile Include="DirectConnection\InternetHandler.cs" />
-    <Compile Include="DirectConnection\SerialHandler.cs" />
+    <Compile Include="Connection\InternetHandler.cs" />
+    <Compile Include="Connection\SerialHandler.cs" />
     <Compile Include="Device\RadioDevice.cs" />
     <Compile Include="Interface\ConnectionDialog.cs">
       <SubType>Form</SubType>

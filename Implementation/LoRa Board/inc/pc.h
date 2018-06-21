@@ -1,12 +1,27 @@
-#ifndef PC_H
-#define PC_H
+/* Define to prevent recursive inclusion -------------------------------------*/
+#ifndef __PC_H__
+#define __PC_H__
 
-#include "commands.h"
-#include "hw.h"
+#ifdef __cplusplus
+ extern "C" {
+#endif
+   
+/* Includes ------------------------------------------------------------------*/
+#include "message.h"
 
+/* Exported defines ----------------------------------------------------------*/
+/* Exported types ------------------------------------------------------------*/
+/* Exported constants --------------------------------------------------------*/
+/* External variables --------------------------------------------------------*/
+/* Exported functions --------------------------------------------------------*/
 void PC_Init(void);
 void PC_MainLoop(void);
 void PC_ProcessMessage(void);
-void PC_Send(Message_t message);
+void PC_Send(Frame_t frame);
+bool PC_Connected(void);
 
-#endif /* PC_H */
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* __PC_H__ */
