@@ -436,7 +436,7 @@ namespace LoRa_Controller
             connectionHandler.Write(new Connection.Messages.Message(CommandType.SetAddress, mainWindow.DirectNodeInterface.Address));
 		}
 		#endregion
-
+        
 		[System.Runtime.InteropServices.DllImport("user32.dll")]
 		private static extern bool SetProcessDPIAware();
 	}

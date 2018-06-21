@@ -1,0 +1,12 @@
+C:\Users\User\Documents\GitHub\LoRa\Implementation\Power LoRa\bin\Debug\LoRa Controller.exe.config
+C:\Users\User\Documents\GitHub\LoRa\Implementation\Power LoRa\bin\Debug\LoRa Controller.exe
+C:\Users\User\Documents\GitHub\LoRa\Implementation\Power LoRa\bin\Debug\LoRa Controller.pdb
+C:\Users\User\Documents\GitHub\LoRa\Implementation\Power LoRa\obj\Debug\Power LoRa.csprojAssemblyReference.cache
+C:\Users\User\Documents\GitHub\LoRa\Implementation\Power LoRa\obj\Debug\LoRa_Controller.Interface.ConnectionDialog.resources
+C:\Users\User\Documents\GitHub\LoRa\Implementation\Power LoRa\obj\Debug\LoRa_Controller.Interface.MainWindow.resources
+C:\Users\User\Documents\GitHub\LoRa\Implementation\Power LoRa\obj\Debug\LoRa_Controller.Device.BaseNodeGroupBox.resources
+C:\Users\User\Documents\GitHub\LoRa\Implementation\Power LoRa\obj\Debug\LoRa_Controller.Properties.Resources.resources
+C:\Users\User\Documents\GitHub\LoRa\Implementation\Power LoRa\obj\Debug\Power LoRa.csproj.GenerateResource.cache
+C:\Users\User\Documents\GitHub\LoRa\Implementation\Power LoRa\obj\Debug\Power LoRa.csproj.CoreCompileInputs.cache
+C:\Users\User\Documents\GitHub\LoRa\Implementation\Power LoRa\obj\Debug\LoRa Controller.exe
+C:\Users\User\Documents\GitHub\LoRa\Implementation\Power LoRa\obj\Debug\LoRa Controller.pdb

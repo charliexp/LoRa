@@ -16,7 +16,6 @@ namespace LoRa_Controller.Device
             SetAddress = new ButtonControl("Set Address");
 
             radioLayout.Controls.Add(SetAddress.Field);
-            radioLayout.SetColumnSpan(SetAddress.Field, 2);
 
             AddControlsToLayout();
         }

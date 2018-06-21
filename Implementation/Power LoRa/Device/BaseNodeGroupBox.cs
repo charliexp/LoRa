@@ -16,7 +16,7 @@ namespace LoRa_Controller.Device
         private Graph graph;
         private TableLayoutPanel secondLayout;
         private TableLayoutPanel powerReadingLayout;
-        private TableLayoutPanel powerIOLayout;
+        private TableLayoutPanel powerSetupLayout;
 
         private TextBoxControl lastReadingTime;
         private TextBoxControl activePower;
@@ -26,10 +26,12 @@ namespace LoRa_Controller.Device
         private TextBoxControl apparentPower;
         private TextBoxControl powerFactor;
 
+        private TextBoxControl transmissionRate;
         private ParameterCheckBox hasMeter;
         private List<CheckBox> outputs;
         private ButtonControl addPowerOutput;
-        
+
+        public ButtonControl checkIfPresent;
 		public TextBoxControl addressControl;
         #endregion
 
@@ -110,6 +112,10 @@ namespace LoRa_Controller.Device
             {
                 Value = "1"
             };
+            transmissionRate = new TextBoxControl("TransmissionRate", "s", TextBoxControl.Type.Input)
+            {
+                Value = "5"
+            };
             hasMeter = new ParameterCheckBox(CommandType.HasMeter, false);
             outputs = new List<CheckBox>
             {
@@ -123,6 +129,7 @@ namespace LoRa_Controller.Device
                 }
             };
             addPowerOutput = new ButtonControl("Add output");
+            checkIfPresent = new ButtonControl("Check if present");
             addressControl = new TextBoxControl("Address", TextBoxControl.Type.Input);
             /*Bandwidth = new ParameterComboBox(CommandType.Bandwidth, new List<string> { "125 kHz", "250 kHz", "500 kHz" }, 0);
             OutputPower = new ParameterSpinBox(CommandType.OutputPower, 1, 14, 14);
@@ -169,12 +176,14 @@ namespace LoRa_Controller.Device
             };
             radioLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
             radioLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-            powerIOLayout = new TableLayoutPanel
+            powerSetupLayout = new TableLayoutPanel
             {
                 AutoSize = true,
                 ColumnCount = 2,
-                Name = name + "PowerIOLayout",
+                Name = name + "PowerSetupLayout",
             };
+            powerSetupLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+            powerSetupLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
 
             Controls.Add(mainLayout);
             mainLayout.Controls.Add(graph);
@@ -183,7 +192,7 @@ namespace LoRa_Controller.Device
             secondLayout.Controls.Add(verticalSeparator);
             secondLayout.Controls.Add(radioLayout);
             secondLayout.Controls.Add(horizontalSeparator);
-            secondLayout.Controls.Add(powerIOLayout);
+            secondLayout.Controls.Add(powerSetupLayout);
             secondLayout.SetRowSpan(verticalSeparator, 3);
             secondLayout.SetRowSpan(radioLayout, 3);
             powerReadingLayout.Controls.Add(lastReadingTime.Label);
@@ -201,7 +210,8 @@ namespace LoRa_Controller.Device
             powerReadingLayout.Controls.Add(powerFactor.Label);
             powerReadingLayout.Controls.Add(powerFactor.Field);
             radioLayout.Controls.Add(addressControl.Label);
-            radioLayout.Controls.Add(addressControl.Field);/*
+            radioLayout.Controls.Add(addressControl.Field);
+            radioLayout.Controls.Add(checkIfPresent.Field);/*
             radioLayout.Controls.Add(Bandwidth.Label);
             radioLayout.Controls.Add(Bandwidth.Field);
             radioLayout.Controls.Add(OutputPower.Label);
@@ -224,11 +234,16 @@ namespace LoRa_Controller.Device
             radioLayout.Controls.Add(VariablePayload.Field);
             radioLayout.Controls.Add(PerformCRC.Label);
             radioLayout.Controls.Add(PerformCRC.Field);*/
-            powerIOLayout.Controls.Add(hasMeter.Label);
-            powerIOLayout.Controls.Add(hasMeter.Field);
+            powerSetupLayout.Controls.Add(transmissionRate.Label);
+            powerSetupLayout.Controls.Add(transmissionRate.Field);
+            powerSetupLayout.Controls.Add(hasMeter.Label);
+            powerSetupLayout.Controls.Add(hasMeter.Field);
             foreach (CheckBox output in outputs)
-                powerIOLayout.Controls.Add(output);
-            powerIOLayout.Controls.Add(addPowerOutput.Field);
+            {
+                powerSetupLayout.Controls.Add(output);
+                powerSetupLayout.SetColumnSpan(output, 2);
+            }
+            powerSetupLayout.Controls.Add(addPowerOutput.Field);
 
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
