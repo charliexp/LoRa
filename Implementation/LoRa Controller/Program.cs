@@ -10,7 +10,6 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using static LoRa_Controller.Connection.BaseConnectionHandler;
 using System.IO;
-using static LoRa_Controller.Device.BaseDevice;
 using LoRa_Controller.Connection.Messages;
 using static LoRa_Controller.Connection.Messages.Message;
 

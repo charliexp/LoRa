@@ -54,6 +54,9 @@ namespace LoRa_Controller.Log
                 if (Items.Count > maxEntries)
                     Items.RemoveAt(0);
                 TopItem = Items[Items.Count - 1];
+
+                AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+                AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
             }
         }
         #endregion
