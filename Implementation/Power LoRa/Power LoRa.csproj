@@ -53,6 +53,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -78,7 +79,7 @@
     <Compile Include="Interface\ConnectionDialog.Designer.cs">
       <DependentUpon>ConnectionDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Interface\Controls\GraphControl.cs">
+    <Compile Include="Interface\Controls\ChartControl.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Interface\Controls\LabeledControl.cs" />

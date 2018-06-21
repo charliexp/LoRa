@@ -92,8 +92,8 @@ namespace Power_LoRa.Node
             set
             {
                 activeEnergy = value;
-
-                GroupBox.UpdateInterface(GroupBox.ActiveEnergy, activeEnergy);
+                GroupBox.UpdateInterface(GroupBox.ActiveEnergy, ActiveEnergy);
+                GroupBox.EnergyChart.AddPoint(GroupBox.EnergyChart.ActiveEnergy, Timestamp, ActiveEnergy);
             }
         }
         public Int32 ReactiveEnergy
@@ -106,6 +106,7 @@ namespace Power_LoRa.Node
             {
                 reactiveEnergy = value;
                 GroupBox.UpdateInterface(GroupBox.ReactiveEnergy, reactiveEnergy);
+                GroupBox.EnergyChart.AddPoint(GroupBox.EnergyChart.ReactiveEnergy, Timestamp, ReactiveEnergy);
             }
         }
         public Int32 ActivePower

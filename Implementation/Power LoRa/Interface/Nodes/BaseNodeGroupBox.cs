@@ -17,8 +17,6 @@ namespace Power_LoRa.Interface.Nodes
         private TableLayoutPanel powerReadingLayout;
         private TableLayoutPanel powerSetupLayout;
 
-        private Graph graph;
-
         private ParameterCheckBox hasMeter;
         private ButtonControl addPowerOutput;
 
@@ -66,6 +64,7 @@ namespace Power_LoRa.Interface.Nodes
         public TextBoxControl ApparentPower { get; set; }
         public TextBoxControl PowerFactor { get; set; }
         public List<ParameterCheckBox> Outputs { get; set; }
+        public ChartControl EnergyChart { get; private set; }
         #endregion
 
         #region Constructors
@@ -89,7 +88,7 @@ namespace Power_LoRa.Interface.Nodes
                 }
             };
 
-            graph = new Graph("Graph");
+            EnergyChart = new ChartControl("Energy Chart");
             LastReadingTime = new TextBoxControl("LastReading", TextBoxControl.Type.Output)
             {
                 Value = "00:00:00"
@@ -162,7 +161,7 @@ namespace Power_LoRa.Interface.Nodes
             Controls.Add(mainLayout);
             mainLayout.Controls.Add(radioLayout);
             mainLayout.Controls.Add(horizontalSeparators[0]);
-            mainLayout.Controls.Add(graph);
+            mainLayout.Controls.Add(EnergyChart);
             mainLayout.Controls.Add(powerReadingLayout);
             mainLayout.Controls.Add(horizontalSeparators[1]);
             mainLayout.Controls.Add(powerSetupLayout);
@@ -299,6 +298,10 @@ namespace Power_LoRa.Interface.Nodes
         {
             if (target.GetType() == LastReadingTime.GetType())
                 ((TextBoxControl)target).Value = value;
+        }
+        public void UpdateChart(ChartControl chart, int value)
+        {
+
         }
         #endregion
     }
