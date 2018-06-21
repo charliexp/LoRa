@@ -1,6 +1,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "daq.h"
 #include "hw_uart.h"
+#include "timeServer.h"
 
 /* Private typedef -----------------------------------------------------------*/
 typedef struct Register_t
@@ -51,6 +52,7 @@ static uint32_t DAQ_ActiveOldValue;
 static uint32_t DAQ_InductiveOldValue;
 static uint32_t DAQ_CapacitiveOldValue;
 static DAQ_State_t DAQ_State;
+static TimerEvent_t DAQ_Timer;
 
 /* Public variables ----------------------------------------------------------*/
 DAQ_Struct_t DAQ_Data;
@@ -63,12 +65,16 @@ static void DAQ_ReadRegister(const Register_t reg, char *result, uint8_t *result
 static void DAQ_GetTime(void);
 static void DAQ_GetBatteryLevel(void);
 static void DAQ_GetPowers(void);
+static void DAQ_TimerEvent(void);
 
 /* Functions Definition ------------------------------------------------------*/
 void DAQ_Init(void)
 {
 	DAQ_BufferLength = 0;
 	DAQ_State = IDLE;
+	
+	TimerInit(&DAQ_Timer, DAQ_TimerEvent);
+  DAQ_TimerEvent();
 }
 
 void DAQ_Start(void)
@@ -123,6 +129,21 @@ void DAQ_ReadData(void)
 	DAQ_GetTime();
 	DAQ_GetBatteryLevel();
 	DAQ_GetPowers();
+}
+
+static void DAQ_TimerEvent(void)
+{
+	DAQ_ReadData();
+	DAQ_Start();
+	
+	//Temp
+	DAQ_Data.activeEnergy = 1234;
+	DAQ_Data.inductive = false;
+	DAQ_Data.reactiveEnergy = 5432;
+	DAQ_Data.reactivePower = 84463;
+	
+	TimerSetValue(&DAQ_Timer, DAQ_SAMPLE_RATE * 1000); 
+  TimerStart(&DAQ_Timer);
 }
 
 static void DAQ_SendReq(const uint8_t *request, uint16_t length)
@@ -308,7 +329,7 @@ static void DAQ_GetPowers(void)
 		DAQ_InductiveOldValue = newValue;
 	}
 	
-	//Diferenta intre timestamp citiri in loc de APP_DUTYCYCLE
+	/* Powers */
 	DAQ_Data.activePower = DAQ_Data.activeEnergy * 3600 / timeDifference;
 	if (DAQ_Data.inductive)
 		DAQ_Data.reactivePower = DAQ_Data.inductiveEnergy * 3600 / timeDifference;

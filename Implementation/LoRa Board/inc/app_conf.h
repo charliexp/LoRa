@@ -11,11 +11,13 @@
 #include <stdint.h>
 
 /* Exported defines ----------------------------------------------------------*/
-#define APP_DUTYCYCLE							5
+#define APP_INITIAL_SAMPLE_RATE			5
+#define DAQ_SAMPLE_RATE							5
 
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 /* External variables --------------------------------------------------------*/
+extern uint16_t appSampleRate;
 /* Exported macros -----------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */ 
 
