@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoRa Controller", "Implementation\LoRa Controller\LoRa Controller.csproj", "{0A2966F2-1E85-4F89-B4F2-8C8C0D37EC53}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Power LoRa", "Implementation\LoRa Controller\Power LoRa.csproj", "{0A2966F2-1E85-4F89-B4F2-8C8C0D37EC53}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
