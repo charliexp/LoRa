@@ -1,13 +1,13 @@
-﻿using LoRa_Controller.Interface.Controls;
-using LoRa_Controller.Settings;
+﻿using Power_LoRa.Interface.Controls;
+using Power_LoRa.Settings;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO.Ports;
 using System.Windows.Forms;
-using static LoRa_Controller.Connection.BaseConnectionHandler;
+using static Power_LoRa.Connection.BaseConnectionHandler;
 
-namespace LoRa_Controller.Interface
+namespace Power_LoRa.Interface
 {
 	public partial class ConnectionDialog : Form
     {

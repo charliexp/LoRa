@@ -1,11 +1,11 @@
-﻿using LoRa_Controller.Device;
+﻿using Power_LoRa.Device;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using static LoRa_Controller.Device.BaseDevice;
+using static Power_LoRa.Device.BaseDevice;
 
-namespace LoRa_Controller.Interface
+namespace Power_LoRa.Interface
 {
     public partial class MainWindow : Form
     {

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using static LoRa_Controller.Connection.Messages.Message;
+using static Power_LoRa.Connection.Messages.Message;
 
-namespace LoRa_Controller.Connection.Messages
+namespace Power_LoRa.Connection.Messages
 {
     public class Frame
     {

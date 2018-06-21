@@ -1,8 +1,8 @@
-﻿using LoRa_Controller.Connection.Messages;
+﻿using Power_LoRa.Connection.Messages;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace LoRa_Controller.Connection
+namespace Power_LoRa.Connection
 {
 	public abstract class BaseConnectionHandler
 	{

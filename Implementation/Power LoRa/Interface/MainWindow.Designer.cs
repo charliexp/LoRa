@@ -1,4 +1,4 @@
-﻿namespace LoRa_Controller.Interface
+﻿namespace Power_LoRa.Interface
 {
 	partial class MainWindow
 	{
@@ -28,6 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.SuspendLayout();
             // 
             // MainWindow
@@ -38,8 +39,9 @@
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(120, 0);
             this.Enabled = false;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainWindow";
-            this.Text = "LoRa Controller";
+            this.Text = "Power LoRa";
             this.ResumeLayout(false);
 
 		}

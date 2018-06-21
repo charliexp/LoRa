@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace LoRa_Controller.Settings
+namespace Power_LoRa.Settings
 {
 	public static class SettingHandler
 	{

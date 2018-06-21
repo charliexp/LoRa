@@ -4,10 +4,10 @@ using System.Net;
 using System.Net.Sockets;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using LoRa_Controller.Connection.Messages;
-using static LoRa_Controller.Connection.Messages.Message;
+using Power_LoRa.Connection.Messages;
+using static Power_LoRa.Connection.Messages.Message;
 
-namespace LoRa_Controller.Networking
+namespace Power_LoRa.Networking
 {
 	public class Server : TcpListener
     {

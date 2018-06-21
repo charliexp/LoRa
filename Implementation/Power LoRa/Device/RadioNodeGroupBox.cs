@@ -1,9 +1,9 @@
 ﻿
-using LoRa_Controller.Interface.Controls;
+using Power_LoRa.Interface.Controls;
 using System.Windows.Forms;
-using static LoRa_Controller.Device.BaseDevice;
+using static Power_LoRa.Device.BaseDevice;
 
-namespace LoRa_Controller.Device
+namespace Power_LoRa.Device
 {
 	public class RadioNodeGroupBox : BaseNodeGroupBox
     {

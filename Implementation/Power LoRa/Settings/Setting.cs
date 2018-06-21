@@ -1,4 +1,4 @@
-﻿namespace LoRa_Controller.Settings
+﻿namespace Power_LoRa.Settings
 {
 	public class Setting
     {

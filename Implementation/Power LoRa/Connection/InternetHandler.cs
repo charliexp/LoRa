@@ -1,8 +1,8 @@
-﻿using LoRa_Controller.Settings;
+﻿using Power_LoRa.Settings;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 
-namespace LoRa_Controller.Connection
+namespace Power_LoRa.Connection
 {
 	class InternetHandler : BaseConnectionHandler
     {

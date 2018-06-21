@@ -1,4 +1,4 @@
-﻿namespace LoRa_Controller.Interface
+﻿namespace Power_LoRa.Interface
 {
 	partial class ConnectionDialog
 	{

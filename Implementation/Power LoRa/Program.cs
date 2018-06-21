@@ -1,19 +1,19 @@
-﻿using LoRa_Controller.Connection;
-using LoRa_Controller.Device;
-using LoRa_Controller.Interface;
-using LoRa_Controller.Log;
-using LoRa_Controller.Networking;
-using LoRa_Controller.Settings;
+﻿using Power_LoRa.Connection;
+using Power_LoRa.Device;
+using Power_LoRa.Interface;
+using Power_LoRa.Log;
+using Power_LoRa.Networking;
+using Power_LoRa.Settings;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
-using static LoRa_Controller.Connection.BaseConnectionHandler;
+using static Power_LoRa.Connection.BaseConnectionHandler;
 using System.IO;
-using LoRa_Controller.Connection.Messages;
-using static LoRa_Controller.Connection.Messages.Message;
+using Power_LoRa.Connection.Messages;
+using static Power_LoRa.Connection.Messages.Message;
 
-namespace LoRa_Controller
+namespace Power_LoRa
 {
 	public static class Program
 	{

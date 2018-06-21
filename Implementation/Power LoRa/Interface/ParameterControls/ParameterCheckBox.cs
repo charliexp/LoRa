@@ -1,11 +1,11 @@
-﻿using LoRa_Controller.Connection.Messages;
-using LoRa_Controller.Device;
-using LoRa_Controller.Interface.Controls;
+﻿using Power_LoRa.Connection.Messages;
+using Power_LoRa.Device;
+using Power_LoRa.Interface.Controls;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static LoRa_Controller.Connection.Messages.Message;
+using static Power_LoRa.Connection.Messages.Message;
 
-namespace LoRa_Controller.Interface.Node.ParameterControls
+namespace Power_LoRa.Interface.Node.ParameterControls
 {
 	public class ParameterCheckBox : CheckBoxControl
     {

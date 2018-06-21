@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace LoRa_Controller.Interface.Controls
+namespace Power_LoRa.Interface.Controls
 {
 	public class CheckBoxControl : LabeledControl
     {

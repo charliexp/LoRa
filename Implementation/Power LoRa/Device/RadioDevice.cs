@@ -1,4 +1,4 @@
-﻿namespace LoRa_Controller.Device
+﻿namespace Power_LoRa.Device
 {
 	public class RadioDevice : BaseDevice
     {

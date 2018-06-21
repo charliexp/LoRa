@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace LoRa_Controller.Interface.Controls
+namespace Power_LoRa.Interface.Controls
 {
 	public abstract class LabeledControl : BaseControl
     {

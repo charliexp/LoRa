@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{0A2966F2-1E85-4F89-B4F2-8C8C0D37EC53}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>LoRa_Controller</RootNamespace>
-    <AssemblyName>LoRa Controller</AssemblyName>
+    <RootNamespace>Power_LoRa</RootNamespace>
+    <AssemblyName>Power LoRa</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -46,6 +46,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>radio-tower.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -162,6 +165,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Interface\GroupBoxes\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="radio-tower.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

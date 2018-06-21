@@ -1,11 +1,11 @@
-﻿using LoRa_Controller.Connection.Messages;
-using LoRa_Controller.Interface;
+﻿using Power_LoRa.Connection.Messages;
+using Power_LoRa.Interface;
 using System;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
-namespace LoRa_Controller.Log
+namespace Power_LoRa.Log
 {
 	public class LogGroupBox : GroupBox
     {

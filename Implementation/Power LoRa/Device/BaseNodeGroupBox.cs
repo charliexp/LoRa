@@ -1,13 +1,13 @@
-﻿using LoRa_Controller.Interface;
-using LoRa_Controller.Interface.Controls;
-using LoRa_Controller.Interface.Node.ParameterControls;
+﻿using Power_LoRa.Interface;
+using Power_LoRa.Interface.Controls;
+using Power_LoRa.Interface.Node.ParameterControls;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using static LoRa_Controller.Connection.Messages.Message;
+using static Power_LoRa.Connection.Messages.Message;
 
-namespace LoRa_Controller.Device
+namespace Power_LoRa.Device
 {
 	public abstract class BaseNodeGroupBox : GroupBox
     {

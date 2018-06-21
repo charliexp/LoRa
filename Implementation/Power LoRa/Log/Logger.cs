@@ -1,12 +1,12 @@
-﻿using LoRa_Controller.Connection.Messages;
-using LoRa_Controller.Device;
-using LoRa_Controller.Settings;
+﻿using Power_LoRa.Connection.Messages;
+using Power_LoRa.Device;
+using Power_LoRa.Settings;
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using static LoRa_Controller.Connection.Messages.Frame;
+using static Power_LoRa.Connection.Messages.Frame;
 
-namespace LoRa_Controller.Log
+namespace Power_LoRa.Log
 {
     public class Logger
     {

@@ -1,9 +1,9 @@
-﻿using LoRa_Controller.Settings;
+﻿using Power_LoRa.Settings;
 using System.Collections.Generic;
 using System.IO.Ports;
 using System.Threading.Tasks;
 
-namespace LoRa_Controller.Connection
+namespace Power_LoRa.Connection
 {
 	class SerialHandler : BaseConnectionHandler
     {

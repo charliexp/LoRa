@@ -1,10 +1,7 @@
-﻿using LoRa_Controller.Connection.Messages;
-using System;
-using System.Drawing;
+﻿using Power_LoRa.Connection.Messages;
 using System.Windows.Forms;
-using static LoRa_Controller.Device.BaseDevice;
 
-namespace LoRa_Controller.Log
+namespace Power_LoRa.Log
 {
 	public class LogListView : ListView
     {
