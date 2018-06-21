@@ -1,5 +1,6 @@
 ﻿using Power_LoRa.Interface.Controls;
 using Power_LoRa.Interface.Node.ParameterControls;
+using Power_LoRa.Node;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -18,15 +19,6 @@ namespace Power_LoRa.Interface.Nodes
         private TableLayoutPanel powerReadingLayout;
         private TableLayoutPanel powerSetupLayout;
 
-        private TextBoxControl lastReadingTime;
-        private TextBoxControl activePower;
-        private TextBoxControl inductivePower;
-        private TextBoxControl capacitivePower;
-        private TextBoxControl reactivePower;
-        private TextBoxControl apparentPower;
-        private TextBoxControl powerFactor;
-
-        private TextBoxControl transmissionRate;
         private ParameterCheckBox hasMeter;
         private List<CheckBox> outputs;
         private ButtonControl addPowerOutput;
@@ -45,13 +37,13 @@ namespace Power_LoRa.Interface.Nodes
         #region Properties
         public byte NewAddress { get; set; }
         public byte Address
-		{
-			get
-			{
-				return address;
-			}
-			set
-			{
+        {
+            get
+            {
+                return address;
+            }
+            set
+            {
                 address = value;
 
                 switch ((AddressType)address)
@@ -64,20 +56,17 @@ namespace Power_LoRa.Interface.Nodes
                         break;
                 }
                 ((TextBox)addressControl.Field).Text = address.ToString();
-			}
-		}
-        /*
-		public ParameterComboBox Bandwidth;
-		public ParameterSpinBox OutputPower;
-		public ParameterSpinBox SpreadingFactor;
-		public ParameterComboBox CodingRate;
-		public ParameterSpinBox RxSymTimeout;
-		public ParameterSpinBox RxMsTimeout;
-		public ParameterSpinBox TxTimeout;
-		public ParameterSpinBox PreambleSize;
-		public ParameterSpinBox PayloadMaxSize;
-		public ParameterCheckBox VariablePayload;
-		public ParameterCheckBox PerformCRC;*/
+            }
+        }
+        public ParameterSpinBox TransmissionRate { get; set; }
+        public TextBoxControl LastReadingTime { get; set; }
+        public TextBoxControl ActiveEnergy { get; set; }
+        public TextBoxControl ReactiveEnergy { get; set; }
+        public TextBoxControl ActivePower { get; set; }
+        public TextBoxControl ReactivePower { get; set; }
+        public TextBoxControl ApparentPower { get; set; }
+        public TextBoxControl PowerFactor { get; set; }
+
         #endregion
 
         #region Constructors
@@ -99,38 +88,35 @@ namespace Power_LoRa.Interface.Nodes
             };
 
             graph = new Graph("Graph");
-            lastReadingTime = new TextBoxControl("LastReading", TextBoxControl.Type.Output)
+            LastReadingTime = new TextBoxControl("LastReading", TextBoxControl.Type.Output)
             {
                 Value = "00:00:00"
             };
-            activePower = new TextBoxControl("ActivePower", "kWh", TextBoxControl.Type.Output)
+            ActiveEnergy = new TextBoxControl("ActiveEnergy", "kWh", TextBoxControl.Type.Output)
             {
                 Value = "0"
             };
-            inductivePower = new TextBoxControl("InductivePower", "kVArh", TextBoxControl.Type.Output)
+            ReactiveEnergy = new TextBoxControl("ReactiveEnergy", "kVArh", TextBoxControl.Type.Output)
             {
                 Value = "0"
             };
-            capacitivePower = new TextBoxControl("CapacitivePower", "kVArh", TextBoxControl.Type.Output)
+            ActivePower = new TextBoxControl("ActivePower", "kW", TextBoxControl.Type.Output)
             {
                 Value = "0"
             };
-            reactivePower = new TextBoxControl("ReactivePower", "kVArh", TextBoxControl.Type.Output)
+            ReactivePower = new TextBoxControl("ReactivePower", "kVAr", TextBoxControl.Type.Output)
             {
                 Value = "0"
             };
-            apparentPower = new TextBoxControl("ApparentPower", "kWh", TextBoxControl.Type.Output)
+            ApparentPower = new TextBoxControl("ApparentPower", "kVA", TextBoxControl.Type.Output)
             {
                 Value = "0"
             };
-            powerFactor = new TextBoxControl("PowerFactor", TextBoxControl.Type.Output)
+            PowerFactor = new TextBoxControl("PowerFactor", TextBoxControl.Type.Output)
             {
                 Value = "1"
             };
-            transmissionRate = new TextBoxControl("TransmissionRate", "s", TextBoxControl.Type.Input)
-            {
-                Value = "5"
-            };
+            TransmissionRate = new ParameterSpinBox(CommandType.TransmissionRate, BaseNode.MinTransmissionRate, BaseNode.MaxTransmissionRate, 5);
             hasMeter = new ParameterCheckBox(CommandType.HasMeter, false);
             outputs = new List<CheckBox>
             {
@@ -200,20 +186,20 @@ namespace Power_LoRa.Interface.Nodes
             secondLayout.Controls.Add(powerSetupLayout);
             secondLayout.SetRowSpan(verticalSeparator, 3);
             secondLayout.SetRowSpan(radioLayout, 3);
-            powerReadingLayout.Controls.Add(lastReadingTime.Label);
-            powerReadingLayout.Controls.Add(lastReadingTime.Field);
-            powerReadingLayout.Controls.Add(activePower.Label);
-            powerReadingLayout.Controls.Add(activePower.Field);
-            powerReadingLayout.Controls.Add(inductivePower.Label);
-            powerReadingLayout.Controls.Add(inductivePower.Field);
-            powerReadingLayout.Controls.Add(capacitivePower.Label);
-            powerReadingLayout.Controls.Add(capacitivePower.Field);
-            powerReadingLayout.Controls.Add(reactivePower.Label);
-            powerReadingLayout.Controls.Add(reactivePower.Field);
-            powerReadingLayout.Controls.Add(apparentPower.Label);
-            powerReadingLayout.Controls.Add(apparentPower.Field);
-            powerReadingLayout.Controls.Add(powerFactor.Label);
-            powerReadingLayout.Controls.Add(powerFactor.Field);
+            powerReadingLayout.Controls.Add(LastReadingTime.Label);
+            powerReadingLayout.Controls.Add(LastReadingTime.Field);
+            powerReadingLayout.Controls.Add(ActiveEnergy.Label);
+            powerReadingLayout.Controls.Add(ActiveEnergy.Field);
+            powerReadingLayout.Controls.Add(ReactiveEnergy.Label);
+            powerReadingLayout.Controls.Add(ReactiveEnergy.Field);
+            powerReadingLayout.Controls.Add(ActivePower.Label);
+            powerReadingLayout.Controls.Add(ActivePower.Field);
+            powerReadingLayout.Controls.Add(ReactivePower.Label);
+            powerReadingLayout.Controls.Add(ReactivePower.Field);
+            powerReadingLayout.Controls.Add(ApparentPower.Label);
+            powerReadingLayout.Controls.Add(ApparentPower.Field);
+            powerReadingLayout.Controls.Add(PowerFactor.Label);
+            powerReadingLayout.Controls.Add(PowerFactor.Field);
             radioLayout.Controls.Add(addressControl.Label);
             radioLayout.Controls.Add(addressControl.Field);
             radioLayout.Controls.Add(checkIfPresent.Field);
@@ -240,8 +226,8 @@ namespace Power_LoRa.Interface.Nodes
             radioLayout.Controls.Add(VariablePayload.Field);
             radioLayout.Controls.Add(PerformCRC.Label);
             radioLayout.Controls.Add(PerformCRC.Field);*/
-            powerSetupLayout.Controls.Add(transmissionRate.Label);
-            powerSetupLayout.Controls.Add(transmissionRate.Field);
+            powerSetupLayout.Controls.Add(TransmissionRate.Label);
+            powerSetupLayout.Controls.Add(TransmissionRate.Field);
             powerSetupLayout.Controls.Add(hasMeter.Label);
             powerSetupLayout.Controls.Add(hasMeter.Field);
             foreach (CheckBox output in outputs)
@@ -296,6 +282,25 @@ namespace Power_LoRa.Interface.Nodes
                 mainLayout.Controls.Add(control.Field);
                 control.Field.Dock = DockStyle.Fill;
             }*/
+        }
+        #endregion
+
+        #region Public methods
+        public void UpdateInterface(BaseControl sender, double value)
+        {
+            UpdateInterface(sender, value.ToString("0.##"));
+        }
+        public void UpdateInterface(BaseControl sender, int value)
+        {
+            if (sender.GetType() == TransmissionRate.GetType())
+                ((ParameterSpinBox)sender).SetValue(value);
+            else
+                UpdateInterface(sender, value.ToString());
+        }
+        public void UpdateInterface(BaseControl sender, string value)
+        {
+            if (sender.GetType() == LastReadingTime.GetType())
+                ((TextBoxControl)sender).Value = value;
         }
         #endregion
     }

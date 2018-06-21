@@ -1,5 +1,5 @@
 ﻿using Power_LoRa.Connection;
-using Power_LoRa.Device;
+using Power_LoRa.Node;
 using Power_LoRa.Interface;
 using Power_LoRa.Log;
 using Power_LoRa.Networking;
@@ -18,10 +18,10 @@ namespace Power_LoRa
     public static class Program
     {
         #region Public variables
-        public static List<RadioDevice> radioDevices;
+        public static List<RadioNode> radioDevices;
         public static BaseConnectionHandler connectionHandler;
         public static Logger logger;
-        public static DirectDevice directDevice;
+        public static BaseNode directDevice;
         public static MainWindow mainWindow;
         public static Server serverHandler;
         public static ConnectionDialog connectionDialog;
@@ -42,8 +42,8 @@ namespace Power_LoRa
 
             directDeviceInitialized = false;
 
-            directDevice = new DirectDevice();
-            radioDevices = new List<RadioDevice>();
+            directDevice = new BaseNode();
+            radioDevices = new List<RadioNode>();
             SettingHandler.Load();
 
             logger = new Logger("log_", "txt");
@@ -133,6 +133,7 @@ namespace Power_LoRa
         {
             int radioDeviceAddress = Int32.MaxValue;
             bool newRadioDevice;
+            byte[] array;
             Frame frame = (Frame)e.UserState;
 
             foreach (Connection.Messages.Message message in frame.Messages)
@@ -140,13 +141,45 @@ namespace Power_LoRa
                 switch (message.Command)
                 {
                     case CommandType.IsPresent:
-                        if (!directDeviceInitialized)
-                        {
-                            directDevice.Address = frame.EndDevice;
-                            directDeviceInitialized = true;
-                        }
+                        array = message.RawArgument;
+                        Array.Reverse(array);
+                        directDevice.Address = frame.EndDevice;
+                        directDevice.TransmissionRate = BitConverter.ToInt16(array, 0);
+                        directDeviceInitialized = true;
                         break;
                     case CommandType.Timestamp:
+                        directDevice.Timestamp = new DateTime(1, 1, 1,
+                            message.RawArgument[0],
+                            message.RawArgument[1],
+                            message.RawArgument[2]);
+                        break;
+                    case CommandType.ActiveEnergy:
+                        array = new byte[4];
+                        message.RawArgument.CopyTo(array, 1);
+                        Array.Reverse(array);
+                        directDevice.ActiveEnergy = BitConverter.ToInt32(array, 0);
+                        break;
+                    case CommandType.ReactiveEnergy:
+                        array = new byte[4];
+                        message.RawArgument.CopyTo(array, 1);
+                        if ((array[1] & 0x80) != 0)
+                            array[0] = 0xFF;
+                        Array.Reverse(array);
+                        directDevice.ReactiveEnergy = BitConverter.ToInt32(array, 0);
+                        break;
+                    case CommandType.ActivePower:
+                        array = new byte[4];
+                        message.RawArgument.CopyTo(array, 1);
+                        Array.Reverse(array);
+                        directDevice.ActivePower = BitConverter.ToInt32(array, 0);
+                        break;
+                    case CommandType.ReactivePower:
+                        array = new byte[4];
+                        message.RawArgument.CopyTo(array, 1);
+                        if ((array[1] & 0x80) != 0)
+                            array[0] = 0xFF;
+                        Array.Reverse(array);
+                        directDevice.ReactivePower = BitConverter.ToInt32(array, 0);
                         break;
                 }
             }

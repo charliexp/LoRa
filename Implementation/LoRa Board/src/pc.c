@@ -108,9 +108,9 @@ void PC_ProcessMessage(void)
 	switch (receivedFrame.messages[0].command)
 	{
 		case COMMAND_IS_PRESENT:
-			reply.messages[0].argLength = 1;
-			reply.messages[0].rawArgument[0] = ACK;
-			PC_Send(reply);
+			reply.messages[0].argLength = 2;
+			reply.messages[0].rawArgument[0] = (appTransmissionRate >> 8) & 0xFF;
+			reply.messages[0].rawArgument[1] = (appTransmissionRate >> 0) & 0xFF;
 			PC_Handle.connected = true;
 			break;
 		case COMMAND_SET_ADDRESS:
@@ -118,15 +118,20 @@ void PC_ProcessMessage(void)
 			reply.endDevice = myAddress;
 			reply.messages[0].argLength = 1;
 			reply.messages[0].rawArgument[0] = ACK;
-			PC_Send(reply);
+			break;
+		case COMMAND_TRANSMISSION_RATE:
+			appTransmissionRate = ((receivedFrame.messages[0].rawArgument[0] >> 8) & 0xFF) |
+				((receivedFrame.messages[0].rawArgument[1] >> 0) & 0xFF);
+			reply.messages[0].argLength = 1;
+			reply.messages[0].rawArgument[0] = ACK;
 			break;
 		default:
 			reply.messages[0].argLength = 1;
 			reply.messages[0].rawArgument[0] = NAK;
-			PC_Send(reply);
 			break;
 	}
 	PC_Handle.bufferLength = 0;
+	PC_Send(reply);
 }
 
 void PC_Send(Frame_t frame)

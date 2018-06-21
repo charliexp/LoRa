@@ -1,5 +1,5 @@
 ﻿using Power_LoRa.Connection.Messages;
-using Power_LoRa.Device;
+using Power_LoRa.Node;
 using Power_LoRa.Settings;
 using System;
 using System.IO;

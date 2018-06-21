@@ -137,10 +137,12 @@ static void DAQ_TimerEvent(void)
 	DAQ_Start();
 	
 	//Temp
-	DAQ_Data.activeEnergy = 1234;
+	DAQ_Data.time.hour = 14;
+	DAQ_Data.activeEnergy++;
 	DAQ_Data.inductive = false;
-	DAQ_Data.reactiveEnergy = 5432;
-	DAQ_Data.reactivePower = 84463;
+	DAQ_Data.reactiveEnergy++;
+	DAQ_Data.activePower = 3;
+	DAQ_Data.reactivePower = 4;
 	
 	TimerSetValue(&DAQ_Timer, DAQ_SAMPLE_RATE * 1000); 
   TimerStart(&DAQ_Timer);

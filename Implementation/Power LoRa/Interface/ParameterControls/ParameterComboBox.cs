@@ -1,5 +1,5 @@
 ﻿using Power_LoRa.Connection.Messages;
-using Power_LoRa.Device;
+using Power_LoRa.Node;
 using Power_LoRa.Interface.Controls;
 using Power_LoRa.Interface.Nodes;
 using System.Collections.Generic;
@@ -26,7 +26,7 @@ namespace Power_LoRa.Interface.Node.ParameterControls
         #endregion
 
         #region Private methods
-        private async Task ParameterChangedCallback(byte value)
+        private async Task ParameterChangedCallback(int value)
         {
             Connection.Messages.Message message = new Connection.Messages.Message(parameter, value);
 

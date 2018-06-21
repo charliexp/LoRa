@@ -1,33 +1,34 @@
 ﻿using Power_LoRa.Connection.Messages;
-using Power_LoRa.Device;
+using Power_LoRa.Node;
 using Power_LoRa.Interface.Controls;
 using Power_LoRa.Interface.Nodes;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static Power_LoRa.Connection.Messages.Message;
+using System;
 
 namespace Power_LoRa.Interface.Node.ParameterControls
 {
 	public class ParameterSpinBox : SpinBoxControl
     {
         #region Private variables
-        private CommandType parameter;
+        private CommandType command;
 		private bool remotelyChanged;
         #endregion
 
         #region Constructors
         public ParameterSpinBox(CommandType parameter, int minValue, int maxValue, int defaultValue) : base(parameter.ToString(), minValue, maxValue, defaultValue)
 		{
-			this.parameter = parameter;
+			this.command = parameter;
             ValueChanged = ParameterChangedCallback;
 			remotelyChanged = false;
         }
         #endregion
 
         #region Private methods
-        private async Task ParameterChangedCallback(byte value)
+        private async Task ParameterChangedCallback(int value)
         {
-            Connection.Messages.Message message = new Connection.Messages.Message(parameter, value);
+            Connection.Messages.Message message = new Connection.Messages.Message(command, (Int16) value);
 
             if (!remotelyChanged)
                 await Program.connectionHandler.WriteAsync(new Frame(((BaseNodeGroupBox)Field.Parent.Parent.Parent.Parent).Address, message));

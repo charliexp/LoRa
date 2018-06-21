@@ -28,7 +28,7 @@ namespace Power_LoRa.Interface.Controls
         private async void IndexChanged(object sender, EventArgs e)
 		{
 			if (ValueChanged != null)
-				await ValueChanged(Decimal.ToByte(((NumericUpDown)sender).Value));
+				await ValueChanged(Decimal.ToInt16(((NumericUpDown)sender).Value));
         }
         #endregion
     }

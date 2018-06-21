@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Power_LoRa.Node;
+using System;
 using System.Collections.Generic;
-using static Power_LoRa.Device.BaseDevice;
+using static Power_LoRa.Node.BaseNode;
 
 namespace Power_LoRa.Connection.Messages
 {
@@ -19,15 +20,17 @@ namespace Power_LoRa.Connection.Messages
             Reset = 0x12,
             
 			SetAddress = 0x20,
-            HasMeter = 0x21,
-            ChangeCompensator = 0x22,
+            TransmissionRate = 0x21,
+            HasMeter = 0x22,
+            ChangeCompensator = 0x23,
 
             Acquisition = 0x30,
             Timestamp = 0x31,
             ActiveEnergy = 0x32,
             ReactiveEnergy = 0x33,
-            ReactivePower = 0x34,
-            SetCompensator = 0x35
+            ActivePower = 0x34,
+            ReactivePower = 0x35,
+            SetCompensator = 0x36,
 		}
         #endregion
 
@@ -63,10 +66,18 @@ namespace Power_LoRa.Connection.Messages
                     switch(Command)
                     {
                         case CommandType.IsPresent:
-                            PrintableArgument = ((ResponseType)value[Idx_ack]).ToString();
+                            PrintableArgument = ((rawArgument[0] << 8) |
+                                (rawArgument[1])).ToString() + " s";
                             break;
                         case CommandType.SetAddress:
-                            PrintableArgument = ((ResponseType)value[Idx_ack]).ToString();
+                            PrintableArgument = ((ResponseType)rawArgument[Idx_ack]).ToString();
+                            break;
+                        case CommandType.TransmissionRate:
+                            if (value[Idx_ack] < MinTransmissionRate)
+                                PrintableArgument = ((ResponseType)rawArgument[Idx_ack]).ToString();
+                            else
+                                PrintableArgument = ((rawArgument[0] << 8) |
+                                    (rawArgument[1])).ToString() + " s";
                             break;
                         case CommandType.Timestamp:
                             PrintableArgument = rawArgument[0].ToString("D2") + ":" +
@@ -85,6 +96,11 @@ namespace Power_LoRa.Connection.Messages
                             if ((tempValue & (1 << 23)) != 0)
                                 tempValue |= 0xFF << 24;
                             PrintableArgument = tempValue.ToString("+#;-#;0") + " kVARh";
+                            break;
+                        case CommandType.ActivePower:
+                            PrintableArgument = ((rawArgument[0] << 16) |
+                                (rawArgument[1] << 8) |
+                                (rawArgument[2])).ToString() + " kW";
                             break;
                         case CommandType.ReactivePower:
                             tempValue = (rawArgument[0] << 16) |
@@ -135,9 +151,15 @@ namespace Power_LoRa.Connection.Messages
         {
             RawArgument = new byte[1] { argument };
         }
-        public Message(CommandType command, int argument) : this(command)
+        public Message(CommandType command, Int16 argument) : this(command)
         {
             RawArgument = BitConverter.GetBytes(argument);
+            Array.Reverse(RawArgument);
+        }
+        public Message(CommandType command, Int32 argument) : this(command)
+        {
+            RawArgument = BitConverter.GetBytes(argument);
+            Array.Reverse(RawArgument);
         }
         #endregion
     }

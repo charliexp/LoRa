@@ -1,6 +1,6 @@
-﻿namespace Power_LoRa.Device
+﻿namespace Power_LoRa.Node
 {
-	public class RadioDevice : BaseDevice
+	public class RadioNode : BaseNode
     {
         #region Properties
         public int RSSI { get; private set; }
@@ -9,7 +9,7 @@
         #endregion
 
         #region Constructors
-        public RadioDevice(byte address) : base()
+        public RadioNode(byte address) : base()
 		{
 			Address = address;
 			Connected = false;

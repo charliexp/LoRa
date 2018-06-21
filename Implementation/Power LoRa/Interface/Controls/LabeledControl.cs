@@ -9,7 +9,7 @@ namespace Power_LoRa.Interface.Controls
 	public abstract class LabeledControl : BaseControl
     {
         #region Types
-        public delegate Task ValueChangedDelegate(byte index);
+        public delegate Task ValueChangedDelegate(int value);
         #endregion
         
         #region Properties

@@ -10,7 +10,7 @@
 
 #define DEVICE_ADDRESS_LOCATION		0x08080000
 
-uint16_t appSampleRate = APP_INITIAL_SAMPLE_RATE;
+uint16_t appTransmissionRate = APP_INITIAL_SAMPLE_RATE;
 
 uint8_t myAddress;
 bool LoRa_setupPending;
@@ -208,51 +208,56 @@ void OnTimerEvent(void)
 	DBG_PRINTF("Putere aparenta\t\t%03d.%03d\tkVA\r\n", DAQ_Data.apparentPower / 1000, DAQ_Data.apparentPower % 1000);
 	DBG_PRINTF("Factor putere\t\t%c%d.%02d\r\n", DAQ_Data.inductive? '+': '-', abs(DAQ_Data.powerFactor) / 100, abs(DAQ_Data.powerFactor) % 100);
 	
-	if (PC_Connected())
-	{
-		result.endDevice = myAddress;
-		result.nrOfMessages = 0;
-		
-		result.messages[result.nrOfMessages].command = COMMAND_TIMESTAMP;
-		result.messages[result.nrOfMessages].argLength = 3;
-		result.messages[result.nrOfMessages].rawArgument[0] = DAQ_Data.time.hour;
-		result.messages[result.nrOfMessages].rawArgument[1] = DAQ_Data.time.minute;
-		result.messages[result.nrOfMessages].rawArgument[2] = DAQ_Data.time.second;
-		result.nrOfMessages++;
-		
-		result.messages[result.nrOfMessages].command = COMMAND_ACTIVE_ENERGY;
-		result.messages[result.nrOfMessages].argLength = 3;
-		result.messages[result.nrOfMessages].rawArgument[0] = (DAQ_Data.activeEnergy >> 16) & 0xFF;
-		result.messages[result.nrOfMessages].rawArgument[1] = (DAQ_Data.activeEnergy >> 8) & 0xFF;
-		result.messages[result.nrOfMessages].rawArgument[2] = (DAQ_Data.activeEnergy >> 0) & 0xFF;
-		result.nrOfMessages++;
-		
-		if (!DAQ_Data.inductive)
-			tempValue = 0 - DAQ_Data.reactiveEnergy;
-		else
-			tempValue = DAQ_Data.reactiveEnergy;
-		result.messages[result.nrOfMessages].command = COMMAND_REACTIVE_ENERGY;
-		result.messages[result.nrOfMessages].argLength = 3;
-		result.messages[result.nrOfMessages].rawArgument[0] = (tempValue >> 16) & 0xFF;
-		result.messages[result.nrOfMessages].rawArgument[1] = (tempValue >> 8) & 0xFF;
-		result.messages[result.nrOfMessages].rawArgument[2] = (tempValue >> 0) & 0xFF;
-		result.nrOfMessages++;
-		
-		if (!DAQ_Data.inductive)
-			tempValue = 0 - DAQ_Data.reactivePower;
-		else
-			tempValue = DAQ_Data.reactivePower;
-		result.messages[result.nrOfMessages].command = COMMAND_REACTIVE_POWER;
-		result.messages[result.nrOfMessages].argLength = 3;
-		result.messages[result.nrOfMessages].rawArgument[0] = (tempValue >> 16) & 0xFF;
-		result.messages[result.nrOfMessages].rawArgument[1] = (tempValue >> 8) & 0xFF;
-		result.messages[result.nrOfMessages].rawArgument[2] = (tempValue >> 0) & 0xFF;
-		result.nrOfMessages++;
-		
-		PC_Send(result);
-	}
+	result.endDevice = myAddress;
+	result.nrOfMessages = 0;
 	
-	TimerSetValue(&appTimer, appSampleRate * 1000); 
+	result.messages[result.nrOfMessages].command = COMMAND_TIMESTAMP;
+	result.messages[result.nrOfMessages].argLength = 3;
+	result.messages[result.nrOfMessages].rawArgument[0] = DAQ_Data.time.hour;
+	result.messages[result.nrOfMessages].rawArgument[1] = DAQ_Data.time.minute;
+	result.messages[result.nrOfMessages].rawArgument[2] = DAQ_Data.time.second;
+	result.nrOfMessages++;
+	
+	result.messages[result.nrOfMessages].command = COMMAND_ACTIVE_ENERGY;
+	result.messages[result.nrOfMessages].argLength = 3;
+	result.messages[result.nrOfMessages].rawArgument[0] = (DAQ_Data.activeEnergy >> 16) & 0xFF;
+	result.messages[result.nrOfMessages].rawArgument[1] = (DAQ_Data.activeEnergy >> 8) & 0xFF;
+	result.messages[result.nrOfMessages].rawArgument[2] = (DAQ_Data.activeEnergy >> 0) & 0xFF;
+	result.nrOfMessages++;
+	
+	if (!DAQ_Data.inductive)
+		tempValue = 0 - DAQ_Data.reactiveEnergy;
+	else
+		tempValue = DAQ_Data.reactiveEnergy;
+	result.messages[result.nrOfMessages].command = COMMAND_REACTIVE_ENERGY;
+	result.messages[result.nrOfMessages].argLength = 3;
+	result.messages[result.nrOfMessages].rawArgument[0] = (tempValue >> 16) & 0xFF;
+	result.messages[result.nrOfMessages].rawArgument[1] = (tempValue >> 8) & 0xFF;
+	result.messages[result.nrOfMessages].rawArgument[2] = (tempValue >> 0) & 0xFF;
+	result.nrOfMessages++;
+	
+	result.messages[result.nrOfMessages].command = COMMAND_ACTIVE_POWER;
+	result.messages[result.nrOfMessages].argLength = 3;
+	result.messages[result.nrOfMessages].rawArgument[0] = (DAQ_Data.activePower >> 16) & 0xFF;
+	result.messages[result.nrOfMessages].rawArgument[1] = (DAQ_Data.activePower >> 8) & 0xFF;
+	result.messages[result.nrOfMessages].rawArgument[2] = (DAQ_Data.activePower >> 0) & 0xFF;
+	result.nrOfMessages++;
+	
+	if (!DAQ_Data.inductive)
+		tempValue = 0 - DAQ_Data.reactivePower;
+	else
+		tempValue = DAQ_Data.reactivePower;
+	result.messages[result.nrOfMessages].command = COMMAND_REACTIVE_POWER;
+	result.messages[result.nrOfMessages].argLength = 3;
+	result.messages[result.nrOfMessages].rawArgument[0] = (tempValue >> 16) & 0xFF;
+	result.messages[result.nrOfMessages].rawArgument[1] = (tempValue >> 8) & 0xFF;
+	result.messages[result.nrOfMessages].rawArgument[2] = (tempValue >> 0) & 0xFF;
+	result.nrOfMessages++;
+		
+	if (PC_Connected())
+		PC_Send(result);
+	
+	TimerSetValue(&appTimer, appTransmissionRate * 1000); 
   TimerStart(&appTimer);
 }
 
