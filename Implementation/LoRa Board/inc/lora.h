@@ -1,6 +1,7 @@
 #ifndef LORA_H
 #define LORA_H
 
+#include "app_conf.h"
 #include "message.h"
 #include "hw.h"
 

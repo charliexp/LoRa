@@ -1,32 +1,26 @@
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __ACTUATOR_H__
-#define __ACTUATOR_H__
+#ifndef __APP_CONF_H__
+#define __APP_CONF_H__
 
 #ifdef __cplusplus
  extern "C" {
 #endif
-   
+
 /* Includes ------------------------------------------------------------------*/
-#include "app_conf.h"
+#include <stdbool.h>
+#include <stdint.h>
 
 /* Exported defines ----------------------------------------------------------*/
+#define APP_DUTYCYCLE							5
+
 /* Exported types ------------------------------------------------------------*/
-typedef enum ActuatorType_t
-{
-	ACT_INDUCTOR,
-	ACT_CAPACITOR
-}ActuatorType_t;
-	 
 /* Exported constants --------------------------------------------------------*/
 /* External variables --------------------------------------------------------*/
-/* Exported functions --------------------------------------------------------*/
-void ACT_Init(void);
-void ACT_UpdateData(void);
-void ACT_SetContact(uint8_t contactNumber, bool state);
-void ACT_ChangeActuator(uint8_t contactNumber, ActuatorType_t actuatorType, bool enabled);
+/* Exported macros -----------------------------------------------------------*/
+/* Exported functions ------------------------------------------------------- */ 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __ACTUATOR_H__*/
+#endif /* __APP_CONF_H__*/

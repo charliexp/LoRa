@@ -7,7 +7,7 @@
 #endif
    
 /* Includes ------------------------------------------------------------------*/
-#include "hw_uart.h"
+#include "app_conf.h"
 
 /* Exported defines ----------------------------------------------------------*/
 #define DAQ_TIMEOUT                           5000

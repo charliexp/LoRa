@@ -1,5 +1,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "daq.h"
+#include "hw_uart.h"
 
 /* Private typedef -----------------------------------------------------------*/
 typedef struct Register_t

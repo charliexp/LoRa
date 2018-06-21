@@ -1,12 +1,12 @@
 #include <string.h>
+#include <stdlib.h>
+#include "actuator.h"
+#include "app_conf.h"
+#include "daq.h"
 #include "message.h"
 #include "lora.h"
 #include "pc.h"
-#include "delay.h"
-#include "daq.h"
-#include "actuator.h"
 #include "timeServer.h"
-#include <stdlib.h>
 
 #define DEVICE_ADDRESS_LOCATION		0x08080000
 
@@ -234,13 +234,13 @@ int main(void)
 	DAQ_Init();
 	ACT_Init();
 	
-	TimerInit(&appTimer, OnTimerEvent);
-	TimerSetValue(&appTimer, APP_DUTYCYCLE * 1000); 
-  OnTimerEvent();
-	
 	LoRa_setupPending = false;
 	myAddress = *((uint8_t *) DEVICE_ADDRESS_LOCATION);
 	LoRa_startReceiving();
+	
+	TimerInit(&appTimer, OnTimerEvent);
+	TimerSetValue(&appTimer, APP_DUTYCYCLE * 1000); 
+  OnTimerEvent();
 	
   while(1)
   {

@@ -125,9 +125,6 @@ Maintainer: Miguel Luis and Gregory Cristian
 #endif
 
 /* --------Preprocessor compile swicth------------ */
-//move somewhere else
-#define APP_DUTYCYCLE							5
-
 /* debug switches in debug.h */
 #define DEBUG
 //#define TRACE
