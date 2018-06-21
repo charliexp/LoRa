@@ -1,16 +1,14 @@
-﻿using Power_LoRa.Device;
+﻿using Power_LoRa.Interface.Nodes;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using static Power_LoRa.Device.BaseDevice;
 
 namespace Power_LoRa.Interface
 {
     public partial class MainWindow : Form
     {
         #region Properties
-        public DirectNodeGroupBox DirectNodeInterface { get; private set; }
 		public List<RadioNodeGroupBox> RadioNodeInterfaces { get; private set; }
         public FlowLayoutPanel FlowLayout { get; private set; }
         public TableLayoutPanel TableLayout { get; private set; }
@@ -19,7 +17,6 @@ namespace Power_LoRa.Interface
         #region Constructors
         public MainWindow()
 		{
-			DirectNodeInterface = new DirectNodeGroupBox("Directly Connected Node");
 			RadioNodeInterfaces = new List<RadioNodeGroupBox>();
 
             FlowLayout = new FlowLayoutPanel
@@ -40,7 +37,6 @@ namespace Power_LoRa.Interface
             TableLayout.Controls.Add(FlowLayout);
 
             FlowLayout.FlowDirection = FlowDirection.LeftToRight;
-            FlowLayout.Controls.Add(DirectNodeInterface);
 
             InitializeComponent();
 
@@ -71,7 +67,7 @@ namespace Power_LoRa.Interface
         {
         }
         public void UpdateRadioConnectedNodes()
-        {
+        {/*
             for (int i = RadioNodeInterfaces.Count; i < Program.radioDevices.Count; i++)
             {
                 RadioNodeInterfaces.Add(new RadioNodeGroupBox("Radio Node"));
@@ -82,7 +78,7 @@ namespace Power_LoRa.Interface
                     RadioNodeInterfaces[i].Text = "Beacon " + Program.radioDevices[i].Address;
                 FlowLayout.Controls.Add(RadioNodeInterfaces[i]);
                 RadioNodeInterfaces[i].Draw(RadioNodeInterfaces.Count);
-            }
+            }*/
         }
         #endregion
     }

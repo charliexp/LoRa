@@ -1,5 +1,4 @@
-﻿using Power_LoRa.Interface;
-using Power_LoRa.Interface.Controls;
+﻿using Power_LoRa.Interface.Controls;
 using Power_LoRa.Interface.Node.ParameterControls;
 using System;
 using System.Collections.Generic;
@@ -8,9 +7,9 @@ using System.Windows.Forms;
 using static Power_LoRa.Connection.Messages.Frame;
 using static Power_LoRa.Connection.Messages.Message;
 
-namespace Power_LoRa.Device
+namespace Power_LoRa.Interface.Nodes
 {
-	public abstract class BaseNodeGroupBox : GroupBox
+	public class BaseNodeGroupBox : GroupBox
     {
         #region Private variables
         private TableLayoutPanel mainLayout;
@@ -82,7 +81,7 @@ namespace Power_LoRa.Device
         #endregion
 
         #region Constructors
-        public BaseNodeGroupBox(string name) : base()
+        public BaseNodeGroupBox(EventHandler setAddressEvent, string name) : base()
         {
             Label horizontalSeparator = new Label
             {
@@ -257,8 +256,8 @@ namespace Power_LoRa.Device
             Name = name.Replace(" ", "") + "GroupBox";
             Text = name;
             TabStop = false;
-
-            setAddress.Field.Click += new EventHandler(Program.SetNewAddress);
+            
+            setAddress.Field.Click += new EventHandler(setAddressEvent);
             addressControl.Field.TextChanged += new EventHandler(AddressFieldChanged);
         }
         #endregion

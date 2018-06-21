@@ -15,18 +15,18 @@ using static Power_LoRa.Connection.Messages.Message;
 
 namespace Power_LoRa
 {
-	public static class Program
-	{
-		#region Public variables
-		public static List<RadioDevice> radioDevices;
-		public static BaseConnectionHandler connectionHandler;
-		public static Logger logger;
-		public static DirectDevice directDevice;
-		public static MainWindow mainWindow;
-		public static Server serverHandler;
-		public static ConnectionDialog connectionDialog;
+    public static class Program
+    {
+        #region Public variables
+        public static List<RadioDevice> radioDevices;
+        public static BaseConnectionHandler connectionHandler;
+        public static Logger logger;
+        public static DirectDevice directDevice;
+        public static MainWindow mainWindow;
+        public static Server serverHandler;
+        public static ConnectionDialog connectionDialog;
 
-		public static bool directDeviceInitialized;
+        public static bool directDeviceInitialized;
         #endregion
 
         #region Public methods
@@ -36,24 +36,25 @@ namespace Power_LoRa
         [STAThread]
         public static void Main()
         {
-			if (Environment.OSVersion.Version.Major >= 6)
+            if (Environment.OSVersion.Version.Major >= 6)
                 SetProcessDPIAware(); Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-			directDeviceInitialized = false;
+            directDeviceInitialized = false;
 
-			directDevice = new DirectDevice();
-			radioDevices = new List<RadioDevice>();
-			SettingHandler.Load();
+            directDevice = new DirectDevice();
+            radioDevices = new List<RadioDevice>();
+            SettingHandler.Load();
 
-			logger = new Logger("log_", "txt");
+            logger = new Logger("log_", "txt");
 
-			connectionDialog = new ConnectionDialog();
-			mainWindow = new MainWindow();
-
+            connectionDialog = new ConnectionDialog();
+            mainWindow = new MainWindow();
+            
+            mainWindow.FlowLayout.Controls.Add(directDevice.GroupBox);
             mainWindow.AddControl(logger.Interface);
 
-			connectionDialog.Show();
+            connectionDialog.Show();
             Application.Run(mainWindow);
         }
         public static void StartConnection(ConnectionType connectionType, List<string> parameters)
@@ -94,48 +95,55 @@ namespace Power_LoRa
 
             BackgroundWorker.RunWorkerAsync();
         }
+        public static void Write(Connection.Messages.Message message)
+        {
+            connectionHandler.Write(message);
+        }
+        public static void Write(Frame frame)
+        {
+            connectionHandler.Write(frame);
+        }
         #endregion
 
         #region Private methods
         private static void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
-		{
+        {
             Frame directConnectionFrame;
 
-			BackgroundWorker worker = (BackgroundWorker)sender;
-            
+            BackgroundWorker worker = (BackgroundWorker)sender;
+
             connectionHandler.Write(new Connection.Messages.Message(CommandType.IsPresent));
 
             while (connectionHandler.Connected)
-			{
+            {
                 directConnectionFrame = connectionHandler.Read();
-				if (serverHandler != null)
-				{/*
+                if (serverHandler != null)
+                {/*
                     Frame remoteFrame = serverHandler.Read();
 					if (receivedClientMessage.Command != CommandType.Invalid)
 						connectionHandler.Write(receivedClientMessage);
 					serverHandler.Write(receivedDirectlyMessage.ToString());*/
-				}
-                
-                if (directConnectionFrame != null)
-				    worker.ReportProgress(0, directConnectionFrame);
-			}
-		}
-		private static void BackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
-		{
-			int radioDeviceAddress = Int32.MaxValue;
-			bool newRadioDevice;
-			Frame frame = (Frame)e.UserState;
+                }
 
-            foreach(Connection.Messages.Message message in frame.Messages)
+                if (directConnectionFrame != null)
+                    worker.ReportProgress(0, directConnectionFrame);
+            }
+        }
+        private static void BackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            int radioDeviceAddress = Int32.MaxValue;
+            bool newRadioDevice;
+            Frame frame = (Frame)e.UserState;
+
+            foreach (Connection.Messages.Message message in frame.Messages)
             {
-                switch(message.Command)
+                switch (message.Command)
                 {
                     case CommandType.IsPresent:
                         if (!directDeviceInitialized)
                         {
                             directDevice.Address = frame.EndDevice;
                             directDeviceInitialized = true;
-                            mainWindow.DirectNodeInterface.Address = frame.EndDevice;
                         }
                         break;
                     case CommandType.Timestamp:
@@ -409,17 +417,10 @@ namespace Power_LoRa
 			}
 			logger.Write(message);*/
         }
-		private static void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-		{
-			mainWindow.BoardDisconnected();
-        }
-        public static void SetNewAddress(object sender, EventArgs e)
+        private static void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            BaseNodeGroupBox parentGroupBox = (BaseNodeGroupBox)((Button)sender).Parent.Parent.Parent.Parent;
-            parentGroupBox.Address = parentGroupBox.NewAddress;
-            directDevice.Address = parentGroupBox.Address;
-            connectionHandler.Write(new Connection.Messages.Message(CommandType.SetAddress, parentGroupBox.Address));
-		}
+            mainWindow.BoardDisconnected();
+        }
 		#endregion
         
 		[System.Runtime.InteropServices.DllImport("user32.dll")]

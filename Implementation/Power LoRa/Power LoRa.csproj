@@ -95,13 +95,10 @@
     <Compile Include="Log\LogListView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Device\BaseNodeGroupBox.cs">
+    <Compile Include="Interface\Nodes\BaseNodeGroupBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Device\DirectNodeGroupBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Device\RadioNodeGroupBox.cs">
+    <Compile Include="Interface\Nodes\RadioNodeGroupBox.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Interface\ParameterControls\ParameterCheckBox.cs" />
@@ -125,7 +122,7 @@
     <EmbeddedResource Include="Interface\MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Device\BaseNodeGroupBox.resx">
+    <EmbeddedResource Include="Interface\Nodes\BaseNodeGroupBox.resx">
       <DependentUpon>BaseNodeGroupBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -163,9 +160,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Interface\GroupBoxes\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="radio-tower.ico" />
   </ItemGroup>

@@ -1,4 +1,9 @@
-﻿namespace Power_LoRa.Device
+﻿using Power_LoRa.Interface.Nodes;
+using System;
+using System.Windows.Forms;
+using static Power_LoRa.Connection.Messages.Message;
+
+namespace Power_LoRa.Device
 {
     public abstract class BaseDevice
     {
@@ -23,12 +28,15 @@
         #endregion
 
         #region Properties
+        public BaseNodeGroupBox GroupBox { get; private set; }
         public byte Address
         {
             get { return address; }
             set
             {
                 address = value;
+                GroupBox.Address = value;
+                //TODO remove
                 if (address == (int)AddressType.Master)
                     Type = NodeType.Gateway;
                 else if (address == (int)AddressType.General)
@@ -44,7 +52,18 @@
         public BaseDevice()
         {
             Type = NodeType.Unknown;
+            GroupBox = new BaseNodeGroupBox(SetNewAddress, "Directly Connected Node");
         }
         #endregion
-	}
+
+        #region Public methods
+        public void SetNewAddress(object sender, EventArgs e)
+        {
+            BaseNodeGroupBox parentGroupBox = (BaseNodeGroupBox)((Button)sender).Parent.Parent.Parent.Parent;
+            parentGroupBox.Address = parentGroupBox.NewAddress;
+            Address = parentGroupBox.Address;
+            Program.Write(new Connection.Messages.Message(CommandType.SetAddress, parentGroupBox.Address));
+        }
+        #endregion
+    }
 }

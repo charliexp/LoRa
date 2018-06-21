@@ -1,6 +1,7 @@
 ﻿using Power_LoRa.Connection.Messages;
 using Power_LoRa.Device;
 using Power_LoRa.Interface.Controls;
+using Power_LoRa.Interface.Nodes;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static Power_LoRa.Connection.Messages.Message;

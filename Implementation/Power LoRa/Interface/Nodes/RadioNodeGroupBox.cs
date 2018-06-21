@@ -1,9 +1,8 @@
-﻿
-using Power_LoRa.Interface.Controls;
+﻿using Power_LoRa.Interface.Controls;
+using System;
 using System.Windows.Forms;
-using static Power_LoRa.Device.BaseDevice;
 
-namespace Power_LoRa.Device
+namespace Power_LoRa.Interface.Nodes
 {
 	public class RadioNodeGroupBox : BaseNodeGroupBox
     {
@@ -13,7 +12,7 @@ namespace Power_LoRa.Device
         #endregion
 
         #region Constructors
-        public RadioNodeGroupBox(string name) : base(name)
+        public RadioNodeGroupBox(EventHandler setAddressEvent, string name) : base(setAddressEvent, name)
 		{
 			RSSI = new TextBoxControl("RSSI", TextBoxControl.Type.Output);
 			SNR = new TextBoxControl("SNR", TextBoxControl.Type.Output);

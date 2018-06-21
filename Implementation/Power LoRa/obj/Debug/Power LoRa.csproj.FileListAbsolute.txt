@@ -8,5 +8,5 @@ C:\Users\User\Documents\GitHub\LoRa\Implementation\Power LoRa\obj\Debug\Power Lo
 C:\Users\User\Documents\GitHub\LoRa\Implementation\Power LoRa\obj\Debug\Power LoRa.pdb
 C:\Users\User\Documents\GitHub\LoRa\Implementation\Power LoRa\obj\Debug\Power_LoRa.Interface.ConnectionDialog.resources
 C:\Users\User\Documents\GitHub\LoRa\Implementation\Power LoRa\obj\Debug\Power_LoRa.Interface.MainWindow.resources
-C:\Users\User\Documents\GitHub\LoRa\Implementation\Power LoRa\obj\Debug\Power_LoRa.Device.BaseNodeGroupBox.resources
 C:\Users\User\Documents\GitHub\LoRa\Implementation\Power LoRa\obj\Debug\Power LoRa.csprojAssemblyReference.cache
+C:\Users\User\Documents\GitHub\LoRa\Implementation\Power LoRa\obj\Debug\Power_LoRa.Interface.Nodes.BaseNodeGroupBox.resources
