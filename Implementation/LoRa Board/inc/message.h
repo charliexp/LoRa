@@ -22,11 +22,11 @@
 #define ACK														0x01
 #define NAK														0x00
 
-#define FRAME_HEADER_SIZE							1
+#define FRAME_HEADER_SIZE							2
 #define MESSAGE_HEADER_SIZE						2
-#define MESSAGE_ARG_MAX_SIZE									4
+#define MESSAGE_ARG_MAX_SIZE					4
 #define MESSAGE_MAX_SIZE							(MESSAGE_HEADER_SIZE + MESSAGE_ARG_MAX_SIZE)
-#define FRAME_MAX_MESSAGES					1
+#define FRAME_MAX_MESSAGES						4
 #define FRAME_MAX_SIZE								(FRAME_HEADER_SIZE + FRAME_MAX_MESSAGES * MESSAGE_MAX_SIZE)
 
 /* Exported types ------------------------------------------------------------*/
@@ -67,6 +67,7 @@ typedef struct Frame_t
 /* Exported functions --------------------------------------------------------*/
 void Message_fromArray(Message_t *message, uint8_t *array, uint8_t length);
 void Message_toArray(Message_t message, uint8_t *array, uint8_t *length);
+uint8_t Message_frameLengthFromArray(uint8_t *array);
 uint8_t Message_argLengthFromArray(uint8_t *array);
 void Message_frameToArray(Frame_t frame, uint8_t *array, uint8_t *length);
 void Message_arrayToFrame(uint8_t *array, uint8_t length, Frame_t *frame);

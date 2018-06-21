@@ -19,14 +19,15 @@ namespace LoRa_Controller.Connection.Messages
         private const int MaxMessages = 1;
         private const int MaxSize = HeaderSize + MaxMessages * Message.MaxSize;
 
-        private const int Idx_devAddr = 0;
+        private const int Idx_length = 0;
+        private const int Idx_devAddr = 1;
         private const int Idx_firstMessage = HeaderSize;
         //private const int Idx_RSSI = HeaderSize + ArgMaxSize + 3;
         //private const int Idx_SNR = HeaderSize + ArgMaxSize + 4;
         #endregion
 
         #region Public constants
-        public const int HeaderSize = 1;
+        public const int HeaderSize = 2;
         #endregion
 
         #region Properties
@@ -76,11 +77,20 @@ namespace LoRa_Controller.Connection.Messages
         }
         #endregion
 
+        #region Public static methods
+        public static byte LengthFromArray(byte[] array)
+        {
+            return array[Idx_length];
+        }
+        #endregion
+
         #region Public methods
         public byte[] ToArray()
         {
+            byte length = HeaderSize;
             List<byte> list = new List<byte>
             {
+                0,
                 EndDevice
             };
 
@@ -89,7 +99,9 @@ namespace LoRa_Controller.Connection.Messages
                 list.Add((byte) message.Command);
                 list.Add((byte) message.RawArgument.Length);
                 list.AddRange(message.RawArgument);
+                length += (byte)(Message.HeaderSize + message.RawArgument.Length);
             }
+            list[Idx_length] = length;
 
             return list.ToArray();
         }

@@ -69,35 +69,32 @@ namespace LoRa_Controller.Connection
         }
         public Frame Read()
         {
-            int argLength;
-            List<byte> header = new List<byte>();
-            List<byte> argument = new List<byte>();
+            int expectedLength;
+            List<byte> frame = new List<byte>();
 
-            /* Get frame header + message header */
+            /* Get frame header */
             try
             {
-                header.AddRange(ReadBytes(Frame.HeaderSize + Message.HeaderSize));
+                frame.AddRange(ReadBytes(Frame.HeaderSize));
             }
             catch
             {
                 Close();
                 return null;
             }
-            
-            /* Get message argument based on its length */
-            argLength = Message.ArgLengthFromArray(header.GetRange(Frame.HeaderSize, header.Count - Frame.HeaderSize).ToArray());
+
+            /* Get entire frame based on its length */
+            expectedLength = Frame.LengthFromArray(frame.ToArray()) - Frame.HeaderSize;
             try
             {
-                argument.AddRange(ReadBytes(argLength));
+                frame.AddRange(ReadBytes(expectedLength));
             }
             catch
             {
                 Close();
                 return null;
             }
-            header.AddRange(argument);
-
-            return new Frame(header.ToArray());
+            return new Frame(frame.ToArray());
         }
         public async Task<Frame> ReadAsync()
         {

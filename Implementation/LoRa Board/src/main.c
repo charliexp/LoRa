@@ -193,19 +193,57 @@ void processRadioSetupCommand(uint8_t source, uint8_t command, uint8_t* paramete
 
 void OnTimerEvent(void)
 {
+	int32_t tempValue;
 	Frame_t result;
 	
 	DAQ_ReadData();
-	result.endDevice = myAddress;
-	result.nrOfMessages = 1;
-	result.messages[0].command = COMMAND_TIMESTAMP;
-	result.messages[0].argLength = 3;
-	result.messages[0].rawArgument[0] = DAQ_Data.time.hour;
-	result.messages[0].rawArgument[1] = DAQ_Data.time.minute;
-	result.messages[0].rawArgument[2] = DAQ_Data.time.second;
+	
+	DAQ_Data.activeEnergy = 1234;
+	DAQ_Data.inductive = false;
+	DAQ_Data.reactiveEnergy = 5432;
+	DAQ_Data.reactivePower = 84463;
 	
 	if (PC_Connected())
 	{
+		result.endDevice = myAddress;
+		result.nrOfMessages = 0;
+		
+		result.messages[result.nrOfMessages].command = COMMAND_TIMESTAMP;
+		result.messages[result.nrOfMessages].argLength = 3;
+		result.messages[result.nrOfMessages].rawArgument[0] = DAQ_Data.time.hour;
+		result.messages[result.nrOfMessages].rawArgument[1] = DAQ_Data.time.minute;
+		result.messages[result.nrOfMessages].rawArgument[2] = DAQ_Data.time.second;
+		result.nrOfMessages++;
+		
+		result.messages[result.nrOfMessages].command = COMMAND_ACTIVE_ENERGY;
+		result.messages[result.nrOfMessages].argLength = 3;
+		result.messages[result.nrOfMessages].rawArgument[0] = (DAQ_Data.activeEnergy >> 16) & 0xFF;
+		result.messages[result.nrOfMessages].rawArgument[1] = (DAQ_Data.activeEnergy >> 8) & 0xFF;
+		result.messages[result.nrOfMessages].rawArgument[2] = (DAQ_Data.activeEnergy >> 0) & 0xFF;
+		result.nrOfMessages++;
+		
+		if (!DAQ_Data.inductive)
+			tempValue = 0 - DAQ_Data.reactiveEnergy;
+		else
+			tempValue = DAQ_Data.reactiveEnergy;
+		result.messages[result.nrOfMessages].command = COMMAND_REACTIVE_ENERGY;
+		result.messages[result.nrOfMessages].argLength = 3;
+		result.messages[result.nrOfMessages].rawArgument[0] = (tempValue >> 16) & 0xFF;
+		result.messages[result.nrOfMessages].rawArgument[1] = (tempValue >> 8) & 0xFF;
+		result.messages[result.nrOfMessages].rawArgument[2] = (tempValue >> 0) & 0xFF;
+		result.nrOfMessages++;
+		
+		if (!DAQ_Data.inductive)
+			tempValue = 0 - DAQ_Data.reactivePower;
+		else
+			tempValue = DAQ_Data.reactivePower;
+		result.messages[result.nrOfMessages].command = COMMAND_REACTIVE_POWER;
+		result.messages[result.nrOfMessages].argLength = 3;
+		result.messages[result.nrOfMessages].rawArgument[0] = (tempValue >> 16) & 0xFF;
+		result.messages[result.nrOfMessages].rawArgument[1] = (tempValue >> 8) & 0xFF;
+		result.messages[result.nrOfMessages].rawArgument[2] = (tempValue >> 0) & 0xFF;
+		result.nrOfMessages++;
+		
 		PC_Send(result);
 	}
 	/*PRINTF("\r\nTura %d\r\n", step++);

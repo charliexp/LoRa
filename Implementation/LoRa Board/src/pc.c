@@ -46,7 +46,6 @@ void PC_MainLoop(void)
 	switch(PC_Handle.state)
 	{
 		case READY:
-			PC_Handle.bufferLength = 0;
 			returnValue = UART_ReceiveFixedLength(&DBG_UartHandle, PC_Handle.buffer, FRAME_HEADER_SIZE);
 			if (returnValue == UART_RX_AVAILABLE)
 			{
@@ -57,10 +56,10 @@ void PC_MainLoop(void)
 				PC_Handle.state = READY;
 			break;
 		case REC_FRAME_HEADER:
-			returnValue = UART_ReceiveFixedLength(&DBG_UartHandle, PC_Handle.buffer + FRAME_HEADER_SIZE, MESSAGE_HEADER_SIZE);
+			returnValue = UART_ReceiveFixedLength(&DBG_UartHandle, PC_Handle.buffer + PC_Handle.bufferLength, MESSAGE_HEADER_SIZE);
 			if (returnValue == UART_RX_AVAILABLE)
 			{
-				PC_Handle.bufferLength += FRAME_HEADER_SIZE;
+				PC_Handle.bufferLength += MESSAGE_HEADER_SIZE;
 				PC_Handle.state = REC_MESSAGE_HEADER;
 			}
 			else if (returnValue == UART_RX_TIMEOUT)
@@ -77,9 +76,14 @@ void PC_MainLoop(void)
 			if (returnValue == UART_RX_AVAILABLE)
 			{
 				PC_Handle.bufferLength += argLength;
-				Message_arrayToFrame(PC_Handle.buffer, PC_Handle.bufferLength, &receivedFrame);
-				PC_ProcessMessage();
-				PC_Handle.state = READY;
+				if (PC_Handle.bufferLength == Message_frameLengthFromArray(PC_Handle.buffer))
+				{
+					Message_arrayToFrame(PC_Handle.buffer, PC_Handle.bufferLength, &receivedFrame);
+					PC_ProcessMessage();
+					PC_Handle.state = READY;
+				}
+				else
+					PC_Handle.state = REC_FRAME_HEADER;
 			}
 			else if (returnValue == UART_RX_TIMEOUT)
 				PC_Handle.state = READY;
@@ -104,8 +108,8 @@ void PC_ProcessMessage(void)
 		case COMMAND_IS_PRESENT:
 			reply.messages[0].argLength = 1;
 			reply.messages[0].rawArgument[0] = ACK;
-			PC_Handle.connected = true;
 			PC_Send(reply);
+			PC_Handle.connected = true;
 			break;/*
 		case COMMAND_SET_ADDRESS:
 			setAddress(parameters[3]);

@@ -1,5 +1,6 @@
 ﻿using LoRa_Controller.Connection.Messages;
 using System;
+using System.Drawing;
 using System.Windows.Forms;
 using static LoRa_Controller.Device.BaseDevice;
 
@@ -21,11 +22,14 @@ namespace LoRa_Controller.Log
 			Sorting = SortOrder.None;
 
 			Columns.Add("Timestamp");
-			Columns.Add("Address");
+			Columns.Add("Addr");
 			Columns.Add("Command");
             Columns.Add("Parameter");
             Columns.Add("RSSI");
             Columns.Add("SNR");
+
+            Columns[3].TextAlign = HorizontalAlignment.Right;
+            Width += 2 * SystemInformation.VerticalScrollBarWidth;
         }
         #endregion
 
@@ -34,21 +38,22 @@ namespace LoRa_Controller.Log
         {
             if (Enabled)
             {
-                ListViewItem item = new ListViewItem(frame.Timestamp.ToString("HH:mm:ss.fff"));
+                foreach (Connection.Messages.Message message in frame.Messages)
+                {
+                    ListViewItem item = new ListViewItem(frame.Timestamp.ToString("HH:mm:ss"));
 
-                item.SubItems.Add(frame.EndDevice.ToString());
-                item.SubItems.Add(frame.Messages[0].Command.ToString());
-                item.SubItems.Add(frame.Messages[0].PrintableArgument);
-                item.SubItems.Add((-frame.RSSI).ToString());
-                item.SubItems.Add(frame.SNR.ToString());
-                
-                Items.Add(item);
+                    item.SubItems.Add(frame.EndDevice.ToString());
+                    item.SubItems.Add(message.Command.ToString());
+                    item.SubItems.Add(message.PrintableArgument);
+                    item.SubItems.Add((-frame.RSSI).ToString());
+                    item.SubItems.Add(frame.SNR.ToString());
+
+                    Items.Add(item);
+                }
+
                 if (Items.Count > maxEntries)
                     Items.RemoveAt(0);
                 TopItem = Items[Items.Count - 1];
-
-                AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
-                AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
             }
         }
         #endregion

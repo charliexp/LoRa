@@ -2,7 +2,8 @@
 #include "message.h"
 
 /* Private typedef -----------------------------------------------------------*/
-#define IDX_DEVADDR					0
+#define IDX_FRAME_LENGTH		0
+#define IDX_DEVADDR					1
 #define IDX_FIRST_MESSAGE		FRAME_HEADER_SIZE
 
 #define IDX_COMMAND					0
@@ -31,6 +32,11 @@ void Message_toArray(Message_t message, uint8_t *array, uint8_t *length)
 	*length = message.argLength + MESSAGE_HEADER_SIZE;
 }
 
+uint8_t Message_frameLengthFromArray(uint8_t *array)
+{
+	return array[IDX_FRAME_LENGTH];
+}
+
 uint8_t Message_argLengthFromArray(uint8_t *array)
 {
 	return array[IDX_ARG_LENGTH];
@@ -41,7 +47,7 @@ void Message_frameToArray(Frame_t frame, uint8_t *array, uint8_t *length)
 	uint8_t m;
 	
 	array[IDX_DEVADDR] = frame.endDevice;
-	(*length)++;
+	(*length) = IDX_FIRST_MESSAGE;
 	for (m = 0; m < frame.nrOfMessages; m++)
 	{
 		array[*length + IDX_COMMAND] = frame.messages[m].command;
@@ -49,6 +55,8 @@ void Message_frameToArray(Frame_t frame, uint8_t *array, uint8_t *length)
 		memcpy(array + *length + IDX_ARGUMENT, frame.messages[m].rawArgument, frame.messages[m].argLength);
 		*length += MESSAGE_HEADER_SIZE + frame.messages[m].argLength;
 	}
+	
+	array[IDX_FRAME_LENGTH] = *length;
 }
 
 void Message_arrayToFrame(uint8_t *array, uint8_t length, Frame_t *frame)

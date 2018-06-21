@@ -56,6 +56,8 @@ namespace LoRa_Controller.Connection.Messages
 
             private set
             {
+                int tempValue;
+
                 rawArgument = value;
                 if (value.Length != 0)
                     switch(Command)
@@ -67,6 +69,27 @@ namespace LoRa_Controller.Connection.Messages
                             PrintableArgument = rawArgument[0].ToString("D2") + ":" +
                                 rawArgument[1].ToString("D2") + ":" +
                                 rawArgument[2].ToString("D2");
+                            break;
+                        case CommandType.ActiveEnergy:
+                            PrintableArgument = ((rawArgument[0] << 16) |
+                                (rawArgument[1] << 8) |
+                                (rawArgument[2])).ToString() + " kWh";
+                            break;
+                        case CommandType.ReactiveEnergy:
+                            tempValue = (rawArgument[0] << 16) |
+                                (rawArgument[1] << 8) |
+                                (rawArgument[2]);
+                            if ((tempValue & (1 << 23)) != 0)
+                                tempValue |= 0xFF << 24;
+                            PrintableArgument = tempValue.ToString("+#;-#;0") + " kVARh";
+                            break;
+                        case CommandType.ReactivePower:
+                            tempValue = (rawArgument[0] << 16) |
+                                (rawArgument[1] << 8) |
+                                (rawArgument[2]);
+                            if ((tempValue & (1 << 23)) != 0)
+                                tempValue |= 0xFF << 24;
+                            PrintableArgument = tempValue.ToString("+#;-#;0") + " kVAR";
                             break;
                     }
             }
