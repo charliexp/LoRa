@@ -1,5 +1,6 @@
 ﻿using Power_LoRa.Interface.Nodes;
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using static Power_LoRa.Connection.Messages.Message;
 
@@ -159,22 +160,34 @@ namespace Power_LoRa.Node
                 GroupBox.UpdateInterface(GroupBox.PowerFactor, powerFactor);
             }
         }
-
+        public List<Compensator> Compensators;
         public NodeType Type { get; private set; }
         #endregion
 
         #region Constructors
         public BaseNode()
         {
+            Compensators = new List<Compensator>
+            {
+                new Compensator(Compensator.CompensatorType.Capacitor, 60, 2),
+                new Compensator(Compensator.CompensatorType.Capacitor, 60, 3)
+            };
+
             Type = NodeType.Unknown;
-            GroupBox = new BaseNodeGroupBox(SetNewAddress, "Directly Connected Node");
+            GroupBox = new BaseNodeGroupBox(SetNewAddress, CheckIfPresent, "Directly Connected Node");
+            GroupBox.UpdateInterface(GroupBox.Outputs, Compensators);
         }
         #endregion
 
         #region Public methods
+        public void CheckIfPresent(object sender, EventArgs e)
+        {
+            BaseNodeGroupBox parentGroupBox = (BaseNodeGroupBox)((Button)sender).Parent.Parent.Parent;
+            Program.Write(new Connection.Messages.Message(CommandType.IsPresent, parentGroupBox.Address));
+        }
         public void SetNewAddress(object sender, EventArgs e)
         {
-            BaseNodeGroupBox parentGroupBox = (BaseNodeGroupBox)((Button)sender).Parent.Parent.Parent.Parent;
+            BaseNodeGroupBox parentGroupBox = (BaseNodeGroupBox)((Button)sender).Parent.Parent.Parent;
             parentGroupBox.Address = parentGroupBox.NewAddress;
             Address = parentGroupBox.Address;
             Program.Write(new Connection.Messages.Message(CommandType.SetAddress, parentGroupBox.Address));

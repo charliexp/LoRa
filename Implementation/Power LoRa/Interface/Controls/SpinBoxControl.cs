@@ -8,12 +8,13 @@ namespace Power_LoRa.Interface.Controls
         #region Constructors
         public SpinBoxControl(string name, int minValue, int maxValue, int defaultValue) : base(name)
 		{
-			Field = new NumericUpDown
+            Field = new NumericUpDown
             {
                 Dock = Field.Dock,
                 Margin = Field.Margin,
-				Name = Field.Name,
+                Name = Field.Name,
                 Size = Field.Size,
+                TextAlign = HorizontalAlignment.Right,
             };
 			((System.ComponentModel.ISupportInitialize)Field).BeginInit();
 			((NumericUpDown)Field).Maximum = new decimal(new int[] { maxValue, 0, 0, 0 });

@@ -8,6 +8,7 @@
    
 /* Includes ------------------------------------------------------------------*/
 #include "app_conf.h"
+#include "message.h"
 
 /* Exported defines ----------------------------------------------------------*/
 /* Exported types ------------------------------------------------------------*/
@@ -22,6 +23,7 @@ typedef enum ActuatorType_t
 /* Exported functions --------------------------------------------------------*/
 void ACT_Init(void);
 void ACT_UpdateData(void);
+void ACT_ProcessMessage(Message_t message);
 void ACT_SetContact(uint8_t contactNumber, bool state);
 void ACT_ChangeActuator(uint8_t contactNumber, ActuatorType_t actuatorType, bool enabled);
 

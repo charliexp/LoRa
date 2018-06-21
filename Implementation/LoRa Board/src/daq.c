@@ -1,6 +1,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "daq.h"
 #include "hw_uart.h"
+#include "pc.h"
 #include "timeServer.h"
 
 /* Private typedef -----------------------------------------------------------*/
@@ -23,17 +24,17 @@ typedef enum DAQ_State_t
 /* Private define ------------------------------------------------------------*/
 #define DATA_LENGTH		1071
 
-#define SOH 0x01
-#define STX	0x02
-#define ETX	0x03
-#define ACK	0x06
-#define CR	0x0d
-#define LF	0x0a
+#define SOH 			0x01
+#define STX				0x02
+#define ETX				0x03
+#define ASCII_ACK	0x06
+#define CR				0x0d
+#define LF				0x0a
 
 /* Private macro -------------------------------------------------------------*/
 /* Private constants ---------------------------------------------------------*/
 static const uint8_t MeterIDReq[] = "/?!\r\n";
-static const uint8_t DataReq[] = {ACK, '0', '4', '0', CR, LF};
+static const uint8_t DataReq[] = {ASCII_ACK, '0', '4', '0', CR, LF};
 
 static const Register_t BatteryLevelRegister = { "C.6.3", 5 };
 static const Register_t CurrentTimeRegister = { "0.9.1", 5 };
@@ -70,10 +71,12 @@ static void DAQ_TimerEvent(void);
 /* Functions Definition ------------------------------------------------------*/
 void DAQ_Init(void)
 {
+	DAQ_Data.haveMeter = true;
 	DAQ_BufferLength = 0;
 	DAQ_State = IDLE;
 	
 	TimerInit(&DAQ_Timer, DAQ_TimerEvent);
+	TimerSetValue(&DAQ_Timer, DAQ_SAMPLE_RATE * 1000); 
   DAQ_TimerEvent();
 }
 
@@ -131,6 +134,35 @@ void DAQ_ReadData(void)
 	DAQ_GetPowers();
 }
 
+void DAQ_ProcessMessage(Message_t message)
+{
+	Frame_t reply;
+	
+	reply.endDevice = myAddress;
+	reply.nrOfMessages = 1;
+	
+	reply.messages[0].command = message.command;
+	
+	switch (message.command)
+	{
+		case COMMAND_HAS_METER:
+			DAQ_Data.haveMeter = message.rawArgument[0];
+			if (DAQ_Data.haveMeter)
+				TimerStart(&DAQ_Timer);
+			else
+				TimerStop(&DAQ_Timer);
+			reply.messages[0].argLength = 1;
+			reply.messages[0].rawArgument[0] = ACK;
+			break;
+		default:
+			reply.messages[0].argLength = 1;
+			reply.messages[0].rawArgument[0] = NAK;
+			break;
+	}
+	
+	PC_Send(reply);
+}
+
 static void DAQ_TimerEvent(void)
 {
 	DAQ_ReadData();
@@ -144,8 +176,8 @@ static void DAQ_TimerEvent(void)
 	DAQ_Data.activePower = 3;
 	DAQ_Data.reactivePower = 4;
 	
-	TimerSetValue(&DAQ_Timer, DAQ_SAMPLE_RATE * 1000); 
-  TimerStart(&DAQ_Timer);
+	if (DAQ_Data.haveMeter)
+		TimerStart(&DAQ_Timer);
 }
 
 static void DAQ_SendReq(const uint8_t *request, uint16_t length)

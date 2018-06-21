@@ -7,7 +7,7 @@ namespace Power_LoRa.Interface.Controls
         #region Constructors
         public Graph(string name) : base()
         {
-            Name = name.Replace(" ", "") + "Field";
+            Name = name.Replace(" ", "") + "Graph";
             BorderStyle = BorderStyle.FixedSingle;
             Dock = DockStyle.Fill;
         }

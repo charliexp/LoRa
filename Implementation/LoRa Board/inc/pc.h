@@ -17,9 +17,8 @@
 /* Exported functions --------------------------------------------------------*/
 void PC_Init(void);
 void PC_MainLoop(void);
-void PC_ProcessMessage(void);
+void PC_ProcessFrame(Frame_t frame);
 void PC_Send(Frame_t frame);
-bool PC_Connected(void);
 
 #ifdef __cplusplus
 }

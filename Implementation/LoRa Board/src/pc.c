@@ -1,7 +1,10 @@
 /* Includes ------------------------------------------------------------------*/
+#include "actuator.h"
+#include "daq.h"
 #include "hw.h"
 #include "pc.h"
 #include "vcom.h"
+
 /* Private typedef -----------------------------------------------------------*/
 typedef enum PC_State_t
 {
@@ -81,7 +84,7 @@ void PC_MainLoop(void)
 				if (PC_Handle.bufferLength == Message_frameLengthFromArray(PC_Handle.buffer))
 				{
 					Message_arrayToFrame(PC_Handle.buffer, PC_Handle.bufferLength, &receivedFrame);
-					PC_ProcessMessage();
+					PC_ProcessFrame(receivedFrame);
 					PC_Handle.state = READY;
 				}
 				else
@@ -96,42 +99,51 @@ void PC_MainLoop(void)
 	}
 }
 
-void PC_ProcessMessage(void)
+void PC_ProcessFrame(Frame_t frame)
 {
 	Frame_t reply;
 	
 	reply.endDevice = myAddress;
 	reply.nrOfMessages = 1;
 	
-	reply.messages[0].command = receivedFrame.messages[0].command;
+	reply.messages[0].command = frame.messages[0].command;
 	
-	switch (receivedFrame.messages[0].command)
+	switch (frame.messages[0].command)
 	{
 		case COMMAND_IS_PRESENT:
 			reply.messages[0].argLength = 2;
 			reply.messages[0].rawArgument[0] = (appTransmissionRate >> 8) & 0xFF;
 			reply.messages[0].rawArgument[1] = (appTransmissionRate >> 0) & 0xFF;
+			PC_Send(reply);
 			PC_Handle.connected = true;
 			break;
 		case COMMAND_SET_ADDRESS:
-			setAddress(receivedFrame.messages[0].rawArgument[0]);
+			setAddress(frame.messages[0].rawArgument[0]);
 			reply.endDevice = myAddress;
 			reply.messages[0].argLength = 1;
 			reply.messages[0].rawArgument[0] = ACK;
+			PC_Send(reply);
 			break;
 		case COMMAND_TRANSMISSION_RATE:
-			appTransmissionRate = ((receivedFrame.messages[0].rawArgument[0] >> 8) & 0xFF) |
-				((receivedFrame.messages[0].rawArgument[1] >> 0) & 0xFF);
+			appTransmissionRate = ((frame.messages[0].rawArgument[0] >> 8) & 0xFF) |
+				((frame.messages[0].rawArgument[1] >> 0) & 0xFF);
 			reply.messages[0].argLength = 1;
 			reply.messages[0].rawArgument[0] = ACK;
+			PC_Send(reply);
+			break;
+		case COMMAND_HAS_METER:
+			DAQ_ProcessMessage(frame.messages[0]);
+			break;
+		case COMMAND_SET_COMPENSATOR:
+			ACT_ProcessMessage(frame.messages[0]);
 			break;
 		default:
 			reply.messages[0].argLength = 1;
 			reply.messages[0].rawArgument[0] = NAK;
+			PC_Send(reply);
 			break;
 	}
 	PC_Handle.bufferLength = 0;
-	PC_Send(reply);
 }
 
 void PC_Send(Frame_t frame)
@@ -139,11 +151,9 @@ void PC_Send(Frame_t frame)
 	uint8_t array[FRAME_MAX_SIZE];
 	uint8_t arrayLength = 0;
 	
-	Message_frameToArray(frame, array, &arrayLength);
-	UART_Send(&DBG_UartHandle, array, arrayLength);
-}
-
-bool PC_Connected(void)
-{
-	return PC_Handle.connected;
+	if (PC_Handle.connected)
+	{
+		Message_frameToArray(frame, array, &arrayLength);
+		UART_Send(&DBG_UartHandle, array, arrayLength);
+	}
 }

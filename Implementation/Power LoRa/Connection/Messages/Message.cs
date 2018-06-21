@@ -66,18 +66,18 @@ namespace Power_LoRa.Connection.Messages
                     switch(Command)
                     {
                         case CommandType.IsPresent:
-                            PrintableArgument = ((rawArgument[0] << 8) |
-                                (rawArgument[1])).ToString() + " s";
-                            break;
-                        case CommandType.SetAddress:
-                            PrintableArgument = ((ResponseType)rawArgument[Idx_ack]).ToString();
-                            break;
                         case CommandType.TransmissionRate:
-                            if (value[Idx_ack] < MinTransmissionRate)
+                            if (rawArgument.Length == 1)
                                 PrintableArgument = ((ResponseType)rawArgument[Idx_ack]).ToString();
                             else
                                 PrintableArgument = ((rawArgument[0] << 8) |
                                     (rawArgument[1])).ToString() + " s";
+                            break;
+                        case CommandType.Reset:
+                        case CommandType.SetAddress:
+                        case CommandType.HasMeter:
+                        case CommandType.SetCompensator:
+                            PrintableArgument = ((ResponseType)rawArgument[Idx_ack]).ToString();
                             break;
                         case CommandType.Timestamp:
                             PrintableArgument = rawArgument[0].ToString("D2") + ":" +
@@ -109,6 +109,9 @@ namespace Power_LoRa.Connection.Messages
                             if ((tempValue & (1 << 23)) != 0)
                                 tempValue |= 0xFF << 24;
                             PrintableArgument = tempValue.ToString("+#;-#;0") + " kVAR";
+                            break;
+                        default:
+                            PrintableArgument = ResponseType.NAK.ToString();
                             break;
                     }
             }
@@ -150,6 +153,10 @@ namespace Power_LoRa.Connection.Messages
         public Message(CommandType command, byte argument) : this(command)
         {
             RawArgument = new byte[1] { argument };
+        }
+        public Message(CommandType command, byte argument1, byte argument2) : this(command)
+        {
+            RawArgument = new byte[2] { argument1, argument2 };
         }
         public Message(CommandType command, Int16 argument) : this(command)
         {

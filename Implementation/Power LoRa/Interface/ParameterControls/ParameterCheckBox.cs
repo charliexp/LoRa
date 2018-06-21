@@ -5,33 +5,45 @@ using Power_LoRa.Interface.Nodes;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static Power_LoRa.Connection.Messages.Message;
+using System;
 
 namespace Power_LoRa.Interface.Node.ParameterControls
 {
 	public class ParameterCheckBox : CheckBoxControl
     {
         #region Private variables
-        private CommandType parameter;
+        private readonly CommandType command;
+        private readonly byte argument;
 		private bool remotelyChanged;
         #endregion
 
         #region Constructors
-        public ParameterCheckBox(CommandType parameter, bool defaultState) : base(parameter.ToString(), defaultState)
+        public ParameterCheckBox(CommandType command, bool defaultState) : base(command.ToString(), defaultState)
 		{
-			this.parameter = parameter;
+            argument = Byte.MaxValue;
+			this.command = command;
             ValueChanged = ParameterChangedCallback;
 			remotelyChanged = false;
+        }
+        public ParameterCheckBox(CommandType command, string text, byte argument, bool defaultState) : this(command, defaultState)
+        {
+            Label.Text = text;
+            this.argument = argument;
         }
         #endregion
 
         #region Private methods
         private async Task ParameterChangedCallback(int value)
         {
-            Connection.Messages.Message message = new Connection.Messages.Message(parameter, value);
+            Connection.Messages.Message message;
+            if (argument != Byte.MaxValue)
+                message = new Connection.Messages.Message(command, argument, (byte) value);
+            else
+                message = new Connection.Messages.Message(command, (byte)value);
 
             if (!remotelyChanged)
-				await Program.connectionHandler.WriteAsync(new Frame(((BaseNodeGroupBox)Field.Parent.Parent.Parent.Parent).Address, message));
-			else
+                await Program.connectionHandler.WriteAsync(new Frame(((BaseNodeGroupBox)Field.Parent.Parent.Parent).Address, message));
+            else
 				remotelyChanged = false;
         }
         #endregion

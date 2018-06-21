@@ -14,13 +14,12 @@ namespace Power_LoRa.Interface.Nodes
     {
         #region Private variables
         private TableLayoutPanel mainLayout;
-        private Graph graph;
-        private TableLayoutPanel secondLayout;
         private TableLayoutPanel powerReadingLayout;
         private TableLayoutPanel powerSetupLayout;
 
+        private Graph graph;
+
         private ParameterCheckBox hasMeter;
-        private List<CheckBox> outputs;
         private ButtonControl addPowerOutput;
 
         private ButtonControl checkIfPresent;
@@ -66,25 +65,28 @@ namespace Power_LoRa.Interface.Nodes
         public TextBoxControl ReactivePower { get; set; }
         public TextBoxControl ApparentPower { get; set; }
         public TextBoxControl PowerFactor { get; set; }
-
+        public List<ParameterCheckBox> Outputs { get; set; }
         #endregion
 
         #region Constructors
-        public BaseNodeGroupBox(EventHandler setAddressEvent, string name) : base()
+        public BaseNodeGroupBox(EventHandler setAddressEvent, EventHandler isPresentEvent, string name) : base()
         {
-            Label horizontalSeparator = new Label
+            List<Label> horizontalSeparators = new List<Label>
             {
-                AutoSize = false,
-                Height = 2,
-                BorderStyle = BorderStyle.Fixed3D,
-                Dock = DockStyle.Fill,
-            };
-            Label verticalSeparator = new Label
-            {
-                AutoSize = false,
-                Width = 2,
-                BorderStyle = BorderStyle.Fixed3D,
-                Dock = DockStyle.Fill,
+                new Label
+                {
+                    AutoSize = false,
+                    Height = 2,
+                    BorderStyle = BorderStyle.Fixed3D,
+                    Dock = DockStyle.Fill,
+                },
+                new Label
+                {
+                    AutoSize = false,
+                    Height = 2,
+                    BorderStyle = BorderStyle.Fixed3D,
+                    Dock = DockStyle.Fill,
+                }
             };
 
             graph = new Graph("Graph");
@@ -117,18 +119,8 @@ namespace Power_LoRa.Interface.Nodes
                 Value = "1"
             };
             TransmissionRate = new ParameterSpinBox(CommandType.TransmissionRate, BaseNode.MinTransmissionRate, BaseNode.MaxTransmissionRate, 5);
-            hasMeter = new ParameterCheckBox(CommandType.HasMeter, false);
-            outputs = new List<CheckBox>
-            {
-                new CheckBox()
-                {
-                    Text = "50 kVArh",
-                },
-                new CheckBox()
-                {
-                    Text = "50 kVArh",
-                }
-            };
+            hasMeter = new ParameterCheckBox(CommandType.HasMeter, true);
+            Outputs = new List<ParameterCheckBox>();
             addPowerOutput = new ButtonControl("Add output");
             checkIfPresent = new ButtonControl("Check if present");
             addressControl = new TextBoxControl("Address", TextBoxControl.Type.Input);
@@ -142,15 +134,6 @@ namespace Power_LoRa.Interface.Nodes
                 Name = name + "MainLayout",
                 Location = new Point(InterfaceConstants.ItemPadding, InterfaceConstants.GroupBoxFirstItemY),
             };
-            secondLayout = new TableLayoutPanel
-            {
-                AutoSize = true,
-                ColumnCount = 3,
-                Name = name + "SecondLayout",
-            };
-            secondLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 49));
-            secondLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 2));
-            secondLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 49));
             powerReadingLayout = new TableLayoutPanel
             {
                 AutoSize = true,
@@ -177,15 +160,12 @@ namespace Power_LoRa.Interface.Nodes
             powerSetupLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
 
             Controls.Add(mainLayout);
+            mainLayout.Controls.Add(radioLayout);
+            mainLayout.Controls.Add(horizontalSeparators[0]);
             mainLayout.Controls.Add(graph);
-            mainLayout.Controls.Add(secondLayout);
-            secondLayout.Controls.Add(powerReadingLayout);
-            secondLayout.Controls.Add(verticalSeparator);
-            secondLayout.Controls.Add(radioLayout);
-            secondLayout.Controls.Add(horizontalSeparator);
-            secondLayout.Controls.Add(powerSetupLayout);
-            secondLayout.SetRowSpan(verticalSeparator, 3);
-            secondLayout.SetRowSpan(radioLayout, 3);
+            mainLayout.Controls.Add(powerReadingLayout);
+            mainLayout.Controls.Add(horizontalSeparators[1]);
+            mainLayout.Controls.Add(powerSetupLayout);
             powerReadingLayout.Controls.Add(LastReadingTime.Label);
             powerReadingLayout.Controls.Add(LastReadingTime.Field);
             powerReadingLayout.Controls.Add(ActiveEnergy.Label);
@@ -230,12 +210,11 @@ namespace Power_LoRa.Interface.Nodes
             powerSetupLayout.Controls.Add(TransmissionRate.Field);
             powerSetupLayout.Controls.Add(hasMeter.Label);
             powerSetupLayout.Controls.Add(hasMeter.Field);
-            foreach (CheckBox output in outputs)
+            foreach (ParameterCheckBox output in Outputs)
             {
-                powerSetupLayout.Controls.Add(output);
-                powerSetupLayout.SetColumnSpan(output, 2);
+                powerSetupLayout.Controls.Add(output.Label);
+                powerSetupLayout.Controls.Add(output.Field);
             }
-            powerSetupLayout.Controls.Add(addPowerOutput.Field);
 
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
@@ -244,6 +223,7 @@ namespace Power_LoRa.Interface.Nodes
             TabStop = false;
             
             setAddress.Field.Click += new EventHandler(setAddressEvent);
+            checkIfPresent.Field.Click += new EventHandler(isPresentEvent);
             addressControl.Field.TextChanged += new EventHandler(AddressFieldChanged);
         }
         #endregion
@@ -254,6 +234,7 @@ namespace Power_LoRa.Interface.Nodes
             try
             {
                 NewAddress = Byte.Parse(((TextBox)addressControl.Field).Text);
+                //TODO: check for used addresses
                 if (NewAddress != Address &&
                     NewAddress != (byte) AddressType.Broadcast &&
                     NewAddress != (byte) AddressType.PC)
@@ -263,7 +244,6 @@ namespace Power_LoRa.Interface.Nodes
             }
             catch
             {
-                //TODO: invalid address
                 setAddress.Field.Enabled = false;
             }
         }
@@ -286,21 +266,39 @@ namespace Power_LoRa.Interface.Nodes
         #endregion
 
         #region Public methods
-        public void UpdateInterface(BaseControl sender, double value)
+        public void UpdateInterface(object target, List<Compensator> value)
         {
-            UpdateInterface(sender, value.ToString("0.##"));
+            if (target.GetType() == Outputs.GetType())
+            {
+                Outputs = new List<ParameterCheckBox>();
+
+                foreach(Compensator compensator in value)
+                    Outputs.Add(new ParameterCheckBox(CommandType.SetCompensator, compensator.Value + " " + Compensator.MeasureUnit, compensator.Position, false));
+
+                powerSetupLayout.Controls.Remove(addPowerOutput.Field);
+                foreach (ParameterCheckBox output in Outputs)
+                {
+                    powerSetupLayout.Controls.Add(output.Label);
+                    powerSetupLayout.Controls.Add(output.Field);
+                }
+                powerSetupLayout.Controls.Add(addPowerOutput.Field);
+            }
         }
-        public void UpdateInterface(BaseControl sender, int value)
+        public void UpdateInterface(BaseControl target, double value)
         {
-            if (sender.GetType() == TransmissionRate.GetType())
-                ((ParameterSpinBox)sender).SetValue(value);
+            UpdateInterface(target, value.ToString("0.##"));
+        }
+        public void UpdateInterface(BaseControl target, int value)
+        {
+            if (target.GetType() == TransmissionRate.GetType())
+                ((ParameterSpinBox)target).SetValue(value);
             else
-                UpdateInterface(sender, value.ToString());
+                UpdateInterface(target, value.ToString());
         }
-        public void UpdateInterface(BaseControl sender, string value)
+        public void UpdateInterface(BaseControl target, string value)
         {
-            if (sender.GetType() == LastReadingTime.GetType())
-                ((TextBoxControl)sender).Value = value;
+            if (target.GetType() == LastReadingTime.GetType())
+                ((TextBoxControl)target).Value = value;
         }
         #endregion
     }

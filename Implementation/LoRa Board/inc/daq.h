@@ -8,6 +8,7 @@
    
 /* Includes ------------------------------------------------------------------*/
 #include "app_conf.h"
+#include "message.h"
 
 /* Exported defines ----------------------------------------------------------*/
 #define DAQ_TIMEOUT                           5000
@@ -22,6 +23,7 @@ typedef struct DAQTime_t
 
 typedef struct DAQ_Struct_t
 {
+	bool haveMeter;
 	DAQTime_t time;
 	uint16_t batteryLevel;			//Resolution: 0.01, Unit: V
 	uint32_t activeEnergy;			//Resolution: 0.001, Unit: kWh
@@ -44,6 +46,7 @@ void DAQ_Init(void);
 void DAQ_Start(void);
 void DAQ_MainLoop(void);
 void DAQ_ReadData(void);
+void DAQ_ProcessMessage(Message_t message);
 
 #ifdef __cplusplus
 }

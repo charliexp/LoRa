@@ -1,6 +1,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "actuator.h"
 #include "hw_i2c.h"
+#include "pc.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -69,4 +70,29 @@ void ACT_ChangeActuator(uint8_t contactNumber, ActuatorType_t actuatorType, bool
 		default:
 			break;
 	}
+}
+
+void ACT_ProcessMessage(Message_t message)
+{
+	Frame_t reply;
+	
+	reply.endDevice = myAddress;
+	reply.nrOfMessages = 1;
+	
+	reply.messages[0].command = message.command;
+	
+	switch (message.command)
+	{
+		case COMMAND_SET_COMPENSATOR:
+			ACT_SetContact(message.rawArgument[0], message.rawArgument[1]);
+			reply.messages[0].argLength = 1;
+			reply.messages[0].rawArgument[0] = ACK;
+			break;
+		default:
+			reply.messages[0].argLength = 1;
+			reply.messages[0].rawArgument[0] = NAK;
+			break;
+	}
+	
+	PC_Send(reply);
 }

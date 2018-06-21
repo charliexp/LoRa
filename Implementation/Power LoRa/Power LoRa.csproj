@@ -70,6 +70,7 @@
     <Compile Include="Connection\BaseConnectionHandler.cs" />
     <Compile Include="Connection\InternetHandler.cs" />
     <Compile Include="Connection\SerialHandler.cs" />
+    <Compile Include="Node\Compensator.cs" />
     <Compile Include="Node\RadioNode.cs" />
     <Compile Include="Interface\ConnectionDialog.cs">
       <SubType>Form</SubType>

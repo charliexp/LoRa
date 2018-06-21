@@ -31,7 +31,7 @@ namespace Power_LoRa.Interface.Node.ParameterControls
             Connection.Messages.Message message = new Connection.Messages.Message(command, (Int16) value);
 
             if (!remotelyChanged)
-                await Program.connectionHandler.WriteAsync(new Frame(((BaseNodeGroupBox)Field.Parent.Parent.Parent.Parent).Address, message));
+                await Program.connectionHandler.WriteAsync(new Frame(((BaseNodeGroupBox)Field.Parent.Parent.Parent).Address, message));
             else
 				remotelyChanged = false;
         }
