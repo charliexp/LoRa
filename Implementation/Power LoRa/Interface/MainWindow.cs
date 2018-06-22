@@ -4,16 +4,36 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace Power_LoRa.Interface
 {
     public partial class MainWindow : Form
     {
+        #region Private variables
+        private ChartControl bigChart;
+        #endregion
+
         #region Properties
-		public List<RadioNodeGroupBox> RadioNodeInterfaces { get; private set; }
+        public List<RadioNodeGroupBox> RadioNodeInterfaces { get; private set; }
         public FlowLayoutPanel FlowLayout { get; private set; }
         public TableLayoutPanel TableLayout { get; private set; }
-        public ChartControl BigChart { get; private set; }
+        public ChartControl BigChart
+        {
+            set
+            {
+                bigChart.Legends.Clear();
+                bigChart.Titles.Clear();
+                bigChart.Series.Clear();
+
+                foreach (Legend legend in value.Legends)
+                    bigChart.Legends.Add(legend);
+                foreach (Title title in value.Titles)
+                    bigChart.Titles.Add(title);
+                foreach (Series series in value.Series)
+                    bigChart.Series.Add(series);
+            }
+        }
         #endregion
 
         #region Constructors
@@ -21,7 +41,7 @@ namespace Power_LoRa.Interface
 		{
 			RadioNodeInterfaces = new List<RadioNodeGroupBox>();
 
-            BigChart = new ChartControl("Big Chart");
+            bigChart = new ChartControl(null, "Big Chart");
             FlowLayout = new FlowLayoutPanel
             {
                 AutoSize = true,
@@ -40,7 +60,7 @@ namespace Power_LoRa.Interface
 
             Controls.Add(TableLayout);
             TableLayout.Controls.Add(FlowLayout);
-            TableLayout.Controls.Add(BigChart);
+            TableLayout.Controls.Add(bigChart);
 
 
             InitializeComponent();

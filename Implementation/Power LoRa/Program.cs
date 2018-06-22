@@ -12,6 +12,7 @@ using Power_LoRa.Connection;
 using Power_LoRa.Log;
 using Power_LoRa.Interface;
 using Power_LoRa.Networking;
+using Power_LoRa.Interface.Controls;
 
 namespace Power_LoRa
 {
@@ -102,6 +103,10 @@ namespace Power_LoRa
         public static void Write(Frame frame)
         {
             connectionHandler.Write(frame);
+        }
+        public static void SetBigChartData(ChartControl chart)
+        {
+            mainWindow.BigChart = chart;
         }
         #endregion
 

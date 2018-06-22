@@ -65,6 +65,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interface\Controls\ChartableControl.cs" />
     <Compile Include="Node\BaseNode.cs" />
     <Compile Include="Connection\Messages\Frame.cs" />
     <Compile Include="Connection\Messages\Message.cs" />

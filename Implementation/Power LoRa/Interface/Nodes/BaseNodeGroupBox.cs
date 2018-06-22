@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 using static Power_LoRa.Connection.Messages.Frame;
 using static Power_LoRa.Connection.Messages.Message;
 
@@ -28,6 +29,12 @@ namespace Power_LoRa.Interface.Nodes
         private TextBoxControl addressControl;
         private ButtonControl checkIfPresent;
         private ButtonControl setAddress;
+
+        private Series activeEnergy;
+        private Series reactiveEnergy;
+        private Series activePower;
+        private Series reactivePower;
+        private Series apparentPower;
 
         private byte address;
         #endregion
@@ -61,11 +68,11 @@ namespace Power_LoRa.Interface.Nodes
         }
         public ParameterSpinBox TransmissionRate { get; set; }
         public TextBoxControl LastReadingTime { get; set; }
-        public TextBoxControl ActiveEnergy { get; set; }
-        public TextBoxControl ReactiveEnergy { get; set; }
-        public TextBoxControl ActivePower { get; set; }
-        public TextBoxControl ReactivePower { get; set; }
-        public TextBoxControl ApparentPower { get; set; }
+        public ChartableControl ActiveEnergy { get; set; }
+        public ChartableControl ReactiveEnergy { get; set; }
+        public ChartableControl ActivePower { get; set; }
+        public ChartableControl ReactivePower { get; set; }
+        public ChartableControl ApparentPower { get; set; }
         public TextBoxControl PowerFactor { get; set; }
         public List<ParameterCheckBox> Outputs { get; set; }
         public ChartControl EnergyChart { get; private set; }
@@ -110,11 +117,61 @@ namespace Power_LoRa.Interface.Nodes
                 }
             };
 
-            EnergyChart = new ChartControl("Energies chart")
+            activeEnergy = new Series
+            {
+                Color = Color.Green,
+                YAxisType = AxisType.Primary,
+            };
+            reactiveEnergy = new Series
+            {
+                Color = Color.Blue,
+                YAxisType = AxisType.Secondary,
+            };
+            activePower = new Series
+            {
+                Color = Color.Green,
+                YAxisType = AxisType.Primary,
+            };
+            reactivePower = new Series
+            {
+                Color = Color.Blue,
+                YAxisType = AxisType.Secondary,
+            };
+            apparentPower = new Series
+            {
+                Color = Color.Red,
+                YAxisType = AxisType.Primary,
+            };
+            List<Series> energyChartSeries = new List<Series>
+            {
+                activeEnergy,
+                reactiveEnergy
+            };
+            List<Series> powerChartSeries = new List<Series>
+            {
+                activePower,
+                reactivePower,
+                apparentPower
+            };
+
+            foreach (Series series in energyChartSeries)
+            {
+                series.IsVisibleInLegend = true;
+                series.ChartType = SeriesChartType.Line;
+                series.XValueType = ChartValueType.DateTime;
+            }
+            foreach (Series series in powerChartSeries)
+            {
+                series.IsVisibleInLegend = true;
+                series.ChartType = SeriesChartType.Line;
+                series.XValueType = ChartValueType.DateTime;
+            }
+
+            EnergyChart = new ChartControl(energyChartSeries, "Energies Chart")
             {
                 Size = new Size(ChartWidth, ChartWidth),
             };
-            PowerChart = new ChartControl("Powers chart")
+            PowerChart = new ChartControl(powerChartSeries, "Powers Chart")
             {
                 Size = new Size(ChartWidth, ChartWidth),
             };
@@ -122,26 +179,11 @@ namespace Power_LoRa.Interface.Nodes
             {
                 Value = "00:00:00"
             };
-            ActiveEnergy = new TextBoxControl(this, "ActiveEnergy", "kWh", TextBoxControl.Type.Output)
-            {
-                Value = "0"
-            };
-            ReactiveEnergy = new TextBoxControl(this, "ReactiveEnergy", "kVArh", TextBoxControl.Type.Output)
-            {
-                Value = "0"
-            };
-            ActivePower = new TextBoxControl(this, "ActivePower", "kW", TextBoxControl.Type.Output)
-            {
-                Value = "0"
-            };
-            ReactivePower = new TextBoxControl(this, "ReactivePower", "kVAr", TextBoxControl.Type.Output)
-            {
-                Value = "0"
-            };
-            ApparentPower = new TextBoxControl(this, "ApparentPower", "kVA", TextBoxControl.Type.Output)
-            {
-                Value = "0"
-            };
+            ActiveEnergy = new ChartableControl(this, EnergyChart, activeEnergy, "ActiveEnergy", "kWh");
+            ReactiveEnergy = new ChartableControl(this, EnergyChart, reactiveEnergy, "ReactiveEnergy", "kVArh");
+            ActivePower = new ChartableControl(this, PowerChart, activePower, "ActivePower", "kW");
+            ReactivePower = new ChartableControl(this, PowerChart, reactivePower, "ReactivePower", "kVAr");
+            ApparentPower = new ChartableControl(this, PowerChart, apparentPower, "ApparentPower", "kVA");
             PowerFactor = new TextBoxControl(this, "PowerFactor", TextBoxControl.Type.Output)
             {
                 Value = "1"
@@ -205,16 +247,16 @@ namespace Power_LoRa.Interface.Nodes
 
             powerReadingLayout.Controls.Add(LastReadingTime.Label);
             powerReadingLayout.Controls.Add(LastReadingTime.Field);
-            powerReadingLayout.Controls.Add(ActiveEnergy.Label);
-            powerReadingLayout.Controls.Add(ActiveEnergy.Field);
-            powerReadingLayout.Controls.Add(ReactiveEnergy.Label);
-            powerReadingLayout.Controls.Add(ReactiveEnergy.Field);
-            powerReadingLayout.Controls.Add(ActivePower.Label);
-            powerReadingLayout.Controls.Add(ActivePower.Field);
-            powerReadingLayout.Controls.Add(ReactivePower.Label);
-            powerReadingLayout.Controls.Add(ReactivePower.Field);
-            powerReadingLayout.Controls.Add(ApparentPower.Label);
-            powerReadingLayout.Controls.Add(ApparentPower.Field);
+            powerReadingLayout.Controls.Add(ActiveEnergy.Text.Label);
+            powerReadingLayout.Controls.Add(ActiveEnergy.Text.Field);
+            powerReadingLayout.Controls.Add(ReactiveEnergy.Text.Label);
+            powerReadingLayout.Controls.Add(ReactiveEnergy.Text.Field);
+            powerReadingLayout.Controls.Add(ActivePower.Text.Label);
+            powerReadingLayout.Controls.Add(ActivePower.Text.Field);
+            powerReadingLayout.Controls.Add(ReactivePower.Text.Label);
+            powerReadingLayout.Controls.Add(ReactivePower.Text.Field);
+            powerReadingLayout.Controls.Add(ApparentPower.Text.Label);
+            powerReadingLayout.Controls.Add(ApparentPower.Text.Field);
             powerReadingLayout.Controls.Add(PowerFactor.Label);
             powerReadingLayout.Controls.Add(PowerFactor.Field);
             setupLayout.Controls.Add(addressControl.Label);
@@ -236,7 +278,9 @@ namespace Power_LoRa.Interface.Nodes
             Name = name.Replace(" ", "") + "GroupBox";
             Text = name;
             TabStop = false;
-            
+
+            EnergyChart.Click += new EventHandler(ShowAsBigChart);
+            PowerChart.Click += new EventHandler(ShowAsBigChart);
             setAddress.Field.Click += new EventHandler(setAddressEvent);
             checkIfPresent.Field.Click += new EventHandler(isPresentEvent);
             addressControl.Field.TextChanged += new EventHandler(AddressFieldChanged);
@@ -261,6 +305,10 @@ namespace Power_LoRa.Interface.Nodes
             {
                 setAddress.Field.Enabled = false;
             }
+        }
+        private void ShowAsBigChart(object sender, EventArgs e)
+        {
+            Program.SetBigChartData((ChartControl) sender);
         }
         #endregion
 
@@ -303,6 +351,10 @@ namespace Power_LoRa.Interface.Nodes
         {
             UpdateInterface(target, value.ToString("0.##"));
         }
+        public void UpdateInterface(ChartableControl target, DataPoint value)
+        {
+            target.LastValue = value;
+        }
         public void UpdateInterface(BaseControl target, int value)
         {
             if (target.GetType() == TransmissionRate.GetType())
@@ -314,10 +366,6 @@ namespace Power_LoRa.Interface.Nodes
         {
             if (target.GetType() == LastReadingTime.GetType())
                 ((TextBoxControl)target).Value = value;
-        }
-        public void UpdateChart(ChartControl chart, int value)
-        {
-
         }
         #endregion
     }

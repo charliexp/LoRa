@@ -3,6 +3,7 @@ using Power_LoRa.Interface.Nodes;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 using static Power_LoRa.Connection.Messages.Message;
 
 namespace Power_LoRa.Node
@@ -70,6 +71,8 @@ namespace Power_LoRa.Node
             {
                 transmissionRate = value;
                 GroupBox.UpdateInterface(GroupBox.TransmissionRate, transmissionRate);
+                GroupBox.EnergyChart.MaxPoints = 3600 / value * 24;
+                GroupBox.PowerChart.MaxPoints = 3600 / value * 24;
             }
         }
         public DateTime Timestamp
@@ -93,8 +96,7 @@ namespace Power_LoRa.Node
             set
             {
                 activeEnergy = value;
-                GroupBox.UpdateInterface(GroupBox.ActiveEnergy, ActiveEnergy);
-                GroupBox.EnergyChart.AddPoint(GroupBox.EnergyChart.ActiveEnergy, Timestamp, ActiveEnergy);
+                GroupBox.UpdateInterface(GroupBox.ActiveEnergy, new DataPoint(Timestamp.ToOADate(), value));
             }
         }
         public Int32 ReactiveEnergy
@@ -106,8 +108,7 @@ namespace Power_LoRa.Node
             set
             {
                 reactiveEnergy = value;
-                GroupBox.UpdateInterface(GroupBox.ReactiveEnergy, reactiveEnergy);
-                GroupBox.EnergyChart.AddPoint(GroupBox.EnergyChart.ReactiveEnergy, Timestamp, ReactiveEnergy);
+                GroupBox.UpdateInterface(GroupBox.ReactiveEnergy, new DataPoint(Timestamp.ToOADate(), value));
             }
         }
         public Int32 ActivePower
@@ -119,8 +120,7 @@ namespace Power_LoRa.Node
             set
             {
                 activePower = value;
-                ApparentPower = (Int32) Math.Sqrt(Math.Pow(activePower, 2) * Math.Pow(reactivePower, 2));
-                GroupBox.UpdateInterface(GroupBox.ActivePower, activePower);
+                GroupBox.UpdateInterface(GroupBox.ActivePower, new DataPoint(Timestamp.ToOADate(), value));
             }
         }
         public Int32 ReactivePower
@@ -133,7 +133,7 @@ namespace Power_LoRa.Node
             {
                 reactivePower = value;
                 ApparentPower = Convert.ToInt32(Math.Sqrt(Math.Pow(activePower, 2) + Math.Pow(reactivePower, 2)));
-                GroupBox.UpdateInterface(GroupBox.ReactivePower, reactivePower);
+                GroupBox.UpdateInterface(GroupBox.ReactivePower, new DataPoint(Timestamp.ToOADate(), value));
             }
         }
         public Int32 ApparentPower
@@ -147,7 +147,7 @@ namespace Power_LoRa.Node
                 apparentPower = value;
                 if (ApparentPower != 0)
                     PowerFactor = (double) ActivePower / ApparentPower;
-                GroupBox.UpdateInterface(GroupBox.ApparentPower, apparentPower);
+                GroupBox.UpdateInterface(GroupBox.ApparentPower, new DataPoint(Timestamp.ToOADate(), value));
             }
         }
         public Double PowerFactor
