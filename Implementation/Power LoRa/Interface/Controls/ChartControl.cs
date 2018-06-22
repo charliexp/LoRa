@@ -10,7 +10,6 @@ namespace Power_LoRa.Interface.Controls
     {
         #region Private variables
         private ChartArea chartArea;
-        private Legend legend;
         private Title title;
         #endregion
 
@@ -22,12 +21,12 @@ namespace Power_LoRa.Interface.Controls
         public ChartControl(List<Series> seriesList, string name) : base()
         {
             Name = name;
+            MaxPoints = 10;
 
             chartArea = new ChartArea();
             chartArea.AxisX.Enabled = AxisEnabled.True;
             chartArea.AxisY.Enabled = AxisEnabled.True;
             chartArea.AxisY2.Enabled = AxisEnabled.True;
-            legend = new Legend();
             title = new Title(Name);
 
             chartArea.AxisX.LabelStyle.Format = "HH:mm:ss";
@@ -37,7 +36,6 @@ namespace Power_LoRa.Interface.Controls
 
             ChartAreas.Add(chartArea);
             Titles.Add(title);
-            //Legends.Add(legend);
             if (seriesList != null)
                 foreach (Series series in seriesList)
                     Series.Add(series);

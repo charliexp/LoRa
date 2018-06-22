@@ -25,19 +25,21 @@ typedef struct UartHandle_t
 /* Uart Handle */
 	UART_HandleTypeDef lowLevelHandle;
 /* Receive state */
-	UartRxState_t RxState;
+	UartRxState_t rxState;
 /* Receive buffer */
-	uint8_t RxBuffer[UART_BUFFSIZE];
+	uint8_t rxBuffer[UART_BUFFSIZE];
 /* Index of first byte not forwarded to upper layer */
-	uint16_t RxProcessedIndex;
+	uint16_t rxProcessedIndex;
 /* Index of last byte checked for terminator character */
-	uint16_t RxCheckedIndex;
+	uint16_t rxCheckedIndex;
 /* Index of byte to be received */
-	uint16_t RxReceiveIndex;
+	uint16_t rxReceiveIndex;
 /* Timestamp of last sent byte */
 	uint32_t lastSendTime;
 /* Timestamp of last read byte */
 	uint32_t lastReceiveTime;
+/* Receive timeout in seconds */
+	uint16_t timeout;
 }UartHandle_t;
 
 /* Exported constants --------------------------------------------------------*/
@@ -46,7 +48,8 @@ typedef struct UartHandle_t
 /* Exported functions --------------------------------------------------------*/
 void UART_Init(void);
 void UART_Send(UartHandle_t *uart, uint8_t *buffer, uint8_t length);
-UartRxState_t UART_ReceiveUntilChar(UartHandle_t *uart, uint8_t *buffer, uint16_t *length, uint8_t terminatorChar);
+UartRxState_t UART_Receive(UartHandle_t *uart, uint8_t *buffer, uint16_t length);
+UartRxState_t UART_ReceiveUntilChar(UartHandle_t *uart, uint8_t *buffer, uint16_t *length, uint8_t terminatorChar, uint8_t interruptChar);
 UartRxState_t UART_ReceiveFixedLength(UartHandle_t *uart, uint8_t *buffer, uint16_t length);
 void UART_DeInit(void);
 

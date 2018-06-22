@@ -92,10 +92,17 @@ void vcom_Init(void)
     Error_Handler(); 
   }
   
-  HAL_NVIC_SetPriority(DBG_USARTX_IRQn, 0x1, 0);
+  HAL_NVIC_SetPriority(DBG_USARTX_IRQn, 0x2, 0);
   HAL_NVIC_EnableIRQ(DBG_USARTX_IRQn);
 	
-	HAL_UART_Receive_IT(&DBG_UartHandle.lowLevelHandle, DBG_UartHandle.RxBuffer + DBG_UartHandle.RxReceiveIndex, 1);
+	DBG_UartHandle.rxProcessedIndex = 0;
+	DBG_UartHandle.rxCheckedIndex = 0;
+	DBG_UartHandle.rxReceiveIndex = 0;
+	DBG_UartHandle.lastSendTime = 0;
+	DBG_UartHandle.lastReceiveTime = 0;
+	DBG_UartHandle.timeout = 2;
+	
+	HAL_UART_Receive_IT(&DBG_UartHandle.lowLevelHandle, DBG_UartHandle.rxBuffer + DBG_UartHandle.rxReceiveIndex, 1);
 }
 
 

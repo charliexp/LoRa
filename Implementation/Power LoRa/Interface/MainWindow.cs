@@ -22,10 +22,10 @@ namespace Power_LoRa.Interface
         {
             set
             {
+                bigChart.MaxPoints = value.MaxPoints;
                 bigChart.Legends.Clear();
                 bigChart.Titles.Clear();
                 bigChart.Series.Clear();
-
                 foreach (Legend legend in value.Legends)
                     bigChart.Legends.Add(legend);
                 foreach (Title title in value.Titles)
@@ -41,7 +41,10 @@ namespace Power_LoRa.Interface
 		{
 			RadioNodeInterfaces = new List<RadioNodeGroupBox>();
 
-            bigChart = new ChartControl(null, "Big Chart");
+            bigChart = new ChartControl(null, "Big Chart")
+            {
+                Dock = DockStyle.Fill,
+            };
             FlowLayout = new FlowLayoutPanel
             {
                 AutoSize = true,

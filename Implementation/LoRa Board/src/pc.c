@@ -16,10 +16,12 @@ typedef enum PC_State_t
 
 typedef struct PC_Handle_t
 {
-	bool connected;
+	UartHandle_t *uartHandle;
+	PC_State_t state;
 	uint8_t buffer[FRAME_MAX_SIZE];
 	uint8_t bufferLength;
-	PC_State_t state;
+	Frame_t receivedFrame;
+	bool connected;
 }PC_Handle_t;
 
 /* Private define ------------------------------------------------------------*/
@@ -30,7 +32,6 @@ extern UartHandle_t DBG_UartHandle;
 extern uint8_t myAddress;
 
 static PC_Handle_t PC_Handle;
-static Frame_t receivedFrame;
 
 /* Private function prototypes -----------------------------------------------*/
 extern void setAddress(uint8_t newAddress);
@@ -39,6 +40,7 @@ extern void setAddress(uint8_t newAddress);
 
 void PC_Init(void)
 {
+	PC_Handle.uartHandle = &DBG_UartHandle;
 	PC_Handle.connected = false;
 	PC_Handle.state = READY;
 }
@@ -83,8 +85,8 @@ void PC_MainLoop(void)
 				PC_Handle.bufferLength += argLength;
 				if (PC_Handle.bufferLength == Message_frameLengthFromArray(PC_Handle.buffer))
 				{
-					Message_arrayToFrame(PC_Handle.buffer, PC_Handle.bufferLength, &receivedFrame);
-					PC_ProcessFrame(receivedFrame);
+					Message_arrayToFrame(PC_Handle.buffer, PC_Handle.bufferLength, &PC_Handle.receivedFrame);
+					PC_ProcessFrame(PC_Handle.receivedFrame);
 					PC_Handle.state = READY;
 				}
 				else

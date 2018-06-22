@@ -19,6 +19,7 @@ typedef enum DAQ_State_t
 	SENT_DATA_REQ,
 	REC_DATA,
 	IDLE,
+	TIMEOUT,
 }DAQ_State_t;
 
 /* Private define ------------------------------------------------------------*/
@@ -28,6 +29,7 @@ typedef enum DAQ_State_t
 #define STX				0x02
 #define ETX				0x03
 #define ASCII_ACK	0x06
+#define ASCII_NAK	0x15
 #define CR				0x0d
 #define LF				0x0a
 
@@ -100,7 +102,7 @@ void DAQ_MainLoop(void)
 			if (returnValue == UART_RX_AVAILABLE)
 				DAQ_State = REC_ID;
 			else if (returnValue == UART_RX_TIMEOUT)
-				DAQ_State = READY;
+				DAQ_State = TIMEOUT;
 			break;
 		case REC_ID:
 			DAQ_SendReq(DataReq, 6);
@@ -114,12 +116,15 @@ void DAQ_MainLoop(void)
 				DAQ_State = REC_DATA;
 			}
 			else if (returnValue == UART_RX_TIMEOUT)
-				DAQ_State = READY;
+				DAQ_State = TIMEOUT;
 			break;
 		case REC_DATA:
 			DAQ_State = IDLE;
 			break;
 		case IDLE:
+			break;
+		case TIMEOUT:
+			DAQ_BufferLength = 0;
 			break;
 		default:
 			DAQ_State = IDLE;
@@ -189,7 +194,7 @@ static UartRxState_t DAQ_CheckForResp(const uint8_t terminatorChar)
 {
 	UartRxState_t result;
 	
-	result = UART_ReceiveUntilChar(&DAQ_UartHandle, DAQ_Buffer, &DAQ_BufferLength, terminatorChar);
+	result = UART_ReceiveUntilChar(&DAQ_UartHandle, DAQ_Buffer, &DAQ_BufferLength, terminatorChar, ASCII_NAK);
 	
 	return result;
 }

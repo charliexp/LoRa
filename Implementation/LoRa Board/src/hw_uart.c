@@ -14,19 +14,19 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
 	if (huart->Instance == DAQ_USARTX)
 	{
-		if (DAQ_UartHandle.RxReceiveIndex == UART_BUFFSIZE - 1)
-			DAQ_UartHandle.RxReceiveIndex = 0;
+		if (DAQ_UartHandle.rxReceiveIndex == UART_BUFFSIZE - 1)
+			DAQ_UartHandle.rxReceiveIndex = 0;
 		else
-			DAQ_UartHandle.RxReceiveIndex++;
-		HAL_UART_Receive_IT(huart, DAQ_UartHandle.RxBuffer + DAQ_UartHandle.RxReceiveIndex, 1);
+			DAQ_UartHandle.rxReceiveIndex++;
+		HAL_UART_Receive_IT(huart, DAQ_UartHandle.rxBuffer + DAQ_UartHandle.rxReceiveIndex, 1);
 	}
 	else if (huart->Instance == DBG_USARTX)
 	{
-		if (DBG_UartHandle.RxReceiveIndex == UART_BUFFSIZE - 1)
-			DBG_UartHandle.RxReceiveIndex = 0;
+		if (DBG_UartHandle.rxReceiveIndex == UART_BUFFSIZE - 1)
+			DBG_UartHandle.rxReceiveIndex = 0;
 		else
-			DBG_UartHandle.RxReceiveIndex++;
-		HAL_UART_Receive_IT(huart, DBG_UartHandle.RxBuffer + DBG_UartHandle.RxReceiveIndex, 1);
+			DBG_UartHandle.rxReceiveIndex++;
+		HAL_UART_Receive_IT(huart, DBG_UartHandle.rxBuffer + DBG_UartHandle.rxReceiveIndex, 1);
 	}
 }
 
@@ -35,14 +35,18 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
 	if (huart->Instance == DAQ_USARTX)
 	{
 		HAL_UART_AbortReceive(huart);
-		HAL_UART_Receive_IT(huart, DAQ_UartHandle.RxBuffer + DAQ_UartHandle.RxReceiveIndex, 1);
-		DAQ_UartHandle.RxState = UART_RX_TIMEOUT;
+		HAL_UART_Receive_IT(huart, DAQ_UartHandle.rxBuffer + DAQ_UartHandle.rxReceiveIndex, 1);
+		DAQ_UartHandle.rxState = UART_RX_TIMEOUT;
+		DBG_UartHandle.rxCheckedIndex = DBG_UartHandle.rxReceiveIndex;
+		DAQ_UartHandle.rxProcessedIndex = DAQ_UartHandle.rxReceiveIndex;
 	}
 	else if (huart->Instance == DBG_USARTX)
 	{
 		HAL_UART_AbortReceive(huart);
-		HAL_UART_Receive_IT(huart, DBG_UartHandle.RxBuffer + DBG_UartHandle.RxReceiveIndex, 1);
-		DBG_UartHandle.RxState = UART_RX_TIMEOUT;
+		HAL_UART_Receive_IT(huart, DBG_UartHandle.rxBuffer + DBG_UartHandle.rxReceiveIndex, 1);
+		DBG_UartHandle.rxState = UART_RX_TIMEOUT;
+		DBG_UartHandle.rxCheckedIndex = DBG_UartHandle.rxReceiveIndex;
+		DBG_UartHandle.rxProcessedIndex = DBG_UartHandle.rxReceiveIndex;
 	}
 }
 
@@ -63,55 +67,68 @@ void UART_Init(void)
     Error_Handler(); 
   }
 	
-  HAL_NVIC_SetPriority(DAQ_USARTX_IRQn, 0x2, 0);
+  HAL_NVIC_SetPriority(DAQ_USARTX_IRQn, 0x1, 0);
   HAL_NVIC_EnableIRQ(DAQ_USARTX_IRQn);
 	
-	DAQ_UartHandle.RxProcessedIndex = 0;
-	DAQ_UartHandle.RxCheckedIndex = 0;
-	DAQ_UartHandle.RxReceiveIndex = 0;
+	DAQ_UartHandle.rxProcessedIndex = 0;
+	DAQ_UartHandle.rxCheckedIndex = 0;
+	DAQ_UartHandle.rxReceiveIndex = 0;
 	DAQ_UartHandle.lastSendTime = 0;
 	DAQ_UartHandle.lastReceiveTime = 0;
+	DAQ_UartHandle.timeout = DAQ_SAMPLE_RATE;
 	
-	HAL_UART_Receive_IT(&DAQ_UartHandle.lowLevelHandle, DAQ_UartHandle.RxBuffer + DAQ_UartHandle.RxReceiveIndex, 1);
+	HAL_UART_Receive_IT(&DAQ_UartHandle.lowLevelHandle, DAQ_UartHandle.rxBuffer + DAQ_UartHandle.rxReceiveIndex, 1);
 }
 
-UartRxState_t UART_ReceiveUntilChar(UartHandle_t *uart, uint8_t *buffer, uint16_t *length, uint8_t terminatorChar)
+UartRxState_t UART_ReceiveUntilChar(UartHandle_t *uart, uint8_t *buffer, uint16_t *length, uint8_t terminatorChar, uint8_t interruptChar)
 {
 	*length = 0;
-	UartRxState_t returnValue = uart->RxState;
+	UartRxState_t returnValue = uart->rxState;
 	
-	while (uart->RxCheckedIndex != uart->RxReceiveIndex && uart->RxState == UART_RX_PENDING)
+	while (uart->rxCheckedIndex != uart->rxReceiveIndex && uart->rxState == UART_RX_PENDING)
 	{
-		if (uart->RxBuffer[uart->RxCheckedIndex - 1] == terminatorChar)
+		/*if (uart->rxBuffer[uart->rxCheckedIndex] == interruptChar)
 		{
-			uart->RxState = UART_RX_AVAILABLE;
+			HAL_UART_ErrorCallback(&uart->lowLevelHandle);
+			uart->rxBuffer[uart->rxCheckedIndex] = 0;
+			break;
+		}*/
+		if (uart->rxCheckedIndex != 0)
+		{
+			if (uart->rxBuffer[uart->rxCheckedIndex - 1] == terminatorChar)
+				uart->rxState = UART_RX_AVAILABLE;
 		}
-		if (uart->RxCheckedIndex == UART_BUFFSIZE - 1)
-			uart->RxCheckedIndex = 0;
+		else if (uart->rxBuffer[UART_BUFFSIZE - 1] == terminatorChar)
+			uart->rxState = UART_RX_AVAILABLE;
+		
+		if (uart->rxCheckedIndex == UART_BUFFSIZE - 1)
+		{
+			uart->rxCheckedIndex = 0;
+		}
 		else
-			uart->RxCheckedIndex++;
+			uart->rxCheckedIndex++;
 	}
-	//timeout as parameter
-	if (HAL_GetTick() - uart->lastSendTime > DAQ_SAMPLE_RATE * 1000)
+	
+	/* Timeout */
+	if (HAL_GetTick() - uart->lastSendTime > uart->timeout * 1000)
 		HAL_UART_ErrorCallback(&uart->lowLevelHandle);
 		
-	if (uart->RxState != UART_RX_PENDING)
+	if (uart->rxState != UART_RX_PENDING)
 	{
-		while (uart->RxProcessedIndex != uart->RxCheckedIndex)
+		while (uart->rxProcessedIndex != uart->rxCheckedIndex)
 		{
-			buffer[*length] = uart->RxBuffer[uart->RxProcessedIndex];
+			buffer[*length] = uart->rxBuffer[uart->rxProcessedIndex];
 			(*length)++;
-			if (uart->RxProcessedIndex == UART_BUFFSIZE - 1)
-				uart->RxProcessedIndex = 0;
+			if (uart->rxProcessedIndex == UART_BUFFSIZE - 1)
+				uart->rxProcessedIndex = 0;
 			else
-				uart->RxProcessedIndex++;
+				uart->rxProcessedIndex++;
 		}
 		
+		returnValue = uart->rxState;
 		if (returnValue == UART_RX_AVAILABLE)
 			uart->lastReceiveTime = HAL_GetTick();
-		
-		returnValue = uart->RxState;
-		uart->RxState = UART_RX_PENDING;
+		uart->rxState = UART_RX_PENDING;
 	}
 	
 	return returnValue;
@@ -120,45 +137,59 @@ UartRxState_t UART_ReceiveUntilChar(UartHandle_t *uart, uint8_t *buffer, uint16_
 UartRxState_t UART_ReceiveFixedLength(UartHandle_t *uart, uint8_t *buffer, uint16_t length)
 {
 	uint8_t i = 0;
-	UartRxState_t returnValue = DAQ_UartHandle.RxState;
+	UartRxState_t returnValue = DAQ_UartHandle.rxState;
 	
-	if ((uart->RxCheckedIndex < uart->RxReceiveIndex) &&
-		(uart->RxReceiveIndex - uart->RxCheckedIndex >= length))
+	if ((uart->rxCheckedIndex < uart->rxReceiveIndex) &&
+		(uart->rxReceiveIndex - uart->rxCheckedIndex >= length))
 	{
-		uart->RxState = UART_RX_AVAILABLE;
-		uart->RxCheckedIndex += length;
+		uart->rxState = UART_RX_AVAILABLE;
+		uart->rxCheckedIndex += length;
 	}
-	else if ((uart->RxCheckedIndex > uart->RxReceiveIndex) &&
-		((uart->RxReceiveIndex + UART_BUFFSIZE) - uart->RxCheckedIndex > length))
+	else if ((uart->rxCheckedIndex > uart->rxReceiveIndex) &&
+		((uart->rxReceiveIndex + UART_BUFFSIZE) - uart->rxCheckedIndex > length))
 	{
-		uart->RxState = UART_RX_AVAILABLE;
-		uart->RxCheckedIndex += length;
-		if (uart->RxCheckedIndex >= UART_BUFFSIZE)
-			uart->RxCheckedIndex -= UART_BUFFSIZE;
+		uart->rxState = UART_RX_AVAILABLE;
+		uart->rxCheckedIndex += length;
+		if (uart->rxCheckedIndex >= UART_BUFFSIZE)
+			uart->rxCheckedIndex -= UART_BUFFSIZE;
 	}
-	//timeout as parameter
-	/*
-	if (HAL_GetTick() - uart->lastReceiveTime > 5 * 1000)
+	
+	/* Timeout *//*
+	if (HAL_GetTick() - uart->lastSendTime > uart->timeout * 1000)
 		HAL_UART_ErrorCallback(&uart->lowLevelHandle);
 		*/
-	if (uart->RxState != UART_RX_PENDING)
+	if (uart->rxState != UART_RX_PENDING)
 	{
 		while (i < length)
 		{
-			buffer[i] = uart->RxBuffer[uart->RxProcessedIndex];
+			buffer[i] = uart->rxBuffer[uart->rxProcessedIndex];
 			i++;
-			if (uart->RxProcessedIndex == UART_BUFFSIZE - 1)
-				uart->RxProcessedIndex = 0;
+			if (uart->rxProcessedIndex == UART_BUFFSIZE - 1)
+				uart->rxProcessedIndex = 0;
 			else
-				uart->RxProcessedIndex++;
+				uart->rxProcessedIndex++;
 		}
 		
 		if (returnValue == UART_RX_AVAILABLE)
 			uart->lastReceiveTime = HAL_GetTick();
 		
-		returnValue = uart->RxState;
-		uart->RxState = UART_RX_PENDING;
+		returnValue = uart->rxState;
+		uart->rxState = UART_RX_PENDING;
 	}
+	
+	return returnValue;
+}
+
+UartRxState_t UART_Receive(UartHandle_t *uart, uint8_t *buffer, uint16_t length)
+{
+	UartRxState_t returnValue;
+	
+	if (HAL_UART_Receive(&uart->lowLevelHandle, DAQ_UartHandle.rxBuffer, length, DAQ_SAMPLE_RATE) == HAL_OK)
+	{
+		returnValue = UART_RX_AVAILABLE;
+	}
+	else
+		returnValue = UART_RX_TIMEOUT;
 	
 	return returnValue;
 }

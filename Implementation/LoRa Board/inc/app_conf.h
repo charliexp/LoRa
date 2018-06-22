@@ -12,7 +12,7 @@
 
 /* Exported defines ----------------------------------------------------------*/
 #define APP_INITIAL_TRANSMISSION_RATE		10
-#define DAQ_SAMPLE_RATE									5
+#define DAQ_SAMPLE_RATE									10
 #define DAQ_SAMPLES						`					6
 
 /* Exported types ------------------------------------------------------------*/
