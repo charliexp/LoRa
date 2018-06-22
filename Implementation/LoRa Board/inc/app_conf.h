@@ -11,8 +11,8 @@
 #include <stdint.h>
 
 /* Exported defines ----------------------------------------------------------*/
-#define APP_INITIAL_SAMPLE_RATE			5
-#define DAQ_SAMPLE_RATE							5
+#define APP_INITIAL_SAMPLE_RATE			10
+#define DAQ_SAMPLE_RATE							10
 
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/

@@ -168,18 +168,6 @@ static void DAQ_TimerEvent(void)
 	DAQ_ReadData();
 	DAQ_Start();
 	
-	//Temp
-	DAQ_Data.time.hour = 14;
-	if (DAQ_Data.time.second < 59)
-		DAQ_Data.time.second++;
-	else
-		DAQ_Data.time.second = 0;
-	DAQ_Data.activeEnergy++;
-	DAQ_Data.inductive = false;
-	DAQ_Data.reactiveEnergy++;
-	DAQ_Data.activePower = 3;
-	DAQ_Data.reactivePower = 4;
-	
 	if (DAQ_Data.haveMeter)
 		TimerStart(&DAQ_Timer);
 }
