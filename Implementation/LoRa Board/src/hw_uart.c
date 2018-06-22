@@ -92,7 +92,7 @@ UartRxState_t UART_ReceiveUntilChar(UartHandle_t *uart, uint8_t *buffer, uint16_
 			uart->RxCheckedIndex++;
 	}
 	//timeout as parameter
-	if (HAL_GetTick() - uart->lastSendTime > 5 * 1000)
+	if (HAL_GetTick() - uart->lastSendTime > DAQ_SAMPLE_RATE * 1000)
 		HAL_UART_ErrorCallback(&uart->lowLevelHandle);
 		
 	if (uart->RxState != UART_RX_PENDING)

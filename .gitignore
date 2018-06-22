@@ -15,6 +15,7 @@
 *.elf
 *.crf
 *.d
+*.__i
 
 # Linker output
 *.ilk
