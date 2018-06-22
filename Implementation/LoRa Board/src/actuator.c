@@ -84,7 +84,7 @@ void ACT_ProcessMessage(Message_t message)
 	switch (message.command)
 	{
 		case COMMAND_SET_COMPENSATOR:
-			ACT_SetContact(message.rawArgument[0], message.rawArgument[1]);
+			ACT_SetContact((message.rawArgument[0] >> 4) & 0x0F, (message.rawArgument[1] & 0x0F));
 			reply.messages[0].argLength = 1;
 			reply.messages[0].rawArgument[0] = ACK;
 			break;
