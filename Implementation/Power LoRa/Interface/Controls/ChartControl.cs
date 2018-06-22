@@ -27,7 +27,6 @@ namespace Power_LoRa.Interface.Controls
         public ChartControl(string name) : base()
         {
             Name = name;
-            Dock = DockStyle.Fill;
 
             chartArea = new ChartArea();
             legend = new Legend();
