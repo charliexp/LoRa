@@ -4,6 +4,10 @@ namespace Power_LoRa.Interface.Controls
 {
 	public abstract class BaseControl
     {
+        #region Protected variables
+        protected Control container;
+        #endregion
+
         #region Properties
         public Control Field { get; protected set; }
         public bool Visible
@@ -20,8 +24,9 @@ namespace Power_LoRa.Interface.Controls
         #endregion
 
         #region Constructors
-        public BaseControl(string name)
+        public BaseControl(Control container, string name)
 		{
+            this.container = container;
 			Field = new Control
             {
                 Name = name.Replace(" ", "") + "Field",

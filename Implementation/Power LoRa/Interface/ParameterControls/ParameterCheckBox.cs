@@ -18,14 +18,14 @@ namespace Power_LoRa.Interface.Node.ParameterControls
         #endregion
 
         #region Constructors
-        public ParameterCheckBox(CommandType command, bool defaultState) : base(command.ToString(), defaultState)
+        public ParameterCheckBox(Control container, CommandType command, bool defaultState) : base(container, command.ToString(), defaultState)
 		{
             argument = Byte.MaxValue;
 			this.command = command;
             ValueChanged = ParameterChangedCallback;
 			remotelyChanged = false;
         }
-        public ParameterCheckBox(CommandType command, string text, byte argument, bool defaultState) : this(command, defaultState)
+        public ParameterCheckBox(Control container, CommandType command, string text, byte argument, bool defaultState) : this(container, command, defaultState)
         {
             Label.Text = text;
             this.argument = argument;
@@ -42,7 +42,7 @@ namespace Power_LoRa.Interface.Node.ParameterControls
                 message = new Connection.Messages.Message(command, (byte)value);
 
             if (!remotelyChanged)
-                await Program.connectionHandler.WriteAsync(new Frame(((BaseNodeGroupBox)Field.Parent.Parent.Parent).Address, message));
+                await Program.connectionHandler.WriteAsync(new Frame(((BaseNodeGroupBox)container).Address, message));
             else
 				remotelyChanged = false;
         }

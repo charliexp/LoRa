@@ -1,4 +1,5 @@
-﻿using Power_LoRa.Interface.Nodes;
+﻿using Power_LoRa.Interface.Controls;
+using Power_LoRa.Interface.Nodes;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -12,6 +13,7 @@ namespace Power_LoRa.Interface
 		public List<RadioNodeGroupBox> RadioNodeInterfaces { get; private set; }
         public FlowLayoutPanel FlowLayout { get; private set; }
         public TableLayoutPanel TableLayout { get; private set; }
+        public ChartControl BigChart { get; private set; }
         #endregion
 
         #region Constructors
@@ -19,15 +21,18 @@ namespace Power_LoRa.Interface
 		{
 			RadioNodeInterfaces = new List<RadioNodeGroupBox>();
 
+            BigChart = new ChartControl("Big Chart");
             FlowLayout = new FlowLayoutPanel
             {
                 AutoSize = true,
-                Name = "FlowLayout"
+                FlowDirection = FlowDirection.TopDown,
+                Name = "FlowLayout",
             };
 
             TableLayout = new TableLayoutPanel
             {
                 AutoSize = true,
+                ColumnCount = 2,
                 RowCount = 2,
                 Location = new Point(0, 0),
                 Name = "TableLayout",
@@ -35,8 +40,8 @@ namespace Power_LoRa.Interface
 
             Controls.Add(TableLayout);
             TableLayout.Controls.Add(FlowLayout);
+            TableLayout.Controls.Add(BigChart);
 
-            FlowLayout.FlowDirection = FlowDirection.LeftToRight;
 
             InitializeComponent();
 

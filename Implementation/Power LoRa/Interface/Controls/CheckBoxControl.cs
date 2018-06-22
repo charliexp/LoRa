@@ -6,9 +6,10 @@ namespace Power_LoRa.Interface.Controls
 	public class CheckBoxControl : LabeledControl
     {
         #region Constructors
-        public CheckBoxControl(string name, bool defaultState) : base(name)
+        public CheckBoxControl(Control container, string name, bool defaultState) : base(container, name)
 		{
-			Field = new CheckBox
+
+            Field = new CheckBox
             {
                 Dock = Field.Dock,
                 Margin = Field.Margin,

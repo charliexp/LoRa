@@ -17,7 +17,7 @@ namespace Power_LoRa.Interface.Node.ParameterControls
         #endregion
 
         #region Constructors
-        public ParameterSpinBox(CommandType parameter, int minValue, int maxValue, int defaultValue) : base(parameter.ToString(), minValue, maxValue, defaultValue)
+        public ParameterSpinBox(Control container, CommandType parameter, int minValue, int maxValue, int defaultValue) : base(container, parameter.ToString(), minValue, maxValue, defaultValue)
 		{
 			this.command = parameter;
             ValueChanged = ParameterChangedCallback;
@@ -31,7 +31,7 @@ namespace Power_LoRa.Interface.Node.ParameterControls
             Connection.Messages.Message message = new Connection.Messages.Message(command, (Int16) value);
 
             if (!remotelyChanged)
-                await Program.connectionHandler.WriteAsync(new Frame(((BaseNodeGroupBox)Field.Parent.Parent.Parent).Address, message));
+                await Program.connectionHandler.WriteAsync(new Frame(((BaseNodeGroupBox)container).Address, message));
             else
 				remotelyChanged = false;
         }

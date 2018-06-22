@@ -1,4 +1,5 @@
-﻿using Power_LoRa.Interface.Nodes;
+﻿using Power_LoRa.Interface.Controls;
+using Power_LoRa.Interface.Nodes;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -183,15 +184,13 @@ namespace Power_LoRa.Node
         #region Public methods
         public void CheckIfPresent(object sender, EventArgs e)
         {
-            BaseNodeGroupBox parentGroupBox = (BaseNodeGroupBox)((Button)sender).Parent.Parent.Parent;
-            Program.Write(new Connection.Messages.Message(CommandType.IsPresent, parentGroupBox.Address));
+            Program.Write(new Connection.Messages.Message(CommandType.IsPresent, GroupBox.Address));
         }
         public void SetNewAddress(object sender, EventArgs e)
         {
-            BaseNodeGroupBox parentGroupBox = (BaseNodeGroupBox)((Button)sender).Parent.Parent.Parent;
-            parentGroupBox.Address = parentGroupBox.NewAddress;
-            Address = parentGroupBox.Address;
-            Program.Write(new Connection.Messages.Message(CommandType.SetAddress, parentGroupBox.Address));
+            GroupBox.Address = GroupBox.NewAddress;
+            Address = GroupBox.Address;
+            Program.Write(new Connection.Messages.Message(CommandType.SetAddress, GroupBox.Address));
         }
         #endregion
     }

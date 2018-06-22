@@ -6,7 +6,7 @@ namespace Power_LoRa.Interface.Controls
 	public class SpinBoxControl : LabeledControl
     {
         #region Constructors
-        public SpinBoxControl(string name, int minValue, int maxValue, int defaultValue) : base(name)
+        public SpinBoxControl(Control container, string name, int minValue, int maxValue, int defaultValue) : base(container, name)
 		{
             Field = new NumericUpDown
             {

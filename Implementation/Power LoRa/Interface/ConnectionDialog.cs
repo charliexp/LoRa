@@ -75,13 +75,13 @@ namespace Power_LoRa.Interface
             parametersTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
             parametersTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
 
-            serialPortChooser = new ComboBoxControl("COMPort", new List<string>(SerialPort.GetPortNames()), 0);
+            serialPortChooser = new ComboBoxControl(this, "COMPort", new List<string>(SerialPort.GetPortNames()), 0);
             ((ComboBox)serialPortChooser.Field).SelectedItem = SettingHandler.COMPort.Value;
 
-            ipChooser = new TextBoxControl("IP", TextBoxControl.Type.Input);
+            ipChooser = new TextBoxControl(this, "IP", TextBoxControl.Type.Input);
             ipChooser.Field.Text = (string)SettingHandler.IPAddress.Value;
 
-            tcpPortChooser = new TextBoxControl("TCPPort", TextBoxControl.Type.Input);
+            tcpPortChooser = new TextBoxControl(this, "TCPPort", TextBoxControl.Type.Input);
             tcpPortChooser.Field.Text = (string)SettingHandler.TCPPort.Value.ToString();
 
             Controls.Add(layout);

@@ -30,8 +30,8 @@ namespace Power_LoRa.Interface.Controls
         #endregion
 
         #region Constructors
-        public LabeledControl(string name) : base(name)
-		{
+        public LabeledControl(Control container, string name) : base(container, name)
+        {
             Label = new Label
             {
                 Name = name.Replace(" ", "") + "Label",

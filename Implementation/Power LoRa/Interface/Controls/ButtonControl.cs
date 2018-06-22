@@ -5,7 +5,7 @@ namespace Power_LoRa.Interface.Controls
 	public class ButtonControl : BaseControl
     {
         #region Constructors
-        public ButtonControl(string name) : base(name)
+        public ButtonControl(Control container, string name) : base(container, name)
 		{
 			Field = new Button
             {

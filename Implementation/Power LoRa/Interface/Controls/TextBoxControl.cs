@@ -28,7 +28,7 @@ namespace Power_LoRa.Interface.Controls
         #endregion
 
         #region Constructors
-        public TextBoxControl(string name, Type type) : base(name)
+        public TextBoxControl(Control container, string name, Type type) : base(container, name)
 		{
             Field = new TextBox
             {
@@ -49,7 +49,7 @@ namespace Power_LoRa.Interface.Controls
             MeasureUnit = null;
         }
 
-        public TextBoxControl(string name, string measureUnit, Type type) : this(name, type)
+        public TextBoxControl(Control container, string name, string measureUnit, Type type) : this(container, name, type)
         {
             MeasureUnit = measureUnit;
             ((TextBox)Field).TextAlign = HorizontalAlignment.Right;

@@ -17,7 +17,7 @@ namespace Power_LoRa.Interface.Node.ParameterControls
         #endregion
 
         #region Constructors
-        public ParameterComboBox(CommandType parameter, List<string> values, int defaultIndex) : base(parameter.ToString(), values, defaultIndex)
+        public ParameterComboBox(Control container, CommandType parameter, List<string> values, int defaultIndex) : base(container, parameter.ToString(), values, defaultIndex)
 		{
 			this.parameter = parameter;
 			ValueChanged = ParameterChangedCallback;
@@ -31,7 +31,7 @@ namespace Power_LoRa.Interface.Node.ParameterControls
             Connection.Messages.Message message = new Connection.Messages.Message(parameter, value);
 
             if (!remotelyChanged)
-                await Program.connectionHandler.WriteAsync(new Frame(((BaseNodeGroupBox)Field.Parent.Parent.Parent).Address, message));
+                await Program.connectionHandler.WriteAsync(new Frame(((BaseNodeGroupBox)container).Address, message));
             else
 				remotelyChanged = false;
         }

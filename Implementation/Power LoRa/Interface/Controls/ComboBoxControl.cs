@@ -8,7 +8,7 @@ namespace Power_LoRa.Interface.Controls
     {
         //TODO: intermediary class between labeledcontrol and those with value changed delegate
         #region Constructors
-        public ComboBoxControl(string name, List<string> values, int defaultIndex) : base(name)
+        public ComboBoxControl(Control container, string name, List<string> values, int defaultIndex) : base(container, name)
 		{
 			Field = new ComboBox
 			{
