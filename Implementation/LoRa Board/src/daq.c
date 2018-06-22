@@ -356,11 +356,24 @@ static void DAQ_GetPowers(void)
 	}
 	
 	/* Powers */
-	DAQ_Data.activePower = DAQ_Data.activeEnergy * 3600 / timeDifference;
-	if (DAQ_Data.inductive)
-		DAQ_Data.reactivePower = DAQ_Data.inductiveEnergy * 3600 / timeDifference;
+	if (DAQ_Data.activeEnergy != 0)
+		DAQ_Data.activePower = DAQ_Data.activeEnergy * 3600 / timeDifference;
 	else
-		DAQ_Data.reactivePower = DAQ_Data.capacitiveEnergy * 3600 / timeDifference;
+		DAQ_Data.activePower = 0;
+	if (DAQ_Data.inductive)
+	{
+		if (DAQ_Data.inductiveEnergy != 0)
+			DAQ_Data.reactivePower = DAQ_Data.inductiveEnergy * 3600 / timeDifference;
+		else
+			DAQ_Data.reactivePower = 0;
+	}
+	else
+	{
+		if (DAQ_Data.capacitiveEnergy != 0)
+			DAQ_Data.reactivePower = DAQ_Data.capacitiveEnergy * 3600 / timeDifference;
+		else
+			DAQ_Data.reactivePower = 0;
+	}
 	DAQ_Data.apparentPower = sqrt(DAQ_Data.activePower * DAQ_Data.activePower +
 																DAQ_Data.reactivePower * DAQ_Data.reactivePower);
 	DAQ_Data.powerFactor = DAQ_Data.activePower * 100 / DAQ_Data.apparentPower;

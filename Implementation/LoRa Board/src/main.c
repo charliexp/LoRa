@@ -10,7 +10,7 @@
 
 #define DEVICE_ADDRESS_LOCATION		0x08080000
 
-uint16_t appTransmissionRate = APP_INITIAL_SAMPLE_RATE;
+uint16_t appTransmissionRate = APP_INITIAL_TRANSMISSION_RATE;
 
 uint8_t myAddress;
 bool LoRa_setupPending;
