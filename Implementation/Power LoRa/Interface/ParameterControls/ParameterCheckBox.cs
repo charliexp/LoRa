@@ -37,7 +37,7 @@ namespace Power_LoRa.Interface.Node.ParameterControls
         {
             Connection.Messages.Message message;
             if (argument != Byte.MaxValue)
-                message = new Connection.Messages.Message(command, argument, (byte) value);
+                message = new Connection.Messages.Message(command, (byte) (argument << 4 |  value) & 0xFF);
             else
                 message = new Connection.Messages.Message(command, (byte)value);
 
