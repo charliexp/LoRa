@@ -35,7 +35,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
   GPIO_InitStruct.Pin = METER_USARTX_TX_PIN;
   HAL_GPIO_Init(METER_USARTX_TX_GPIO_PORT, &GPIO_InitStruct);
   GPIO_InitStruct.Alternate = PC_USARTX_TX_AF;
-  GPIO_InitStruct.Pin = METER_USARTX_TX_PIN;
+  GPIO_InitStruct.Pin = PC_USARTX_TX_PIN;
   HAL_GPIO_Init(PC_USARTX_TX_GPIO_PORT, &GPIO_InitStruct);
 
   GPIO_InitStruct.Alternate = METER_USARTX_RX_AF;
