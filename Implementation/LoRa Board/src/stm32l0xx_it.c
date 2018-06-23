@@ -105,7 +105,6 @@ void NMI_Handler(void)
 
 void HardFault_Handler(void)
 {
-	PRINTF("Hard Fault exception\r\n");
   while(1)
   {
     __NOP();
@@ -121,7 +120,6 @@ void HardFault_Handler(void)
   */
 void MemManage_Handler(void)
 {
-	PRINTF("Memory Manage exception\r\n");
   /* Go to infinite loop when Memory Manage exception occurs */
   while (1)
   {
@@ -135,7 +133,6 @@ void MemManage_Handler(void)
   */
 void BusFault_Handler(void)
 {
-	PRINTF("Bus Fault exception\r\n");
   /* Go to infinite loop when Bus Fault exception occurs */
   while (1)
   {
@@ -149,7 +146,6 @@ void BusFault_Handler(void)
   */
 void UsageFault_Handler(void)
 {
-	PRINTF("Usage Fault exception\r\n");
   /* Go to infinite loop when Usage Fault exception occurs */
   while (1)
   {
@@ -208,17 +204,6 @@ void SysTick_Handler(void)
 /*void PPP_IRQHandler(void)
 {
 }*/
-
-void USART4_5_IRQHandler( void )
-{
-   HAL_UART_IRQHandler(&DAQ_UartHandle);
-}
-
-void USART2_IRQHandler( void )
-{
-	HAL_UART_IRQHandler ( &DBG_UartHandle );
-	vcom_Print( );
-}
 
 void RTC_IRQHandler( void )
 {

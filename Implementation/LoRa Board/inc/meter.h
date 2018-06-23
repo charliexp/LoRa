@@ -1,12 +1,13 @@
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __PC_H__
-#define __PC_H__
+#ifndef __METER_H__
+#define __METER_H__
 
 #ifdef __cplusplus
  extern "C" {
 #endif
    
 /* Includes ------------------------------------------------------------------*/
+#include <stdint.h>
 #include "message.h"
 
 /* Exported defines ----------------------------------------------------------*/
@@ -14,13 +15,12 @@
 /* Exported constants --------------------------------------------------------*/
 /* External variables --------------------------------------------------------*/
 /* Exported functions --------------------------------------------------------*/
-void PC_Init(void);
-void PC_Deinit(void);
-void PC_MainLoop(void);
-void PC_Send(Frame_t frame);
+void Meter_Init(void);
+void Meter_MainLoop(void);
+void Meter_ProcessRequest(Message_t message);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __PC_H__ */
+#endif /* __METER_H__*/

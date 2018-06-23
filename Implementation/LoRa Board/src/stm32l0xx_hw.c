@@ -60,7 +60,6 @@ Maintainer: Miguel Luis and Gregory Cristian
 #include "hw.h"
 #include "radio.h"
 #include "debug.h"
-#include "vcom.h"
 
 /*!
  *  \brief Unique Devices IDs register set ( STM32L0xxx )
@@ -110,12 +109,6 @@ void HW_Init( void )
 
     HW_RTC_Init( );
 		
-		UART_Init( );
-		
-		I2C_Init( );
-    
-    vcom_Init( );
-
     McuInitialized = true;
   }
 }
@@ -131,12 +124,6 @@ void HW_DeInit( void )
   
   Radio.IoDeInit( );
   
-	UART_DeInit( );
-	
-	I2C_DeInit( );
-	
-  vcom_DeInit( );
-   
   McuInitialized = false;
 }
 
@@ -150,8 +137,6 @@ static void HW_IoInit( void )
   HW_SPI_IoInit( );
   
   Radio.IoInit( );
-  
-  vcom_IoInit( );
 }
 
 /**
@@ -164,8 +149,6 @@ static void HW_IoDeInit( void )
   HW_SPI_IoDeInit( );
   
   Radio.IoDeInit( );
-  
-  vcom_IoDeInit( );
 }
 
 

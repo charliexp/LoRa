@@ -636,11 +636,6 @@
               <FileType>1</FileType>
               <FilePath>Implementation\LoRa Board\src\stm32l0xx_it.c</FilePath>
             </File>
-            <File>
-              <FileName>vcom.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>Implementation\LoRa Board\src\vcom.c</FilePath>
-            </File>
           </Files>
         </Group>
       </Groups>
@@ -1274,11 +1269,6 @@
               <FileName>stm32l0xx_it.c</FileName>
               <FileType>1</FileType>
               <FilePath>Implementation\LoRa Board\src\stm32l0xx_it.c</FilePath>
-            </File>
-            <File>
-              <FileName>vcom.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>Implementation\LoRa Board\src\vcom.c</FilePath>
             </File>
           </Files>
         </Group>
