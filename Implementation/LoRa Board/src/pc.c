@@ -141,5 +141,5 @@ void PC_Write(Frame_t frame)
 	uint8_t arrayLength = 0;
 	
 	Message_FrameToArray(frame, array, &arrayLength);
-	HAL_UART_Transmit(&handle.hw, array, arrayLength, handle.timeout);
+	HAL_UART_Transmit(&handle.hw, array, arrayLength, handle.timeout * 1000);
 }

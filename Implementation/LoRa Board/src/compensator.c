@@ -91,12 +91,17 @@ static void Comp_CheckFeedback(void)
 	feedback = (feedback >> 4) & OUTPUTS_MASK;
 	for (i = 0; i < MAX_COMPENSATORS; i++)
 		/* If a contact input is different from the expected output of the i-th compensator*/
-		if (((feedback ^ handle.i2c_output) & OUTPUTS_MASK) == (1 << i))
+		if (((feedback ^ handle.i2c_output) & (1 << i)) != 0)
 			/* Mark it with error, and send error message */
 		{
 			handle.outputs[i].failedAttempts++;
 			handle.outputs[i].state = COMP_NOK;
 			Comp_SignalError(i);
+		}
+		else
+		{
+			handle.outputs[i].failedAttempts = 0;
+			handle.outputs[i].state = COMP_OK;
 		}
 }
 
@@ -157,7 +162,7 @@ static void Comp_Read(uint8_t reg, uint8_t *data)
 {
 	HAL_StatusTypeDef returnValue;
 	
-	returnValue = HAL_I2C_Mem_Read(&handle.hw, I2C_ADDRESS, reg, I2C_MEMADD_SIZE_8BIT, data, 1, handle.timeout);
+	returnValue = HAL_I2C_Mem_Read(&handle.hw, I2C_ADDRESS, reg, I2C_MEMADD_SIZE_8BIT, data, 1, handle.timeout * 1000);
 	if (returnValue != HAL_OK)
 		Comp_SignalError(ERROR_TIMEOUT);
 }
@@ -197,7 +202,7 @@ static void Comp_Write(uint8_t reg, uint8_t data)
 {
 	HAL_StatusTypeDef returnValue;
 	
-	returnValue = HAL_I2C_Mem_Write(&handle.hw, I2C_ADDRESS, reg, I2C_MEMADD_SIZE_8BIT, &data, 1, handle.timeout);
+	returnValue = HAL_I2C_Mem_Write(&handle.hw, I2C_ADDRESS, reg, I2C_MEMADD_SIZE_8BIT, &data, 1, handle.timeout * 1000);
 	if (returnValue != HAL_OK)
 		Comp_SignalError(ERROR_TIMEOUT);
 }

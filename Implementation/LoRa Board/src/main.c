@@ -14,12 +14,12 @@ int main(void)
 	HW_Init();
 	
 	Comp_Init();
-	LoRa_Init();
+	/*LoRa_Init();
 	Meter_Init();
 	PC_Init();
 	
 	PC_SignalPressence();
-	
+	*/
   while(1)
   {
   }
