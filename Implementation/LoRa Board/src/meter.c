@@ -258,7 +258,7 @@ static void Meter_Read(uint16_t length)
 {
 	HAL_StatusTypeDef returnValue;
 	
-	returnValue = HAL_UART_Receive(&handle.hw, handle.buffer, length, handle.timeout);
+	returnValue = HAL_UART_Receive(&handle.hw, handle.buffer, length, handle.timeout * 1000);
 	if (returnValue != HAL_OK)
 		Meter_SignalError();
 }
@@ -341,7 +341,7 @@ static void Meter_Write(Register_t reg)
 {
 	HAL_StatusTypeDef returnValue;
 	
-	returnValue = HAL_UART_Transmit(&handle.hw, (uint8_t*) reg.name, reg.length, handle.timeout);
+	returnValue = HAL_UART_Transmit(&handle.hw, (uint8_t*) reg.name, reg.length, handle.timeout * 1000);
 	if (returnValue != HAL_OK)
 		Meter_SignalError();
 }
