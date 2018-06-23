@@ -15,9 +15,7 @@
 /* External variables --------------------------------------------------------*/
 /* Exported functions --------------------------------------------------------*/
 void PC_Init(void);
-void PC_Deinit(void);
-void PC_MainLoop(void);
-void PC_Send(Frame_t frame);
+void PC_Write(Frame_t frame);
 
 #ifdef __cplusplus
 }

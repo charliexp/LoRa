@@ -1,121 +1,148 @@
 /* Includes ------------------------------------------------------------------*/
 #include "compensator.h"
-#include "meter.h"
 #include "hw.h"
+#include "lora.h"
 #include "pc.h"
 
-/* Private typedef -----------------------------------------------------------*/
-typedef enum PC_State_t
-{
-	READY,
-	REC_FRAME_HEADER,
-	REC_MESSAGE_HEADER,
-	REC_MESSAGE,
-}PC_State_t;
-
-typedef struct PC_Handle_t
-{
-	//UartHandle_t *uartHandle;
-	PC_State_t state;
-	uint8_t buffer[FRAME_MAX_SIZE];
-	uint8_t bufferLength;
-	Frame_t receivedFrame;
-}PC_Handle_t;
-
 /* Private define ------------------------------------------------------------*/
+#define UART_TIMEOUT						1
+
+/* Private typedef -----------------------------------------------------------*/
+typedef enum State_t
+{
+	PENDING,
+	RECEIVED_FRAME_HEADER,
+	RECEIVED_MESSAGE_HEADER,
+	RECEIVED_FULL_MESSAGE,
+}State_t;
+
+typedef struct PCHandle_t
+{
+/* Uart handle */
+	UART_HandleTypeDef uartHandle;
+/* Uart receive buffer */
+	uint8_t buffer[FRAME_MAX_SIZE];
+/* Frame receive state */
+	State_t state;
+/* Timeout in seconds */
+	uint16_t timeout;
+}PCHandle_t;
+
 /* Private macro -------------------------------------------------------------*/
 /* Private constants ---------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-extern uint32_t myAddress;
-
-//static PC_Handle_t PC_Handle;
+static PCHandle_t PC_Handle;
 
 /* Private function prototypes -----------------------------------------------*/
+static void PC_ProcessRequest(void);
 
 /* Functions Definition ------------------------------------------------------*/
-/*
-void PC_Init(void)
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)	
 {
-  DBG_UartHandle.lowLevelHandle.Instance        = PC_USARTX;
-  
-  DBG_UartHandle.lowLevelHandle.Init.BaudRate   = 115200;
-  DBG_UartHandle.lowLevelHandle.Init.WordLength = UART_WORDLENGTH_8B;
-  DBG_UartHandle.lowLevelHandle.Init.StopBits   = UART_STOPBITS_1;
-  DBG_UartHandle.lowLevelHandle.Init.Parity     = UART_PARITY_NONE;
-  DBG_UartHandle.lowLevelHandle.Init.HwFlowCtl  = UART_HWCONTROL_NONE;
-  DBG_UartHandle.lowLevelHandle.Init.Mode       = UART_MODE_TX_RX;
-  
-  if(HAL_UART_Init(&DBG_UartHandle.lowLevelHandle) != HAL_OK)
-  {*/
-    /* Initialization Error */
-  /*  Error_Handler(); 
-  }
-	
-	PC_Handle.uartHandle = &DBG_UartHandle;
-	PC_Handle.state = READY;
-}
-
-void PC_MainLoop(void)
-{
-	UartRxState_t returnValue;
-	uint8_t argLength;
-	
-	switch(PC_Handle.state)
+	switch (PC_Handle.state)
 	{
-		case READY:
-			returnValue = UART_ReceiveFixedLength(&DBG_UartHandle, PC_Handle.buffer, FRAME_HEADER_SIZE);
-			if (returnValue == UART_RX_AVAILABLE)
-			{
-				PC_Handle.bufferLength += FRAME_HEADER_SIZE;
-				PC_Handle.state = REC_FRAME_HEADER;
-			}
-			else if (returnValue == UART_RX_TIMEOUT)
-				PC_Handle.state = READY;
+		case PENDING:
+			HAL_UART_Receive_IT(&PC_Handle.uartHandle,
+				PC_Handle.buffer,
+				FRAME_HEADER_SIZE);
 			break;
-		case REC_FRAME_HEADER:
-			returnValue = UART_ReceiveFixedLength(&DBG_UartHandle, PC_Handle.buffer + PC_Handle.bufferLength, MESSAGE_HEADER_SIZE);
-			if (returnValue == UART_RX_AVAILABLE)
-			{
-				PC_Handle.bufferLength += MESSAGE_HEADER_SIZE;
-				PC_Handle.state = REC_MESSAGE_HEADER;
-			}
-			else if (returnValue == UART_RX_TIMEOUT)
-				PC_Handle.state = READY;
+		case RECEIVED_FRAME_HEADER:
+			HAL_UART_Receive_IT(&PC_Handle.uartHandle,
+				PC_Handle.buffer + FRAME_HEADER_SIZE,
+				MESSAGE_HEADER_SIZE);
 			break;
-		case REC_MESSAGE_HEADER:
-			argLength = Message_argLengthFromArray(PC_Handle.buffer + FRAME_HEADER_SIZE);
-			if (argLength != 0)
-				returnValue = UART_ReceiveFixedLength(&DBG_UartHandle,
-										PC_Handle.buffer + PC_Handle.bufferLength,
-										argLength);
-			else
-				returnValue = UART_RX_AVAILABLE;
-			if (returnValue == UART_RX_AVAILABLE)
-			{
-				PC_Handle.bufferLength += argLength;
-				if (PC_Handle.bufferLength == Message_frameLengthFromArray(PC_Handle.buffer))
-				{
-					Message_arrayToFrame(PC_Handle.buffer, PC_Handle.bufferLength, &PC_Handle.receivedFrame);
-					//PC_ProcessFrame(PC_Handle.receivedFrame);
-					PC_Handle.state = READY;
-				}
-				else
-					PC_Handle.state = REC_FRAME_HEADER;
-			}
-			else if (returnValue == UART_RX_TIMEOUT)
-				PC_Handle.state = READY;
+		case RECEIVED_MESSAGE_HEADER:
+			HAL_UART_Receive_IT(&PC_Handle.uartHandle,
+				PC_Handle.buffer + FRAME_HEADER_SIZE + MESSAGE_HEADER_SIZE,
+				Message_ArgLengthFromArray(PC_Handle.buffer + FRAME_HEADER_SIZE));
 			break;
-		default:
-			PC_Handle.state = READY;
+		case RECEIVED_FULL_MESSAGE:
+			PC_ProcessRequest();
 			break;
 	}
+}	
+	
+void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)	
+{
+	PC_Handle.state = PENDING;
+	HAL_UART_Receive_IT(&PC_Handle.uartHandle, PC_Handle.buffer, FRAME_HEADER_SIZE);
 }
 
-void PC_Send(Frame_t frame)
+void PC_Init(void)
+{
+  PC_Handle.uartHandle.Instance = PC_USARTX;
+  PC_Handle.uartHandle.Init.BaudRate = 115200;
+  PC_Handle.uartHandle.Init.WordLength = UART_WORDLENGTH_8B;
+  PC_Handle.uartHandle.Init.StopBits = UART_STOPBITS_1;
+  PC_Handle.uartHandle.Init.Parity = UART_PARITY_NONE;
+  PC_Handle.uartHandle.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  PC_Handle.uartHandle.Init.Mode = UART_MODE_TX_RX;
+	PC_Handle.state = PENDING;
+	PC_Handle.timeout = UART_TIMEOUT;
+  if(HAL_UART_Init(&PC_Handle.uartHandle) != HAL_OK)
+  {
+    /* Initialization Error */
+    Error_Handler(); 
+  }
+	
+	HAL_NVIC_SetPriority(PC_USARTX_IRQn, 0x1, 0);	
+	HAL_NVIC_EnableIRQ(PC_USARTX_IRQn);
+	HAL_UART_Receive_IT(&PC_Handle.uartHandle, PC_Handle.buffer, FRAME_HEADER_SIZE);
+}
+
+static void PC_ProcessRequest(void)
+{
+	Frame_t frame;
+	Frame_t reply;
+	Message_ArrayToFrame(PC_Handle.buffer, &frame);
+	
+	reply.endDevice = LoRa_GetAddress();
+	reply.nrOfMessages = 1;
+	reply.messages[0].command = frame.messages[0].command;
+	
+	if (frame.endDevice == LoRa_GetAddress())
+	{
+		switch (frame.messages[0].command)
+		{
+			case COMMAND_IS_PRESENT:
+				reply.messages[0].argLength = 2;
+				reply.messages[0].rawArgument[0] = (LoRa_GetTransmissionRate() >> 8) & 0xFF;
+				reply.messages[0].rawArgument[1] = (LoRa_GetTransmissionRate() >> 0) & 0xFF;
+				PC_Write(reply);
+				break;
+			case COMMAND_SET_ADDRESS:
+				reply.endDevice = LoRa_GetAddress();
+			case COMMAND_TRANSMISSION_RATE:
+				LoRa_ProcessRequest(frame.messages[0]);
+				reply.messages[0].argLength = 1;
+				reply.messages[0].rawArgument[0] = ACK;
+				PC_Write(reply);
+				break;
+			case COMMAND_SET_COMPENSATOR:
+				Comp_ProcessRequest(frame.messages[0]);
+				reply.messages[0].argLength = 1;
+				reply.messages[0].rawArgument[0] = ACK;
+				break;
+			default:
+				reply.messages[0].argLength = 1;
+				reply.messages[0].rawArgument[0] = NAK;
+				PC_Write(reply);
+				break;
+		}
+	}
+#ifdef GATEWAY
+	else
+	{
+		LoRa_QueueMessage(frame.endDevice, Message_FromArray(PC_Handle.buffer + FRAME_HEADER_SIZE);
+	}
+#endif
+}
+
+void PC_Write(Frame_t frame)
 {
 	uint8_t array[FRAME_MAX_SIZE];
 	uint8_t arrayLength = 0;
 	
-	Message_frameToArray(frame, array, &arrayLength);
-	UART_Send(&DBG_UartHandle, array, arrayLength);
-}*/
+	Message_FrameToArray(frame, array, &arrayLength);
+	HAL_UART_Transmit(&PC_Handle.uartHandle, array, arrayLength, PC_Handle.timeout);
+}
