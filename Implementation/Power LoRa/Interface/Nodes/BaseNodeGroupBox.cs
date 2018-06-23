@@ -19,10 +19,10 @@ namespace Power_LoRa.Interface.Nodes
 
         #region Private variables
         private TableLayoutPanel mainLayout;
-        private TableLayoutPanel powerLayout;
-        private TableLayoutPanel setupLayout;
+        private TableLayoutPanel chartsLayout;
+        private TableLayoutPanel regulatorLayout;
 
-        private TableLayoutPanel powerReadingLayout;
+        private TableLayoutPanel readings;
         private ButtonControl addPowerOutput;
 
         private TextBoxControl addressControl;
@@ -178,8 +178,8 @@ namespace Power_LoRa.Interface.Nodes
             {
                 Value = "00:00:00"
             };
-            ActiveEnergy = new ChartableControl(this, EnergyChart, activeEnergy, "ActiveEnergy", "kWh");
-            ReactiveEnergy = new ChartableControl(this, EnergyChart, reactiveEnergy, "ReactiveEnergy", "kVArh");
+            //ActiveEnergy = new ChartableControl(this, EnergyChart, activeEnergy, "ActiveEnergy", "kWh");
+            //ReactiveEnergy = new ChartableControl(this, EnergyChart, reactiveEnergy, "ReactiveEnergy", "kVArh");
             ActivePower = new ChartableControl(this, PowerChart, activePower, "ActivePower", "kW");
             ReactivePower = new ChartableControl(this, PowerChart, reactivePower, "ReactivePower", "kVAr");
             ApparentPower = new ChartableControl(this, PowerChart, apparentPower, "ApparentPower", "kVA");
@@ -197,77 +197,81 @@ namespace Power_LoRa.Interface.Nodes
             mainLayout = new TableLayoutPanel
             {
                 AutoSize = true,
-                ColumnCount = 5,
+                AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                ColumnCount = 3,
                 Name = name + "MainLayout",
                 Location = new Point(InterfaceConstants.ItemPadding, InterfaceConstants.GroupBoxFirstItemY),
             };
-            powerLayout = new TableLayoutPanel
+            chartsLayout = new TableLayoutPanel
             {
                 AutoSize = true,
-                RowCount = 2,
+                AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                ColumnCount = 2,
                 Name = name + "PowerLayout",
             };
-            powerLayout.RowStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-            powerLayout.RowStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-            setupLayout = new TableLayoutPanel
+            chartsLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+            chartsLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+            regulatorLayout = new TableLayoutPanel
             {
                 AutoSize = true,
+                AutoSizeMode = AutoSizeMode.GrowAndShrink,
                 ColumnCount = 2,
                 Name = name + "SetupLayout",
             };
-            setupLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-            setupLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-            powerReadingLayout = new TableLayoutPanel
+            regulatorLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+            regulatorLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+            readings = new TableLayoutPanel
             {
                 AutoSize = true,
+                AutoSizeMode = AutoSizeMode.GrowAndShrink,
                 ColumnCount = 2,
                 Name = name + "PowerReadingLayout",
             };
-            powerReadingLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-            powerReadingLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+            readings.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+            readings.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
 
             Controls.Add(mainLayout);
-            mainLayout.Controls.Add(setupLayout);
-            mainLayout.Controls.Add(verticalSeparators[0]);
-            mainLayout.Controls.Add(powerReadingLayout);
-            mainLayout.Controls.Add(verticalSeparators[1]);
-            mainLayout.Controls.Add(powerLayout);
-            mainLayout.SetRowSpan(verticalSeparators[0], 3);
+            //mainLayout.Controls.Add(verticalSeparators[0]);
+            mainLayout.Controls.Add(readings);
+            mainLayout.Controls.Add(regulatorLayout);
+            //mainLayout.Controls.Add(verticalSeparators[1]);
+            mainLayout.Controls.Add(chartsLayout);
+            /*mainLayout.SetRowSpan(verticalSeparators[0], 3);
             mainLayout.SetRowSpan(verticalSeparators[1], 3);
             mainLayout.SetColumn(verticalSeparators[0], 1);
             mainLayout.SetColumn(verticalSeparators[0], 3);
-            mainLayout.SetColumn(setupLayout, 0);
+            mainLayout.SetColumn(regulatorLayout, 0);
             mainLayout.SetColumn(powerReadingLayout, 2);
             mainLayout.SetColumn(powerLayout, 4);
+            */
+            chartsLayout.Controls.Add(EnergyChart);
+            chartsLayout.Controls.Add(PowerChart);
 
-            powerLayout.Controls.Add(EnergyChart);
-            powerLayout.Controls.Add(PowerChart);
-
-            powerReadingLayout.Controls.Add(LastReadingTime.Label);
-            powerReadingLayout.Controls.Add(LastReadingTime.Field);
-            powerReadingLayout.Controls.Add(ActiveEnergy.Text.Label);
-            powerReadingLayout.Controls.Add(ActiveEnergy.Text.Field);
-            powerReadingLayout.Controls.Add(ReactiveEnergy.Text.Label);
-            powerReadingLayout.Controls.Add(ReactiveEnergy.Text.Field);
-            powerReadingLayout.Controls.Add(ActivePower.Text.Label);
-            powerReadingLayout.Controls.Add(ActivePower.Text.Field);
-            powerReadingLayout.Controls.Add(ReactivePower.Text.Label);
-            powerReadingLayout.Controls.Add(ReactivePower.Text.Field);
-            powerReadingLayout.Controls.Add(ApparentPower.Text.Label);
-            powerReadingLayout.Controls.Add(ApparentPower.Text.Field);
-            powerReadingLayout.Controls.Add(PowerFactor.Label);
-            powerReadingLayout.Controls.Add(PowerFactor.Field);
-            setupLayout.Controls.Add(addressControl.Label);
-            setupLayout.Controls.Add(addressControl.Field);
-            setupLayout.Controls.Add(checkIfPresent.Field);
-            setupLayout.Controls.Add(setAddress.Field);
-            setupLayout.Controls.Add(TransmissionRate.Label);
-            setupLayout.Controls.Add(TransmissionRate.Field);
-            foreach (ParameterCheckBox output in Outputs)
+            readings.Controls.Add(LastReadingTime.Label);
+            readings.Controls.Add(LastReadingTime.Field);
+            //powerReadingLayout.Controls.Add(ActiveEnergy.Text.Label);
+            //powerReadingLayout.Controls.Add(ActiveEnergy.Text.Field);
+            //powerReadingLayout.Controls.Add(ReactiveEnergy.Text.Label);
+            //powerReadingLayout.Controls.Add(ReactiveEnergy.Text.Field);
+            readings.Controls.Add(ActivePower.Text.Label);
+            readings.Controls.Add(ActivePower.Text.Field);
+            readings.Controls.Add(ReactivePower.Text.Label);
+            readings.Controls.Add(ReactivePower.Text.Field);
+            //powerReadingLayout.Controls.Add(ApparentPower.Text.Label);
+            //powerReadingLayout.Controls.Add(ApparentPower.Text.Field);
+            regulatorLayout.Controls.Add(PowerFactor.Label);
+            regulatorLayout.Controls.Add(PowerFactor.Field);
+            /*regulatorLayout.Controls.Add(addressControl.Label);
+            regulatorLayout.Controls.Add(addressControl.Field);
+            regulatorLayout.Controls.Add(checkIfPresent.Field);
+            regulatorLayout.Controls.Add(setAddress.Field);
+            regulatorLayout.Controls.Add(TransmissionRate.Label);
+            regulatorLayout.Controls.Add(TransmissionRate.Field);*/
+            /*foreach (ParameterCheckBox output in Outputs)
             {
-                setupLayout.Controls.Add(output.Label);
-                setupLayout.Controls.Add(output.Field);
-            }
+                regulatorLayout.Controls.Add(output.Label);
+                regulatorLayout.Controls.Add(output.Field);
+            }*/
 
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
@@ -304,6 +308,7 @@ namespace Power_LoRa.Interface.Nodes
         }
         private void ShowAsBigChart(object sender, EventArgs e)
         {
+            //Replace power fields with energies
             Program.SetBigChartData((ChartControl) sender);
         }
         #endregion
@@ -334,13 +339,13 @@ namespace Power_LoRa.Interface.Nodes
                 foreach(Compensator compensator in value)
                     Outputs.Add(new ParameterCheckBox(this, CommandType.SetCompensator, compensator.Value + " " + Compensator.MeasureUnit, compensator.Position, false));
 
-                setupLayout.Controls.Remove(addPowerOutput.Field);
+                regulatorLayout.Controls.Remove(addPowerOutput.Field);
                 foreach (ParameterCheckBox output in Outputs)
                 {
-                    setupLayout.Controls.Add(output.Label);
-                    setupLayout.Controls.Add(output.Field);
+                    regulatorLayout.Controls.Add(output.Label);
+                    regulatorLayout.Controls.Add(output.Field);
                 }
-                setupLayout.Controls.Add(addPowerOutput.Field);
+                //regulatorLayout.Controls.Add(addPowerOutput.Field);
             }
         }
         public void UpdateInterface(BaseControl target, double value)

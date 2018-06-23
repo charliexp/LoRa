@@ -54,7 +54,9 @@ namespace Power_LoRa.Interface
             FlowLayout = new FlowLayoutPanel
             {
                 AutoSize = true,
+                AutoSizeMode = AutoSizeMode.GrowAndShrink,
                 FlowDirection = FlowDirection.TopDown,
+                Margin = new Padding(0),
                 Name = "FlowLayout",
             };
 
@@ -64,7 +66,7 @@ namespace Power_LoRa.Interface
                 ColumnCount = 2,
                 Dock = DockStyle.Fill,
                 RowCount = 2,
-                Location = new Point(0, 0),
+                Padding = new Padding(3),
                 Name = "TableLayout",
             };
 

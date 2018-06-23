@@ -10,7 +10,7 @@ namespace Power_LoRa.Log
 	public class LogGroupBox : GroupBox
     {
         #region Private variables
-        public FlowLayoutPanel layout;
+        public TableLayoutPanel layout;
         #endregion
 
         #region Properties
@@ -23,38 +23,41 @@ namespace Power_LoRa.Log
         #region Constructors
         public LogGroupBox() : base()
         {
+            Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
             Name = "logGroupBox";
             Text = "Log";
 
-            layout = new FlowLayoutPanel
+            layout = new TableLayoutPanel
             {
                 AutoSize = true,
+                Dock = DockStyle.Fill,
                 Name = "layout",
-                FlowDirection = FlowDirection.LeftToRight,
-                Location = new Point(InterfaceConstants.ItemPadding, InterfaceConstants.GroupBoxFirstItemY),
+                ColumnCount = 3,
             };
             FolderLabel = new Label
             {
                 AutoSize = true,
                 Name = "logFolderLabel",
                 Text = "Log Folder",
-                Anchor = AnchorStyles.Left,
             };
             FolderTextBox = new TextBox
             {
                 AutoSize = true,
+                Dock = DockStyle.Fill,
                 Name = "logFolderTextBox",
             };
             ChangeFolderButton = new Button
             {
+                AutoSize = true,
                 Name = "changeLogFolderButton",
                 Text = "Change",
-                Anchor = AnchorStyles.Right,
             };
             List = new LogListView
             {
+                AutoSize = true,
+                Dock = DockStyle.Fill,
                 Name = "logListView",
             };
             List.Size = new Size(   List.Columns[0].Width +
@@ -69,11 +72,14 @@ namespace Power_LoRa.Log
                                     InterfaceConstants.ItemPadding);
 
             Controls.Add(layout);
+            layout.Controls.Add(List);
             layout.Controls.Add(FolderLabel);
             layout.Controls.Add(FolderTextBox);
             layout.Controls.Add(ChangeFolderButton);
-            layout.SetFlowBreak(ChangeFolderButton, true);
-            layout.Controls.Add(List);
+            layout.SetColumnSpan(List, 3);
+            layout.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+            layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+            layout.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
 
             ChangeFolderButton.Click += new EventHandler(ChangeLogFolderButton_Click);
         }
