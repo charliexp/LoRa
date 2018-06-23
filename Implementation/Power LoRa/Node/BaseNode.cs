@@ -71,8 +71,8 @@ namespace Power_LoRa.Node
             {
                 transmissionRate = value;
                 GroupBox.UpdateInterface(GroupBox.TransmissionRate, transmissionRate);
-                GroupBox.EnergyChart.MaxPoints = 3600 / value * 24;
-                GroupBox.PowerChart.MaxPoints = 3600 / value * 24;
+                /*GroupBox.EnergyChart.MaxPoints = 3600 / value * 24;
+                GroupBox.PowerChart.MaxPoints = 3600 / value * 24;*/
             }
         }
         public DateTime Timestamp
@@ -184,7 +184,10 @@ namespace Power_LoRa.Node
         #region Public methods
         public void CheckIfPresent(object sender, EventArgs e)
         {
-            Program.Write(new Connection.Messages.Message(CommandType.IsPresent, GroupBox.Address));
+            if (GroupBox.Address != 0)
+                Program.Write(new Connection.Messages.Message(CommandType.IsPresent, GroupBox.Address));
+            else
+                Program.Write(new Connection.Messages.Message(CommandType.IsPresent));
         }
         public void SetNewAddress(object sender, EventArgs e)
         {

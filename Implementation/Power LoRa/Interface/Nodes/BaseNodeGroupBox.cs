@@ -350,6 +350,7 @@ namespace Power_LoRa.Interface.Nodes
         public void UpdateInterface(ChartableControl target, DataPoint value)
         {
             target.LastValue = value;
+            Program.mainWindow.BigChart.ResetAutoValues();
         }
         public void UpdateInterface(BaseControl target, int value)
         {

@@ -7,7 +7,8 @@ namespace Power_LoRa.Interface.Controls
     {
         #region Private variables
         private Series series;
-        private ChartControl chart;
+        //TODO: make private
+        public ChartControl chart;
         #endregion
 
         #region Properties
@@ -18,8 +19,8 @@ namespace Power_LoRa.Interface.Controls
                 Text.Value = value.YValues[0].ToString();
                 if (series.Points.Count == chart.MaxPoints)
                     series.Points.RemoveAt(0);
-                chart.Refresh();
                 series.Points.Add(value);
+                chart.ResetAutoValues();
             }
         }
         public TextBoxControl Text

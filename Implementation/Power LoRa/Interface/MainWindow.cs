@@ -20,12 +20,18 @@ namespace Power_LoRa.Interface
         public TableLayoutPanel TableLayout { get; private set; }
         public ChartControl BigChart
         {
+            //TODO: remove get
+            get
+            {
+                return bigChart;
+            }
             set
             {
-                bigChart.MaxPoints = value.MaxPoints;
+                bigChart.MaxPoints = 100;
                 bigChart.Legends.Clear();
                 bigChart.Titles.Clear();
                 bigChart.Series.Clear();
+
                 foreach (Legend legend in value.Legends)
                     bigChart.Legends.Add(legend);
                 foreach (Title title in value.Titles)

@@ -14,7 +14,11 @@ namespace Power_LoRa.Interface.Controls
         #endregion
 
         #region Properties
-        public int MaxPoints { get; set; }
+        public int MaxPoints
+        {
+            get;
+            set;
+        }
         #endregion
 
         #region Constructors
