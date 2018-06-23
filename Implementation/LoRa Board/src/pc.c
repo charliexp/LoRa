@@ -7,13 +7,14 @@
 /* Private define ------------------------------------------------------------*/
 #define UART_TIMEOUT						1
 
+#define ADDRESS_PC							0xFF
+
 /* Private typedef -----------------------------------------------------------*/
 typedef enum State_t
 {
-	PENDING,
-	RECEIVED_FRAME_HEADER,
-	RECEIVED_MESSAGE_HEADER,
-	RECEIVED_FULL_MESSAGE,
+	PENDING_FRAME_HEADER,
+	PENDING_MESSAGE_HEADER,
+	PENDING_FULL_MESSAGE,
 }State_t;
 
 typedef struct PCHandle_t
@@ -39,32 +40,39 @@ static void PC_ProcessRequest(void);
 /* Functions Definition ------------------------------------------------------*/
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)	
 {
+	uint8_t argLength;
+	
 	switch (handle.state)
 	{
-		case PENDING:
-			HAL_UART_Receive_IT(&handle.hw,
-				handle.buffer,
-				FRAME_HEADER_SIZE);
+		case PENDING_FRAME_HEADER:
+			handle.state = PENDING_MESSAGE_HEADER;
+			HAL_UART_Receive_IT(&handle.hw, handle.buffer + FRAME_HEADER_SIZE, MESSAGE_HEADER_SIZE);
 			break;
-		case RECEIVED_FRAME_HEADER:
-			HAL_UART_Receive_IT(&handle.hw,
-				handle.buffer + FRAME_HEADER_SIZE,
-				MESSAGE_HEADER_SIZE);
+		case PENDING_MESSAGE_HEADER:
+			argLength = Message_ArgLengthFromArray(handle.buffer + FRAME_HEADER_SIZE);
+			if (argLength != 0)
+			{
+				handle.state = PENDING_FULL_MESSAGE;
+				HAL_UART_Receive_IT(&handle.hw, handle.buffer + FRAME_HEADER_SIZE + MESSAGE_HEADER_SIZE, argLength);
+			}
+			else
+			{
+				handle.state = PENDING_FRAME_HEADER;
+				PC_ProcessRequest();
+				HAL_UART_Receive_IT(&handle.hw, handle.buffer, FRAME_HEADER_SIZE);
+			}
 			break;
-		case RECEIVED_MESSAGE_HEADER:
-			HAL_UART_Receive_IT(&handle.hw,
-				handle.buffer + FRAME_HEADER_SIZE + MESSAGE_HEADER_SIZE,
-				Message_ArgLengthFromArray(handle.buffer + FRAME_HEADER_SIZE));
-			break;
-		case RECEIVED_FULL_MESSAGE:
+		case PENDING_FULL_MESSAGE:
+			handle.state = PENDING_FRAME_HEADER;
 			PC_ProcessRequest();
+			HAL_UART_Receive_IT(&handle.hw, handle.buffer, FRAME_HEADER_SIZE);
 			break;
 	}
 }	
 	
 void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)	
 {
-	handle.state = PENDING;
+	handle.state = PENDING_FRAME_HEADER;
 	HAL_UART_Receive_IT(&handle.hw, handle.buffer, FRAME_HEADER_SIZE);
 }
 
@@ -77,7 +85,7 @@ void PC_Init(void)
   handle.hw.Init.Parity = UART_PARITY_NONE;
   handle.hw.Init.HwFlowCtl = UART_HWCONTROL_NONE;
   handle.hw.Init.Mode = UART_MODE_TX_RX;
-	handle.state = PENDING;
+	handle.state = PENDING_FRAME_HEADER;
 	handle.timeout = UART_TIMEOUT;
   if(HAL_UART_Init(&handle.hw) != HAL_OK)
   {
@@ -100,7 +108,7 @@ static void PC_ProcessRequest(void)
 	reply.nrOfMessages = 1;
 	reply.messages[0].command = frame.messages[0].command;
 	
-	if (frame.endDevice == LoRa_GetAddress())
+	if (frame.endDevice == ADDRESS_PC)
 	{
 		switch (frame.messages[0].command)
 		{
@@ -133,6 +141,11 @@ static void PC_ProcessRequest(void)
 		LoRa_QueueMessage(frame.endDevice, Message_FromArray(handle.buffer + FRAME_HEADER_SIZE);
 	}
 #endif
+}
+
+void USART2_IRQHandler(void)		
+{		
+	HAL_UART_IRQHandler(&handle.hw);
 }
 
 void PC_Write(Frame_t frame)
