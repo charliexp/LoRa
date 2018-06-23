@@ -146,7 +146,7 @@ void Comp_ProcessRequest(Message_t message)
 	{
 		case COMMAND_CHANGE_COMPENSATOR:
 			Comp_Change((message.rawArgument[2] >> 4) & 0x0F,
-				(message.rawArgument[0] << 8) || message.rawArgument[1],
+				(message.rawArgument[0] << 8) | message.rawArgument[1],
 				(CompensatorType_t)((message.rawArgument[2] >> 0) & 0x0F));
 			break;
 		case COMMAND_SET_COMPENSATOR:
