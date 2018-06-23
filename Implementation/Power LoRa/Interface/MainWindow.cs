@@ -62,6 +62,7 @@ namespace Power_LoRa.Interface
             {
                 AutoSize = true,
                 ColumnCount = 2,
+                Dock = DockStyle.Fill,
                 RowCount = 2,
                 Location = new Point(0, 0),
                 Name = "TableLayout",
@@ -70,7 +71,7 @@ namespace Power_LoRa.Interface
             Controls.Add(TableLayout);
             TableLayout.Controls.Add(FlowLayout);
             TableLayout.Controls.Add(bigChart);
-
+            TableLayout.SetRowSpan(bigChart, 2);
 
             InitializeComponent();
 
