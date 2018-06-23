@@ -3,7 +3,12 @@
 *.uvoptx
 *.dep
 *.axf
-*.htm
+*.scvd
+.vs
+DebugConfig
+
+# Documentation files
+*htm*
 
 # Backup files
 *.bak
