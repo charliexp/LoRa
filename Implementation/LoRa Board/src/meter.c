@@ -141,6 +141,8 @@ void Meter_Init(void)
 	handle.hw.Init.Parity = UART_PARITY_EVEN;
 	handle.hw.Init.HwFlowCtl = UART_HWCONTROL_NONE;
 	handle.hw.Init.Mode = UART_MODE_TX_RX;
+	handle.failedAttempts = 0;
+	handle.state = METER_OK;
 	handle.timeout = UART_TIMEOUT;
 	if(HAL_UART_Init(&handle.hw) != HAL_OK)
 	{
@@ -349,7 +351,10 @@ static void Meter_SignalError(void)
 	
 	handle.failedAttempts++;
 	if (handle.failedAttempts == MAX_ATTEMPTS)
+	{
 		handle.state = METER_NOK;
+		Meter_Init();
+	}
 	
 	message.command = COMMAND_ERROR;
 	message.argLength = 1;
