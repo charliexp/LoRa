@@ -23,7 +23,6 @@ namespace Power_LoRa.Interface.Nodes
         private TableLayoutPanel setupLayout;
 
         private TableLayoutPanel powerReadingLayout;
-        private ParameterCheckBox hasMeter;
         private ButtonControl addPowerOutput;
 
         private TextBoxControl addressControl;
@@ -189,7 +188,6 @@ namespace Power_LoRa.Interface.Nodes
                 Value = "1"
             };
             TransmissionRate = new ParameterSpinBox(this, CommandType.TransmissionRate, BaseNode.MinTransmissionRate, BaseNode.MaxTransmissionRate, 5);
-            hasMeter = new ParameterCheckBox(this, CommandType.HasMeter, true);
             Outputs = new List<ParameterCheckBox>();
             addPowerOutput = new ButtonControl(this, "Add output");
             checkIfPresent = new ButtonControl(this, "Check if present");
@@ -265,8 +263,6 @@ namespace Power_LoRa.Interface.Nodes
             setupLayout.Controls.Add(setAddress.Field);
             setupLayout.Controls.Add(TransmissionRate.Label);
             setupLayout.Controls.Add(TransmissionRate.Field);
-            setupLayout.Controls.Add(hasMeter.Label);
-            setupLayout.Controls.Add(hasMeter.Field);
             foreach (ParameterCheckBox output in Outputs)
             {
                 setupLayout.Controls.Add(output.Label);
