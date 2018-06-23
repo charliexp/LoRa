@@ -803,19 +803,19 @@
           <GroupName>src</GroupName>
           <Files>
             <File>
-              <FileName>actuator.c</FileName>
+              <FileName>compensator.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\src\actuator.c</FilePath>
-            </File>
-            <File>
-              <FileName>daq.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\daq.c</FilePath>
+              <FilePath>.\src\compensator.c</FilePath>
             </File>
             <File>
               <FileName>debug.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\src\debug.c</FilePath>
+            </File>
+            <File>
+              <FileName>eeprom.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\eeprom.c</FilePath>
             </File>
             <File>
               <FileName>hw_gpio.c</FileName>
@@ -856,6 +856,11 @@
               <FileName>message.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\src\message.c</FilePath>
+            </File>
+            <File>
+              <FileName>meter.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\meter.c</FilePath>
             </File>
             <File>
               <FileName>pc.c</FileName>
@@ -1684,19 +1689,19 @@
           <GroupName>src</GroupName>
           <Files>
             <File>
-              <FileName>actuator.c</FileName>
+              <FileName>compensator.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\src\actuator.c</FilePath>
-            </File>
-            <File>
-              <FileName>daq.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\daq.c</FilePath>
+              <FilePath>.\src\compensator.c</FilePath>
             </File>
             <File>
               <FileName>debug.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\src\debug.c</FilePath>
+            </File>
+            <File>
+              <FileName>eeprom.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\eeprom.c</FilePath>
             </File>
             <File>
               <FileName>hw_gpio.c</FileName>
@@ -1737,6 +1742,11 @@
               <FileName>message.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\src\message.c</FilePath>
+            </File>
+            <File>
+              <FileName>meter.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\meter.c</FilePath>
             </File>
             <File>
               <FileName>pc.c</FileName>
@@ -2564,19 +2574,19 @@
           <GroupName>src</GroupName>
           <Files>
             <File>
-              <FileName>actuator.c</FileName>
+              <FileName>compensator.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\src\actuator.c</FilePath>
-            </File>
-            <File>
-              <FileName>daq.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\daq.c</FilePath>
+              <FilePath>.\src\compensator.c</FilePath>
             </File>
             <File>
               <FileName>debug.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\src\debug.c</FilePath>
+            </File>
+            <File>
+              <FileName>eeprom.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\eeprom.c</FilePath>
             </File>
             <File>
               <FileName>hw_gpio.c</FileName>
@@ -2617,6 +2627,11 @@
               <FileName>message.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\src\message.c</FilePath>
+            </File>
+            <File>
+              <FileName>meter.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\meter.c</FilePath>
             </File>
             <File>
               <FileName>pc.c</FileName>
@@ -3444,19 +3459,19 @@
           <GroupName>src</GroupName>
           <Files>
             <File>
-              <FileName>actuator.c</FileName>
+              <FileName>compensator.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\src\actuator.c</FilePath>
-            </File>
-            <File>
-              <FileName>daq.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\daq.c</FilePath>
+              <FilePath>.\src\compensator.c</FilePath>
             </File>
             <File>
               <FileName>debug.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\src\debug.c</FilePath>
+            </File>
+            <File>
+              <FileName>eeprom.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\eeprom.c</FilePath>
             </File>
             <File>
               <FileName>hw_gpio.c</FileName>
@@ -3497,6 +3512,11 @@
               <FileName>message.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\src\message.c</FilePath>
+            </File>
+            <File>
+              <FileName>meter.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\meter.c</FilePath>
             </File>
             <File>
               <FileName>pc.c</FileName>
