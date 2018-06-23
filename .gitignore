@@ -6,6 +6,7 @@
 *.scvd
 .vs
 DebugConfig
+*.csproj.user
 
 # Documentation files
 *htm*
@@ -21,6 +22,8 @@ DebugConfig
 *.crf
 *.d
 *.__i
+*._ia
+Obj
 
 # Linker output
 *.ilk
@@ -54,6 +57,7 @@ DebugConfig
 *.i*86
 *.x86_64
 *.hex
+Bin
 
 # Debug files
 *.dSYM/

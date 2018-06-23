@@ -1,4 +1,0 @@
-13:24:02.815, Log started,
-13:24:02.866, 2, IsPresent, System.Byte[], ,
-13:24:07.170, 2, Timestamp, System.Byte[], ActiveEnergy, System.Byte[], ReactiveEnergy, System.Byte[], ReactivePower, System.Byte[], ,
-13:24:08.696, Log finished,
