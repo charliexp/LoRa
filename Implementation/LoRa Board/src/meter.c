@@ -10,7 +10,7 @@
 #define MAX_SAMPLES							6
 
 #define REG_MAX_LENGTH					8
-#define RESP_ID_LENGTH					22
+#define RESP_ID_LENGTH					23
 #define RESP_DATA_LENGTH				1071
 
 /* Private typedef -----------------------------------------------------------*/
@@ -38,6 +38,11 @@ typedef struct Time_t
 typedef struct Sample_t
 {
 	Time_t time;
+/* Total values reported by meter */
+	uint32_t activeEnergyTotal;
+	uint32_t capacitiveEnergyTotal;
+	uint32_t inductiveEnergyTotal;
+/* Actual values used */
 	uint32_t activeEnergy;			//kWh
 	uint32_t reactiveEnergy;		//kVARh
 	uint32_t capacitiveEnergy;	//kVARh
@@ -115,7 +120,7 @@ static void Meter_Write(Register_t reg);
 /* Functions Definition ------------------------------------------------------*/
 static uint32_t Meter_ArrayToInt(uint8_t *array, uint8_t length)
 {
-	uint8_t i;
+	uint8_t i = 0;
 	uint32_t returnValue = 0;
 	
 	do
@@ -213,40 +218,43 @@ void Meter_ProcessRequest(Message_t message)
 				Meter_SetEnergies();
 				Meter_SetPowers();
 			
-				reponse.command = COMMAND_TIMESTAMP;
-				reponse.argLength = 3;
-				reponse.rawArgument[0] = CURRENT_SAMPLE.time.hour;
-				reponse.rawArgument[1] = CURRENT_SAMPLE.time.minute;
-				reponse.rawArgument[2] = CURRENT_SAMPLE.time.second;
-				LoRa_QueueMessage(reponse);
-				
-				reponse.command = COMMAND_ACTIVE_ENERGY;
-				reponse.argLength = 3;
-				reponse.rawArgument[0] = (CURRENT_SAMPLE.activeEnergy >> 16) & 0xFF;
-				reponse.rawArgument[1] = (CURRENT_SAMPLE.activeEnergy >> 8) & 0xFF;
-				reponse.rawArgument[2] = (CURRENT_SAMPLE.activeEnergy >> 0) & 0xFF;
-				LoRa_QueueMessage(reponse);
-				
-				reponse.command = COMMAND_REACTIVE_ENERGY;
-				reponse.argLength = 3;
-				reponse.rawArgument[0] = (CURRENT_SAMPLE.reactiveEnergy >> 16) & 0xFF;
-				reponse.rawArgument[1] = (CURRENT_SAMPLE.reactiveEnergy >> 8) & 0xFF;
-				reponse.rawArgument[2] = (CURRENT_SAMPLE.reactiveEnergy >> 0) & 0xFF;
-				LoRa_QueueMessage(reponse);
-				
-				reponse.command = COMMAND_ACTIVE_POWER;
-				reponse.argLength = 3;
-				reponse.rawArgument[0] = (CURRENT_SAMPLE.activePower >> 16) & 0xFF;
-				reponse.rawArgument[1] = (CURRENT_SAMPLE.activePower >> 8) & 0xFF;
-				reponse.rawArgument[2] = (CURRENT_SAMPLE.activePower >> 0) & 0xFF;
-				LoRa_QueueMessage(reponse);
-				
-				reponse.command = COMMAND_REACTIVE_POWER;
-				reponse.argLength = 3;
-				reponse.rawArgument[0] = (CURRENT_SAMPLE.reactivePower >> 16) & 0xFF;
-				reponse.rawArgument[1] = (CURRENT_SAMPLE.reactivePower >> 8) & 0xFF;
-				reponse.rawArgument[2] = (CURRENT_SAMPLE.reactivePower >> 0) & 0xFF;
-				LoRa_QueueMessage(reponse);
+				if (OLDEST_SAMPLE.time.timestamp != 0)
+				{
+					reponse.command = COMMAND_TIMESTAMP;
+					reponse.argLength = 3;
+					reponse.rawArgument[0] = CURRENT_SAMPLE.time.hour;
+					reponse.rawArgument[1] = CURRENT_SAMPLE.time.minute;
+					reponse.rawArgument[2] = CURRENT_SAMPLE.time.second;
+					LoRa_QueueMessage(reponse);
+					
+					reponse.command = COMMAND_ACTIVE_ENERGY;
+					reponse.argLength = 3;
+					reponse.rawArgument[0] = (CURRENT_SAMPLE.activeEnergy >> 16) & 0xFF;
+					reponse.rawArgument[1] = (CURRENT_SAMPLE.activeEnergy >> 8) & 0xFF;
+					reponse.rawArgument[2] = (CURRENT_SAMPLE.activeEnergy >> 0) & 0xFF;
+					LoRa_QueueMessage(reponse);
+					
+					reponse.command = COMMAND_REACTIVE_ENERGY;
+					reponse.argLength = 3;
+					reponse.rawArgument[0] = (CURRENT_SAMPLE.reactiveEnergy >> 16) & 0xFF;
+					reponse.rawArgument[1] = (CURRENT_SAMPLE.reactiveEnergy >> 8) & 0xFF;
+					reponse.rawArgument[2] = (CURRENT_SAMPLE.reactiveEnergy >> 0) & 0xFF;
+					LoRa_QueueMessage(reponse);
+					
+					reponse.command = COMMAND_ACTIVE_POWER;
+					reponse.argLength = 3;
+					reponse.rawArgument[0] = (CURRENT_SAMPLE.activePower >> 16) & 0xFF;
+					reponse.rawArgument[1] = (CURRENT_SAMPLE.activePower >> 8) & 0xFF;
+					reponse.rawArgument[2] = (CURRENT_SAMPLE.activePower >> 0) & 0xFF;
+					LoRa_QueueMessage(reponse);
+					
+					reponse.command = COMMAND_REACTIVE_POWER;
+					reponse.argLength = 3;
+					reponse.rawArgument[0] = (CURRENT_SAMPLE.reactivePower >> 16) & 0xFF;
+					reponse.rawArgument[1] = (CURRENT_SAMPLE.reactivePower >> 8) & 0xFF;
+					reponse.rawArgument[2] = (CURRENT_SAMPLE.reactivePower >> 0) & 0xFF;
+					LoRa_QueueMessage(reponse);
+				}
 			}
 			break;
 		default:
@@ -268,13 +276,25 @@ static void Meter_SetEnergies(void)
 	uint8_t value[REG_MAX_LENGTH];
 	
 	Meter_ProcessRegister(ActiveEnergy, value);
-	CURRENT_SAMPLE.activeEnergy = Meter_ArrayToInt(value, REG_MAX_LENGTH) - OLDEST_SAMPLE.activeEnergy;
-	
+	CURRENT_SAMPLE.activeEnergyTotal = Meter_ArrayToInt(value, REG_MAX_LENGTH);
 	Meter_ProcessRegister(InductiveEnergy, value);
-	CURRENT_SAMPLE.inductiveEnergy = Meter_ArrayToInt(value, REG_MAX_LENGTH) - OLDEST_SAMPLE.inductiveEnergy;
-	
+	CURRENT_SAMPLE.inductiveEnergyTotal = Meter_ArrayToInt(value, REG_MAX_LENGTH);
 	Meter_ProcessRegister(CapacitiveEnergy, value);
-	CURRENT_SAMPLE.capacitiveEnergy = Meter_ArrayToInt(value, REG_MAX_LENGTH) - OLDEST_SAMPLE.capacitiveEnergy;
+	CURRENT_SAMPLE.capacitiveEnergyTotal = Meter_ArrayToInt(value, REG_MAX_LENGTH);
+	
+	/* Workaround for 0 - 0 giving a negative number */
+	if (CURRENT_SAMPLE.activeEnergyTotal == OLDEST_SAMPLE.activeEnergyTotal)
+		CURRENT_SAMPLE.activeEnergy = 0;
+	else
+		CURRENT_SAMPLE.activeEnergy = CURRENT_SAMPLE.activeEnergyTotal - OLDEST_SAMPLE.activeEnergyTotal;
+	if (CURRENT_SAMPLE.inductiveEnergyTotal == OLDEST_SAMPLE.inductiveEnergyTotal)
+		CURRENT_SAMPLE.inductiveEnergy = 0;
+	else
+		CURRENT_SAMPLE.inductiveEnergy = CURRENT_SAMPLE.inductiveEnergyTotal - OLDEST_SAMPLE.inductiveEnergyTotal;
+	if (CURRENT_SAMPLE.capacitiveEnergyTotal == OLDEST_SAMPLE.capacitiveEnergyTotal)
+		CURRENT_SAMPLE.capacitiveEnergy = 0;
+	else
+		CURRENT_SAMPLE.capacitiveEnergy = CURRENT_SAMPLE.capacitiveEnergyTotal - OLDEST_SAMPLE.capacitiveEnergy;
 }
 
 static void Meter_SetPowers(void)
