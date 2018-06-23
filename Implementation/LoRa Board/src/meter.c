@@ -17,7 +17,6 @@
 typedef enum MeterState_t
 {
 	METER_OK,
-	METER_NOK,
 	METER_TIMEOUT,
 }MeterState_t;
 
@@ -257,6 +256,13 @@ void Meter_ProcessRequest(Message_t message)
 					reponse.rawArgument[2] = (CURRENT_SAMPLE.reactivePower >> 0) & 0xFF;
 					LoRa_QueueMessage(reponse);
 				}
+				else
+				{
+					reponse.command = COMMAND_ACQUISITION;
+					reponse.argLength = 1;
+					reponse.rawArgument[0] = ACK;
+					LoRa_QueueMessage(reponse);
+				}
 			}
 			break;
 		default:
@@ -351,10 +357,7 @@ static void Meter_SignalError(void)
 	
 	handle.failedAttempts++;
 	if (handle.failedAttempts == MAX_ATTEMPTS)
-	{
-		handle.state = METER_NOK;
 		Meter_Init();
-	}
 	
 	message.command = COMMAND_ERROR;
 	message.argLength = 1;
