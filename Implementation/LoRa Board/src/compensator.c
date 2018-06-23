@@ -26,16 +26,16 @@
 #define ERROR_TIMEOUT					0xFF
 
 /* Private typedef -----------------------------------------------------------*/
-typedef enum CompensatorState_t
+typedef enum State_t
 {
 	COMP_OK,
 	COMP_NOK
-}CompensatorState_t;
+}State_t;
 
 typedef struct Compensator_t
 {
 	uint8_t failedAttempts;
-	CompensatorState_t state;
+	State_t state;
 	CompensatorType_t type;
 	uint16_t value;
 }Compensator_t;
@@ -64,7 +64,6 @@ static void Comp_Read(uint8_t reg, uint8_t *data);
 static void Comp_SignalError(uint8_t pin);
 static void Comp_Write(uint8_t reg, uint8_t data);
 
-/* Public variables ----------------------------------------------------------*/
 /* Functions Definition ------------------------------------------------------*/
 static void Comp_Change(uint8_t pin, uint16_t value, CompensatorType_t type)
 {

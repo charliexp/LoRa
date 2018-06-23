@@ -43,13 +43,13 @@ typedef struct Time_t
 typedef struct Sample_t
 {
 	Time_t time;
-	uint32_t activeEnergy;			//Resolution: 0.001, Unit: kWh
-	uint32_t reactiveEnergy;		//Resolution: 0.001, Unit: kVARh
-	uint32_t capacitiveEnergy;	//Resolution: 0.001, Unit: kVARh
-	uint32_t inductiveEnergy;		//Resolution: 0.001, Unit: kVARh
+	uint32_t activeEnergy;			//kWh
+	uint32_t reactiveEnergy;		//kVARh
+	uint32_t capacitiveEnergy;	//kVARh
+	uint32_t inductiveEnergy;		//kVARh
 	ReactivePower_t powerType;	
-	uint32_t activePower;				//Resolution: 0.001, Unit: kW
-	uint32_t reactivePower;			//Resolution: 0.001, Unit: kVAR
+	uint32_t activePower;				//kW
+	uint32_t reactivePower;			//kVAR
 #ifdef GATEWAY
 	uint32_t apparentPower;			//Resolution: 0.001, Unit: kVA
 	int8_t powerFactor;					//Resolution: 0.01
@@ -101,7 +101,6 @@ static const Register_t CapacitiveEnergy = {CAPACITIVE_ENERGY, "131.8.0", 7};
 /* Private variables ---------------------------------------------------------*/
 static MeterHandle_t Meter_handle;
 
-/* Public variables ----------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
 static uint32_t Meter_ArrayToInt(uint8_t *array, uint8_t length);
 static void Meter_ProcessRegister(Register_t reg, uint8_t *result);
