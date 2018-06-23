@@ -10,17 +10,13 @@
 #include <stdint.h>
 
 /* Exported defines ----------------------------------------------------------*/
-#define ADDRESS_BROADCAST							0xAA
-#define ADDRESS_END_DEVICE						1
-#define ADDRESS_PC										0xFF
-
 #define ACK														0x01
 #define NAK														0x00
 
-#define FRAME_HEADER_SIZE							2
 #define MESSAGE_HEADER_SIZE						2
 #define MESSAGE_ARG_MAX_SIZE					4
 #define MESSAGE_MAX_SIZE							(MESSAGE_HEADER_SIZE + MESSAGE_ARG_MAX_SIZE)
+#define FRAME_HEADER_SIZE							2
 #define FRAME_MAX_MESSAGES						5
 #define FRAME_MAX_SIZE								(FRAME_HEADER_SIZE + FRAME_MAX_MESSAGES * MESSAGE_MAX_SIZE)
 
@@ -68,12 +64,10 @@ typedef struct Frame_t
 /* Exported constants --------------------------------------------------------*/
 /* External variables --------------------------------------------------------*/
 /* Exported functions --------------------------------------------------------*/
-void Message_fromArray(Message_t *message, uint8_t *array, uint8_t length);
-void Message_toArray(Message_t message, uint8_t *array, uint8_t *length);
-uint8_t Message_frameLengthFromArray(uint8_t *array);
-uint8_t Message_argLengthFromArray(uint8_t *array);
-void Message_frameToArray(Frame_t frame, uint8_t *array, uint8_t *length);
-void Message_arrayToFrame(uint8_t *array, uint8_t length, Frame_t *frame);
+void Message_ArrayToFrame(uint8_t *array, Frame_t *frame);
+void Message_ArrayToMessage(Message_t *message, uint8_t *array);
+uint8_t Message_ArgLengthFromArray(uint8_t *array);
+void Message_FrameToArray(Frame_t frame, uint8_t *array, uint8_t *length);
 
 #ifdef __cplusplus
 }
