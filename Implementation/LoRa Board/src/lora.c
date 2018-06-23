@@ -15,7 +15,6 @@
 #endif
 #ifdef END_NODE
 #define RADIO_RX_TIMEOUT							0
-#define RADIO_MAX_CONNECTIONS					1
 #endif
 
 #define RADIO_TX_TIMEOUT							3
@@ -73,7 +72,7 @@ typedef struct LoRaHandle_t
 /* Transmission rate */
 	uint16_t transmissionRate;
 /* Message queue */
-	Message_t messageQueue[RADIO_MAX_CONNECTIONS];
+	Message_t messageQueue[FRAME_MAX_MESSAGES];
 #ifdef GATEWAY
 /* Transmission timer */
 	TimerEvent_t timer;
@@ -100,6 +99,7 @@ static void LoRa_OnTxTimeout(void);
 static void LoRa_OnRxTimeout(void);
 static void LoRa_OnRxError(void);
 static void LoRa_SignalError(void);
+static void LoRa_Write(void);
 	
 /* Functions Definition ------------------------------------------------------*/
 uint8_t LoRa_GetAddress(void)
@@ -148,6 +148,7 @@ void LoRa_Init(void)
 	#ifdef GATEWAY
 	//set up tx timer
 	#endif
+	//TODO: start receiving
 }
 
 static void LoRa_OnRxDone(uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr)
@@ -246,12 +247,15 @@ void LoRa_ProcessRequest(Frame_t frame)
 		default:
 			reply.argLength = 1;
 			reply.rawArgument[0] = NAK;
+			LoRa_QueueMessage(reply);
 			break;
 		}
-		LoRa_QueueMessage(reply);
 		#endif
 	}
-	memcpy(&handle.lastFrame, &reply, FRAME_MAX_SIZE);
+	//memcpy(&handle.lastFrame, &reply, FRAME_MAX_SIZE);
+	
+	if (handle.queueLength != 0)
+		LoRa_Write();
 }
 
 void LoRa_QueueMessage(Message_t message)
@@ -274,4 +278,27 @@ static void LoRa_SignalError(void)
 	frame.messages[0].rawArgument[0] = ERROR_LORA_NOK;
 	
 	PC_Write(frame);
+}
+
+static void LoRa_Write(void)
+{
+	Frame_t frame;
+	uint8_t i;
+	uint8_t array[FRAME_MAX_SIZE];
+	uint8_t arrayLength;
+	
+	frame.endDevice = handle.address;
+	frame.nrOfMessages = handle.queueLength;
+	
+	for (i = 0; i < handle.queueLength; i++)
+	{
+		memcpy(&frame.messages[i],
+			&handle.messageQueue[handle.queueLength],
+			MESSAGE_HEADER_SIZE + handle.messageQueue[handle.queueLength].argLength);
+	}
+	
+	PC_Write(frame);
+	Message_FrameToArray(frame, array, &arrayLength);
+	//handle.hw.radio.Send(array, arrayLength);
+	handle.queueLength = 0;
 }
