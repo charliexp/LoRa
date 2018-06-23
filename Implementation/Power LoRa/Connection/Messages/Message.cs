@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using static Power_LoRa.Node.BaseNode;
+using static Power_LoRa.Node.Compensator;
 
 namespace Power_LoRa.Connection.Messages
 {
@@ -13,16 +14,23 @@ namespace Power_LoRa.Connection.Messages
             ACK = 1,
             NAK = 0
         }
+        public enum ErrorType
+        {
+            Resend = 0x40,
+            Reset = 0x41,
+            MeterNOK = 0x42,
+            CompensatorNOK = 0x43,
+            LoRaNOK = 0x44,
+        }
         public enum CommandType
 		{
 			IsPresent = 0x10,
-            Resend = 0x11,
-            Reset = 0x12,
+            Error = 0x11,
             
 			SetAddress = 0x20,
             TransmissionRate = 0x21,
-            HasMeter = 0x22,
-            ChangeCompensator = 0x23,
+            ChangeCompensator = 0x22,
+            SetCompensator = 0x23,
 
             Acquisition = 0x30,
             Timestamp = 0x31,
@@ -30,7 +38,6 @@ namespace Power_LoRa.Connection.Messages
             ReactiveEnergy = 0x33,
             ActivePower = 0x34,
             ReactivePower = 0x35,
-            SetCompensator = 0x36,
 		}
         #endregion
 
@@ -73,11 +80,26 @@ namespace Power_LoRa.Connection.Messages
                                 PrintableArgument = ((rawArgument[0] << 8) |
                                     (rawArgument[1])).ToString() + " s";
                             break;
-                        case CommandType.Reset:
+                        case CommandType.Error:
+                            PrintableArgument = ((ErrorType)rawArgument[0]).ToString();
+                            break;
                         case CommandType.SetAddress:
-                        case CommandType.HasMeter:
                         case CommandType.SetCompensator:
                             PrintableArgument = ((ResponseType)rawArgument[Idx_ack]).ToString();
+                            break;
+                        case CommandType.ChangeCompensator:
+                            if (rawArgument.Length == 1)
+                                PrintableArgument = ((ResponseType)rawArgument[Idx_ack]).ToString();
+                            else
+                                PrintableArgument = ((CompensatorType)(rawArgument[2] & 0x0F)).ToString() + " " +
+                                    ((rawArgument[0] << 8) | rawArgument[1]).ToString() + Compensator.MeasureUnit + " " +
+                                    ((rawArgument[2] >> 4) & 0x0F);
+                            break;
+                        case CommandType.Acquisition:
+                            if (rawArgument.Length == 1)
+                                PrintableArgument = ((ResponseType)rawArgument[Idx_ack]).ToString();
+                            else
+                                PrintableArgument = "";
                             break;
                         case CommandType.Timestamp:
                             PrintableArgument = rawArgument[0].ToString("D2") + ":" +
