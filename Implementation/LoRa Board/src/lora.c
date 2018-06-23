@@ -133,6 +133,7 @@ void LoRa_Init(void)
 	handle.hw.bandwidth = RADIO_INITIAL_BANDWIDTH;
 	handle.hw.spreadingFactor = RADIO_INITIAL_SPREAD_FACTOR;
 	handle.timeout = RADIO_RX_TIMEOUT;
+	handle.transmissionRate = INITIAL_TRANSMISSION_RATE;
 	
 	Radio.Init(&handle.hw.events);
 	Radio.SetChannel(handle.hw.frequency);
@@ -293,8 +294,8 @@ static void LoRa_Write(void)
 	for (i = 0; i < handle.queueLength; i++)
 	{
 		memcpy(&frame.messages[i],
-			&handle.messageQueue[handle.queueLength],
-			MESSAGE_HEADER_SIZE + handle.messageQueue[handle.queueLength].argLength);
+			&handle.messageQueue[i],
+			MESSAGE_HEADER_SIZE + handle.messageQueue[i].argLength);
 	}
 	
 	PC_Write(frame);
