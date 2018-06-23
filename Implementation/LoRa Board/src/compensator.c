@@ -34,16 +34,20 @@ typedef enum State_t
 
 typedef struct Compensator_t
 {
+/* Failed attempts to set compensator */
 	uint8_t failedAttempts;
+/* Working state */
 	State_t state;
+/* Type */
 	CompensatorType_t type;
+/* Reactive power */
 	uint16_t value;
 }Compensator_t;
 
 typedef struct CompensatorHandle_t
 {
 /* I2C handle */
-	I2C_HandleTypeDef i2cHandle;
+	I2C_HandleTypeDef hw;
 /* Index in array corresponds to output pin */
 	Compensator_t outputs[MAX_COMPENSATORS];
 /* Bit mask of all outputs sent to I2C */
@@ -55,7 +59,7 @@ typedef struct CompensatorHandle_t
 /* Private macro -------------------------------------------------------------*/
 /* Private constants ---------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-static CompensatorHandle_t Comp_handle;
+static CompensatorHandle_t handle;
 
 /* Private function prototypes -----------------------------------------------*/
 static void Comp_Change(uint8_t pin, uint16_t value, CompensatorType_t type);
@@ -67,14 +71,14 @@ static void Comp_Write(uint8_t reg, uint8_t data);
 /* Functions Definition ------------------------------------------------------*/
 static void Comp_Change(uint8_t pin, uint16_t value, CompensatorType_t type)
 {
-	Comp_handle.outputs[pin].state = COMP_OK;
-	Comp_handle.outputs[pin].type = type;
-	Comp_handle.outputs[pin].value = value;
+	handle.outputs[pin].state = COMP_OK;
+	handle.outputs[pin].type = type;
+	handle.outputs[pin].value = value;
 	EEPROM_EraseWord(EEPROM_LOCATION + EEPROM_SIZE * pin);
 	EEPROM_WriteByte(EEPROM_LOCATION + EEPROM_SIZE * pin + EEPROM_TYPE_OFFET,
-		Comp_handle.outputs[pin].type);
+		handle.outputs[pin].type);
 	EEPROM_WriteHalfWord(EEPROM_LOCATION + EEPROM_SIZE * pin + EEPROM_VALUE_OFFET,
-		Comp_handle.outputs[pin].value);
+		handle.outputs[pin].value);
 }
 
 static void Comp_CheckFeedback(void)
@@ -87,11 +91,11 @@ static void Comp_CheckFeedback(void)
 	feedback = (feedback >> 4) & OUTPUTS_MASK;
 	for (i = 0; i < MAX_COMPENSATORS; i++)
 		/* If a contact input is different from the expected output of the i-th compensator*/
-		if (((feedback ^ Comp_handle.i2c_output) & OUTPUTS_MASK) == (1 << i))
+		if (((feedback ^ handle.i2c_output) & OUTPUTS_MASK) == (1 << i))
 			/* Mark it with error, and send error message */
 		{
-			Comp_handle.outputs[i].failedAttempts++;
-			Comp_handle.outputs[i].state = COMP_NOK;
+			handle.outputs[i].failedAttempts++;
+			handle.outputs[i].state = COMP_NOK;
 			Comp_SignalError(i);
 		}
 }
@@ -101,14 +105,14 @@ void Comp_Init(void)
 	uint8_t i;
 	
 	/* Init I2C */
-	Comp_handle.i2cHandle.Instance = COMP_I2C;
-	Comp_handle.i2cHandle.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
-	Comp_handle.i2cHandle.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
-	Comp_handle.i2cHandle.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
-	Comp_handle.i2cHandle.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
-	Comp_handle.i2cHandle.Init.Timing = 0x10420F13;	
-	Comp_handle.timeout = I2C_TIMEOUT;
-	if(HAL_I2C_Init(&Comp_handle.i2cHandle) != HAL_OK)
+	handle.hw.Instance = COMP_I2C;
+	handle.hw.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
+	handle.hw.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
+	handle.hw.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
+	handle.hw.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
+	handle.hw.Init.Timing = 0x10420F13;	
+	handle.timeout = I2C_TIMEOUT;
+	if(HAL_I2C_Init(&handle.hw) != HAL_OK)
 	{
 		/* Initialization Error */
 		Error_Handler(); 
@@ -117,18 +121,18 @@ void Comp_Init(void)
 	/* Get compensator setup from EEPROM */
 	for (i = 0; i < MAX_COMPENSATORS; i++)
 	{
-		Comp_handle.outputs[i].failedAttempts = 0;
-		Comp_handle.outputs[i].state = COMP_OK;
-		Comp_handle.outputs[i].type = (CompensatorType_t)(EEPROM_ReadByte(EEPROM_LOCATION + EEPROM_SIZE * i + EEPROM_TYPE_OFFET));
-		Comp_handle.outputs[i].value = (CompensatorType_t)(EEPROM_ReadHalfWord(EEPROM_LOCATION + EEPROM_SIZE * i + EEPROM_VALUE_OFFET));
+		handle.outputs[i].failedAttempts = 0;
+		handle.outputs[i].state = COMP_OK;
+		handle.outputs[i].type = (CompensatorType_t)(EEPROM_ReadByte(EEPROM_LOCATION + EEPROM_SIZE * i + EEPROM_TYPE_OFFET));
+		handle.outputs[i].value = (CompensatorType_t)(EEPROM_ReadHalfWord(EEPROM_LOCATION + EEPROM_SIZE * i + EEPROM_VALUE_OFFET));
 	}
 	
 	/* Set compensators initial state */
 	/* All output pins low */
-	Comp_handle.i2c_output = 0x00 | INPUTS_MASK;
-	Comp_Write(REG_OUTPUT, Comp_handle.i2c_output);
+	handle.i2c_output = 0x00 | INPUTS_MASK;
+	Comp_Write(REG_OUTPUT, handle.i2c_output);
 	/* Configure output pins */
-	Comp_Write(REG_CONFIG, Comp_handle.i2c_output);
+	Comp_Write(REG_CONFIG, handle.i2c_output);
 }
 
 void Comp_ProcessRequest(Message_t message)
@@ -153,7 +157,7 @@ static void Comp_Read(uint8_t reg, uint8_t *data)
 {
 	HAL_StatusTypeDef returnValue;
 	
-	returnValue = HAL_I2C_Mem_Read(&Comp_handle.i2cHandle, I2C_ADDRESS, reg, I2C_MEMADD_SIZE_8BIT, data, 1, Comp_handle.timeout);
+	returnValue = HAL_I2C_Mem_Read(&handle.hw, I2C_ADDRESS, reg, I2C_MEMADD_SIZE_8BIT, data, 1, handle.timeout);
 	if (returnValue != HAL_OK)
 		Comp_SignalError(ERROR_TIMEOUT);
 }
@@ -161,16 +165,16 @@ static void Comp_Read(uint8_t reg, uint8_t *data)
 void Comp_Set(uint8_t pin, bool state)
 {
 	/* Check if compensator is working */
-	if (Comp_handle.outputs[pin].state == COMP_OK ||
-			Comp_handle.outputs[pin].failedAttempts < MAX_ATTEMPTS)
+	if (handle.outputs[pin].state == COMP_OK ||
+			handle.outputs[pin].failedAttempts < MAX_ATTEMPTS)
 	{
 		/* Set new state */
 		if (state)
-			Comp_handle.i2c_output |= (1 << pin);
+			handle.i2c_output |= (1 << pin);
 		else
-			Comp_handle.i2c_output &= ~(1 << pin);
-		Comp_handle.i2c_output |= ~OUTPUTS_MASK;
-		Comp_Write(REG_OUTPUT, Comp_handle.i2c_output);
+			handle.i2c_output &= ~(1 << pin);
+		handle.i2c_output |= ~OUTPUTS_MASK;
+		Comp_Write(REG_OUTPUT, handle.i2c_output);
 		
 		/* Check if contact really closed */
 		Comp_CheckFeedback();
@@ -193,7 +197,7 @@ static void Comp_Write(uint8_t reg, uint8_t data)
 {
 	HAL_StatusTypeDef returnValue;
 	
-	returnValue = HAL_I2C_Mem_Write(&Comp_handle.i2cHandle, I2C_ADDRESS, reg, I2C_MEMADD_SIZE_8BIT, &data, 1, Comp_handle.timeout);
+	returnValue = HAL_I2C_Mem_Write(&handle.hw, I2C_ADDRESS, reg, I2C_MEMADD_SIZE_8BIT, &data, 1, handle.timeout);
 	if (returnValue != HAL_OK)
 		Comp_SignalError(ERROR_TIMEOUT);
 }

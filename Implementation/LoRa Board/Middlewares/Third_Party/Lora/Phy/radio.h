@@ -15,6 +15,8 @@ Maintainer: Miguel Luis and Gregory Cristian
 #ifndef __RADIO_H__
 #define __RADIO_H__
 
+#include <stdbool.h>
+#include <stdint.h>
 /*!
  * Radio driver supported modems
  */
@@ -85,7 +87,7 @@ typedef struct
 /*!
  * \brief Radio driver definition
  */
-struct Radio_s
+typedef struct Radio_s
 {
     /*!
      * \brief Initializes the io
@@ -337,7 +339,7 @@ struct Radio_s
      * \retval  Value of the radio wake-up time.
      */
     uint32_t ( *GetRadioWakeUpTime ) ( void );
-};
+}Radio_s;
 
 /*!
  * \brief Radio driver

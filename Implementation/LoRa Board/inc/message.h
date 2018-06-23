@@ -24,9 +24,7 @@
 typedef enum Command_t
 {
 	COMMAND_IS_PRESENT = 0x10,
-	COMMAND_RESEND = 0x11,
-	COMMAND_RESET = 0x12,
-	COMMAND_ERROR = 0x13,
+	COMMAND_ERROR = 0x11,
 	
 	COMMAND_SET_ADDRESS = 0x20,
 	COMMAND_TRANSMISSION_RATE = 0x21,
@@ -43,8 +41,11 @@ typedef enum Command_t
 
 typedef enum Error_t
 {
-	ERROR_METER_NOK = 0x40,
-	ERROR_COMPENSATOR_NOK = 0x41,
+	ERROR_RESEND = 0x40,
+	ERROR_RESET = 0x41,
+	ERROR_METER_NOK = 0x42,
+	ERROR_COMPENSATOR_NOK = 0x43,
+	ERROR_LORA_NOK = 0x44,
 }Error_t;
 
 typedef struct Message_t

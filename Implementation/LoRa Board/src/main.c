@@ -16,7 +16,7 @@ void processCommunicationCommand(uint8_t source, uint8_t command, uint8_t* param
 	switch (command)
 	{
 		case COMMAND_IS_PRESENT:
-			if (myAddress == ADDRESS_MASTER)
+			if (NodeAddress == ADDRESS_MASTER)
 			{
 				if (source == ADDRESS_PC)
 					LoRa_send(ADDRESS_GENERAL, COMMAND_IS_PRESENT, 0, 0);
@@ -25,19 +25,19 @@ void processCommunicationCommand(uint8_t source, uint8_t command, uint8_t* param
 					response[0] = parameters[3];
 					response[4] = rssi;
 					response[5] = snr;
-					//PC_Send(source, myAddress, command, response, 6);
+					//PC_Write(source, NodeAddress, command, response, 6);
 				}
 			}
-			else if (myAddress >= ADDRESS_BEACON)
+			else if (NodeAddress >= ADDRESS_BEACON)
 			{
 				if (source == ADDRESS_MASTER)
 				{
-						DelayMs((myAddress - 2) * 2000);
+						DelayMs((NodeAddress - 2) * 2000);
 						parameters[3] = RESPONSE_ACK;
 						response[0] = RESPONSE_ACK;
 						response[4] = rssi;
 						response[5] = snr;
-						//PC_Send(source, myAddress, command, response, 6);
+						//PC_Write(source, NodeAddress, command, response, 6);
 						LoRa_send(source, command, parameters, PARAMETERS_MAX_SIZE);
 						break;
 				}
@@ -56,7 +56,7 @@ void processCommunicationCommand(uint8_t source, uint8_t command, uint8_t* param
 				response[4] = rssi;
 				response[5] = snr;
 			}
-			//PC_Send(source, myAddress, command, response, 6);
+			//PC_Write(source, NodeAddress, command, response, 6);
 			break;
 	}*/
 }
@@ -68,16 +68,16 @@ void processPCCommand(uint8_t source, uint8_t command, uint8_t* parameters)
 	{
 		case COMMAND_GET_ADDRESS:
 			response[0] = RESPONSE_ACK;
-			//PC_Send(source, myAddress, command, response, 6);
+			//PC_Write(source, NodeAddress, command, response, 6);
 			break;
 		case COMMAND_SET_ADDRESS:
 			setAddress(parameters[3]);
 			response[0] = RESPONSE_ACK;
-			//PC_Send(source, myAddress, command, response, 6);
+			//PC_Write(source, NodeAddress, command, response, 6);
 			break;
 		default:
 			response[0] = RESPONSE_NACK;
-			//PC_Send(source, myAddress, command, response, 6);
+			//PC_Write(source, NodeAddress, command, response, 6);
 			break;
 	}*/
 }
@@ -170,7 +170,7 @@ void processRadioSetupCommand(uint8_t source, uint8_t command, uint8_t* paramete
 	else
 		LoRa_setupPending = false;
 	
-	//PC_Send(source, myAddress, command, response, 6);*/
+	//PC_Write(source, NodeAddress, command, response, 6);*/
 }
 
 void OnTimerEvent(void)
@@ -205,7 +205,7 @@ int main(void)
 		{
 			PC_Receive(&target, &command, parameters, &length);
 		
-			if (target == myAddress)
+			if (target == NodeAddress)
 			{
 				if ((command & COMMANDS_COMMUNICATION_MASK) != 0)
 				{
@@ -226,15 +226,15 @@ int main(void)
 				{
 					processPCCommand(ADDRESS_PC, command, parameters);
 				}
-				else if (myAddress == ADDRESS_MASTER)
+				else if (NodeAddress == ADDRESS_MASTER)
 				{
-					PC_Send(ADDRESS_PC, target, command, parameters, 6);
+					PC_Write(ADDRESS_PC, target, command, parameters, 6);
 					LoRa_send(target, command, parameters, PARAMETERS_MAX_SIZE);
 				}
 			}
-			else if (myAddress == ADDRESS_MASTER)
+			else if (NodeAddress == ADDRESS_MASTER)
 			{
-				PC_Send(myAddress, target, command, parameters, 6);
+				PC_Write(NodeAddress, target, command, parameters, 6);
 				LoRa_send(target, command, parameters, PARAMETERS_MAX_SIZE);
 			}
 			UartState = UART_IDLE;
@@ -245,7 +245,7 @@ int main(void)
 			case RADIO_RX:
 				LoRa_receive(&source, &command, parameters, &rssi, &snr);
 				
-				if (source == ADDRESS_MASTER || source == ADDRESS_GENERAL || myAddress == ADDRESS_MASTER)
+				if (source == ADDRESS_MASTER || source == ADDRESS_GENERAL || NodeAddress == ADDRESS_MASTER)
 				{
 					if ((command & COMMANDS_COMMUNICATION_MASK) != 0)
 					{
@@ -265,13 +265,13 @@ int main(void)
 					LoRa_setupPending = false;
 					LoRa_updateParameters();
 				}
-				if (myAddress == ADDRESS_MASTER)
+				if (NodeAddress == ADDRESS_MASTER)
 				{
 					response[0] = RESPONSE_NACK;
 					response[1] = RADIO_RX_TIMEOUT;
-					//PC_Send(LoRa_whoTimedOut(), myAddress, command, response, 6);
+					//PC_Write(LoRa_whoTimedOut(), NodeAddress, command, response, 6);
 				}
-				else if (myAddress >= ADDRESS_BEACON)
+				else if (NodeAddress >= ADDRESS_BEACON)
 					LoRa_startReceiving();
 				break;
 			case RADIO_RX_ERROR:
@@ -281,7 +281,7 @@ int main(void)
 					LoRa_setupPending = false;
 					LoRa_updateParameters();
 				}
-				if (myAddress >= ADDRESS_BEACON)
+				if (NodeAddress >= ADDRESS_BEACON)
 					LoRa_startReceiving();
 				break;
 			case RADIO_TX:
@@ -290,11 +290,11 @@ int main(void)
 					LoRa_setupPending = false;
 					LoRa_updateParameters();
 				}
-				if (myAddress == ADDRESS_MASTER)
+				if (NodeAddress == ADDRESS_MASTER)
 				{
 					LoRa_startReceiving();
 				}
-				if (myAddress >= ADDRESS_BEACON)
+				if (NodeAddress >= ADDRESS_BEACON)
 				{
 					LoRa_startReceiving();
 				}
@@ -302,8 +302,8 @@ int main(void)
 			case RADIO_TX_TIMEOUT:
 				response[0] = RESPONSE_NACK;
 				response[1] = RADIO_TX_TIMEOUT;
-				//PC_Send(LoRa_whoTimedOut(), myAddress, command, response, 6);
-				if (myAddress >= ADDRESS_BEACON)
+				//PC_Write(LoRa_whoTimedOut(), NodeAddress, command, response, 6);
+				if (NodeAddress >= ADDRESS_BEACON)
 					LoRa_startReceiving();
 					if (LoRa_setupPending)
 					{

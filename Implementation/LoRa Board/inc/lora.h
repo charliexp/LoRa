@@ -1,9 +1,29 @@
-#ifndef LORA_H
-#define LORA_H
+/* Define to prevent recursive inclusion -------------------------------------*/
+#ifndef __LORA_H__
+#define __LORA_H__
 
+#ifdef __cplusplus
+ extern "C" {
+#endif
+   
+/* Includes ------------------------------------------------------------------*/
 #include "message.h"
-#include "hw.h"
 
+/* Exported defines ----------------------------------------------------------*/
+/* Exported types ------------------------------------------------------------*/
+/* Exported constants --------------------------------------------------------*/
+/* External variables --------------------------------------------------------*/
+/* Exported functions --------------------------------------------------------*/
+uint8_t LoRa_GetAddress(void);
+uint16_t LoRa_GetTransmissionRate(void);
+void LoRa_Init(void);
+void LoRa_ProcessRequest(Frame_t frame);
+void LoRa_QueueMessage(Message_t message);
+
+
+
+
+/*
 #define RADIO_BUFFER_SIZE     64
 #define RADIO_MAX_NODES				2
 
@@ -26,11 +46,9 @@ typedef struct RadioNodeStruct_t
 extern RadioNodeStruct_t RadioNodes[];
 extern RadioStates_t RadioState;
 
-void LoRa_QueueMessage(Message_t message);
 void LoRa_ReplyMessage(Message_t message);
 
 void LoRa_MainLoop(void);
-void LoRa_init(void);
 void LoRa_send(uint8_t target, uint8_t command, uint8_t* data, uint8_t length);
 void LoRa_startReceiving(void);
 void LoRa_receive(uint8_t* source, uint8_t* command, uint8_t* parameters, uint8_t* rssi, uint8_t* snr);
@@ -48,5 +66,5 @@ void LoRa_setPreambleSize(uint8_t preambleSize);
 void LoRa_setPayloadMaxSize(uint8_t payloadMaxSize);
 void LoRa_setVariablePayload(bool variablePayload);
 void LoRa_setPerformCRC(bool performCRC);
-
-#endif /* LORA_H */
+*/
+#endif /* __LORA_H__ */

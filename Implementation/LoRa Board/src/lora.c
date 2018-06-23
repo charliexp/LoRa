@@ -1,379 +1,277 @@
-#include "lora.h"
-#include "radio.h"
-#include "stdlib.h"
-#include "pc.h"
-#include "eeprom.h"
+/* Includes ------------------------------------------------------------------*/
 #include "compensator.h"
+#include "eeprom.h"
+#include "lora.h"
 #include "meter.h"
+#include "pc.h"
+#include "radio.h"
+#include <string.h>
+#include "timeserver.h"
 
-#define RADIO_FREQUENCY       866500000
-#define EEPROM_LOCATION		0x08080000
-#define APP_INITIAL_TRANSMISSION_RATE		10
+/* Private define ------------------------------------------------------------*/
+#ifdef GATEWAY
+#define RADIO_RX_TIMEOUT							5
+#define RADIO_MAX_CONNECTIONS					1
+#endif
+#ifdef END_NODE
+#define RADIO_RX_TIMEOUT							0
+#define RADIO_MAX_CONNECTIONS					1
+#endif
 
-uint32_t myAddress;
+#define RADIO_TX_TIMEOUT							3
+#define RADIO_FREQUENCY       				866500000
+#define RADIO_MAX_OUTPUT_POWER				14
+#define RADIO_INITIAL_OUTPUT_POWER		14
+#define RADIO_MAX_BANDWIDTH						1
+#define RADIO_INITIAL_BANDWIDTH				0
+#define RADIO_MIN_SPREAD_FACTOR				7
+#define RADIO_MAX_SPREAD_FACTOR				12
+#define RADIO_INITIAL_SPREAD_FACTOR		RADIO_MIN_SPREAD_FACTOR
+#define RADIO_CODING_RATE							4
+#define RADIO_PREAMBLE_SIZE						8
+#define RADIO_RX_SYMB_TIMEOUT					5
+#ifdef GATEWAY
+//TODO: commented are actual values
+//#define	RADIO_INVERTED_IQ							true
+//#define	RADIO_PERFORM_CRC							false
+#define	RADIO_INVERTED_IQ							false
+#define	RADIO_PERFORM_CRC							true
+#endif
+#ifdef END_NODE
+#define	RADIO_INVERTED_IQ							false
+#define	RADIO_PERFORM_CRC							true
+#endif
 
-bool LoRaSetupRequired = false;
+#define ADDRESS_BROADCAST							0xAA
+#define INITIAL_TRANSMISSION_RATE			10
 
-uint8_t LoRa_Bandwidth = 0;         // [0: 125 kHz,
-																		//  1: 250 kHz,
-																		//  2: 500 kHz,
-																		//  3: Reserved]
-uint8_t LoRa_OutputPower = 14;      // dBm
-uint8_t LoRa_SpreadingFactor = 12;  // [SF7..SF12]
-uint8_t LoRa_CodingRate = 4;        // [1: 4/5,
-                                    //  2: 4/6,
-                                    //  3: 4/7,
-                                    //  4: 4/8]
-uint8_t LoRa_RxSymTimeout = 5;      // Symbols
-uint16_t LoRa_RxMsTimeout = 5000;   // Milliseconds
-uint32_t LoRa_TxTimeout = 5000;  		// Milliseconds
-uint8_t LoRa_PreambleSize = 8;      // Same for Tx and Rx
-uint8_t LoRa_PayloadMaxSize = 7;
-bool LoRa_VariablePayload = true;
-bool LoRa_PerformCRC = true;
-bool LoRa_Transmitting = false;
+#define EEPROM_LOCATION								0x08080000
 
-volatile uint8_t RadioRxBuffer[RADIO_BUFFER_SIZE];
-volatile uint8_t RadioTxBuffer[RADIO_BUFFER_SIZE];
-uint16_t BufferSize = RADIO_BUFFER_SIZE;
-
-uint16_t appTransmissionRate = APP_INITIAL_TRANSMISSION_RATE;
-
-RadioNodeStruct_t RadioNodes[RADIO_MAX_NODES] = 
+/* Private typedef -----------------------------------------------------------*/
+typedef struct Radio_t
 {
-	{false, 2},
-	{false, 3},
-};
-RadioStates_t RadioState = RADIO_LOWPOWER;
+/* HW handle */
+	Radio_s radio;
+/* Events handle */
+	RadioEvents_t events;
+/* Frequency */
+	uint32_t frequency;
+/* Output power */
+	uint8_t outputPower;
+/* Bandwidth */
+	uint8_t bandwidth;
+/* Spreading factor */
+	uint8_t spreadingFactor;
+}Radio_t;
 
-int8_t RSSI = 0;
-int8_t SNR = 0;
-static RadioEvents_t RadioEvents;
-
-static void OnTxDone( void )
+typedef struct LoRaHandle_t
 {
-	Radio.Sleep();
-	RadioState = RADIO_TX;
+/* Radio handle */
+	Radio_t hw;
+/* Node address */
+	uint8_t address;
+/* Transmission rate */
+	uint16_t transmissionRate;
+/* Message queue */
+	Message_t messageQueue[RADIO_MAX_CONNECTIONS];
+#ifdef GATEWAY
+/* Transmission timer */
+	TimerEvent_t timer;
+/* Connected end nodes addresses */
+	uint8_t endNodeAddresses[RADIO_MAX_CONNECTIONS];
+#endif
+/* Number of messages queued */
+	uint8_t queueLength;
+/* Timeout in seconds */
+	uint16_t timeout;
+/* Last frame sent */
+	Frame_t lastFrame;
+}LoRaHandle_t;
+
+/* Private macro -------------------------------------------------------------*/
+/* Private constants ---------------------------------------------------------*/
+/* Private variables ---------------------------------------------------------*/
+static LoRaHandle_t handle;
+
+/* Private function prototypes -----------------------------------------------*/
+static void LoRa_OnTxDone(void);
+static void LoRa_OnRxDone(uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr);
+static void LoRa_OnTxTimeout(void);
+static void LoRa_OnRxTimeout(void);
+static void LoRa_OnRxError(void);
+static void LoRa_SignalError(void);
+	
+/* Functions Definition ------------------------------------------------------*/
+uint8_t LoRa_GetAddress(void)
+{
+	return handle.address;
 }
 
-static void OnRxDone( uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr )
+uint16_t LoRa_GetTransmissionRate(void)
 {
-	Radio.Sleep();
-	RadioState = RADIO_RX;
-	BufferSize = size;
-	memcpy((uint8_t *) RadioRxBuffer, payload, BufferSize );
-	RSSI = rssi;
-	SNR = snr;
+	return handle.transmissionRate;
 }
 
-static void OnTxTimeout( void )
+void LoRa_Init(void)
+{
+	#ifdef GATEWAY
+	uint8_t i;
+	
+	for (i = 0; i < RADIO_MAX_CONNECTIONS; i++)
+		handle.endNodeAddresses[i] = *((uint8_t *) EEPROM_LOCATION + i);
+	#endif
+	#ifdef END_NODE
+	handle.address = *((uint8_t *) EEPROM_LOCATION);
+	#endif
+	handle.hw.frequency = RADIO_FREQUENCY;
+	handle.hw.events.TxDone = LoRa_OnTxDone;
+	handle.hw.events.RxDone = LoRa_OnRxDone;
+	handle.hw.events.TxTimeout = LoRa_OnTxTimeout;
+	handle.hw.events.RxTimeout = LoRa_OnRxTimeout;
+	handle.hw.events.RxError = LoRa_OnRxError;
+	handle.hw.outputPower = RADIO_INITIAL_OUTPUT_POWER;
+	handle.hw.bandwidth = RADIO_INITIAL_BANDWIDTH;
+	handle.hw.spreadingFactor = RADIO_INITIAL_SPREAD_FACTOR;
+	handle.timeout = RADIO_RX_TIMEOUT;
+	
+	Radio.Init(&handle.hw.events);
+	Radio.SetChannel(handle.hw.frequency);
+	Radio.SetTxConfig(MODEM_LORA, handle.hw.outputPower, 0, handle.hw.bandwidth,
+		handle.hw.spreadingFactor , RADIO_CODING_RATE,
+		RADIO_PREAMBLE_SIZE, true,
+		RADIO_PERFORM_CRC, false, 0, RADIO_INVERTED_IQ, RADIO_TX_TIMEOUT * 1000);
+	Radio.SetRxConfig(MODEM_LORA, handle.hw.bandwidth, handle.hw.spreadingFactor ,
+		RADIO_CODING_RATE, 0, RADIO_PREAMBLE_SIZE,
+		RADIO_RX_SYMB_TIMEOUT, false,
+		FRAME_MAX_SIZE, RADIO_PERFORM_CRC, false, 0, RADIO_INVERTED_IQ, true);
+		
+	#ifdef GATEWAY
+	//set up tx timer
+	#endif
+}
+
+static void LoRa_OnRxDone(uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr)
+{
+	Frame_t frame;
+	
+	Radio.Sleep();
+	#ifdef GATEWAY
+	//Check if more need to be received
+	#endif
+	#ifdef END_NODE
+	Message_ArrayToFrame(payload, &frame);
+	LoRa_ProcessRequest(frame);
+	#endif
+	//TODO: add those
+	//RSSI = rssi;
+	//SNR = snr;
+}
+
+static void LoRa_OnRxError(void)
+{
+	Radio.Sleep();
+	//TODO request resend
+}
+
+static void LoRa_OnRxTimeout(void)
 {
   Radio.Sleep();
-	RadioState = RADIO_TX_TIMEOUT;
+	#ifdef GATEWAY
+	//TODO
+	#endif
 }
 
-static void OnRxTimeout( void )
+static void LoRa_OnTxDone(void)
+{
+	Radio.Rx(handle.timeout * 1000);
+}
+
+static void LoRa_OnTxTimeout(void)
 {
   Radio.Sleep();
-	RadioState = RADIO_RX_TIMEOUT;
+	LoRa_SignalError();
 }
 
-static void OnRxError( void )
+void LoRa_ProcessRequest(Frame_t frame)
 {
-	Radio.Sleep();
-	RadioState = RADIO_RX_ERROR;
+	uint8_t i;
+	#ifdef END_NODE
+	Message_t reply;
+	#endif
+	
+	PC_Write(frame);
+	for (i = 0; i < frame.nrOfMessages; i++)
+	{
+		#ifdef END_NODE
+		reply.command = frame.messages[i].command;
+		switch (frame.messages[i].command)
+		{
+		case COMMAND_IS_PRESENT:
+			reply.argLength = 2;
+			reply.rawArgument[0] = (handle.transmissionRate >> 8) & 0xFF;
+			reply.rawArgument[1] = (handle.transmissionRate >> 0) & 0xFF;
+			break;
+		case COMMAND_ERROR:
+			switch (frame.messages[i].rawArgument[0])
+			{
+				case ERROR_RESEND:
+					memcpy(&reply, &handle.lastFrame, FRAME_MAX_SIZE);
+					break;
+				case ERROR_RESET:
+					//TODO
+					break;
+			}
+			break;
+		case COMMAND_SET_ADDRESS:
+			handle.address = frame.messages[i].rawArgument[0];
+			EEPROM_WriteByte(EEPROM_LOCATION, handle.address);
+			reply.argLength = 1;
+			reply.rawArgument[0] = ACK;
+			break;
+		case COMMAND_TRANSMISSION_RATE:
+			handle.transmissionRate = ((frame.messages[i].rawArgument[0] >> 8) & 0xFF) |
+				((frame.messages[i].rawArgument[1] >> 0) & 0xFF);
+			reply.argLength = 1;
+			reply.rawArgument[0] = ACK;
+			break;
+		case COMMAND_CHANGE_COMPENSATOR:
+		case COMMAND_SET_COMPENSATOR:
+			Comp_ProcessRequest(frame.messages[i]);
+			reply.argLength = 1;
+			reply.rawArgument[0] = ACK;
+			break;
+		case COMMAND_ACQUISITION:
+			Meter_ProcessRequest(frame.messages[i]);
+			break;
+		default:
+			reply.argLength = 1;
+			reply.rawArgument[0] = NAK;
+			break;
+		}
+		LoRa_QueueMessage(reply);
+		#endif
+	}
+	memcpy(&handle.lastFrame, &reply, FRAME_MAX_SIZE);
 }
 
 void LoRa_QueueMessage(Message_t message)
 {
+	memcpy(&handle.messageQueue[handle.queueLength],
+		&message,
+		MESSAGE_HEADER_SIZE + message.argLength);
+	handle.queueLength++;
 }
 
-void LoRa_MainLoop(void)
-{/*
-	int32_t tempValue;
-	Frame_t result;
+static void LoRa_SignalError(void)
+{
+	Frame_t frame;
 	
-	DBG_PRINTF("\r\n");
-	DBG_PRINTF("Ultima citire contor\t%02d:%02d:%02d\r\n", DAQ_Data.time.hour, DAQ_Data.time.minute, DAQ_Data.time.second);
-	DBG_PRINTF("Energie activa\t\t%03d.%03d\tkWh\r\n", DAQ_Data.activeEnergy / 1000, DAQ_Data.activeEnergy % 1000);
-	DBG_PRINTF("Energie inductiva\t\t%03d.%03d\tkVARh\r\n", DAQ_Data.inductiveEnergy / 1000, DAQ_Data.inductiveEnergy % 1000);
-	DBG_PRINTF("Energie capacitiva\t\t%03d.%03d\tkVARh\r\n", DAQ_Data.capacitiveEnergy / 1000, DAQ_Data.capacitiveEnergy % 1000);
-	DBG_PRINTF("Energie reactiva\t%c%03d.%03d\tkVARh\r\n", DAQ_Data.inductive? '+': '-',  DAQ_Data.reactiveEnergy / 1000,  DAQ_Data.reactiveEnergy % 1000);
-	DBG_PRINTF("Putere activa\t\t%03d.%03d\tkW\r\n", DAQ_Data.activePower / 1000, DAQ_Data.activePower % 1000);
-	DBG_PRINTF("Putere reactiva\t%c%03d.%03d\tkVAR\r\n", DAQ_Data.inductive? '+': '-',  DAQ_Data.reactivePower / 1000,  DAQ_Data.reactivePower % 1000);
-	DBG_PRINTF("Putere aparenta\t\t%03d.%03d\tkVA\r\n", DAQ_Data.apparentPower / 1000, DAQ_Data.apparentPower % 1000);
-	DBG_PRINTF("Factor putere\t\t%c%d.%02d\r\n", DAQ_Data.inductive? '+': '-', abs(DAQ_Data.powerFactor) / 100, abs(DAQ_Data.powerFactor) % 100);
+	frame.endDevice = handle.address;
+	frame.nrOfMessages = 1;
 	
-	if (DAQ_Data.haveMeter)
-	{
-		result.endDevice = myAddress;
-		result.nrOfMessages = 0;
-		
-		result.messages[result.nrOfMessages].command = COMMAND_TIMESTAMP;
-		result.messages[result.nrOfMessages].argLength = 3;
-		result.messages[result.nrOfMessages].rawArgument[0] = DAQ_Data.time.hour;
-		result.messages[result.nrOfMessages].rawArgument[1] = DAQ_Data.time.minute;
-		result.messages[result.nrOfMessages].rawArgument[2] = DAQ_Data.time.second;
-		result.nrOfMessages++;
-		
-		result.messages[result.nrOfMessages].command = COMMAND_ACTIVE_ENERGY;
-		result.messages[result.nrOfMessages].argLength = 3;
-		result.messages[result.nrOfMessages].rawArgument[0] = (DAQ_Data.activeEnergy >> 16) & 0xFF;
-		result.messages[result.nrOfMessages].rawArgument[1] = (DAQ_Data.activeEnergy >> 8) & 0xFF;
-		result.messages[result.nrOfMessages].rawArgument[2] = (DAQ_Data.activeEnergy >> 0) & 0xFF;
-		result.nrOfMessages++;
-		
-		if (!DAQ_Data.inductive)
-			tempValue = 0 - DAQ_Data.reactiveEnergy;
-		else
-			tempValue = DAQ_Data.reactiveEnergy;
-		result.messages[result.nrOfMessages].command = COMMAND_REACTIVE_ENERGY;
-		result.messages[result.nrOfMessages].argLength = 3;
-		result.messages[result.nrOfMessages].rawArgument[0] = (tempValue >> 16) & 0xFF;
-		result.messages[result.nrOfMessages].rawArgument[1] = (tempValue >> 8) & 0xFF;
-		result.messages[result.nrOfMessages].rawArgument[2] = (tempValue >> 0) & 0xFF;
-		result.nrOfMessages++;
-		
-		result.messages[result.nrOfMessages].command = COMMAND_ACTIVE_POWER;
-		result.messages[result.nrOfMessages].argLength = 3;
-		result.messages[result.nrOfMessages].rawArgument[0] = (DAQ_Data.activePower >> 16) & 0xFF;
-		result.messages[result.nrOfMessages].rawArgument[1] = (DAQ_Data.activePower >> 8) & 0xFF;
-		result.messages[result.nrOfMessages].rawArgument[2] = (DAQ_Data.activePower >> 0) & 0xFF;
-		result.nrOfMessages++;
-		
-		if (!DAQ_Data.inductive)
-			tempValue = 0 - DAQ_Data.reactivePower;
-		else
-			tempValue = DAQ_Data.reactivePower;
-		result.messages[result.nrOfMessages].command = COMMAND_REACTIVE_POWER;
-		result.messages[result.nrOfMessages].argLength = 3;
-		result.messages[result.nrOfMessages].rawArgument[0] = (tempValue >> 16) & 0xFF;
-		result.messages[result.nrOfMessages].rawArgument[1] = (tempValue >> 8) & 0xFF;
-		result.messages[result.nrOfMessages].rawArgument[2] = (tempValue >> 0) & 0xFF;
-		result.nrOfMessages++;
-			
-		PC_Send(result);
-	}
+	frame.messages[0].command = COMMAND_ERROR;
+	frame.messages[0].argLength = 1;
+	frame.messages[0].rawArgument[0] = ERROR_LORA_NOK;
 	
-	TimerSetValue(&appTimer, appTransmissionRate * 1000); 
-  TimerStart(&appTimer);*/
-}
-
-void LoRa_ProcessFrame(Frame_t frame)
-{/*
-	Frame_t reply;
-	
-	reply.endDevice = myAddress;
-	reply.nrOfMessages = 1;
-	
-	reply.messages[0].command = frame.messages[0].command;
-	
-	switch (frame.messages[0].command)
-	{
-		case COMMAND_IS_PRESENT:
-			reply.messages[0].argLength = 2;
-			reply.messages[0].rawArgument[0] = (appTransmissionRate >> 8) & 0xFF;
-			reply.messages[0].rawArgument[1] = (appTransmissionRate >> 0) & 0xFF;
-			PC_Send(reply);
-			break;
-		case COMMAND_SET_ADDRESS:
-			myAddress = frame.messages[0].rawArgument[0];
-			EEPROM_Write(DEVICE_ADDRESS_LOCATION, myAddress);
-			reply.endDevice = myAddress;
-			reply.messages[0].argLength = 1;
-			reply.messages[0].rawArgument[0] = ACK;
-			PC_Send(reply);
-			break;
-		case COMMAND_TRANSMISSION_RATE:
-			appTransmissionRate = ((frame.messages[0].rawArgument[0] >> 8) & 0xFF) |
-				((frame.messages[0].rawArgument[1] >> 0) & 0xFF);
-			reply.messages[0].argLength = 1;
-			reply.messages[0].rawArgument[0] = ACK;
-			PC_Send(reply);
-			break;
-		case COMMAND_SET_COMPENSATOR:
-			//ACT_SetContact((frame.messages[0].rawArgument[0] >> 4) & 0x0F, (frame.messages[0].rawArgument[1] & 0x0F));
-			reply.messages[0].argLength = 1;
-			reply.messages[0].rawArgument[0] = ACK;
-			break;
-		default:
-			reply.messages[0].argLength = 1;
-			reply.messages[0].rawArgument[0] = NAK;
-			PC_Send(reply);
-			break;
-	}*/
-}
-
-void expectingResponseFrom(uint8_t target)
-{/*
-	uint8_t i;
-	
-	if (target == ADDRESS_GENERAL)
-		for (i = 0; i < RADIO_MAX_NODES; i++)
-			RadioNodes[i].responsePending = true;
-	else
-		RadioNodes[target - ADDRESS_BEACON].responsePending = true;*/
-}
-
-bool notAllNodesResponded(uint8_t lastResponseSource)
-{
-	uint8_t i;
-	for (i = 0; i < RADIO_MAX_NODES; i++)
-		if (RadioNodes[i].address > lastResponseSource && RadioNodes[i].responsePending)
-			return true;
-		
-	return false;
-}
-
-void LoRa_init(void)
-{
-	myAddress = *((uint8_t *) EEPROM_LOCATION);
-	
-  RadioEvents.TxDone = OnTxDone;
-  RadioEvents.RxDone = OnRxDone;
-  RadioEvents.TxTimeout = OnTxTimeout;
-  RadioEvents.RxTimeout = OnRxTimeout;
-  RadioEvents.RxError = OnRxError;
-
-  Radio.Init( &RadioEvents );
-
-  Radio.SetChannel( RADIO_FREQUENCY );
-
-  Radio.SetTxConfig( MODEM_LORA, LoRa_OutputPower, 0, LoRa_Bandwidth,
-                                 LoRa_SpreadingFactor, LoRa_CodingRate,
-																 LoRa_PreambleSize, !LoRa_VariablePayload,
-																 LoRa_PerformCRC, 0, 0, false, LoRa_TxTimeout );
-    
-  Radio.SetRxConfig( MODEM_LORA, LoRa_Bandwidth, LoRa_SpreadingFactor,
-																 LoRa_CodingRate, 0, LoRa_PreambleSize,
-																 LoRa_RxSymTimeout, !LoRa_VariablePayload,
-																 LoRa_PayloadMaxSize, LoRa_PerformCRC, 0, 0, false, true );
-}
-
-void LoRa_send(uint8_t target, uint8_t command, uint8_t* data, uint8_t length)
-{/*
-	uint8_t i;
-	RadioTxBuffer[IDX_SOURCE_ADDRESS] = myAddress;
-	RadioTxBuffer[IDX_TARGET_ADDRESS] = target;
-	RadioTxBuffer[IDX_COMMAND] = command;
-	for (i = 0; i < length; i++)
-		RadioTxBuffer[IDX_COMMAND + 1 + i] = data[i];
-	Radio.Send((uint8_t *) RadioTxBuffer, LoRa_PayloadMaxSize );
-	RadioState = RADIO_LOWPOWER;
-	if (target != ADDRESS_MASTER)
-		expectingResponseFrom(target);*/
-}
-
-void LoRa_startReceiving(void)
-{
-	Radio.Rx(LoRa_RxMsTimeout);
-	RadioState = RADIO_LOWPOWER;
-}
-
-void LoRa_receive(uint8_t* source, uint8_t* command, uint8_t* parameters, uint8_t* rssi, uint8_t* snr)
-{/*
-	uint8_t i;
-	*source = RadioRxBuffer[IDX_SOURCE_ADDRESS];
-	*command = RadioRxBuffer[IDX_COMMAND];
-	for (i = 0; i < PARAMETERS_MAX_SIZE; i++)
-		parameters[i] = RadioRxBuffer[IDX_COMMAND + 1 + i];
-	RadioState = RADIO_LOWPOWER;
-	*rssi = abs(RSSI);
-	*snr = SNR;
-	if (*source != ADDRESS_MASTER)
-	{
-		for (i = 0; i < RADIO_MAX_NODES; i++)
-			if (RadioNodes[i].address == *source)
-			{
-				RadioNodes[i].responsePending = false;
-				break;
-			}
-		if (notAllNodesResponded(*source))
-			LoRa_startReceiving();
-	}*/
-}
-
-uint8_t LoRa_whoTimedOut(void)
-{/*
-	uint8_t target = RadioTxBuffer[IDX_TARGET_ADDRESS];
-	uint8_t i;
-	
-	for (i = 0; i < RADIO_MAX_NODES; i++)
-		if (RadioNodes[i].responsePending)
-		{
-			RadioNodes[i].responsePending = false;
-			target = RadioNodes[i].address;
-			break;
-		}
-	RadioState = RADIO_LOWPOWER;
-	return target;*/
-	return 0;
-}
-
-void LoRa_updateParameters(void)
-{
-	Radio.SetTxConfig( MODEM_LORA, LoRa_OutputPower, 0, LoRa_Bandwidth,
-																 LoRa_SpreadingFactor, LoRa_CodingRate,
-																 LoRa_PreambleSize, !LoRa_VariablePayload,
-																 LoRa_PerformCRC, 0, 0, false, LoRa_TxTimeout );
-		
-	Radio.SetRxConfig( MODEM_LORA, LoRa_Bandwidth, LoRa_SpreadingFactor,
-																 LoRa_CodingRate, 0, LoRa_PreambleSize,
-																 LoRa_RxSymTimeout, !LoRa_VariablePayload,
-																 LoRa_PayloadMaxSize, LoRa_PerformCRC, 0, 0, false, true );
-}
-
-void LoRa_setBandwidth(uint8_t bandwidth)
-{
-	LoRa_Bandwidth = bandwidth;
-}
-
-void LoRa_setOutputPower(uint8_t outputPower)
-{
-	LoRa_OutputPower = outputPower;
-}
-
-void LoRa_setCodingRate(uint8_t codingRate)
-{
-	LoRa_CodingRate = codingRate;
-}
-
-void LoRa_setSpreadingFactor(uint8_t spreadingFactor)
-{
-	LoRa_SpreadingFactor = spreadingFactor;
-}
-
-void LoRa_setRxSymTimeout(uint8_t rxSymTimeout)
-{
-	LoRa_RxSymTimeout = rxSymTimeout;
-}
-
-void LoRa_setRxMsTimeout(uint32_t rxMsTimeout)
-{
-	LoRa_RxMsTimeout = rxMsTimeout;
-}
-
-void LoRa_setTxTimeout(uint32_t txTimeout)
-{
-	LoRa_TxTimeout = txTimeout;
-}
-
-void LoRa_setPreambleSize(uint8_t preambleSize)
-{
-	LoRa_PreambleSize = preambleSize;
-}
-
-void LoRa_setPayloadMaxSize(uint8_t payloadMaxSize)
-{
-	LoRa_PayloadMaxSize = payloadMaxSize;
-}
-
-void LoRa_setVariablePayload(bool variablePayload)
-{
-	LoRa_VariablePayload = variablePayload;
-}
-
-void LoRa_setPerformCRC(bool performCRC)
-{
-	LoRa_PerformCRC = performCRC;
+	PC_Write(frame);
 }
