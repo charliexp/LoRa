@@ -1,32 +1,13 @@
-#include <string.h>
-#include <stdlib.h>
-#include "actuator.h"
-#include "app_conf.h"
-#include "daq.h"
+#include "compensator.h"
+#include "meter.h"
+
 #include "message.h"
 #include "lora.h"
 #include "pc.h"
 #include "timeServer.h"
 
-#define DEVICE_ADDRESS_LOCATION		0x08080000
-
-uint16_t appTransmissionRate = APP_INITIAL_TRANSMISSION_RATE;
-
-uint8_t myAddress;
 bool LoRa_setupPending;
 TimerEvent_t appTimer;
-
-void setAddress(uint8_t newAddress)
-{
-	if (newAddress != myAddress)
-	{
-		HAL_FLASHEx_DATAEEPROM_Unlock();
-		HAL_FLASHEx_DATAEEPROM_Erase(DEVICE_ADDRESS_LOCATION);
-		HAL_FLASHEx_DATAEEPROM_Program(FLASH_TYPEPROGRAMDATA_BYTE, DEVICE_ADDRESS_LOCATION, newAddress);
-		HAL_FLASHEx_DATAEEPROM_Lock();
-		myAddress = newAddress;
-	}
-}
 
 void processCommunicationCommand(uint8_t source, uint8_t command, uint8_t* parameters, uint8_t rssi, uint8_t snr)
 {/*
@@ -194,73 +175,6 @@ void processRadioSetupCommand(uint8_t source, uint8_t command, uint8_t* paramete
 
 void OnTimerEvent(void)
 {
-	int32_t tempValue;
-	Frame_t result;
-	
-	DBG_PRINTF("\r\n");
-	DBG_PRINTF("Ultima citire contor\t%02d:%02d:%02d\r\n", DAQ_Data.time.hour, DAQ_Data.time.minute, DAQ_Data.time.second);
-	DBG_PRINTF("Energie activa\t\t%03d.%03d\tkWh\r\n", DAQ_Data.activeEnergy / 1000, DAQ_Data.activeEnergy % 1000);
-	DBG_PRINTF("Energie inductiva\t\t%03d.%03d\tkVARh\r\n", DAQ_Data.inductiveEnergy / 1000, DAQ_Data.inductiveEnergy % 1000);
-	DBG_PRINTF("Energie capacitiva\t\t%03d.%03d\tkVARh\r\n", DAQ_Data.capacitiveEnergy / 1000, DAQ_Data.capacitiveEnergy % 1000);
-	DBG_PRINTF("Energie reactiva\t%c%03d.%03d\tkVARh\r\n", DAQ_Data.inductive? '+': '-',  DAQ_Data.reactiveEnergy / 1000,  DAQ_Data.reactiveEnergy % 1000);
-	DBG_PRINTF("Putere activa\t\t%03d.%03d\tkW\r\n", DAQ_Data.activePower / 1000, DAQ_Data.activePower % 1000);
-	DBG_PRINTF("Putere reactiva\t%c%03d.%03d\tkVAR\r\n", DAQ_Data.inductive? '+': '-',  DAQ_Data.reactivePower / 1000,  DAQ_Data.reactivePower % 1000);
-	DBG_PRINTF("Putere aparenta\t\t%03d.%03d\tkVA\r\n", DAQ_Data.apparentPower / 1000, DAQ_Data.apparentPower % 1000);
-	DBG_PRINTF("Factor putere\t\t%c%d.%02d\r\n", DAQ_Data.inductive? '+': '-', abs(DAQ_Data.powerFactor) / 100, abs(DAQ_Data.powerFactor) % 100);
-	
-	if (DAQ_Data.haveMeter)
-	{
-		result.endDevice = myAddress;
-		result.nrOfMessages = 0;
-		
-		result.messages[result.nrOfMessages].command = COMMAND_TIMESTAMP;
-		result.messages[result.nrOfMessages].argLength = 3;
-		result.messages[result.nrOfMessages].rawArgument[0] = DAQ_Data.time.hour;
-		result.messages[result.nrOfMessages].rawArgument[1] = DAQ_Data.time.minute;
-		result.messages[result.nrOfMessages].rawArgument[2] = DAQ_Data.time.second;
-		result.nrOfMessages++;
-		
-		result.messages[result.nrOfMessages].command = COMMAND_ACTIVE_ENERGY;
-		result.messages[result.nrOfMessages].argLength = 3;
-		result.messages[result.nrOfMessages].rawArgument[0] = (DAQ_Data.activeEnergy >> 16) & 0xFF;
-		result.messages[result.nrOfMessages].rawArgument[1] = (DAQ_Data.activeEnergy >> 8) & 0xFF;
-		result.messages[result.nrOfMessages].rawArgument[2] = (DAQ_Data.activeEnergy >> 0) & 0xFF;
-		result.nrOfMessages++;
-		
-		if (!DAQ_Data.inductive)
-			tempValue = 0 - DAQ_Data.reactiveEnergy;
-		else
-			tempValue = DAQ_Data.reactiveEnergy;
-		result.messages[result.nrOfMessages].command = COMMAND_REACTIVE_ENERGY;
-		result.messages[result.nrOfMessages].argLength = 3;
-		result.messages[result.nrOfMessages].rawArgument[0] = (tempValue >> 16) & 0xFF;
-		result.messages[result.nrOfMessages].rawArgument[1] = (tempValue >> 8) & 0xFF;
-		result.messages[result.nrOfMessages].rawArgument[2] = (tempValue >> 0) & 0xFF;
-		result.nrOfMessages++;
-		
-		result.messages[result.nrOfMessages].command = COMMAND_ACTIVE_POWER;
-		result.messages[result.nrOfMessages].argLength = 3;
-		result.messages[result.nrOfMessages].rawArgument[0] = (DAQ_Data.activePower >> 16) & 0xFF;
-		result.messages[result.nrOfMessages].rawArgument[1] = (DAQ_Data.activePower >> 8) & 0xFF;
-		result.messages[result.nrOfMessages].rawArgument[2] = (DAQ_Data.activePower >> 0) & 0xFF;
-		result.nrOfMessages++;
-		
-		if (!DAQ_Data.inductive)
-			tempValue = 0 - DAQ_Data.reactivePower;
-		else
-			tempValue = DAQ_Data.reactivePower;
-		result.messages[result.nrOfMessages].command = COMMAND_REACTIVE_POWER;
-		result.messages[result.nrOfMessages].argLength = 3;
-		result.messages[result.nrOfMessages].rawArgument[0] = (tempValue >> 16) & 0xFF;
-		result.messages[result.nrOfMessages].rawArgument[1] = (tempValue >> 8) & 0xFF;
-		result.messages[result.nrOfMessages].rawArgument[2] = (tempValue >> 0) & 0xFF;
-		result.nrOfMessages++;
-			
-		PC_Send(result);
-	}
-	
-	TimerSetValue(&appTimer, appTransmissionRate * 1000); 
-  TimerStart(&appTimer);
 }
 
 int main(void)
@@ -269,22 +183,24 @@ int main(void)
 	SystemClock_Config();
 	DBG_Init();
 	HW_Init();
-	LoRa_init();
+	
+	Comp_Init();
+	
+	/*LoRa_init();
 	PC_Init();
 	DAQ_Init();
 	ACT_Init();
 	
 	LoRa_setupPending = false;
-	myAddress = *((uint8_t *) DEVICE_ADDRESS_LOCATION);
 	LoRa_startReceiving();
 	
 	TimerInit(&appTimer, OnTimerEvent);
   OnTimerEvent();
-	
+	*/
   while(1)
   {
-		PC_MainLoop();
-		DAQ_MainLoop();
+		//PC_MainLoop();
+		//DAQ_MainLoop();
 		/*if(UartState == UART_RX)
 		{
 			PC_Receive(&target, &command, parameters, &length);

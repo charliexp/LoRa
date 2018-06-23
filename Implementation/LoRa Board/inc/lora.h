@@ -1,7 +1,6 @@
 #ifndef LORA_H
 #define LORA_H
 
-#include "app_conf.h"
 #include "message.h"
 #include "hw.h"
 
@@ -27,6 +26,10 @@ typedef struct RadioNodeStruct_t
 extern RadioNodeStruct_t RadioNodes[];
 extern RadioStates_t RadioState;
 
+void LoRa_QueueMessage(Message_t message);
+void LoRa_ReplyMessage(Message_t message);
+
+void LoRa_MainLoop(void);
 void LoRa_init(void);
 void LoRa_send(uint8_t target, uint8_t command, uint8_t* data, uint8_t length);
 void LoRa_startReceiving(void);

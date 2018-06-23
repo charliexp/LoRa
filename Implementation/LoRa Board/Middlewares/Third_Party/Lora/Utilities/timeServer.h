@@ -68,6 +68,7 @@ Maintainer: Miguel Luis and Gregory Cristian
 
 /* Includes ------------------------------------------------------------------*/
    
+#include "hw.h"
 #include "utilities.h"
 
 /* Exported types ------------------------------------------------------------*/

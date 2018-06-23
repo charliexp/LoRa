@@ -1,8 +1,16 @@
 #include "lora.h"
 #include "radio.h"
 #include "stdlib.h"
+#include "pc.h"
+#include "eeprom.h"
+#include "compensator.h"
+#include "meter.h"
 
 #define RADIO_FREQUENCY       866500000
+#define EEPROM_LOCATION		0x08080000
+#define APP_INITIAL_TRANSMISSION_RATE		10
+
+uint32_t myAddress;
 
 bool LoRaSetupRequired = false;
 
@@ -29,6 +37,8 @@ volatile uint8_t RadioRxBuffer[RADIO_BUFFER_SIZE];
 volatile uint8_t RadioTxBuffer[RADIO_BUFFER_SIZE];
 uint16_t BufferSize = RADIO_BUFFER_SIZE;
 
+uint16_t appTransmissionRate = APP_INITIAL_TRANSMISSION_RATE;
+
 RadioNodeStruct_t RadioNodes[RADIO_MAX_NODES] = 
 {
 	{false, 2},
@@ -39,8 +49,6 @@ RadioStates_t RadioState = RADIO_LOWPOWER;
 int8_t RSSI = 0;
 int8_t SNR = 0;
 static RadioEvents_t RadioEvents;
-
-extern uint8_t myAddress;
 
 static void OnTxDone( void )
 {
@@ -76,6 +84,126 @@ static void OnRxError( void )
 	RadioState = RADIO_RX_ERROR;
 }
 
+void LoRa_QueueMessage(Message_t message)
+{
+}
+
+void LoRa_MainLoop(void)
+{/*
+	int32_t tempValue;
+	Frame_t result;
+	
+	DBG_PRINTF("\r\n");
+	DBG_PRINTF("Ultima citire contor\t%02d:%02d:%02d\r\n", DAQ_Data.time.hour, DAQ_Data.time.minute, DAQ_Data.time.second);
+	DBG_PRINTF("Energie activa\t\t%03d.%03d\tkWh\r\n", DAQ_Data.activeEnergy / 1000, DAQ_Data.activeEnergy % 1000);
+	DBG_PRINTF("Energie inductiva\t\t%03d.%03d\tkVARh\r\n", DAQ_Data.inductiveEnergy / 1000, DAQ_Data.inductiveEnergy % 1000);
+	DBG_PRINTF("Energie capacitiva\t\t%03d.%03d\tkVARh\r\n", DAQ_Data.capacitiveEnergy / 1000, DAQ_Data.capacitiveEnergy % 1000);
+	DBG_PRINTF("Energie reactiva\t%c%03d.%03d\tkVARh\r\n", DAQ_Data.inductive? '+': '-',  DAQ_Data.reactiveEnergy / 1000,  DAQ_Data.reactiveEnergy % 1000);
+	DBG_PRINTF("Putere activa\t\t%03d.%03d\tkW\r\n", DAQ_Data.activePower / 1000, DAQ_Data.activePower % 1000);
+	DBG_PRINTF("Putere reactiva\t%c%03d.%03d\tkVAR\r\n", DAQ_Data.inductive? '+': '-',  DAQ_Data.reactivePower / 1000,  DAQ_Data.reactivePower % 1000);
+	DBG_PRINTF("Putere aparenta\t\t%03d.%03d\tkVA\r\n", DAQ_Data.apparentPower / 1000, DAQ_Data.apparentPower % 1000);
+	DBG_PRINTF("Factor putere\t\t%c%d.%02d\r\n", DAQ_Data.inductive? '+': '-', abs(DAQ_Data.powerFactor) / 100, abs(DAQ_Data.powerFactor) % 100);
+	
+	if (DAQ_Data.haveMeter)
+	{
+		result.endDevice = myAddress;
+		result.nrOfMessages = 0;
+		
+		result.messages[result.nrOfMessages].command = COMMAND_TIMESTAMP;
+		result.messages[result.nrOfMessages].argLength = 3;
+		result.messages[result.nrOfMessages].rawArgument[0] = DAQ_Data.time.hour;
+		result.messages[result.nrOfMessages].rawArgument[1] = DAQ_Data.time.minute;
+		result.messages[result.nrOfMessages].rawArgument[2] = DAQ_Data.time.second;
+		result.nrOfMessages++;
+		
+		result.messages[result.nrOfMessages].command = COMMAND_ACTIVE_ENERGY;
+		result.messages[result.nrOfMessages].argLength = 3;
+		result.messages[result.nrOfMessages].rawArgument[0] = (DAQ_Data.activeEnergy >> 16) & 0xFF;
+		result.messages[result.nrOfMessages].rawArgument[1] = (DAQ_Data.activeEnergy >> 8) & 0xFF;
+		result.messages[result.nrOfMessages].rawArgument[2] = (DAQ_Data.activeEnergy >> 0) & 0xFF;
+		result.nrOfMessages++;
+		
+		if (!DAQ_Data.inductive)
+			tempValue = 0 - DAQ_Data.reactiveEnergy;
+		else
+			tempValue = DAQ_Data.reactiveEnergy;
+		result.messages[result.nrOfMessages].command = COMMAND_REACTIVE_ENERGY;
+		result.messages[result.nrOfMessages].argLength = 3;
+		result.messages[result.nrOfMessages].rawArgument[0] = (tempValue >> 16) & 0xFF;
+		result.messages[result.nrOfMessages].rawArgument[1] = (tempValue >> 8) & 0xFF;
+		result.messages[result.nrOfMessages].rawArgument[2] = (tempValue >> 0) & 0xFF;
+		result.nrOfMessages++;
+		
+		result.messages[result.nrOfMessages].command = COMMAND_ACTIVE_POWER;
+		result.messages[result.nrOfMessages].argLength = 3;
+		result.messages[result.nrOfMessages].rawArgument[0] = (DAQ_Data.activePower >> 16) & 0xFF;
+		result.messages[result.nrOfMessages].rawArgument[1] = (DAQ_Data.activePower >> 8) & 0xFF;
+		result.messages[result.nrOfMessages].rawArgument[2] = (DAQ_Data.activePower >> 0) & 0xFF;
+		result.nrOfMessages++;
+		
+		if (!DAQ_Data.inductive)
+			tempValue = 0 - DAQ_Data.reactivePower;
+		else
+			tempValue = DAQ_Data.reactivePower;
+		result.messages[result.nrOfMessages].command = COMMAND_REACTIVE_POWER;
+		result.messages[result.nrOfMessages].argLength = 3;
+		result.messages[result.nrOfMessages].rawArgument[0] = (tempValue >> 16) & 0xFF;
+		result.messages[result.nrOfMessages].rawArgument[1] = (tempValue >> 8) & 0xFF;
+		result.messages[result.nrOfMessages].rawArgument[2] = (tempValue >> 0) & 0xFF;
+		result.nrOfMessages++;
+			
+		PC_Send(result);
+	}
+	
+	TimerSetValue(&appTimer, appTransmissionRate * 1000); 
+  TimerStart(&appTimer);*/
+}
+
+void LoRa_ProcessFrame(Frame_t frame)
+{/*
+	Frame_t reply;
+	
+	reply.endDevice = myAddress;
+	reply.nrOfMessages = 1;
+	
+	reply.messages[0].command = frame.messages[0].command;
+	
+	switch (frame.messages[0].command)
+	{
+		case COMMAND_IS_PRESENT:
+			reply.messages[0].argLength = 2;
+			reply.messages[0].rawArgument[0] = (appTransmissionRate >> 8) & 0xFF;
+			reply.messages[0].rawArgument[1] = (appTransmissionRate >> 0) & 0xFF;
+			PC_Send(reply);
+			break;
+		case COMMAND_SET_ADDRESS:
+			myAddress = frame.messages[0].rawArgument[0];
+			EEPROM_Write(DEVICE_ADDRESS_LOCATION, myAddress);
+			reply.endDevice = myAddress;
+			reply.messages[0].argLength = 1;
+			reply.messages[0].rawArgument[0] = ACK;
+			PC_Send(reply);
+			break;
+		case COMMAND_TRANSMISSION_RATE:
+			appTransmissionRate = ((frame.messages[0].rawArgument[0] >> 8) & 0xFF) |
+				((frame.messages[0].rawArgument[1] >> 0) & 0xFF);
+			reply.messages[0].argLength = 1;
+			reply.messages[0].rawArgument[0] = ACK;
+			PC_Send(reply);
+			break;
+		case COMMAND_SET_COMPENSATOR:
+			//ACT_SetContact((frame.messages[0].rawArgument[0] >> 4) & 0x0F, (frame.messages[0].rawArgument[1] & 0x0F));
+			reply.messages[0].argLength = 1;
+			reply.messages[0].rawArgument[0] = ACK;
+			break;
+		default:
+			reply.messages[0].argLength = 1;
+			reply.messages[0].rawArgument[0] = NAK;
+			PC_Send(reply);
+			break;
+	}*/
+}
+
 void expectingResponseFrom(uint8_t target)
 {/*
 	uint8_t i;
@@ -99,6 +227,8 @@ bool notAllNodesResponded(uint8_t lastResponseSource)
 
 void LoRa_init(void)
 {
+	myAddress = *((uint8_t *) EEPROM_LOCATION);
+	
   RadioEvents.TxDone = OnTxDone;
   RadioEvents.RxDone = OnRxDone;
   RadioEvents.TxTimeout = OnTxTimeout;
