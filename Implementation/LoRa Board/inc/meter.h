@@ -16,7 +16,6 @@
 /* External variables --------------------------------------------------------*/
 /* Exported functions --------------------------------------------------------*/
 void Meter_Init(void);
-void Meter_MainLoop(void);
 void Meter_ProcessRequest(Message_t message);
 
 #ifdef __cplusplus
