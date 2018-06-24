@@ -116,9 +116,7 @@ namespace Power_LoRa
             Frame directConnectionFrame;
 
             BackgroundWorker worker = (BackgroundWorker)sender;
-
-            connectionHandler.Write(new Connection.Messages.Message(CommandType.IsPresent));
-
+            
             while (connectionHandler.Connected)
             {
                 directConnectionFrame = connectionHandler.Read();
@@ -145,13 +143,6 @@ namespace Power_LoRa
             {
                 switch (message.Command)
                 {
-                    case CommandType.IsPresent:
-                        array = message.RawArgument;
-                        Array.Reverse(array);
-                        directDevice.Address = frame.EndDevice;
-                        directDevice.TransmissionRate = BitConverter.ToInt16(array, 0);
-                        directDeviceInitialized = true;
-                        break;
                     case CommandType.Timestamp:
                         directDevice.Timestamp = new DateTime(1, 1, 1,
                             message.RawArgument[0],

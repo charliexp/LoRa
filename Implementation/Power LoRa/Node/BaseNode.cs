@@ -61,20 +61,6 @@ namespace Power_LoRa.Node
                     Type = NodeType.EndDevice;
             }
         }
-        public Int16 TransmissionRate
-        {
-            get
-            {
-                return transmissionRate;
-            }
-            set
-            {
-                transmissionRate = value;
-                GroupBox.UpdateInterface(GroupBox.TransmissionRate, transmissionRate);
-                /*GroupBox.EnergyChart.MaxPoints = 3600 / value * 24;
-                GroupBox.PowerChart.MaxPoints = 3600 / value * 24;*/
-            }
-        }
         public DateTime Timestamp
         {
             get
@@ -185,9 +171,9 @@ namespace Power_LoRa.Node
         public void CheckIfPresent(object sender, EventArgs e)
         {
             if (GroupBox.Address != 0)
-                Program.Write(new Connection.Messages.Message(CommandType.IsPresent, GroupBox.Address));
+                Program.Write(new Connection.Messages.Message(CommandType.Acquisition, GroupBox.Address));
             else
-                Program.Write(new Connection.Messages.Message(CommandType.IsPresent));
+                Program.Write(new Connection.Messages.Message(CommandType.Acquisition));
         }
         public void SetNewAddress(object sender, EventArgs e)
         {

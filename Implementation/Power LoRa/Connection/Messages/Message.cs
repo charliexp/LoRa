@@ -24,13 +24,11 @@ namespace Power_LoRa.Connection.Messages
         }
         public enum CommandType
 		{
-			IsPresent = 0x10,
-            Error = 0x11,
+            Error = 0x10,
             
 			SetAddress = 0x20,
-            TransmissionRate = 0x21,
-            ChangeCompensator = 0x22,
-            SetCompensator = 0x23,
+            ChangeCompensator = 0x21,
+            SetCompensator = 0x22,
 
             Acquisition = 0x30,
             Timestamp = 0x31,
@@ -72,14 +70,6 @@ namespace Power_LoRa.Connection.Messages
                 if (value.Length != 0)
                     switch(Command)
                     {
-                        case CommandType.IsPresent:
-                        case CommandType.TransmissionRate:
-                            if (rawArgument.Length == 1)
-                                PrintableArgument = ((ResponseType)rawArgument[Idx_ack]).ToString();
-                            else
-                                PrintableArgument = ((rawArgument[0] << 8) |
-                                    (rawArgument[1])).ToString() + " s";
-                            break;
                         case CommandType.Error:
                             PrintableArgument = ((ErrorType)rawArgument[0]).ToString();
                             break;

@@ -42,7 +42,6 @@
 #endif
 
 #define ADDRESS_BROADCAST							0xAA
-#define INITIAL_TRANSMISSION_RATE			10
 
 #define EEPROM_LOCATION								0x08080000
 
@@ -69,8 +68,6 @@ typedef struct LoRaHandle_t
 	Radio_t hw;
 /* Node address */
 	uint8_t address;
-/* Transmission rate */
-	uint16_t transmissionRate;
 /* Message queue */
 	Message_t messageQueue[FRAME_MAX_MESSAGES];
 #ifdef GATEWAY
@@ -107,11 +104,6 @@ uint8_t LoRa_GetAddress(void)
 	return handle.address;
 }
 
-uint16_t LoRa_GetTransmissionRate(void)
-{
-	return handle.transmissionRate;
-}
-
 void LoRa_Init(void)
 {
 	#ifdef GATEWAY
@@ -133,7 +125,6 @@ void LoRa_Init(void)
 	handle.hw.bandwidth = RADIO_INITIAL_BANDWIDTH;
 	handle.hw.spreadingFactor = RADIO_INITIAL_SPREAD_FACTOR;
 	handle.timeout = RADIO_RX_TIMEOUT;
-	handle.transmissionRate = INITIAL_TRANSMISSION_RATE;
 	
 	Radio.Init(&handle.hw.events);
 	Radio.SetChannel(handle.hw.frequency);
@@ -208,11 +199,6 @@ void LoRa_ProcessRequest(Frame_t frame)
 		reply.command = frame.messages[i].command;
 		switch (frame.messages[i].command)
 		{
-		case COMMAND_IS_PRESENT:
-			reply.argLength = 2;
-			reply.rawArgument[0] = (handle.transmissionRate >> 8) & 0xFF;
-			reply.rawArgument[1] = (handle.transmissionRate >> 0) & 0xFF;
-			break;
 		case COMMAND_ERROR:
 			switch (frame.messages[i].rawArgument[0])
 			{
@@ -227,12 +213,6 @@ void LoRa_ProcessRequest(Frame_t frame)
 		case COMMAND_SET_ADDRESS:
 			handle.address = frame.messages[i].rawArgument[0];
 			EEPROM_WriteByte(EEPROM_LOCATION, handle.address);
-			reply.argLength = 1;
-			reply.rawArgument[0] = ACK;
-			break;
-		case COMMAND_TRANSMISSION_RATE:
-			handle.transmissionRate = ((frame.messages[i].rawArgument[0] >> 8) & 0xFF) |
-				((frame.messages[i].rawArgument[1] >> 0) & 0xFF);
 			reply.argLength = 1;
 			reply.rawArgument[0] = ACK;
 			break;

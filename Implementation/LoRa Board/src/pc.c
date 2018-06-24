@@ -112,21 +112,15 @@ static void PC_ProcessRequest(void)
 	{
 		switch (frame.messages[0].command)
 		{
-			case COMMAND_IS_PRESENT:
-				reply.messages[0].argLength = 2;
-				reply.messages[0].rawArgument[0] = (LoRa_GetTransmissionRate() >> 8) & 0xFF;
-				reply.messages[0].rawArgument[1] = (LoRa_GetTransmissionRate() >> 0) & 0xFF;
-				PC_Write(reply);
-				break;
 			case COMMAND_SET_ADDRESS:
 				reply.endDevice = LoRa_GetAddress();
-			case COMMAND_TRANSMISSION_RATE:
 				LoRa_ProcessRequest(frame);
 				break;
 			case COMMAND_SET_COMPENSATOR:
 				Comp_ProcessRequest(frame.messages[0]);
 				reply.messages[0].argLength = 1;
 				reply.messages[0].rawArgument[0] = ACK;
+				PC_Write(reply);
 				break;
 			default:
 				reply.messages[0].argLength = 1;
