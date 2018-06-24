@@ -28,7 +28,6 @@ namespace Power_LoRa.Connection.Messages
             
 			SetAddress = 0x20,
             ChangeCompensator = 0x21,
-            SetCompensator = 0x22,
 
             Acquisition = 0x30,
             Timestamp = 0x31,
@@ -36,7 +35,8 @@ namespace Power_LoRa.Connection.Messages
             ReactiveEnergy = 0x33,
             ActivePower = 0x34,
             ReactivePower = 0x35,
-		}
+            SetCompensator = 0x36,
+        }
         #endregion
 
         #region Private constants

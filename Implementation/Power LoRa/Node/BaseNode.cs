@@ -34,7 +34,6 @@ namespace Power_LoRa.Node
 
         #region Private variables
         private byte address;
-        private Int16 transmissionRate;
         private DateTime timestamp;
         private Int32 activeEnergy;
         private Int32 reactiveEnergy;
