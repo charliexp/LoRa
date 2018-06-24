@@ -310,16 +310,16 @@ static void Meter_SetPowers(void)
 	
 	CURRENT_SAMPLE.activePower = CURRENT_SAMPLE.activeEnergy * 3600 / timeDifference;
 	
-	if (CURRENT_SAMPLE.inductiveEnergy >= CURRENT_SAMPLE.capacitiveEnergy)
-	{
-		CURRENT_SAMPLE.powerType = INDUCTIVE;
-		CURRENT_SAMPLE.reactivePower = CURRENT_SAMPLE.inductiveEnergy * 3600 / timeDifference;
-	}
-	else
+	if (CURRENT_SAMPLE.capacitiveEnergy != 0)
 	{
 		CURRENT_SAMPLE.powerType = CAPACITIVE;
 		CURRENT_SAMPLE.reactivePower = CURRENT_SAMPLE.capacitiveEnergy * 3600 / timeDifference;
 		CURRENT_SAMPLE.reactivePower = 0 - CURRENT_SAMPLE.reactivePower;
+	}
+	else
+	{
+		CURRENT_SAMPLE.powerType = INDUCTIVE;
+		CURRENT_SAMPLE.reactivePower = CURRENT_SAMPLE.inductiveEnergy * 3600 / timeDifference;
 	}
 	
 #ifdef GATEWAY
