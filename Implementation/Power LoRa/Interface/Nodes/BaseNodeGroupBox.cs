@@ -117,35 +117,35 @@ namespace Power_LoRa.Interface.Nodes
                 Color = Color.Green,
                 YAxisType = AxisType.Primary,
                 Legend = "LeftLegend",
-                LegendText = "Active energy",
+                LegendText = "Active energy (kWh)",
             };
             reactiveEnergy = new Series
             {
                 Color = Color.Blue,
                 YAxisType = AxisType.Secondary,
                 Legend = "RightLegend",
-                LegendText = "Reactive energy",
+                LegendText = "Reactive energy (kVARh)",
             };
             activePower = new Series
             {
                 Color = Color.Green,
                 YAxisType = AxisType.Primary,
                 Legend = "LeftLegend",
-                LegendText = "Active power",
+                LegendText = "Active power (kW)",
             };
             reactivePower = new Series
             {
                 Color = Color.Blue,
                 YAxisType = AxisType.Secondary,
                 Legend = "RightLegend",
-                LegendText = "Reactive power",
+                LegendText = "Reactive power (kVAR)",
             };
             apparentPower = new Series
             {
                 Color = Color.Red,
                 YAxisType = AxisType.Primary,
                 Legend = "LeftLegend",
-                LegendText = "Apparent power",
+                LegendText = "Apparent power (kVA)",
             };
             List<Series> energyChartSeries = new List<Series>
             {
@@ -174,30 +174,10 @@ namespace Power_LoRa.Interface.Nodes
             {
                 Size = new Size(ChartWidth, ChartHeight),
             };
-            EnergyChart.Legends.Add(new Legend("Active energy")
-            {
-                Enabled = false,
-            });
-            EnergyChart.Legends.Add(new Legend("Reactive energy")
-            {
-                Enabled = false,
-            });
             PowerChart = new ChartControl(powerChartSeries, "Power")
             {
                 Size = new Size(ChartWidth, ChartHeight),
             };
-            PowerChart.Legends.Add(new Legend("Active power")
-            {
-                Enabled = false,
-            });
-            PowerChart.Legends.Add(new Legend("Reactive power")
-            {
-                Enabled = false,
-            });
-            PowerChart.Legends.Add(new Legend("Apparent power")
-            {
-                Enabled = false,
-            });
             LastReadingTime = new TextBoxControl(this, "LastReading", TextBoxControl.Type.Output);
             ActiveEnergy = new ChartableControl(this, EnergyChart, activeEnergy, "ActiveEnergy", "kWh");
             ReactiveEnergy = new ChartableControl(this, EnergyChart, reactiveEnergy, "ReactiveEnergy", "kVArh");

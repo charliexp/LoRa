@@ -23,11 +23,12 @@ namespace Power_LoRa.Interface.Controls
         public ChartControl(List<Series> seriesList, string name) : base()
         {
             Name = name;
-            MaxPoints = 10;
+            MaxPoints = 1000;
 
             title = new Title(Name);
             ChartArea = new ChartArea("ChartArea");
             ChartArea.AxisX.Enabled = AxisEnabled.False;
+            ChartArea.AxisY.IsStartedFromZero = false;
             ChartArea.AxisY.Enabled = AxisEnabled.False;
             ChartArea.AxisY2.Enabled = AxisEnabled.False;
             ChartArea.AxisX.LabelStyle.Enabled = false;
