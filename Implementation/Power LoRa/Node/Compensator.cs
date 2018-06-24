@@ -7,8 +7,9 @@ namespace Power_LoRa.Node
         #region Types
         public enum CompensatorType
         {
-            Capacitor,
-            Inductor,
+            Unused = 0x00,
+            Inductor = 0x01,
+            Capacitor = 0x02,
         }
         #endregion
 
