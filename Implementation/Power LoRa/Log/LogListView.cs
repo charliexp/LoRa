@@ -1,5 +1,7 @@
 ﻿using Power_LoRa.Connection.Messages;
+using Power_LoRa.Interface;
 using System.Windows.Forms;
+using static Power_LoRa.Connection.Messages.Frame;
 
 namespace Power_LoRa.Log
 {
@@ -22,11 +24,13 @@ namespace Power_LoRa.Log
 			Columns.Add("Addr");
 			Columns.Add("Command");
             Columns.Add("Parameter");
-            Columns.Add("RSSI");
-            Columns.Add("SNR");
+            //Columns.Add("RSSI");
+            //Columns.Add("SNR");
 
-            Columns[3].TextAlign = HorizontalAlignment.Right;
-            Width += 2 * SystemInformation.VerticalScrollBarWidth;
+            Columns[0].Width = InterfaceConstants.ListLongColumnWidth;
+            Columns[1].Width = InterfaceConstants.ListLongColumnWidth;
+            Columns[2].Width = InterfaceConstants.ListLongColumnWidth;
+            Columns[3].Width = InterfaceConstants.ListLongColumnWidth;
         }
         #endregion
 
@@ -39,7 +43,10 @@ namespace Power_LoRa.Log
                 {
                     ListViewItem item = new ListViewItem(frame.Timestamp.ToString("HH:mm:ss"));
 
-                    item.SubItems.Add(frame.EndDevice.ToString());
+                    if (frame.EndDevice == (byte) AddressType.Broadcast)
+                        item.SubItems.Add("Broadcast");
+                    else
+                        item.SubItems.Add(frame.EndDevice.ToString("X2"));
                     item.SubItems.Add(message.Command.ToString());
                     item.SubItems.Add(message.PrintableArgument);
                     item.SubItems.Add((-frame.RSSI).ToString());
@@ -51,9 +58,6 @@ namespace Power_LoRa.Log
                 if (Items.Count > maxEntries)
                     Items.RemoveAt(0);
                 TopItem = Items[Items.Count - 1];
-
-                AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
-                AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
             }
         }
         #endregion

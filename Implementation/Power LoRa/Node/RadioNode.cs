@@ -12,7 +12,7 @@
         public RadioNode(byte address) : base()
 		{
 			Address = address;
-			Connected = false;
+			Connected = true;
 		}
         #endregion
 

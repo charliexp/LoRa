@@ -14,13 +14,13 @@ namespace Power_LoRa.Interface.Nodes
         #region Constructors
         public RadioNodeGroupBox(EventHandler setAddressEvent, EventHandler isPresentEvent, string name) : base(setAddressEvent, isPresentEvent, name)
 		{
-			RSSI = new TextBoxControl(this, "RSSI", TextBoxControl.Type.Output);
-			SNR = new TextBoxControl(this, "SNR", TextBoxControl.Type.Output);
+			//RSSI = new TextBoxControl(this, "RSSI", TextBoxControl.Type.Output);
+			//SNR = new TextBoxControl(this, "SNR", TextBoxControl.Type.Output);
 
 			//radioParameters.Add(RSSI);
             //radioParameters.Add(SNR);
 
-            AddControlsToLayout();
+            //AddControlsToLayout();
         }
         #endregion
 

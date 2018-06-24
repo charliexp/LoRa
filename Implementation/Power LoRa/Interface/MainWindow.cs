@@ -27,13 +27,9 @@ namespace Power_LoRa.Interface
             }
             set
             {
-                bigChart.MaxPoints = 100;
-                bigChart.Legends.Clear();
                 bigChart.Titles.Clear();
                 bigChart.Series.Clear();
 
-                foreach (Legend legend in value.Legends)
-                    bigChart.Legends.Add(legend);
                 foreach (Title title in value.Titles)
                     bigChart.Titles.Add(title);
                 foreach (Series series in value.Series)
@@ -51,6 +47,36 @@ namespace Power_LoRa.Interface
             {
                 Dock = DockStyle.Fill,
             };
+            bigChart.Legends.Clear();
+            bigChart.Legends.Add(new Legend()
+            {
+                Enabled = true,
+                IsDockedInsideChartArea = true,
+                DockedToChartArea = "ChartArea",
+                Docking = Docking.Top | Docking.Left,
+                Name = "LeftLegend",
+            });
+            bigChart.Legends.Add(new Legend()
+            {
+                Enabled = true,
+                IsDockedInsideChartArea = true,
+                DockedToChartArea = "ChartArea",
+                Docking = Docking.Top | Docking.Right,
+                Name = "RightLegend",
+            });
+            bigChart.ChartArea.AxisX.MajorGrid.LineDashStyle = ChartDashStyle.Dash;
+            bigChart.ChartArea.AxisY.MajorGrid.LineDashStyle = ChartDashStyle.Dash;
+            bigChart.ChartArea.AxisY2.MajorGrid.LineDashStyle = ChartDashStyle.Dot;
+            bigChart.ChartArea.AxisX.Enabled = AxisEnabled.True;
+            bigChart.ChartArea.AxisY.Enabled = AxisEnabled.True;
+            bigChart.ChartArea.AxisY2.Enabled = AxisEnabled.True;
+            bigChart.ChartArea.AxisX.LabelStyle.Enabled = true;
+            bigChart.ChartArea.AxisY.LabelStyle.Enabled = true;
+            bigChart.ChartArea.AxisY2.LabelStyle.Enabled = true;
+            bigChart.ChartArea.AxisX.LabelStyle.Format = "HH:mm:ss";
+            bigChart.ChartArea.Position.Auto = true;
+            bigChart.MaxPoints = 100;
+
             FlowLayout = new FlowLayoutPanel
             {
                 AutoSize = true,

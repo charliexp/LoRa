@@ -1,8 +1,6 @@
-﻿using Power_LoRa.Interface.Controls;
-using Power_LoRa.Interface.Nodes;
+﻿using Power_LoRa.Interface.Nodes;
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using static Power_LoRa.Connection.Messages.Message;
 
@@ -118,7 +116,7 @@ namespace Power_LoRa.Node
             {
                 reactivePower = value;
                 ApparentPower = Convert.ToInt32(Math.Sqrt(Math.Pow(activePower, 2) + Math.Pow(reactivePower, 2)));
-                GroupBox.UpdateInterface(GroupBox.ReactivePower, new DataPoint(Timestamp.ToOADate(), value));
+                GroupBox.UpdateInterface(GroupBox.ReactivePower, new DataPoint(Timestamp.ToOADate(), reactivePower));
             }
         }
         public Int32 ApparentPower
@@ -161,7 +159,7 @@ namespace Power_LoRa.Node
             };
 
             Type = NodeType.Unknown;
-            GroupBox = new BaseNodeGroupBox(SetNewAddress, CheckIfPresent, "Directly Connected Node");
+            GroupBox = new BaseNodeGroupBox(SetNewAddress, CheckIfPresent, "Gateway");
             GroupBox.UpdateInterface(GroupBox.Outputs, Compensators);
         }
         #endregion

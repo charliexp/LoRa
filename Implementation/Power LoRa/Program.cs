@@ -43,17 +43,22 @@ namespace Power_LoRa
 
             directDeviceInitialized = false;
 
+            mainWindow = new MainWindow();
+
             directDevice = new BaseNode();
             radioDevices = new List<RadioNode>();
+            radioDevices.Add(new RadioNode(1));
+
             SettingHandler.Load();
 
             logger = new Logger("log_", "txt");
 
             connectionDialog = new ConnectionDialog();
-            mainWindow = new MainWindow();
-            
             mainWindow.FlowLayout.Controls.Add(directDevice.GroupBox);
+            mainWindow.FlowLayout.Controls.Add(radioDevices[0].GroupBox);
+            directDevice.GroupBox.Enabled = false;
             mainWindow.AddControl(logger.Interface);
+            SetBigChartData(directDevice.GroupBox.PowerChart);
 
             connectionDialog.Show();
             Application.Run(mainWindow);
@@ -144,7 +149,7 @@ namespace Power_LoRa
                 switch (message.Command)
                 {
                     case CommandType.Timestamp:
-                        directDevice.Timestamp = new DateTime(1, 1, 1,
+                        radioDevices[0].Timestamp = new DateTime(1, 1, 1,
                             message.RawArgument[0],
                             message.RawArgument[1],
                             message.RawArgument[2]);
@@ -153,7 +158,7 @@ namespace Power_LoRa
                         array = new byte[4];
                         message.RawArgument.CopyTo(array, 1);
                         Array.Reverse(array);
-                        directDevice.ActiveEnergy = BitConverter.ToInt32(array, 0);
+                        radioDevices[0].ActiveEnergy = BitConverter.ToInt32(array, 0);
                         break;
                     case CommandType.ReactiveEnergy:
                         array = new byte[4];
@@ -161,13 +166,13 @@ namespace Power_LoRa
                         if ((array[1] & 0x80) != 0)
                             array[0] = 0xFF;
                         Array.Reverse(array);
-                        directDevice.ReactiveEnergy = BitConverter.ToInt32(array, 0);
+                        radioDevices[0].ReactiveEnergy = BitConverter.ToInt32(array, 0);
                         break;
                     case CommandType.ActivePower:
                         array = new byte[4];
                         message.RawArgument.CopyTo(array, 1);
                         Array.Reverse(array);
-                        directDevice.ActivePower = BitConverter.ToInt32(array, 0);
+                        radioDevices[0].ActivePower = BitConverter.ToInt32(array, 0);
                         break;
                     case CommandType.ReactivePower:
                         array = new byte[4];
@@ -175,7 +180,7 @@ namespace Power_LoRa
                         if ((array[1] & 0x80) != 0)
                             array[0] = 0xFF;
                         Array.Reverse(array);
-                        directDevice.ReactivePower = BitConverter.ToInt32(array, 0);
+                        radioDevices[0].ReactivePower = BitConverter.ToInt32(array, 0);
                         break;
                 }
             }

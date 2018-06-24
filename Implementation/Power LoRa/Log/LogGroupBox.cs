@@ -60,16 +60,9 @@ namespace Power_LoRa.Log
                 Dock = DockStyle.Fill,
                 Name = "logListView",
             };
-            List.Size = new Size(   List.Columns[0].Width +
-                                    List.Columns[1].Width +
-                                    List.Columns[2].Width +
-                                    List.Columns[3].Width +
-                                    List.Columns[4].Width +
-                                    List.Columns[5].Width,
-
-                                    InterfaceConstants.ListHeaderHeight +
-                                    InterfaceConstants.ListItemHeight * LogListView.maxVisibleEntries +
-                                    InterfaceConstants.ItemPadding);
+            List.Height = InterfaceConstants.ListHeaderHeight +
+                InterfaceConstants.ListItemHeight * LogListView.maxVisibleEntries +
+                InterfaceConstants.ItemPadding;
 
             Controls.Add(layout);
             layout.Controls.Add(List);
