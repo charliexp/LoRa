@@ -11,7 +11,8 @@ namespace Power_LoRa.Interface.Controls
 
             Field = new CheckBox
             {
-                Dock = Field.Dock,
+                AutoSize = true,
+                //Dock = Field.Dock,
                 Margin = Field.Margin,
 				Name = Field.Name,
                 Size = Field.Size,

@@ -38,7 +38,7 @@
 		public const int ButtonHeight = 24;
 
 		public const int InputLocationY = 12;
-		public const int InputWidth = 100;
+		public const int InputWidth = 80;
 		public const int InputHeight = 24;
 
 		public const int ItemPadding = 4;

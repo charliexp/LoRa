@@ -37,7 +37,7 @@ namespace Power_LoRa.Interface.Controls
                 Name = name.Replace(" ", "") + "Label",
                 Dock = DockStyle.Top,
                 TextAlign = ContentAlignment.MiddleLeft,
-			};
+            };
 
 			string[] words = Regex.Matches(name.ToString(), "(^[a-z]+|[A-Z]+(?![a-z])|[A-Z][a-z]+)")
 											.OfType<Match>()
