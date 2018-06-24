@@ -301,7 +301,7 @@ static void Meter_SetEnergies(void)
 	if (CURRENT_SAMPLE.capacitiveEnergyTotal == OLDEST_SAMPLE.capacitiveEnergyTotal)
 		CURRENT_SAMPLE.capacitiveEnergy = 0;
 	else
-		CURRENT_SAMPLE.capacitiveEnergy = CURRENT_SAMPLE.capacitiveEnergyTotal - OLDEST_SAMPLE.capacitiveEnergy;
+		CURRENT_SAMPLE.capacitiveEnergy = CURRENT_SAMPLE.capacitiveEnergyTotal - OLDEST_SAMPLE.capacitiveEnergyTotal;
 }
 
 static void Meter_SetPowers(void)
@@ -313,12 +313,14 @@ static void Meter_SetPowers(void)
 	if (CURRENT_SAMPLE.capacitiveEnergy != 0)
 	{
 		CURRENT_SAMPLE.powerType = CAPACITIVE;
+		CURRENT_SAMPLE.reactiveEnergy = 0 - CURRENT_SAMPLE.capacitiveEnergy;
 		CURRENT_SAMPLE.reactivePower = CURRENT_SAMPLE.capacitiveEnergy * 3600 / timeDifference;
 		CURRENT_SAMPLE.reactivePower = 0 - CURRENT_SAMPLE.reactivePower;
 	}
 	else
 	{
 		CURRENT_SAMPLE.powerType = INDUCTIVE;
+		CURRENT_SAMPLE.reactiveEnergy = CURRENT_SAMPLE.inductiveEnergy;
 		CURRENT_SAMPLE.reactivePower = CURRENT_SAMPLE.inductiveEnergy * 3600 / timeDifference;
 	}
 	
