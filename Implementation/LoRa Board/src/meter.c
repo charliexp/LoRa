@@ -90,7 +90,6 @@ typedef struct MeterHandle_t
 
 /* Private macro -------------------------------------------------------------*/
 #define CURRENT_SAMPLE					(handle.samples[MAX_SAMPLES - 1])
-#define PREVIOUS_SAMPLE					(handle.samples[MAX_SAMPLES - 2])
 #define OLDEST_SAMPLE						(handle.samples[0])
 #define ASCII_TO_BINARY(x)			(x - '0')
 
