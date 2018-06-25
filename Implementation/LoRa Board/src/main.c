@@ -71,11 +71,6 @@ void App_ProcessRequest(Frame_t frame)
 				if (IsCompensationNeeded(&endNode->sample))
 					Compensate(endNode);
 				break;
-			case COMMAND_SET_COMPENSATOR:
-				if (frame.messages[i].rawArgument[0] != ACK &&
-					frame.messages[i].rawArgument[0] != NAK)
-				endNode->compensators[(frame.messages[i].rawArgument[0] >> 4) & 0x0F].state = frame.messages[i].rawArgument[0] & 0x0F;
-				break;
 		}
 	}
 }
