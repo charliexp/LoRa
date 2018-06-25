@@ -98,5 +98,8 @@ int main(void)
 	
   while(1)
   {
+		#ifdef END_NODE
+		LoRa_MainLoop();
+		#endif
   }
 }

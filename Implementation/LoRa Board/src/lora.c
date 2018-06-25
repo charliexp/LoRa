@@ -61,6 +61,9 @@ static void LoRa_OnTxTimeout(void);
 static void LoRa_OnRxTimeout(void);
 static void LoRa_OnRxError(void);
 static void LoRa_SignalError(void);
+#ifdef END_NODE
+static void LoRa_SignalRequest(Frame_t frame);
+#endif
 
 extern void App_ProcessRequest(Frame_t frame);
 
@@ -152,6 +155,16 @@ void LoRa_Init(void)
 	#endif
 }
 
+void LoRa_MainLoop(void)
+{
+	if (handle.lastFrameReceived.nrOfMessages != 0)
+	{
+		LoRa_ProcessRequest(handle.lastFrameReceived);
+		/* Invalidate message */
+		handle.lastFrameReceived.nrOfMessages = 0;
+	}
+}
+
 static void LoRa_OnRxDone(uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr)
 {
 	Frame_t frame;
@@ -164,6 +177,7 @@ static void LoRa_OnRxDone(uint8_t *payload, uint16_t size, int16_t rssi, int8_t 
 	#endif
 	#ifdef END_NODE
 	Message_ArrayToFrame(payload, &frame);
+	LoRa_SignalRequest(frame);
 	LoRa_ProcessRequest(frame);
 	#endif
 	//TODO: add those
@@ -293,6 +307,13 @@ static void LoRa_SignalError(void)
 	
 	PC_Write(frame);
 }
+
+#ifdef END_NODE
+static void LoRa_SignalRequest(Frame_t frame)
+{
+	memcpy(&handle.lastFrameReceived, &frame, sizeof(Frame_t));
+}
+#endif
 
 #ifdef GATEWAY
 static void LoRa_SignalTimeout(uint8_t address)

@@ -67,8 +67,10 @@ typedef struct LoRaHandle_t
 #endif
 /* Timeout in seconds */
 	uint16_t timeout;
-/* Last frame sent */
+/* Last frame sent for resend command */
 	Frame_t lastFrame;
+/* Last frame received */
+	Frame_t lastFrameReceived;
 }LoRaHandle_t;
 
 /* Exported constants --------------------------------------------------------*/
@@ -84,6 +86,7 @@ void LoRa_QueueMessage(Message_t message);
 uint8_t LoRa_GetAddress(void);
 uint16_t LoRa_GetTransmissionRate(void);
 void LoRa_Init(void);
+void LoRa_MainLoop(void);
 void LoRa_ProcessRequest(Frame_t frame);
 
 #endif /* __LORA_H__ */
