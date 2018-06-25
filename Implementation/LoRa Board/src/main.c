@@ -115,7 +115,7 @@ static void Compensate(EndNode_t *node)
 			LoRa_ForwardFrame(frame);
 			node->compensators[1].state = COMP_OUT;
 		}
-		else
+		else if (node->compensators[0].state == COMP_OUT) 
 		{
 			frame.messages[0].rawArgument[0] = 0x01;
 			LoRa_ForwardFrame(frame);
@@ -130,7 +130,7 @@ static void Compensate(EndNode_t *node)
 			LoRa_ForwardFrame(frame);
 			node->compensators[0].state = COMP_OUT;
 		}
-		else
+		else if (node->compensators[1].state == COMP_OUT) 
 		{
 			frame.messages[0].rawArgument[0] = 0x11;
 			LoRa_ForwardFrame(frame);
