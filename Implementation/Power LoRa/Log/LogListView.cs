@@ -8,7 +8,7 @@ namespace Power_LoRa.Log
 	public class LogListView : ListView
     {
         #region Public constants
-        public const int maxVisibleEntries = 10;
+        public const int maxVisibleEntries = 20;
         public const int maxEntries = 1000;
         #endregion
 
@@ -29,7 +29,7 @@ namespace Power_LoRa.Log
 
             Columns[0].Width = InterfaceConstants.ListLongColumnWidth;
             Columns[1].Width = InterfaceConstants.ListLongColumnWidth;
-            Columns[2].Width = InterfaceConstants.ListLongColumnWidth;
+            Columns[2].Width = InterfaceConstants.ListLongColumnWidth * 2;
             Columns[3].Width = InterfaceConstants.ListLongColumnWidth;
         }
         #endregion

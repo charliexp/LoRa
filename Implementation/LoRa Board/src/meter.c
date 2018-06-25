@@ -153,7 +153,7 @@ static void Meter_ProcessRegister(Register_t reg, uint8_t *result)
 
 void Meter_ProcessRequest(Message_t message)
 {
-	Message_t reponse;
+	Message_t response;
 	uint8_t previousFailedAttempts = meterHandle.failedAttempts;
 	
 	switch (message.command)
@@ -186,58 +186,58 @@ void Meter_ProcessRequest(Message_t message)
 			
 				if (OLDEST_SAMPLE.time.timestamp != 0)
 				{
-					reponse.command = COMMAND_TIMESTAMP;
-					reponse.argLength = 3;
-					reponse.rawArgument[0] = CURRENT_SAMPLE.time.hour;
-					reponse.rawArgument[1] = CURRENT_SAMPLE.time.minute;
-					reponse.rawArgument[2] = CURRENT_SAMPLE.time.second;
+					response.command = COMMAND_TIMESTAMP;
+					response.argLength = 3;
+					response.rawArgument[0] = CURRENT_SAMPLE.time.hour;
+					response.rawArgument[1] = CURRENT_SAMPLE.time.minute;
+					response.rawArgument[2] = CURRENT_SAMPLE.time.second;
 					#ifdef END_NODE
-					LoRa_QueueMessage(reponse);
+					LoRa_QueueMessage(response);
 					#endif
 					
-					reponse.command = COMMAND_ACTIVE_ENERGY;
-					reponse.argLength = 3;
-					reponse.rawArgument[0] = (CURRENT_SAMPLE.activeEnergy >> 16) & 0xFF;
-					reponse.rawArgument[1] = (CURRENT_SAMPLE.activeEnergy >> 8) & 0xFF;
-					reponse.rawArgument[2] = (CURRENT_SAMPLE.activeEnergy >> 0) & 0xFF;
+					response.command = COMMAND_ACTIVE_ENERGY;
+					response.argLength = 3;
+					response.rawArgument[0] = (CURRENT_SAMPLE.activeEnergy >> 16) & 0xFF;
+					response.rawArgument[1] = (CURRENT_SAMPLE.activeEnergy >> 8) & 0xFF;
+					response.rawArgument[2] = (CURRENT_SAMPLE.activeEnergy >> 0) & 0xFF;
 					#ifdef END_NODE
-					LoRa_QueueMessage(reponse);
+					LoRa_QueueMessage(response);
 					#endif
 					
-					reponse.command = COMMAND_REACTIVE_ENERGY;
-					reponse.argLength = 3;
-					reponse.rawArgument[0] = (CURRENT_SAMPLE.reactiveEnergy >> 16) & 0xFF;
-					reponse.rawArgument[1] = (CURRENT_SAMPLE.reactiveEnergy >> 8) & 0xFF;
-					reponse.rawArgument[2] = (CURRENT_SAMPLE.reactiveEnergy >> 0) & 0xFF;
+					response.command = COMMAND_REACTIVE_ENERGY;
+					response.argLength = 3;
+					response.rawArgument[0] = (CURRENT_SAMPLE.reactiveEnergy >> 16) & 0xFF;
+					response.rawArgument[1] = (CURRENT_SAMPLE.reactiveEnergy >> 8) & 0xFF;
+					response.rawArgument[2] = (CURRENT_SAMPLE.reactiveEnergy >> 0) & 0xFF;
 					#ifdef END_NODE
-					LoRa_QueueMessage(reponse);
+					LoRa_QueueMessage(response);
 					#endif
 					
-					reponse.command = COMMAND_ACTIVE_POWER;
-					reponse.argLength = 3;
-					reponse.rawArgument[0] = (CURRENT_SAMPLE.activePower >> 16) & 0xFF;
-					reponse.rawArgument[1] = (CURRENT_SAMPLE.activePower >> 8) & 0xFF;
-					reponse.rawArgument[2] = (CURRENT_SAMPLE.activePower >> 0) & 0xFF;
+					response.command = COMMAND_ACTIVE_POWER;
+					response.argLength = 3;
+					response.rawArgument[0] = (CURRENT_SAMPLE.activePower >> 16) & 0xFF;
+					response.rawArgument[1] = (CURRENT_SAMPLE.activePower >> 8) & 0xFF;
+					response.rawArgument[2] = (CURRENT_SAMPLE.activePower >> 0) & 0xFF;
 					#ifdef END_NODE
-					LoRa_QueueMessage(reponse);
+					LoRa_QueueMessage(response);
 					#endif
 					
-					reponse.command = COMMAND_REACTIVE_POWER;
-					reponse.argLength = 3;
-					reponse.rawArgument[0] = (CURRENT_SAMPLE.reactivePower >> 16) & 0xFF;
-					reponse.rawArgument[1] = (CURRENT_SAMPLE.reactivePower >> 8) & 0xFF;
-					reponse.rawArgument[2] = (CURRENT_SAMPLE.reactivePower >> 0) & 0xFF;
+					response.command = COMMAND_REACTIVE_POWER;
+					response.argLength = 3;
+					response.rawArgument[0] = (CURRENT_SAMPLE.reactivePower >> 16) & 0xFF;
+					response.rawArgument[1] = (CURRENT_SAMPLE.reactivePower >> 8) & 0xFF;
+					response.rawArgument[2] = (CURRENT_SAMPLE.reactivePower >> 0) & 0xFF;
 					#ifdef END_NODE
-					LoRa_QueueMessage(reponse);
+					LoRa_QueueMessage(response);
 					#endif
 				}
 				else
 				{
-					reponse.command = COMMAND_ACQUISITION;
-					reponse.argLength = 1;
-					reponse.rawArgument[0] = ACK;
+					response.command = COMMAND_ACQUISITION;
+					response.argLength = 1;
+					response.rawArgument[0] = ACK;
 					#ifdef END_NODE
-					LoRa_QueueMessage(reponse);
+					LoRa_QueueMessage(response);
 					#endif
 				}
 			}

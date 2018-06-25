@@ -98,14 +98,7 @@ void LoRa_Broadcast(Message_t message)
 
 void LoRa_ForwardFrame(Frame_t frame)
 {
-	uint8_t array[FRAME_MAX_SIZE];
-	uint8_t arrayLength;
-	
-	Message_FrameToArray(frame, array, &arrayLength);
-	while (loraHandle.hw.radio->GetStatus() != RF_IDLE);
-	
-	PC_Write(frame);
-	loraHandle.hw.radio->Send(array, arrayLength);
+	memcpy(&loraHandle.lastFrameSent, &frame, sizeof(Frame_t));
 }
 #endif
 
@@ -170,6 +163,17 @@ void LoRa_MainLoop(void)
 		LoRa_ProcessRequest(loraHandle.lastFrameReceived);
 		/* Invalidate message */
 		loraHandle.lastFrameReceived.nrOfMessages = 0;
+	}
+	if (loraHandle.lastFrameSent.nrOfMessages != 0)
+	{
+		uint8_t array[FRAME_MAX_SIZE];
+		uint8_t arrayLength;
+		
+		Message_FrameToArray(loraHandle.lastFrameSent, array, &arrayLength);
+		PC_Write(loraHandle.lastFrameSent);
+		loraHandle.hw.radio->Send(array, arrayLength);
+		/* Invalidate message */
+		loraHandle.lastFrameSent.nrOfMessages = 0;
 	}
 }
 
@@ -247,7 +251,7 @@ void LoRa_ProcessRequest(Frame_t frame)
 			switch (frame.messages[i].rawArgument[0])
 			{
 				case ERROR_RESEND:
-					memcpy(&reply, &loraHandle.lastFrame, FRAME_MAX_SIZE);
+					memcpy(&reply, &loraHandle.lastFrameSent, FRAME_MAX_SIZE);
 					break;
 				case ERROR_RESET:
 					//TODO
@@ -282,7 +286,7 @@ void LoRa_ProcessRequest(Frame_t frame)
 		App_ProcessRequest(frame);
 		#endif
 	}
-	//memcpy(&loraHandle.lastFrame, &reply, FRAME_MAX_SIZE);
+	//memcpy(&loraHandle.lastFrameSent, &reply, FRAME_MAX_SIZE);
 	
 	#ifdef END_NODE
 	if (loraHandle.queueLength != 0)

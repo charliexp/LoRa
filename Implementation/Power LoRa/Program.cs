@@ -58,7 +58,7 @@ namespace Power_LoRa
             mainWindow.FlowLayout.Controls.Add(radioDevices[0].GroupBox);
             directDevice.GroupBox.Enabled = false;
             mainWindow.AddControl(logger.Interface);
-            SetBigChartData(directDevice.GroupBox.PowerChart);
+            SetBigChartData(radioDevices[0].GroupBox.PowerChart);
 
             connectionDialog.Show();
             Application.Run(mainWindow);
@@ -181,6 +181,13 @@ namespace Power_LoRa
                             array[0] = 0xFF;
                         Array.Reverse(array);
                         radioDevices[0].ReactivePower = BitConverter.ToInt32(array, 0);
+                        break;
+                    case CommandType.SetCompensator:
+                        if (message.RawArgument[0] != (byte) ResponseType.ACK && message.RawArgument[0] != (byte)ResponseType.NAK)
+                        {
+                            byte outputNumber = (byte)(message.RawArgument[0] >> 4);
+                            radioDevices[0].GroupBox.Outputs[outputNumber].SetValue(((message.RawArgument[0] & 0x0F) != 0));
+                        }
                         break;
                 }
             }

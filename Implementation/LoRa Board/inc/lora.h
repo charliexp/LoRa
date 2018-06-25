@@ -71,7 +71,7 @@ typedef struct LoRaHandle_t
 /* Timeout in seconds */
 	uint16_t timeout;
 /* Last frame sent for resend command */
-	Frame_t lastFrame;
+	Frame_t lastFrameSent;
 /* Last frame received */
 	Frame_t lastFrameReceived;
 }LoRaHandle_t;
