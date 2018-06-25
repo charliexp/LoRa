@@ -21,6 +21,7 @@ namespace Power_LoRa.Connection.Messages
             MeterNOK = 0x42,
             CompensatorNOK = 0x43,
             LoRaNOK = 0x44,
+            Timeout = 0x45,
         }
         public enum CommandType
 		{

@@ -178,7 +178,6 @@ static void LoRa_OnRxDone(uint8_t *payload, uint16_t size, int16_t rssi, int8_t 
 	#ifdef END_NODE
 	Message_ArrayToFrame(payload, &frame);
 	LoRa_SignalRequest(frame);
-	LoRa_ProcessRequest(frame);
 	#endif
 	//TODO: add those
 	//RSSI = rssi;
