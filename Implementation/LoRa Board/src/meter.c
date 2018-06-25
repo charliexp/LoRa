@@ -284,7 +284,11 @@ static void Meter_SetEnergies(void)
 
 static void Meter_SetPowers(void)
 {
-	uint16_t timeDifference = CURRENT_SAMPLE.time.timestamp - OLDEST_SAMPLE.time.timestamp;
+	uint16_t timeDifference;
+	if (CURRENT_SAMPLE.time.timestamp > OLDEST_SAMPLE.time.timestamp)
+		timeDifference = CURRENT_SAMPLE.time.timestamp - OLDEST_SAMPLE.time.timestamp;
+	else
+		timeDifference = CURRENT_SAMPLE.time.timestamp + (60 * 60 * 24) - OLDEST_SAMPLE.time.timestamp;
 	
 	CURRENT_SAMPLE.activePower = CURRENT_SAMPLE.activeEnergy * 3600 / timeDifference;
 	
