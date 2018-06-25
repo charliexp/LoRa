@@ -20,6 +20,25 @@ typedef enum CompensatorType_t
 	COMP_CAPACITOR = 0x02,
 }CompensatorType_t;
 
+typedef enum State_t
+{
+	COMP_IN,
+	COMP_OUT,
+	COMP_NOK
+}State_t;
+
+typedef struct Compensator_t
+{
+/* Failed attempts to set compensator */
+	uint8_t failedAttempts;
+/* Working state */
+	State_t state;
+/* Type */
+	CompensatorType_t type;
+/* Reactive power */
+	uint16_t value;
+}Compensator_t;
+
 /* Exported constants --------------------------------------------------------*/
 /* External variables --------------------------------------------------------*/
 /* Exported functions --------------------------------------------------------*/

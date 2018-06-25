@@ -46,7 +46,7 @@
 /* Private macro -------------------------------------------------------------*/
 /* Private constants ---------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-LoRaHandle_t handle;
+LoRaHandle_t loraHandle;
 
 /* Private function prototypes -----------------------------------------------*/
 #ifdef GATEWAY
@@ -84,16 +84,16 @@ void LoRa_Broadcast(Message_t message)
 		MESSAGE_HEADER_SIZE + message.argLength);
 	
 	for (i = 0; i < RADIO_MAX_CONNECTIONS; i++)
-		if (handle.endNodes[i].queueLength != 0)
+		if (loraHandle.endNodes[i].queueLength != 0)
 			//Send this instead?
 			return;
 	
 	Message_FrameToArray(frame, array, &arrayLength);
 	PC_Write(frame);
-	handle.hw.radio->Send(array, arrayLength);
+	loraHandle.hw.radio->Send(array, arrayLength);
 		
 	for (i = 0; i < RADIO_MAX_CONNECTIONS; i++)
-		handle.endNodes[i].responsePending = true;
+		loraHandle.endNodes[i].responsePending = true;
 }
 
 void LoRa_ForwardFrame(Frame_t frame)
@@ -102,16 +102,16 @@ void LoRa_ForwardFrame(Frame_t frame)
 	uint8_t arrayLength;
 	
 	Message_FrameToArray(frame, array, &arrayLength);
-	while (handle.hw.radio->GetStatus() != RF_IDLE);
+	while (loraHandle.hw.radio->GetStatus() != RF_IDLE);
 	
 	PC_Write(frame);
-	handle.hw.radio->Send(array, arrayLength);
+	loraHandle.hw.radio->Send(array, arrayLength);
 }
 #endif
 
 uint8_t LoRa_GetAddress(void)
 {
-	return handle.address;
+	return loraHandle.address;
 }
 
 void LoRa_Init(void)
@@ -119,49 +119,57 @@ void LoRa_Init(void)
 	#ifdef GATEWAY
 	uint8_t i;
 	
-	EEPROM_WriteByte(EEPROM_LOCATION, 1);
-	
 	for (i = 0; i < RADIO_MAX_CONNECTIONS; i++)
-		handle.endNodes[i].address = *((uint8_t *) EEPROM_LOCATION + i);
+		loraHandle.endNodes[i].address = *((uint8_t *) EEPROM_LOCATION + i);
 	#endif
 	#ifdef END_NODE
-	handle.address = *((uint8_t *) EEPROM_LOCATION);
+	loraHandle.address = *((uint8_t *) EEPROM_LOCATION);
 	#endif
-	handle.hw.frequency = RADIO_FREQUENCY;
-	handle.hw.radio = (Radio_s *) &Radio;
-	handle.hw.events.TxDone = LoRa_OnTxDone;
-	handle.hw.events.RxDone = LoRa_OnRxDone;
-	handle.hw.events.TxTimeout = LoRa_OnTxTimeout;
-	handle.hw.events.RxTimeout = LoRa_OnRxTimeout;
-	handle.hw.events.RxError = LoRa_OnRxError;
-	handle.hw.outputPower = RADIO_INITIAL_OUTPUT_POWER;
-	handle.hw.bandwidth = RADIO_INITIAL_BANDWIDTH;
-	handle.hw.spreadingFactor = RADIO_INITIAL_SPREAD_FACTOR;
-	handle.timeout = RADIO_RX_TIMEOUT;
+	loraHandle.hw.frequency = RADIO_FREQUENCY;
+	loraHandle.hw.radio = (Radio_s *) &Radio;
+	loraHandle.hw.events.TxDone = LoRa_OnTxDone;
+	loraHandle.hw.events.RxDone = LoRa_OnRxDone;
+	loraHandle.hw.events.TxTimeout = LoRa_OnTxTimeout;
+	loraHandle.hw.events.RxTimeout = LoRa_OnRxTimeout;
+	loraHandle.hw.events.RxError = LoRa_OnRxError;
+	loraHandle.hw.outputPower = RADIO_INITIAL_OUTPUT_POWER;
+	loraHandle.hw.bandwidth = RADIO_INITIAL_BANDWIDTH;
+	loraHandle.hw.spreadingFactor = RADIO_INITIAL_SPREAD_FACTOR;
+	loraHandle.timeout = RADIO_RX_TIMEOUT;
 	
-	handle.hw.radio->Init(&handle.hw.events);
-	handle.hw.radio->SetChannel(handle.hw.frequency);
-	handle.hw.radio->SetTxConfig(MODEM_LORA, handle.hw.outputPower, 0, handle.hw.bandwidth,
-		handle.hw.spreadingFactor , RADIO_CODING_RATE,
+	loraHandle.hw.radio->Init(&loraHandle.hw.events);
+	loraHandle.hw.radio->SetChannel(loraHandle.hw.frequency);
+	loraHandle.hw.radio->SetTxConfig(MODEM_LORA, loraHandle.hw.outputPower, 0, loraHandle.hw.bandwidth,
+		loraHandle.hw.spreadingFactor , RADIO_CODING_RATE,
 		RADIO_PREAMBLE_SIZE, true,
 		RADIO_PERFORM_CRC, false, 0, RADIO_INVERTED_IQ, RADIO_TX_TIMEOUT * 1000);
-	handle.hw.radio->SetRxConfig(MODEM_LORA, handle.hw.bandwidth, handle.hw.spreadingFactor ,
+	loraHandle.hw.radio->SetRxConfig(MODEM_LORA, loraHandle.hw.bandwidth, loraHandle.hw.spreadingFactor ,
 		RADIO_CODING_RATE, 0, RADIO_PREAMBLE_SIZE,
 		RADIO_RX_SYMB_TIMEOUT, false,
 		FRAME_MAX_SIZE, RADIO_PERFORM_CRC, false, 0, RADIO_INVERTED_IQ, true);
 		
+		
+	#ifdef GATEWAY
+	loraHandle.endNodes[0].compensators[0].state = COMP_OUT;
+	loraHandle.endNodes[0].compensators[0].type = COMP_INDUCTOR;
+	loraHandle.endNodes[0].compensators[0].value = 60;
+		
+	loraHandle.endNodes[0].compensators[1].state = COMP_OUT;
+	loraHandle.endNodes[0].compensators[1].type = COMP_CAPACITOR;
+	loraHandle.endNodes[0].compensators[1].value = 60;
+	#endif
 	#ifdef END_NODE
-	handle.hw.radio->Rx(handle.timeout * 1000);
+	loraHandle.hw.radio->Rx(loraHandle.timeout * 1000);
 	#endif
 }
 
 void LoRa_MainLoop(void)
 {
-	if (handle.lastFrameReceived.nrOfMessages != 0)
+	if (loraHandle.lastFrameReceived.nrOfMessages != 0)
 	{
-		LoRa_ProcessRequest(handle.lastFrameReceived);
+		LoRa_ProcessRequest(loraHandle.lastFrameReceived);
 		/* Invalidate message */
-		handle.lastFrameReceived.nrOfMessages = 0;
+		loraHandle.lastFrameReceived.nrOfMessages = 0;
 	}
 }
 
@@ -169,7 +177,7 @@ static void LoRa_OnRxDone(uint8_t *payload, uint16_t size, int16_t rssi, int8_t 
 {
 	Frame_t frame;
 	
-	handle.hw.radio->Sleep();
+	loraHandle.hw.radio->Sleep();
 	#ifdef GATEWAY
 	//Check if more need to be received
 	Message_ArrayToFrame(payload, &frame);
@@ -188,23 +196,23 @@ static void LoRa_OnRxError(void)
 {
 	#ifdef GATEWAY
 	//TODO: request resend?
-	handle.hw.radio->Sleep();
+	loraHandle.hw.radio->Sleep();
 	#endif
 	#ifdef END_NODE
-	handle.hw.radio->Rx(handle.timeout * 1000);
+	loraHandle.hw.radio->Rx(loraHandle.timeout * 1000);
 	#endif
 }
 
 static void LoRa_OnRxTimeout(void)
 {
-  handle.hw.radio->Sleep();
+  loraHandle.hw.radio->Sleep();
 	#ifdef GATEWAY
 	//TODO
 	uint8_t i;
 	for (i = 0; i < RADIO_MAX_CONNECTIONS; i++)
-		if (handle.endNodes[i].responsePending)
+		if (loraHandle.endNodes[i].responsePending)
 		{
-			handle.endNodes[i].responsePending = false;
+			loraHandle.endNodes[i].responsePending = false;
 			LoRa_SignalTimeout(i);
 		}
 	#endif
@@ -212,12 +220,12 @@ static void LoRa_OnRxTimeout(void)
 
 static void LoRa_OnTxDone(void)
 {
-	handle.hw.radio->Rx(handle.timeout * 1000);
+	loraHandle.hw.radio->Rx(loraHandle.timeout * 1000);
 }
 
 static void LoRa_OnTxTimeout(void)
 {
-  handle.hw.radio->Sleep();
+  loraHandle.hw.radio->Sleep();
 	LoRa_SignalError();
 }
 
@@ -239,7 +247,7 @@ void LoRa_ProcessRequest(Frame_t frame)
 			switch (frame.messages[i].rawArgument[0])
 			{
 				case ERROR_RESEND:
-					memcpy(&reply, &handle.lastFrame, FRAME_MAX_SIZE);
+					memcpy(&reply, &loraHandle.lastFrame, FRAME_MAX_SIZE);
 					break;
 				case ERROR_RESET:
 					//TODO
@@ -247,8 +255,8 @@ void LoRa_ProcessRequest(Frame_t frame)
 			}
 			break;
 		case COMMAND_SET_ADDRESS:
-			handle.address = frame.messages[i].rawArgument[0];
-			EEPROM_WriteByte(EEPROM_LOCATION, handle.address);
+			loraHandle.address = frame.messages[i].rawArgument[0];
+			EEPROM_WriteByte(EEPROM_LOCATION, loraHandle.address);
 			reply.argLength = 1;
 			reply.rawArgument[0] = ACK;
 			break;
@@ -257,6 +265,7 @@ void LoRa_ProcessRequest(Frame_t frame)
 			Comp_ProcessRequest(frame.messages[i]);
 			reply.argLength = 1;
 			reply.rawArgument[0] = ACK;
+			LoRa_QueueMessage(reply);
 		//TODO: where to send this?
 			break;
 		case COMMAND_ACQUISITION:
@@ -273,23 +282,23 @@ void LoRa_ProcessRequest(Frame_t frame)
 		App_ProcessRequest(frame);
 		#endif
 	}
-	//memcpy(&handle.lastFrame, &reply, FRAME_MAX_SIZE);
+	//memcpy(&loraHandle.lastFrame, &reply, FRAME_MAX_SIZE);
 	
 	#ifdef END_NODE
-	if (handle.queueLength != 0)
+	if (loraHandle.queueLength != 0)
 		LoRa_Write();
 	else
-		handle.hw.radio->Rx(handle.timeout * 1000);
+		loraHandle.hw.radio->Rx(loraHandle.timeout * 1000);
 	#endif
 }
 
 #ifdef END_NODE
 void LoRa_QueueMessage(Message_t message)
 {
-	memcpy(&handle.messageQueue[handle.queueLength],
+	memcpy(&loraHandle.messageQueue[loraHandle.queueLength],
 		&message,
 		MESSAGE_HEADER_SIZE + message.argLength);
-	handle.queueLength++;
+	loraHandle.queueLength++;
 }
 #endif
 
@@ -297,7 +306,7 @@ static void LoRa_SignalError(void)
 {
 	Frame_t frame;
 	
-	frame.endDevice = handle.address;
+	frame.endDevice = loraHandle.address;
 	frame.nrOfMessages = 1;
 	
 	frame.messages[0].command = COMMAND_ERROR;
@@ -310,7 +319,7 @@ static void LoRa_SignalError(void)
 #ifdef END_NODE
 static void LoRa_SignalRequest(Frame_t frame)
 {
-	memcpy(&handle.lastFrameReceived, &frame, sizeof(Frame_t));
+	memcpy(&loraHandle.lastFrameReceived, &frame, sizeof(Frame_t));
 }
 #endif
 
@@ -338,19 +347,19 @@ static void LoRa_Write(void)
 	uint8_t array[FRAME_MAX_SIZE];
 	uint8_t arrayLength;
 	
-	frame.endDevice = handle.address;
-	frame.nrOfMessages = handle.queueLength;
+	frame.endDevice = loraHandle.address;
+	frame.nrOfMessages = loraHandle.queueLength;
 	
-	for (i = 0; i < handle.queueLength; i++)
+	for (i = 0; i < loraHandle.queueLength; i++)
 	{
 		memcpy(&frame.messages[i],
-			&handle.messageQueue[i],
-			MESSAGE_HEADER_SIZE + handle.messageQueue[i].argLength);
+			&loraHandle.messageQueue[i],
+			MESSAGE_HEADER_SIZE + loraHandle.messageQueue[i].argLength);
 	}
 	
 	PC_Write(frame);
 	Message_FrameToArray(frame, array, &arrayLength);
-	handle.hw.radio->Send(array, arrayLength);
-	handle.queueLength = 0;
+	loraHandle.hw.radio->Send(array, arrayLength);
+	loraHandle.queueLength = 0;
 }
 #endif

@@ -1,7 +1,6 @@
 ﻿using Power_LoRa.Node;
 using System;
 using System.Collections.Generic;
-using static Power_LoRa.Node.BaseNode;
 using static Power_LoRa.Node.Compensator;
 
 namespace Power_LoRa.Connection.Messages
@@ -11,8 +10,8 @@ namespace Power_LoRa.Connection.Messages
         #region Types
         public enum ResponseType
         {
-            ACK = 1,
-            NAK = 0
+            ACK = 0x55,
+            NAK = 0x66
         }
         public enum ErrorType
         {
@@ -86,9 +85,9 @@ namespace Power_LoRa.Connection.Messages
                                     ((rawArgument[2] >> 4) & 0x0F);
                             break;
                         case CommandType.SetCompensator:
-                            /*if (rawArgument[0] <= 1)
+                            if (rawArgument[Idx_ack] == (byte) ResponseType.ACK || rawArgument[Idx_ack] == (byte)ResponseType.NAK)
                                 PrintableArgument = ((ResponseType)rawArgument[Idx_ack]).ToString();
-                            else*/
+                            else
                                 PrintableArgument = rawArgument[0].ToString("X2");
                             break;
                         case CommandType.Acquisition:

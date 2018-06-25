@@ -40,7 +40,7 @@ typedef struct Register_t
 
 typedef struct MeterHandle_t
 {
-/* Uart handle */
+/* Uart meterHandle */
 	UART_HandleTypeDef hw;
 /* Uart receive buffer */
 	uint8_t buffer[RESP_DATA_LENGTH];
@@ -55,8 +55,8 @@ typedef struct MeterHandle_t
 }MeterHandle_t;
 
 /* Private macro -------------------------------------------------------------*/
-#define CURRENT_SAMPLE					(handle.samples[MAX_SAMPLES - 1])
-#define OLDEST_SAMPLE						(handle.samples[0])
+#define CURRENT_SAMPLE					(meterHandle.samples[MAX_SAMPLES - 1])
+#define OLDEST_SAMPLE						(meterHandle.samples[0])
 #define ASCII_TO_BINARY(x)			(x - '0')
 
 /* Private constants ---------------------------------------------------------*/
@@ -68,7 +68,7 @@ static const Register_t InductiveEnergy = {INDUCTIVE_ENERGY, "130.8.0", 7};
 static const Register_t CapacitiveEnergy = {CAPACITIVE_ENERGY, "131.8.0", 7};
 
 /* Private variables ---------------------------------------------------------*/
-static MeterHandle_t handle;
+static MeterHandle_t meterHandle;
 
 /* Private function prototypes -----------------------------------------------*/
 static uint32_t Meter_ArrayToInt(uint8_t *array, uint8_t length);
@@ -98,17 +98,17 @@ static uint32_t Meter_ArrayToInt(uint8_t *array, uint8_t length)
 void Meter_Init(void)
 {
 	/* Init UART */
-	handle.hw.Instance = METER_USARTX;
-	handle.hw.Init.BaudRate = 9600;
-	handle.hw.Init.WordLength = UART_WORDLENGTH_8B;
-	handle.hw.Init.StopBits = UART_STOPBITS_1;
-	handle.hw.Init.Parity = UART_PARITY_EVEN;
-	handle.hw.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-	handle.hw.Init.Mode = UART_MODE_TX_RX;
-	handle.failedAttempts = 0;
-	handle.state = METER_OK;
-	handle.timeout = UART_TIMEOUT;
-	if(HAL_UART_Init(&handle.hw) != HAL_OK)
+	meterHandle.hw.Instance = METER_USARTX;
+	meterHandle.hw.Init.BaudRate = 9600;
+	meterHandle.hw.Init.WordLength = UART_WORDLENGTH_8B;
+	meterHandle.hw.Init.StopBits = UART_STOPBITS_1;
+	meterHandle.hw.Init.Parity = UART_PARITY_EVEN;
+	meterHandle.hw.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+	meterHandle.hw.Init.Mode = UART_MODE_TX_RX;
+	meterHandle.failedAttempts = 0;
+	meterHandle.state = METER_OK;
+	meterHandle.timeout = UART_TIMEOUT;
+	if(HAL_UART_Init(&meterHandle.hw) != HAL_OK)
 	{
 		/* Initialization Error */
 		Error_Handler(); 
@@ -119,9 +119,9 @@ static void Meter_ProcessRegister(Register_t reg, uint8_t *result)
 {
 	uint16_t i = 0, j = 0, k = 0;
 	
-	while (handle.buffer[i] != '!' && i < RESP_DATA_LENGTH - 1)
+	while (meterHandle.buffer[i] != '!' && i < RESP_DATA_LENGTH - 1)
 	{
-		while ((handle.buffer[i] == reg.name[j]) && (j != reg.length - 1) && i < RESP_DATA_LENGTH - 1)
+		while ((meterHandle.buffer[i] == reg.name[j]) && (j != reg.length - 1) && i < RESP_DATA_LENGTH - 1)
 		{
 			i++;
 			j++;
@@ -130,14 +130,14 @@ static void Meter_ProcessRegister(Register_t reg, uint8_t *result)
 		{
 			/* Found register */
 			i += 2;
-			while (handle.buffer[i] != ')' && handle.buffer[i] != '*' && i < RESP_DATA_LENGTH - 1)
+			while (meterHandle.buffer[i] != ')' && meterHandle.buffer[i] != '*' && i < RESP_DATA_LENGTH - 1)
 			{
 				/* Skip decimal point character */
-				if (handle.buffer[i] == '.')
+				if (meterHandle.buffer[i] == '.')
 					i++;
 				
 				/* Found value */
-				result[k] = handle.buffer[i];
+				result[k] = meterHandle.buffer[i];
 				i++;
 				k++;
 			}
@@ -154,12 +154,12 @@ static void Meter_ProcessRegister(Register_t reg, uint8_t *result)
 void Meter_ProcessRequest(Message_t message)
 {
 	Message_t reponse;
-	uint8_t previousFailedAttempts = handle.failedAttempts;
+	uint8_t previousFailedAttempts = meterHandle.failedAttempts;
 	
 	switch (message.command)
 	{
 		case COMMAND_ACQUISITION:
-			if (handle.state == METER_OK)
+			if (meterHandle.state == METER_OK)
 			{
 				Meter_Write(MeterIDReq);
 				Meter_Read(RESP_ID_LENGTH);
@@ -167,8 +167,8 @@ void Meter_ProcessRequest(Message_t message)
 			else
 				return;
 			
-			if (handle.state == METER_OK &&
-				handle.failedAttempts - previousFailedAttempts == 0)
+			if (meterHandle.state == METER_OK &&
+				meterHandle.failedAttempts - previousFailedAttempts == 0)
 			{
 				Meter_Write(DataReq);
 				Meter_Read(RESP_DATA_LENGTH);
@@ -176,8 +176,8 @@ void Meter_ProcessRequest(Message_t message)
 			else
 				return;
 				
-			if (handle.state == METER_OK &&
-				handle.failedAttempts - previousFailedAttempts == 0)
+			if (meterHandle.state == METER_OK &&
+				meterHandle.failedAttempts - previousFailedAttempts == 0)
 			{
 				Meter_ShiftSamples();
 				Meter_SetTimestamp();
@@ -251,7 +251,7 @@ static void Meter_Read(uint16_t length)
 {
 	HAL_StatusTypeDef returnValue;
 	
-	returnValue = HAL_UART_Receive(&handle.hw, handle.buffer, length, handle.timeout * 1000);
+	returnValue = HAL_UART_Receive(&meterHandle.hw, meterHandle.buffer, length, meterHandle.timeout * 1000);
 	if (returnValue != HAL_OK)
 		Meter_SignalError();
 }
@@ -327,7 +327,7 @@ static void Meter_ShiftSamples(void)
 	uint8_t i;
 	
 	for (i = 0; i < MAX_SAMPLES - 1; i++)
-		memcpy(&handle.samples[i], &handle.samples[i + 1], sizeof(Sample_t));
+		memcpy(&meterHandle.samples[i], &meterHandle.samples[i + 1], sizeof(Sample_t));
 }
 
 static void Meter_SignalError(void)
@@ -357,7 +357,7 @@ static void Meter_Write(Register_t reg)
 {
 	HAL_StatusTypeDef returnValue;
 	
-	returnValue = HAL_UART_Transmit(&handle.hw, (uint8_t*) reg.name, reg.length, handle.timeout * 1000);
+	returnValue = HAL_UART_Transmit(&meterHandle.hw, (uint8_t*) reg.name, reg.length, meterHandle.timeout * 1000);
 	if (returnValue != HAL_OK)
 		Meter_SignalError();
 }

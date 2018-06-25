@@ -7,6 +7,7 @@
 #endif
    
 /* Includes ------------------------------------------------------------------*/
+#include "compensator.h"
 #include "message.h"
 #include "meter.h"
 #include "radio.h"
@@ -26,6 +27,8 @@ typedef struct EndNode_t
 	uint8_t queueLength;
 /* Address */
 	uint8_t address;
+/* Compensators array */
+	Compensator_t compensators[2];
 /* Response pending */
 	uint8_t responsePending;
 /* Latest sample */

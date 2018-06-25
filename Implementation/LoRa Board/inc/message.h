@@ -10,8 +10,8 @@
 #include <stdint.h>
 
 /* Exported defines ----------------------------------------------------------*/
-#define ACK														0x01
-#define NAK														0x00
+#define ACK														0x55
+#define NAK														0x66
 
 #define MESSAGE_HEADER_SIZE						2
 #define MESSAGE_ARG_MAX_SIZE					4
