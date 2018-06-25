@@ -126,9 +126,12 @@ static void LoRa_Broadcast(Message_t message)
 		&message,
 		MESSAGE_HEADER_SIZE + message.argLength);
 	
-	PC_Write(frame);
 	Message_FrameToArray(frame, array, &arrayLength);
-	handle.hw.radio->Send(array, arrayLength);
+	if (handle.hw.radio->GetStatus() == RF_IDLE)
+	{
+		PC_Write(frame);
+		handle.hw.radio->Send(array, arrayLength);
+	}
 }
 
 static void LoRa_BroadcastAcquisition(void)
@@ -140,6 +143,20 @@ static void LoRa_BroadcastAcquisition(void)
 	TimerStart(&handle.timer);
 }
 #endif
+
+void LoRa_ForwardFrame(Frame_t frame)
+{
+	uint8_t array[FRAME_MAX_SIZE];
+	uint8_t arrayLength;
+	
+	PC_Write(frame);
+	Message_FrameToArray(frame, array, &arrayLength);
+	if (handle.hw.radio->GetStatus() == RF_IDLE)
+	{
+		PC_Write(frame);
+		handle.hw.radio->Send(array, arrayLength);
+	}
+}
 
 uint8_t LoRa_GetAddress(void)
 {
@@ -213,6 +230,9 @@ static void LoRa_OnRxDone(uint8_t *payload, uint16_t size, int16_t rssi, int8_t 
 static void LoRa_OnRxError(void)
 {
 	handle.hw.radio->Sleep();
+	#ifdef END_NODE
+	handle.hw.radio->Rx(0);
+	#endif
 	//TODO request resend
 }
 
@@ -271,6 +291,7 @@ void LoRa_ProcessRequest(Frame_t frame)
 			Comp_ProcessRequest(frame.messages[i]);
 			reply.argLength = 1;
 			reply.rawArgument[0] = ACK;
+		//TODO: where to send this?
 			break;
 		case COMMAND_ACQUISITION:
 			Meter_ProcessRequest(frame.messages[i]);
@@ -287,6 +308,8 @@ void LoRa_ProcessRequest(Frame_t frame)
 	
 	if (handle.queueLength != 0)
 		LoRa_Write();
+	else
+		handle.hw.radio->Rx(0);
 }
 
 void LoRa_QueueMessage(Message_t message)

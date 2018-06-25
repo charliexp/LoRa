@@ -74,7 +74,6 @@ namespace Power_LoRa.Connection.Messages
                             PrintableArgument = ((ErrorType)rawArgument[0]).ToString();
                             break;
                         case CommandType.SetAddress:
-                        case CommandType.SetCompensator:
                             PrintableArgument = ((ResponseType)rawArgument[Idx_ack]).ToString();
                             break;
                         case CommandType.ChangeCompensator:
@@ -84,6 +83,12 @@ namespace Power_LoRa.Connection.Messages
                                 PrintableArgument = ((CompensatorType)(rawArgument[2] & 0x0F)).ToString() + " " +
                                     ((rawArgument[0] << 8) | rawArgument[1]).ToString() + Compensator.MeasureUnit + " " +
                                     ((rawArgument[2] >> 4) & 0x0F);
+                            break;
+                        case CommandType.SetCompensator:
+                            if (rawArgument[0] <= 1)
+                                PrintableArgument = ((ResponseType)rawArgument[Idx_ack]).ToString();
+                            else
+                                PrintableArgument = rawArgument[0].ToString("X2");
                             break;
                         case CommandType.Acquisition:
                             if (rawArgument.Length == 1)

@@ -132,9 +132,7 @@ static void PC_ProcessRequest(void)
 	}
 #ifdef GATEWAY
 	else
-	{
-		//LoRa_QueueMessage(frame.endDevice, Message_FromArray(handle.buffer + FRAME_HEADER_SIZE);
-	}
+		LoRa_ForwardFrame(frame);
 #endif
 }
 
