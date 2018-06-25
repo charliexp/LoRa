@@ -85,9 +85,9 @@ namespace Power_LoRa.Connection.Messages
                                     ((rawArgument[2] >> 4) & 0x0F);
                             break;
                         case CommandType.SetCompensator:
-                            if (rawArgument[0] <= 1)
+                            /*if (rawArgument[0] <= 1)
                                 PrintableArgument = ((ResponseType)rawArgument[Idx_ack]).ToString();
-                            else
+                            else*/
                                 PrintableArgument = rawArgument[0].ToString("X2");
                             break;
                         case CommandType.Acquisition:
