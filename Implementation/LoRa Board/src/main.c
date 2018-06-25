@@ -6,7 +6,7 @@
 #include "timeserver.h"
 
 #ifdef GATEWAY
-#define ACQUISITION_RATE							15
+#define ACQUISITION_RATE							30
 
 extern LoRaHandle_t handle;
 static TimerEvent_t timer;
