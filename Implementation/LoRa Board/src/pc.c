@@ -104,18 +104,19 @@ static void PC_ProcessRequest(void)
 	Frame_t reply;
 	Message_ArrayToFrame(handle.buffer, &frame);
 	
-	reply.endDevice = LoRa_GetAddress();
-	reply.nrOfMessages = 1;
-	reply.messages[0].command = frame.messages[0].command;
-	
-	if (frame.endDevice == ADDRESS_PC)
+	if (frame.endDevice == LoRa_GetAddress())
 	{
+		reply.endDevice = LoRa_GetAddress();
+		reply.nrOfMessages = 1;
+		reply.messages[0].command = frame.messages[0].command;
+	
 		switch (frame.messages[0].command)
 		{
 			case COMMAND_SET_ADDRESS:
 				reply.endDevice = LoRa_GetAddress();
 				LoRa_ProcessRequest(frame);
 				break;
+			case COMMAND_CHANGE_COMPENSATOR:
 			case COMMAND_SET_COMPENSATOR:
 				Comp_ProcessRequest(frame.messages[0]);
 				reply.messages[0].argLength = 1;
@@ -132,7 +133,7 @@ static void PC_ProcessRequest(void)
 #ifdef GATEWAY
 	else
 	{
-		LoRa_QueueMessage(frame.endDevice, Message_FromArray(handle.buffer + FRAME_HEADER_SIZE);
+		//LoRa_QueueMessage(frame.endDevice, Message_FromArray(handle.buffer + FRAME_HEADER_SIZE);
 	}
 #endif
 }

@@ -21,7 +21,7 @@ namespace Power_LoRa.Log
 			Sorting = SortOrder.None;
 
 			Columns.Add("Timestamp");
-			Columns.Add("Addr");
+			Columns.Add("Address");
 			Columns.Add("Command");
             Columns.Add("Parameter");
             //Columns.Add("RSSI");

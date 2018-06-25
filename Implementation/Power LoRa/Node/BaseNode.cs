@@ -154,8 +154,8 @@ namespace Power_LoRa.Node
         {
             Compensators = new List<Compensator>
             {
-                new Compensator(Compensator.CompensatorType.Inductor, 60, 2),
-                new Compensator(Compensator.CompensatorType.Inductor, 60, 3)
+                new Compensator(Compensator.CompensatorType.Inductor, 60, 0),
+                new Compensator(Compensator.CompensatorType.Inductor, 60, 1)
             };
 
             Type = NodeType.Unknown;

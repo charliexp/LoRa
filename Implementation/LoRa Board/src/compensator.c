@@ -182,7 +182,7 @@ void Comp_Set(uint8_t pin, bool state)
 		Comp_Write(REG_OUTPUT, handle.i2c_output);
 		
 		/* Check if contact really closed */
-		Comp_CheckFeedback();
+		//Comp_CheckFeedback();
 	}
 }
 
