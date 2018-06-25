@@ -98,6 +98,18 @@ void LoRa_Broadcast(Message_t message)
 
 void LoRa_ForwardFrame(Frame_t frame)
 {
+	#ifdef GATEWAY
+	switch (frame.messages[0].command)
+	{
+		case COMMAND_SET_COMPENSATOR:
+			if (frame.messages[0].rawArgument[0] != ACK &&
+				frame.messages[0].rawArgument[0] != NAK)
+			loraHandle.endNodes[0].compensators[(frame.messages[0].rawArgument[0] >> 4) & 0x0F].state = frame.messages[0].rawArgument[0] & 0x0F;
+			break;
+		default:
+			break;
+	}
+	#endif
 	memcpy(&loraHandle.lastFrameSent, &frame, sizeof(Frame_t));
 }
 #endif

@@ -22,8 +22,8 @@ typedef enum CompensatorType_t
 
 typedef enum State_t
 {
-	COMP_IN,
-	COMP_OUT,
+	COMP_OUT = 0,
+	COMP_IN = 1,
 	COMP_NOK
 }State_t;
 

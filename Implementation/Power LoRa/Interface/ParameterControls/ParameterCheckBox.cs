@@ -51,7 +51,7 @@ namespace Power_LoRa.Interface.Node.ParameterControls
         #region Public methods
         public void SetValue(bool value)
 		{
-			remotelyChanged = true;
+			//remotelyChanged = true;
 			((CheckBox)Field).Checked = value;
         }
         #endregion

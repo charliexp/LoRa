@@ -6,7 +6,10 @@
 #include "timeserver.h"
 
 #ifdef GATEWAY
-#define ACQUISITION_RATE							30
+#define ACQUISITION_RATE										30
+
+#define CAPACITIVE_POWER_FACTOR_THRESHOLD		100
+#define INDUCTIVE_POWER_FACTOR_THRESHOLD		92
 
 extern LoRaHandle_t loraHandle;
 static TimerEvent_t timer;
@@ -68,6 +71,11 @@ void App_ProcessRequest(Frame_t frame)
 				if (IsCompensationNeeded(&endNode->sample))
 					Compensate(endNode);
 				break;
+			case COMMAND_SET_COMPENSATOR:
+				if (frame.messages[i].rawArgument[0] != ACK &&
+					frame.messages[i].rawArgument[0] != NAK)
+				endNode->compensators[(frame.messages[i].rawArgument[0] >> 4) & 0x0F].state = frame.messages[i].rawArgument[0] & 0x0F;
+				break;
 		}
 	}
 }
@@ -89,7 +97,10 @@ static void FillSampleWithValues(Sample_t *sample)
 
 static bool IsCompensationNeeded(Sample_t *sample)
 {
-	return sample->powerFactor < 98;
+	if (sample->powerType == CAPACITIVE)
+		return sample->powerFactor <= CAPACITIVE_POWER_FACTOR_THRESHOLD;
+	else
+		return sample->powerFactor <= INDUCTIVE_POWER_FACTOR_THRESHOLD;
 }
 
 static void Compensate(EndNode_t *node)
