@@ -88,10 +88,10 @@ namespace Power_LoRa.Log
             
             foreach(Message message in frame.Messages)
             {
-                printableFrame += message.Command + ", " + message.RawArgument + ", ";
+                printableFrame += message.Command + ", " + message.PrintableArgument + ", ";
             }
             if (frame.EndDevice == (byte) AddressType.PC)
-                printableFrame += frame.RSSI + ", " + frame.SNR;
+                printableFrame += frame.RSSI + ", ";
 
             Interface.Update(frame);
             Write(printableFrame);
