@@ -2,18 +2,12 @@
 #include "compensator.h"
 #include "eeprom.h"
 #include "lora.h"
-#include "meter.h"
 #include "pc.h"
-#include "radio.h"
 #include <string.h>
-#ifdef GATEWAY
-#include "timeserver.h"
-#endif
 
 /* Private define ------------------------------------------------------------*/
 #ifdef GATEWAY
 #define RADIO_RX_TIMEOUT							10
-#define RADIO_MAX_CONNECTIONS					1
 #endif
 #ifdef END_NODE
 #define RADIO_RX_TIMEOUT							0
@@ -43,65 +37,23 @@
 #define	RADIO_PERFORM_CRC							true
 #endif
 
-#ifdef GATEWAY
-#define ACQUISITION_RATE							10
-#endif
-
 #define ADDRESS_BROADCAST							0xAA
 
 #define EEPROM_LOCATION								0x08080000
 
 /* Private typedef -----------------------------------------------------------*/
-typedef struct Radio_t
-{
-/* HW handle */
-	Radio_s *radio;
-/* Events handle */
-	RadioEvents_t events;
-/* Frequency */
-	uint32_t frequency;
-/* Output power */
-	uint8_t outputPower;
-/* Bandwidth */
-	uint8_t bandwidth;
-/* Spreading factor */
-	uint8_t spreadingFactor;
-}Radio_t;
-
-typedef struct LoRaHandle_t
-{
-/* Radio handle */
-	Radio_t hw;
-/* Node address */
-	uint8_t address;
-//ifdef endnode
-/* Message queue */
-	Message_t messageQueue[FRAME_MAX_MESSAGES];
-#ifdef GATEWAY
-/* Transmission timer */
-	TimerEvent_t timer;
-/* Connected end nodes addresses */
-	uint8_t endNodeAddresses[RADIO_MAX_CONNECTIONS];
-/* End node responses pending */
-	uint8_t endNodePending[RADIO_MAX_CONNECTIONS];
-#endif
-/* Number of messages queued */
-	uint8_t queueLength;
-/* Timeout in seconds */
-	uint16_t timeout;
-/* Last frame sent */
-	Frame_t lastFrame;
-}LoRaHandle_t;
 
 /* Private macro -------------------------------------------------------------*/
 /* Private constants ---------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-static LoRaHandle_t handle;
+LoRaHandle_t handle;
 
 /* Private function prototypes -----------------------------------------------*/
 #ifdef GATEWAY
-static void LoRa_Broadcast(Message_t message);
-static void LoRa_BroadcastAcquisition(void);
+static void LoRa_SignalTimeout(uint8_t address);
+#endif
+#ifdef END_NODE
+static void LoRa_Write(void);
 #endif
 static void LoRa_OnTxDone(void);
 static void LoRa_OnRxDone(uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr);
@@ -109,13 +61,15 @@ static void LoRa_OnTxTimeout(void);
 static void LoRa_OnRxTimeout(void);
 static void LoRa_OnRxError(void);
 static void LoRa_SignalError(void);
-static void LoRa_Write(void);
-	
+
+extern void App_ProcessRequest(Frame_t frame);
+
 /* Functions Definition ------------------------------------------------------*/
 #ifdef GATEWAY
-static void LoRa_Broadcast(Message_t message)
+void LoRa_Broadcast(Message_t message)
 {
 	Frame_t frame;
+	uint8_t i;
 	uint8_t array[FRAME_MAX_SIZE];
 	uint8_t arrayLength;
 	
@@ -126,37 +80,31 @@ static void LoRa_Broadcast(Message_t message)
 		&message,
 		MESSAGE_HEADER_SIZE + message.argLength);
 	
+	for (i = 0; i < RADIO_MAX_CONNECTIONS; i++)
+		if (handle.endNodes[i].queueLength != 0)
+			//Send this instead?
+			return;
+	
 	Message_FrameToArray(frame, array, &arrayLength);
-	if (handle.hw.radio->GetStatus() == RF_IDLE)
-	{
-		PC_Write(frame);
-		handle.hw.radio->Send(array, arrayLength);
-	}
+	PC_Write(frame);
+	handle.hw.radio->Send(array, arrayLength);
+		
+	for (i = 0; i < RADIO_MAX_CONNECTIONS; i++)
+		handle.endNodes[i].responsePending = true;
 }
-
-static void LoRa_BroadcastAcquisition(void)
-{
-	Message_t message;
-	message.command = COMMAND_ACQUISITION;
-	message.argLength = 0;
-	LoRa_Broadcast(message);
-	TimerStart(&handle.timer);
-}
-#endif
 
 void LoRa_ForwardFrame(Frame_t frame)
 {
 	uint8_t array[FRAME_MAX_SIZE];
 	uint8_t arrayLength;
 	
-	PC_Write(frame);
 	Message_FrameToArray(frame, array, &arrayLength);
-	if (handle.hw.radio->GetStatus() == RF_IDLE)
-	{
-		PC_Write(frame);
-		handle.hw.radio->Send(array, arrayLength);
-	}
+	while (handle.hw.radio->GetStatus() != RF_IDLE);
+	
+	PC_Write(frame);
+	handle.hw.radio->Send(array, arrayLength);
 }
+#endif
 
 uint8_t LoRa_GetAddress(void)
 {
@@ -168,8 +116,10 @@ void LoRa_Init(void)
 	#ifdef GATEWAY
 	uint8_t i;
 	
+	EEPROM_WriteByte(EEPROM_LOCATION, 1);
+	
 	for (i = 0; i < RADIO_MAX_CONNECTIONS; i++)
-		handle.endNodeAddresses[i] = *((uint8_t *) EEPROM_LOCATION + i);
+		handle.endNodes[i].address = *((uint8_t *) EEPROM_LOCATION + i);
 	#endif
 	#ifdef END_NODE
 	handle.address = *((uint8_t *) EEPROM_LOCATION);
@@ -197,14 +147,8 @@ void LoRa_Init(void)
 		RADIO_RX_SYMB_TIMEOUT, false,
 		FRAME_MAX_SIZE, RADIO_PERFORM_CRC, false, 0, RADIO_INVERTED_IQ, true);
 		
-	#ifdef GATEWAY
-	//set up tx timer
-	TimerInit(&handle.timer, LoRa_BroadcastAcquisition);
-	TimerSetValue(&handle.timer, ACQUISITION_RATE * 1000);
-	TimerStart(&handle.timer);
-	#endif
 	#ifdef END_NODE
-	handle.hw.radio->Rx(0);
+	handle.hw.radio->Rx(handle.timeout * 1000);
 	#endif
 }
 
@@ -216,7 +160,7 @@ static void LoRa_OnRxDone(uint8_t *payload, uint16_t size, int16_t rssi, int8_t 
 	#ifdef GATEWAY
 	//Check if more need to be received
 	Message_ArrayToFrame(payload, &frame);
-	PC_Write(frame);
+	LoRa_ProcessRequest(frame);
 	#endif
 	#ifdef END_NODE
 	Message_ArrayToFrame(payload, &frame);
@@ -229,11 +173,13 @@ static void LoRa_OnRxDone(uint8_t *payload, uint16_t size, int16_t rssi, int8_t 
 
 static void LoRa_OnRxError(void)
 {
+	#ifdef GATEWAY
+	//TODO: request resend?
 	handle.hw.radio->Sleep();
-	#ifdef END_NODE
-	handle.hw.radio->Rx(0);
 	#endif
-	//TODO request resend
+	#ifdef END_NODE
+	handle.hw.radio->Rx(handle.timeout * 1000);
+	#endif
 }
 
 static void LoRa_OnRxTimeout(void)
@@ -241,6 +187,13 @@ static void LoRa_OnRxTimeout(void)
   handle.hw.radio->Sleep();
 	#ifdef GATEWAY
 	//TODO
+	uint8_t i;
+	for (i = 0; i < RADIO_MAX_CONNECTIONS; i++)
+		if (handle.endNodes[i].responsePending)
+		{
+			handle.endNodes[i].responsePending = false;
+			LoRa_SignalTimeout(i);
+		}
 	#endif
 }
 
@@ -303,15 +256,21 @@ void LoRa_ProcessRequest(Frame_t frame)
 			break;
 		}
 		#endif
+		#ifdef GATEWAY
+		App_ProcessRequest(frame);
+		#endif
 	}
 	//memcpy(&handle.lastFrame, &reply, FRAME_MAX_SIZE);
 	
+	#ifdef END_NODE
 	if (handle.queueLength != 0)
 		LoRa_Write();
 	else
-		handle.hw.radio->Rx(0);
+		handle.hw.radio->Rx(handle.timeout * 1000);
+	#endif
 }
 
+#ifdef END_NODE
 void LoRa_QueueMessage(Message_t message)
 {
 	memcpy(&handle.messageQueue[handle.queueLength],
@@ -319,6 +278,7 @@ void LoRa_QueueMessage(Message_t message)
 		MESSAGE_HEADER_SIZE + message.argLength);
 	handle.queueLength++;
 }
+#endif
 
 static void LoRa_SignalError(void)
 {
@@ -334,6 +294,23 @@ static void LoRa_SignalError(void)
 	PC_Write(frame);
 }
 
+#ifdef GATEWAY
+static void LoRa_SignalTimeout(uint8_t address)
+{
+	Frame_t frame;
+	
+	frame.endDevice = address;
+	frame.nrOfMessages = 1;
+	
+	frame.messages[0].command = COMMAND_ERROR;
+	frame.messages[0].argLength = 1;
+	frame.messages[0].rawArgument[0] = ERROR_LORA_TIMEOUT;
+	
+	PC_Write(frame);
+}
+#endif
+
+#ifdef END_NODE
 static void LoRa_Write(void)
 {
 	Frame_t frame;
@@ -341,11 +318,7 @@ static void LoRa_Write(void)
 	uint8_t array[FRAME_MAX_SIZE];
 	uint8_t arrayLength;
 	
-	#ifdef GATEWAY
-	#endif
-	#ifdef END_NODE
 	frame.endDevice = handle.address;
-	#endif
 	frame.nrOfMessages = handle.queueLength;
 	
 	for (i = 0; i < handle.queueLength; i++)
@@ -360,3 +333,4 @@ static void LoRa_Write(void)
 	handle.hw.radio->Send(array, arrayLength);
 	handle.queueLength = 0;
 }
+#endif

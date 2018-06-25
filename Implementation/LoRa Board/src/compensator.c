@@ -3,6 +3,7 @@
 #include "eeprom.h"
 #include "hw.h"
 #include "lora.h"
+#include "pc.h"
 
 /* Private define ------------------------------------------------------------*/
 #define I2C_TIMEOUT						1
@@ -188,6 +189,7 @@ void Comp_Set(uint8_t pin, bool state)
 
 static void Comp_SignalError(uint8_t pin)
 {
+	#ifdef END_NODE
 	Message_t message;
 	
 	message.command = COMMAND_ERROR;
@@ -196,6 +198,18 @@ static void Comp_SignalError(uint8_t pin)
 	message.rawArgument[1] = pin;
 	
 	LoRa_QueueMessage(message);
+	#endif
+	#ifdef GATEWAY
+	Frame_t frame;
+	frame.endDevice = LoRa_GetAddress();
+	frame.nrOfMessages = 1;
+	frame.messages[0].command = COMMAND_ERROR;
+	frame.messages[0].argLength = 2;
+	frame.messages[0].rawArgument[0] = ERROR_COMPENSATOR_NOK;
+	frame.messages[0].rawArgument[1] = pin;
+	
+	PC_Write(frame);
+	#endif
 }
 
 static void Comp_Write(uint8_t reg, uint8_t data)

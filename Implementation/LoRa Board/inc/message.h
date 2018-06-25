@@ -44,6 +44,7 @@ typedef enum Error_t
 	ERROR_METER_NOK = 0x42,
 	ERROR_COMPENSATOR_NOK = 0x43,
 	ERROR_LORA_NOK = 0x44,
+	ERROR_LORA_TIMEOUT = 0x45,
 }Error_t;
 
 typedef struct Message_t

@@ -2,6 +2,7 @@
 #include "hw.h"
 #include "lora.h"
 #include "meter.h"
+#include "pc.h"
 #include <string.h>
 
 /* Private define ------------------------------------------------------------*/
@@ -19,41 +20,6 @@ typedef enum MeterState_t
 	METER_OK,
 	METER_TIMEOUT,
 }MeterState_t;
-
-typedef enum ReactivePower_t
-{
-	INDUCTIVE = 0x01,
-	CAPACITIVE = 0x02,
-}ReactivePower_t;
-
-typedef struct Time_t
-{
-	uint8_t hour;
-	uint8_t minute;
-	uint8_t second;
-	uint32_t timestamp;
-}Time_t;
-
-typedef struct Sample_t
-{
-	Time_t time;
-/* Total values reported by meter */
-	uint32_t activeEnergyTotal;
-	uint32_t capacitiveEnergyTotal;
-	uint32_t inductiveEnergyTotal;
-/* Actual values used */
-	uint32_t activeEnergy;			//kWh
-	uint32_t reactiveEnergy;		//kVARh
-	uint32_t capacitiveEnergy;	//kVARh
-	uint32_t inductiveEnergy;		//kVARh
-	ReactivePower_t powerType;	
-	uint32_t activePower;				//kW
-	uint32_t reactivePower;			//kVAR
-#ifdef GATEWAY
-	uint32_t apparentPower;			//Resolution: 0.001, Unit: kVA
-	int8_t powerFactor;					//Resolution: 0.01
-#endif
-}Sample_t;
 
 typedef enum RegisterTag_t
 {
@@ -225,42 +191,54 @@ void Meter_ProcessRequest(Message_t message)
 					reponse.rawArgument[0] = CURRENT_SAMPLE.time.hour;
 					reponse.rawArgument[1] = CURRENT_SAMPLE.time.minute;
 					reponse.rawArgument[2] = CURRENT_SAMPLE.time.second;
+					#ifdef END_NODE
 					LoRa_QueueMessage(reponse);
+					#endif
 					
 					reponse.command = COMMAND_ACTIVE_ENERGY;
 					reponse.argLength = 3;
 					reponse.rawArgument[0] = (CURRENT_SAMPLE.activeEnergy >> 16) & 0xFF;
 					reponse.rawArgument[1] = (CURRENT_SAMPLE.activeEnergy >> 8) & 0xFF;
 					reponse.rawArgument[2] = (CURRENT_SAMPLE.activeEnergy >> 0) & 0xFF;
+					#ifdef END_NODE
 					LoRa_QueueMessage(reponse);
+					#endif
 					
 					reponse.command = COMMAND_REACTIVE_ENERGY;
 					reponse.argLength = 3;
 					reponse.rawArgument[0] = (CURRENT_SAMPLE.reactiveEnergy >> 16) & 0xFF;
 					reponse.rawArgument[1] = (CURRENT_SAMPLE.reactiveEnergy >> 8) & 0xFF;
 					reponse.rawArgument[2] = (CURRENT_SAMPLE.reactiveEnergy >> 0) & 0xFF;
+					#ifdef END_NODE
 					LoRa_QueueMessage(reponse);
+					#endif
 					
 					reponse.command = COMMAND_ACTIVE_POWER;
 					reponse.argLength = 3;
 					reponse.rawArgument[0] = (CURRENT_SAMPLE.activePower >> 16) & 0xFF;
 					reponse.rawArgument[1] = (CURRENT_SAMPLE.activePower >> 8) & 0xFF;
 					reponse.rawArgument[2] = (CURRENT_SAMPLE.activePower >> 0) & 0xFF;
+					#ifdef END_NODE
 					LoRa_QueueMessage(reponse);
+					#endif
 					
 					reponse.command = COMMAND_REACTIVE_POWER;
 					reponse.argLength = 3;
 					reponse.rawArgument[0] = (CURRENT_SAMPLE.reactivePower >> 16) & 0xFF;
 					reponse.rawArgument[1] = (CURRENT_SAMPLE.reactivePower >> 8) & 0xFF;
 					reponse.rawArgument[2] = (CURRENT_SAMPLE.reactivePower >> 0) & 0xFF;
+					#ifdef END_NODE
 					LoRa_QueueMessage(reponse);
+					#endif
 				}
 				else
 				{
 					reponse.command = COMMAND_ACQUISITION;
 					reponse.argLength = 1;
 					reponse.rawArgument[0] = ACK;
+					#ifdef END_NODE
 					LoRa_QueueMessage(reponse);
+					#endif
 				}
 			}
 			break;
@@ -354,16 +332,25 @@ static void Meter_ShiftSamples(void)
 
 static void Meter_SignalError(void)
 {
+	#ifdef END_NODE
 	Message_t message;
-	
-	handle.failedAttempts++;
-	if (handle.failedAttempts == MAX_ATTEMPTS)
-		Meter_Init();
 	
 	message.command = COMMAND_ERROR;
 	message.argLength = 1;
 	message.rawArgument[0] = ERROR_METER_NOK;
+	
 	LoRa_QueueMessage(message);
+	#endif
+	#ifdef GATEWAY
+	Frame_t frame;
+	frame.endDevice = LoRa_GetAddress();
+	frame.nrOfMessages = 1;
+	frame.messages[0].command = COMMAND_ERROR;
+	frame.messages[0].argLength = 1;
+	frame.messages[0].rawArgument[0] = ERROR_METER_NOK;
+	
+	PC_Write(frame);
+	#endif
 }
 	
 static void Meter_Write(Register_t reg)
