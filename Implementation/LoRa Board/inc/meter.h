@@ -2,10 +2,6 @@
 #ifndef __METER_H__
 #define __METER_H__
 
-#ifdef __cplusplus
- extern "C" {
-#endif
-   
 /* Includes ------------------------------------------------------------------*/
 #include <stdint.h>
 #include "message.h"
@@ -52,9 +48,5 @@ typedef struct Sample_t
 /* Exported functions --------------------------------------------------------*/
 void Meter_Init(void);
 void Meter_ProcessRequest(Message_t message);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* __METER_H__*/

@@ -557,6 +557,11 @@
           <GroupName>src</GroupName>
           <Files>
             <File>
+              <FileName>app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Implementation\LoRa Board\src\app.c</FilePath>
+            </File>
+            <File>
               <FileName>compensator.c</FileName>
               <FileType>1</FileType>
               <FilePath>Implementation\LoRa Board\src\compensator.c</FilePath>
@@ -1190,6 +1195,11 @@
         <Group>
           <GroupName>src</GroupName>
           <Files>
+            <File>
+              <FileName>app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Implementation\LoRa Board\src\app.c</FilePath>
+            </File>
             <File>
               <FileName>compensator.c</FileName>
               <FileType>1</FileType>

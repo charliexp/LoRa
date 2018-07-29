@@ -2,10 +2,6 @@
 #ifndef __LORA_H__
 #define __LORA_H__
 
-#ifdef __cplusplus
- extern "C" {
-#endif
-   
 /* Includes ------------------------------------------------------------------*/
 #include "compensator.h"
 #include "message.h"

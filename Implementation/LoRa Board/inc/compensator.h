@@ -2,10 +2,6 @@
 #ifndef __COMPENSATOR_H__
 #define __COMPENSATOR_H__
 
-#ifdef __cplusplus
- extern "C" {
-#endif
-   
 /* Includes ------------------------------------------------------------------*/
 #include <stdbool.h>
 #include <stdint.h>
@@ -45,9 +41,5 @@ typedef struct Compensator_t
 void Comp_Init(void);
 void Comp_ProcessRequest(Message_t message);
 void Comp_Set(uint8_t outputNumber, bool state);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* __COMPENSATOR_H__*/

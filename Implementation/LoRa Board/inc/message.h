@@ -2,10 +2,6 @@
 #ifndef __MESSAGE_H__
 #define __MESSAGE_H__
 
-#ifdef __cplusplus
- extern "C" {
-#endif
-   
 /* Includes ------------------------------------------------------------------*/
 #include <stdint.h>
 
@@ -68,9 +64,5 @@ void Message_ArrayToFrame(uint8_t *array, Frame_t *frame);
 void Message_ArrayToMessage(Message_t *message, uint8_t *array);
 uint8_t Message_ArgLengthFromArray(uint8_t *array);
 void Message_FrameToArray(Frame_t frame, uint8_t *array, uint8_t *length);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* __MESSAGE_H__*/
