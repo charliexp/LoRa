@@ -127,6 +127,9 @@ Maintainer: Miguel Luis and Gregory Cristian
 /* --------Preprocessor compile swicth------------ */
 /* debug switches in debug.h */
 #define DEBUG
+//#define DEBUG_VERBOSE
+#define TEST
+#define TEST_CHANCE_TO_FAIL		50
 //#define TRACE
    
 /* uncomment below line to never enter lowpower modes in main.c*/

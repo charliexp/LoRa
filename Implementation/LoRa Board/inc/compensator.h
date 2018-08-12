@@ -5,41 +5,27 @@
 /* Includes ------------------------------------------------------------------*/
 #include <stdbool.h>
 #include <stdint.h>
-#include "message.h"
 
 /* Exported defines ----------------------------------------------------------*/
+#define I2C_TIMEOUT						1
+#define MAX_ATTEMPTS					3
+#define MAX_COMPENSATORS			4
+
+#define COMPENSATOR_LOCATION	0x08080010
+
 /* Exported types ------------------------------------------------------------*/
-typedef enum CompensatorType_t
+typedef enum Comp_error_e
 {
-	COMP_UNUSED = 0x00,
-	COMP_INDUCTOR = 0x01,
-	COMP_CAPACITOR = 0x02,
-}CompensatorType_t;
-
-typedef enum State_t
-{
-	COMP_OUT = 0,
-	COMP_IN = 1,
-	COMP_NOK
-}State_t;
-
-typedef struct Compensator_t
-{
-/* Failed attempts to set compensator */
-	uint8_t failedAttempts;
-/* Working state */
-	State_t state;
-/* Type */
-	CompensatorType_t type;
-/* Reactive power */
-	uint16_t value;
-}Compensator_t;
+	COMP_OK = 0,
+	COMP_I2C_NAK = 0xC0,
+	COMP_FEEDBACK_NOK = 0xC1,
+}Comp_error_e;
 
 /* Exported constants --------------------------------------------------------*/
 /* External variables --------------------------------------------------------*/
 /* Exported functions --------------------------------------------------------*/
 void Comp_Init(void);
-void Comp_ProcessRequest(Message_t message);
-void Comp_Set(uint8_t outputNumber, bool state);
+void Comp_Update(uint8_t pin, uint16_t value, uint8_t type);
+Comp_error_e Comp_Set(uint8_t pin, bool state);
 
 #endif /* __COMPENSATOR_H__*/
