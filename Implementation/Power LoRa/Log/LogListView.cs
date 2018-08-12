@@ -8,7 +8,7 @@ namespace Power_LoRa.Log
 	public class LogListView : ListView
     {
         #region Public constants
-        public const int maxVisibleEntries = 20;
+        public const int maxVisibleEntries = 10;
         public const int maxEntries = 1000;
         #endregion
 
