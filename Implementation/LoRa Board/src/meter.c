@@ -159,13 +159,9 @@ void Meter_ProcessRequest(Message_t message)
 	switch (message.command)
 	{
 		case COMMAND_ACQUISITION:
-			if (meterHandle.state == METER_OK)
-			{
-				Meter_Write(MeterIDReq);
-				Meter_Read(RESP_ID_LENGTH);
-			}
-			else
-				return;
+			/* Check for meter regardless of error state */
+			Meter_Write(MeterIDReq);
+			Meter_Read(RESP_ID_LENGTH);
 			
 			if (meterHandle.state == METER_OK &&
 				meterHandle.failedAttempts - previousFailedAttempts == 0)
@@ -173,8 +169,6 @@ void Meter_ProcessRequest(Message_t message)
 				Meter_Write(DataReq);
 				Meter_Read(RESP_DATA_LENGTH);
 			}
-			else
-				return;
 				
 			if (meterHandle.state == METER_OK &&
 				meterHandle.failedAttempts - previousFailedAttempts == 0)
@@ -187,46 +181,46 @@ void Meter_ProcessRequest(Message_t message)
 				if (OLDEST_SAMPLE.time.timestamp != 0)
 				{
 					response.command = COMMAND_TIMESTAMP;
-					response.argLength = 3;
-					response.rawArgument[0] = CURRENT_SAMPLE.time.hour;
-					response.rawArgument[1] = CURRENT_SAMPLE.time.minute;
-					response.rawArgument[2] = CURRENT_SAMPLE.time.second;
+					response.paramLength = 3;
+					response.params[0] = CURRENT_SAMPLE.time.hour;
+					response.params[1] = CURRENT_SAMPLE.time.minute;
+					response.params[2] = CURRENT_SAMPLE.time.second;
 					#ifdef END_NODE
 					LoRa_QueueMessage(response);
 					#endif
 					
 					response.command = COMMAND_ACTIVE_ENERGY;
-					response.argLength = 3;
-					response.rawArgument[0] = (CURRENT_SAMPLE.activeEnergy >> 16) & 0xFF;
-					response.rawArgument[1] = (CURRENT_SAMPLE.activeEnergy >> 8) & 0xFF;
-					response.rawArgument[2] = (CURRENT_SAMPLE.activeEnergy >> 0) & 0xFF;
+					response.paramLength = 3;
+					response.params[0] = (CURRENT_SAMPLE.activeEnergy >> 16) & 0xFF;
+					response.params[1] = (CURRENT_SAMPLE.activeEnergy >> 8) & 0xFF;
+					response.params[2] = (CURRENT_SAMPLE.activeEnergy >> 0) & 0xFF;
 					#ifdef END_NODE
 					LoRa_QueueMessage(response);
 					#endif
 					
 					response.command = COMMAND_REACTIVE_ENERGY;
-					response.argLength = 3;
-					response.rawArgument[0] = (CURRENT_SAMPLE.reactiveEnergy >> 16) & 0xFF;
-					response.rawArgument[1] = (CURRENT_SAMPLE.reactiveEnergy >> 8) & 0xFF;
-					response.rawArgument[2] = (CURRENT_SAMPLE.reactiveEnergy >> 0) & 0xFF;
+					response.paramLength = 3;
+					response.params[0] = (CURRENT_SAMPLE.reactiveEnergy >> 16) & 0xFF;
+					response.params[1] = (CURRENT_SAMPLE.reactiveEnergy >> 8) & 0xFF;
+					response.params[2] = (CURRENT_SAMPLE.reactiveEnergy >> 0) & 0xFF;
 					#ifdef END_NODE
 					LoRa_QueueMessage(response);
 					#endif
 					
 					response.command = COMMAND_ACTIVE_POWER;
-					response.argLength = 3;
-					response.rawArgument[0] = (CURRENT_SAMPLE.activePower >> 16) & 0xFF;
-					response.rawArgument[1] = (CURRENT_SAMPLE.activePower >> 8) & 0xFF;
-					response.rawArgument[2] = (CURRENT_SAMPLE.activePower >> 0) & 0xFF;
+					response.paramLength = 3;
+					response.params[0] = (CURRENT_SAMPLE.activePower >> 16) & 0xFF;
+					response.params[1] = (CURRENT_SAMPLE.activePower >> 8) & 0xFF;
+					response.params[2] = (CURRENT_SAMPLE.activePower >> 0) & 0xFF;
 					#ifdef END_NODE
 					LoRa_QueueMessage(response);
 					#endif
 					
 					response.command = COMMAND_REACTIVE_POWER;
-					response.argLength = 3;
-					response.rawArgument[0] = (CURRENT_SAMPLE.reactivePower >> 16) & 0xFF;
-					response.rawArgument[1] = (CURRENT_SAMPLE.reactivePower >> 8) & 0xFF;
-					response.rawArgument[2] = (CURRENT_SAMPLE.reactivePower >> 0) & 0xFF;
+					response.paramLength = 3;
+					response.params[0] = (CURRENT_SAMPLE.reactivePower >> 16) & 0xFF;
+					response.params[1] = (CURRENT_SAMPLE.reactivePower >> 8) & 0xFF;
+					response.params[2] = (CURRENT_SAMPLE.reactivePower >> 0) & 0xFF;
 					#ifdef END_NODE
 					LoRa_QueueMessage(response);
 					#endif
@@ -234,8 +228,8 @@ void Meter_ProcessRequest(Message_t message)
 				else
 				{
 					response.command = COMMAND_ACQUISITION;
-					response.argLength = 1;
-					response.rawArgument[0] = ACK;
+					response.paramLength = 1;
+					response.params[0] = ACK;
 					#ifdef END_NODE
 					LoRa_QueueMessage(response);
 					#endif
@@ -336,12 +330,15 @@ static void Meter_ShiftSamples(void)
 
 static void Meter_SignalError(void)
 {
+	meterHandle.state = METER_TIMEOUT;
+	meterHandle.failedAttempts++;
+	
 	#ifdef END_NODE
 	Message_t message;
 	
 	message.command = COMMAND_ERROR;
-	message.argLength = 1;
-	message.rawArgument[0] = ERROR_METER_NOK;
+	message.paramLength = 1;
+	message.params[0] = ERROR_METER_NOK;
 	
 	LoRa_QueueMessage(message);
 	#endif
@@ -350,8 +347,8 @@ static void Meter_SignalError(void)
 	frame.endDevice = LoRa_GetAddress();
 	frame.nrOfMessages = 1;
 	frame.messages[0].command = COMMAND_ERROR;
-	frame.messages[0].argLength = 1;
-	frame.messages[0].rawArgument[0] = ERROR_METER_NOK;
+	frame.messages[0].paramLength = 1;
+	frame.messages[0].params[0] = ERROR_METER_NOK;
 	
 	PC_Write(frame);
 	#endif
