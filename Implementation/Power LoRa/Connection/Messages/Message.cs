@@ -18,9 +18,10 @@ namespace Power_LoRa.Connection.Messages
             Resend = 0x40,
             Reset = 0x41,
             MeterNOK = 0x42,
-            CompensatorNOK = 0x43,
             LoRaNOK = 0x44,
             Timeout = 0x45,
+            CompNoResponse = 0xC0,
+            CompFeedbackError = 0xC1,
         }
         public enum CommandType
 		{
