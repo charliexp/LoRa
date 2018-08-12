@@ -46,8 +46,8 @@ typedef enum Error_t
 typedef struct Message_t
 {
 	Command_t command;
-	uint8_t argLength;
-	uint8_t rawArgument[MESSAGE_ARG_MAX_SIZE];
+	uint8_t paramLength;
+	uint8_t params[MESSAGE_ARG_MAX_SIZE];
 }Message_t;
 
 typedef struct Frame_t

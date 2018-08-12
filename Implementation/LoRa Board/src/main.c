@@ -22,7 +22,7 @@ static void BroadcastAcquisition(void)
 {
 	Message_t message;
 	message.command = COMMAND_ACQUISITION;
-	message.argLength = 0;
+	message.paramLength = 0;
 	LoRa_Broadcast(message);
 	TimerStart(&timer);
 }
@@ -44,29 +44,29 @@ void App_ProcessRequest(Frame_t frame)
 		switch (frame.messages[i].command)
 		{
 			case COMMAND_TIMESTAMP:
-				endNode->sample.time.hour = frame.messages[i].rawArgument[0];
-				endNode->sample.time.minute = frame.messages[i].rawArgument[1];
-				endNode->sample.time.second = frame.messages[i].rawArgument[2];
+				endNode->sample.time.hour = frame.messages[i].params[0];
+				endNode->sample.time.minute = frame.messages[i].params[1];
+				endNode->sample.time.second = frame.messages[i].params[2];
 				break;
 			case COMMAND_ACTIVE_ENERGY:
-				endNode->sample.activeEnergy = (frame.messages[i].rawArgument[0] << 16) |
-					(frame.messages[i].rawArgument[1] << 8) |
-					(frame.messages[i].rawArgument[2] << 0);
+				endNode->sample.activeEnergy = (frame.messages[i].params[0] << 16) |
+					(frame.messages[i].params[1] << 8) |
+					(frame.messages[i].params[2] << 0);
 				break;
 			case COMMAND_REACTIVE_ENERGY:
-				endNode->sample.reactiveEnergy = (frame.messages[i].rawArgument[0] << 16) |
-					(frame.messages[i].rawArgument[1] << 8) |
-					(frame.messages[i].rawArgument[2] << 0);
+				endNode->sample.reactiveEnergy = (frame.messages[i].params[0] << 16) |
+					(frame.messages[i].params[1] << 8) |
+					(frame.messages[i].params[2] << 0);
 				break;
 			case COMMAND_ACTIVE_POWER:
-				endNode->sample.activePower = (frame.messages[i].rawArgument[0] << 16) |
-					(frame.messages[i].rawArgument[1] << 8) |
-					(frame.messages[i].rawArgument[2] << 0);
+				endNode->sample.activePower = (frame.messages[i].params[0] << 16) |
+					(frame.messages[i].params[1] << 8) |
+					(frame.messages[i].params[2] << 0);
 				break;
 			case COMMAND_REACTIVE_POWER:
-				endNode->sample.reactivePower = (frame.messages[i].rawArgument[0] << 16) |
-					(frame.messages[i].rawArgument[1] << 8) |
-					(frame.messages[i].rawArgument[2] << 0);
+				endNode->sample.reactivePower = (frame.messages[i].params[0] << 16) |
+					(frame.messages[i].params[1] << 8) |
+					(frame.messages[i].params[2] << 0);
 				FillSampleWithValues(&endNode->sample);
 				if (IsCompensationNeeded(&endNode->sample))
 					Compensate(endNode);
@@ -105,19 +105,19 @@ static void Compensate(EndNode_t *node)
 	frame.endDevice = node->address;
 	frame.nrOfMessages = 1;
 	frame.messages[0].command = COMMAND_SET_COMPENSATOR;
-	frame.messages[0].argLength = 1;
+	frame.messages[0].paramLength = 1;
 	
 	if (node->sample.powerType == CAPACITIVE)
 	{
 		if (node->compensators[1].state == COMP_IN)
 		{
-			frame.messages[0].rawArgument[0] = 0x10;
+			frame.messages[0].params[0] = 0x10;
 			LoRa_ForwardFrame(frame);
 			node->compensators[1].state = COMP_OUT;
 		}
 		else if (node->compensators[0].state == COMP_OUT) 
 		{
-			frame.messages[0].rawArgument[0] = 0x01;
+			frame.messages[0].params[0] = 0x01;
 			LoRa_ForwardFrame(frame);
 			node->compensators[0].state = COMP_IN;
 		}
@@ -126,13 +126,13 @@ static void Compensate(EndNode_t *node)
 	{
 		if (node->compensators[0].state == COMP_IN)
 		{
-			frame.messages[0].rawArgument[0] = 0x00;
+			frame.messages[0].params[0] = 0x00;
 			LoRa_ForwardFrame(frame);
 			node->compensators[0].state = COMP_OUT;
 		}
 		else if (node->compensators[1].state == COMP_OUT) 
 		{
-			frame.messages[0].rawArgument[0] = 0x11;
+			frame.messages[0].params[0] = 0x11;
 			LoRa_ForwardFrame(frame);
 			node->compensators[1].state = COMP_IN;
 		}

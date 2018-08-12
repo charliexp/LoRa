@@ -1,4 +1,5 @@
 /* Includes ------------------------------------------------------------------*/
+#include "app.h"
 #include "compensator.h"
 #include "eeprom.h"
 #include "lora.h"
@@ -81,7 +82,7 @@ void LoRa_Broadcast(Message_t message)
 	
 	memcpy(&frame.messages[0],
 		&message,
-		MESSAGE_HEADER_SIZE + message.argLength);
+		MESSAGE_HEADER_SIZE + message.paramLength);
 	
 	for (i = 0; i < RADIO_MAX_CONNECTIONS; i++)
 		if (loraHandle.endNodes[i].queueLength != 0)
@@ -102,9 +103,9 @@ void LoRa_ForwardFrame(Frame_t frame)
 	switch (frame.messages[0].command)
 	{
 		case COMMAND_SET_COMPENSATOR:
-			if (frame.messages[0].rawArgument[0] != ACK &&
-				frame.messages[0].rawArgument[0] != NAK)
-			loraHandle.endNodes[0].compensators[(frame.messages[0].rawArgument[0] >> 4) & 0x0F].state = frame.messages[0].rawArgument[0] & 0x0F;
+			if (frame.messages[0].params[0] != ACK &&
+				frame.messages[0].params[0] != NAK)
+			loraHandle.endNodes[0].compensators[(frame.messages[0].params[0] >> 4) & 0x0F].state = (State_t) (frame.messages[0].params[0] & 0x0F);
 			break;
 		default:
 			break;
@@ -229,7 +230,7 @@ static void LoRa_OnRxTimeout(void)
 		if (loraHandle.endNodes[i].responsePending)
 		{
 			loraHandle.endNodes[i].responsePending = false;
-			LoRa_SignalTimeout(i);
+			LoRa_SignalTimeout(loraHandle.endNodes[i].address);
 		}
 	#endif
 }
@@ -260,7 +261,7 @@ void LoRa_ProcessRequest(Frame_t frame)
 		switch (frame.messages[i].command)
 		{
 		case COMMAND_ERROR:
-			switch (frame.messages[i].rawArgument[0])
+			switch (frame.messages[i].params[0])
 			{
 				case ERROR_RESEND:
 					memcpy(&reply, &loraHandle.lastFrameSent, FRAME_MAX_SIZE);
@@ -271,25 +272,21 @@ void LoRa_ProcessRequest(Frame_t frame)
 			}
 			break;
 		case COMMAND_SET_ADDRESS:
-			loraHandle.address = frame.messages[i].rawArgument[0];
+			loraHandle.address = frame.messages[i].params[0];
 			EEPROM_WriteByte(EEPROM_LOCATION, loraHandle.address);
-			reply.argLength = 1;
-			reply.rawArgument[0] = ACK;
+			reply.paramLength = 1;
+			reply.params[0] = ACK;
 			break;
 		case COMMAND_CHANGE_COMPENSATOR:
 		case COMMAND_SET_COMPENSATOR:
 			Comp_ProcessRequest(frame.messages[i]);
-			reply.argLength = 1;
-			reply.rawArgument[0] = ACK;
-			LoRa_QueueMessage(reply);
-		//TODO: where to send this?
 			break;
 		case COMMAND_ACQUISITION:
 			Meter_ProcessRequest(frame.messages[i]);
 			break;
 		default:
-			reply.argLength = 1;
-			reply.rawArgument[0] = NAK;
+			reply.paramLength = 1;
+			reply.params[0] = NAK;
 			LoRa_QueueMessage(reply);
 			break;
 		}
@@ -313,7 +310,7 @@ void LoRa_QueueMessage(Message_t message)
 {
 	memcpy(&loraHandle.messageQueue[loraHandle.queueLength],
 		&message,
-		MESSAGE_HEADER_SIZE + message.argLength);
+		MESSAGE_HEADER_SIZE + message.paramLength);
 	loraHandle.queueLength++;
 }
 #endif
@@ -326,8 +323,8 @@ static void LoRa_SignalError(void)
 	frame.nrOfMessages = 1;
 	
 	frame.messages[0].command = COMMAND_ERROR;
-	frame.messages[0].argLength = 1;
-	frame.messages[0].rawArgument[0] = ERROR_LORA_NOK;
+	frame.messages[0].paramLength = 1;
+	frame.messages[0].params[0] = ERROR_LORA_NOK;
 	
 	PC_Write(frame);
 }
@@ -348,8 +345,8 @@ static void LoRa_SignalTimeout(uint8_t address)
 	frame.nrOfMessages = 1;
 	
 	frame.messages[0].command = COMMAND_ERROR;
-	frame.messages[0].argLength = 1;
-	frame.messages[0].rawArgument[0] = ERROR_LORA_TIMEOUT;
+	frame.messages[0].paramLength = 1;
+	frame.messages[0].params[0] = ERROR_LORA_TIMEOUT;
 	
 	PC_Write(frame);
 }
@@ -370,7 +367,7 @@ static void LoRa_Write(void)
 	{
 		memcpy(&frame.messages[i],
 			&loraHandle.messageQueue[i],
-			MESSAGE_HEADER_SIZE + loraHandle.messageQueue[i].argLength);
+			MESSAGE_HEADER_SIZE + loraHandle.messageQueue[i].paramLength);
 	}
 	
 	PC_Write(frame);

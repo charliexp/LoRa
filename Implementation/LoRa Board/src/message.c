@@ -26,9 +26,9 @@ void Message_ArrayToFrame(uint8_t *array, Frame_t *frame)
 	while (i < array[IDX_FRAME_LENGTH])
 	{
 		frame->messages[frame->nrOfMessages].command = (Command_t) array[i + IDX_COMMAND];
-		frame->messages[frame->nrOfMessages].argLength = array[i + IDX_ARG_LENGTH];
-		memcpy(frame->messages[frame->nrOfMessages].rawArgument, array + i + IDX_ARGUMENT, frame->messages[frame->nrOfMessages].argLength);
-		i += MESSAGE_HEADER_SIZE + frame->messages[frame->nrOfMessages].argLength;
+		frame->messages[frame->nrOfMessages].paramLength = array[i + IDX_ARG_LENGTH];
+		memcpy(frame->messages[frame->nrOfMessages].params, array + i + IDX_ARGUMENT, frame->messages[frame->nrOfMessages].paramLength);
+		i += MESSAGE_HEADER_SIZE + frame->messages[frame->nrOfMessages].paramLength;
 		frame->nrOfMessages++;
 	}
 }
@@ -36,8 +36,8 @@ void Message_ArrayToFrame(uint8_t *array, Frame_t *frame)
 void Message_ArrayToMessage(Message_t *message, uint8_t *array)
 {
 	message->command = (Command_t) array[IDX_COMMAND];
-	message->argLength = array[IDX_ARG_LENGTH];
-	memcpy(message->rawArgument, array + IDX_ARGUMENT, message->argLength);
+	message->paramLength = array[IDX_ARG_LENGTH];
+	memcpy(message->params, array + IDX_ARGUMENT, message->paramLength);
 }
 
 uint8_t Message_ArgLengthFromArray(uint8_t *array)
@@ -54,9 +54,9 @@ void Message_FrameToArray(Frame_t frame, uint8_t *array, uint8_t *length)
 	for (m = 0; m < frame.nrOfMessages; m++)
 	{
 		array[*length + IDX_COMMAND] = frame.messages[m].command;
-		array[*length + IDX_ARG_LENGTH] = frame.messages[m].argLength;
-		memcpy(array + *length + IDX_ARGUMENT, frame.messages[m].rawArgument, frame.messages[m].argLength);
-		*length += MESSAGE_HEADER_SIZE + frame.messages[m].argLength;
+		array[*length + IDX_ARG_LENGTH] = frame.messages[m].paramLength;
+		memcpy(array + *length + IDX_ARGUMENT, frame.messages[m].params, frame.messages[m].paramLength);
+		*length += MESSAGE_HEADER_SIZE + frame.messages[m].paramLength;
 	}
 	
 	array[IDX_FRAME_LENGTH] = *length;

@@ -1,4 +1,5 @@
 /* Includes ------------------------------------------------------------------*/
+#include "app.h"
 #include "compensator.h"
 #include "hw.h"
 #include "lora.h"
@@ -40,7 +41,7 @@ static void PC_ProcessRequest(void);
 /* Functions Definition ------------------------------------------------------*/
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)	
 {
-	uint8_t argLength;
+	uint8_t paramLength;
 	
 	switch (pcHandle.state)
 	{
@@ -49,11 +50,11 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 			HAL_UART_Receive_IT(&pcHandle.hw, pcHandle.buffer + FRAME_HEADER_SIZE, MESSAGE_HEADER_SIZE);
 			break;
 		case PENDING_MESSAGE_HEADER:
-			argLength = Message_ArgLengthFromArray(pcHandle.buffer + FRAME_HEADER_SIZE);
-			if (argLength != 0)
+			paramLength = Message_ArgLengthFromArray(pcHandle.buffer + FRAME_HEADER_SIZE);
+			if (paramLength != 0)
 			{
 				pcHandle.state = PENDING_FULL_MESSAGE;
-				HAL_UART_Receive_IT(&pcHandle.hw, pcHandle.buffer + FRAME_HEADER_SIZE + MESSAGE_HEADER_SIZE, argLength);
+				HAL_UART_Receive_IT(&pcHandle.hw, pcHandle.buffer + FRAME_HEADER_SIZE + MESSAGE_HEADER_SIZE, paramLength);
 			}
 			else
 			{
@@ -119,13 +120,13 @@ static void PC_ProcessRequest(void)
 			case COMMAND_CHANGE_COMPENSATOR:
 			case COMMAND_SET_COMPENSATOR:
 				Comp_ProcessRequest(frame.messages[0]);
-				reply.messages[0].argLength = 1;
-				reply.messages[0].rawArgument[0] = ACK;
+				reply.messages[0].paramLength = 1;
+				reply.messages[0].params[0] = ACK;
 				PC_Write(reply);
 				break;
 			default:
-				reply.messages[0].argLength = 1;
-				reply.messages[0].rawArgument[0] = NAK;
+				reply.messages[0].paramLength = 1;
+				reply.messages[0].params[0] = NAK;
 				PC_Write(reply);
 				break;
 		}
